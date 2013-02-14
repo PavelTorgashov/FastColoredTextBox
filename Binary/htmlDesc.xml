@@ -1,0 +1,18 @@
+﻿<doc>
+	<brackets left="&lt;" right="&gt;" />
+
+	<style name="Maroon" color="Maroon" fontStyle="Bold,Italic" />
+	<style name="Blue" color="Blue"/>
+	<style name="Red" color="Red" backColor="#f5f5e5" />
+	<style name="Green" color="Green" />
+
+	<rule style="Green" options="Singleline">(&lt;!--.*?--&gt;)|(&lt;!--.*)</rule>
+	<rule style="Green" options="Singleline,RightToLeft">(&lt;!--.*?--&gt;)|(.*--&gt;)</rule>
+	<rule style="Blue">&lt;|/&gt;|&lt;/|&gt;</rule>
+	<rule style="Blue">&lt;|/&gt;|&lt;/|&gt;</rule>
+	<rule style="Maroon">&lt;(?&lt;range&gt;[!\w\d]+)</rule>
+	<rule style="Maroon">&lt;/(?&lt;range&gt;[\w\d]+)&gt;</rule>
+	<rule style="Red" options="Multiline">(?&lt;range&gt;\S+?)='[^']*'|(?&lt;range&gt;\S+)="[^"]*"|(?&lt;range&gt;\S+)=\S+</rule>
+
+	<folding start="&lt;div" finish="&lt;/div&gt;" options="IgnoreCase"/>
+</doc>
