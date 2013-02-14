@@ -1,0 +1,426 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <metadata name="toolStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>113, 17</value>
+  </metadata>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="btAddBookmark.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAIISURBVDhPpZP7S1NxGMbPPxKaXVUkMEq8IpKUCoY/hGgI
+        ymqkDYYXcCjDZOANURSjCNGFQUTsl4GXVMxKk62YU4fXQpaIlygHQxBRH8/zwvyaIAYe+HLgnPN8nue9
+        HA3nvDTq63oW/jm13XOwvPTB3DYFY5MH+bXfcN8ygfTSMSSXfESicQDxBqdYHwH29g9w2tnZ3UcguIvN
+        rR3417exuBJE5N1n/wfwLgXEOc38Bc6xNRHb+/y4nm49G0Bnit2zf9H6bkliE/jKuYxrd6oVgDWfjB+K
+        TWeKMyrGEVfowITvD9re/9ABVQrAhh0HHK+ZselMMaN/mvwtDb+aVqkA7HYIwIj3ysfluPTorJnP6Ezx
+        oHsD1s5ZXEktUwCOioB5f1CEPR9+wTG6iuiserTo8dkwng7HT/R+XUPF8xlcTjErAOdMcW6NW8STiwG8
+        7vej8oUPN/PsEv3t8Ao0TZP3T1u8uJRkUgAuSYHtO97oLxmXd5t9Ho8aPTK+GzntqNfrLm2fFoihwYOI
+        xGIF4KjoGBLzY1OrF9k6OOFxnwDC4wxIMX1G0pMhgVyMNyoA13PAtS7OrJk1PrC69LUdQWxuF6IybHrX
+        LRI7JrtZdoDAo1XmbjMyD+tjSXxGcXRmnYg5ttD9QuxDhN0uUgDOmbvNTpPOJaGAo2K36cyaGZvOFIfd
+        KlSA8/zRh9ABIDUG+1JpAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="btRemoveBookmark.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAIISURBVDhPpZP7S1NxGMbPPxKaXVUkMEq8IpKUCoY/hGgI
+        ymqkDYYXcCjDZOANURSjCNGFQUTsl4GXVMxKk62YU4fXQpaIlygHQxBRH8/zwvyaIAYe+HLgnPN8nue9
+        HA3nvDTq63oW/jm13XOwvPTB3DYFY5MH+bXfcN8ygfTSMSSXfESicQDxBqdYHwH29g9w2tnZ3UcguIvN
+        rR3417exuBJE5N1n/wfwLgXEOc38Bc6xNRHb+/y4nm49G0Bnit2zf9H6bkliE/jKuYxrd6oVgDWfjB+K
+        TWeKMyrGEVfowITvD9re/9ABVQrAhh0HHK+ZselMMaN/mvwtDb+aVqkA7HYIwIj3ysfluPTorJnP6Ezx
+        oHsD1s5ZXEktUwCOioB5f1CEPR9+wTG6iuiserTo8dkwng7HT/R+XUPF8xlcTjErAOdMcW6NW8STiwG8
+        7vej8oUPN/PsEv3t8Ao0TZP3T1u8uJRkUgAuSYHtO97oLxmXd5t9Ho8aPTK+GzntqNfrLm2fFoihwYOI
+        xGIF4KjoGBLzY1OrF9k6OOFxnwDC4wxIMX1G0pMhgVyMNyoA13PAtS7OrJk1PrC69LUdQWxuF6IybHrX
+        LRI7JrtZdoDAo1XmbjMyD+tjSXxGcXRmnYg5ttD9QuxDhN0uUgDOmbvNTpPOJaGAo2K36cyaGZvOFIfd
+        KlSA8/zRh9ABIDUG+1JpAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="btGo.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAIISURBVDhPpZP7S1NxGMbPPxKaXVUkMEq8IpKUCoY/hGgI
+        ymqkDYYXcCjDZOANURSjCNGFQUTsl4GXVMxKk62YU4fXQpaIlygHQxBRH8/zwvyaIAYe+HLgnPN8nue9
+        HA3nvDTq63oW/jm13XOwvPTB3DYFY5MH+bXfcN8ygfTSMSSXfESicQDxBqdYHwH29g9w2tnZ3UcguIvN
+        rR3417exuBJE5N1n/wfwLgXEOc38Bc6xNRHb+/y4nm49G0Bnit2zf9H6bkliE/jKuYxrd6oVgDWfjB+K
+        TWeKMyrGEVfowITvD9re/9ABVQrAhh0HHK+ZselMMaN/mvwtDb+aVqkA7HYIwIj3ysfluPTorJnP6Ezx
+        oHsD1s5ZXEktUwCOioB5f1CEPR9+wTG6iuiserTo8dkwng7HT/R+XUPF8xlcTjErAOdMcW6NW8STiwG8
+        7vej8oUPN/PsEv3t8Ao0TZP3T1u8uJRkUgAuSYHtO97oLxmXd5t9Ho8aPTK+GzntqNfrLm2fFoihwYOI
+        xGIF4KjoGBLzY1OrF9k6OOFxnwDC4wxIMX1G0pMhgVyMNyoA13PAtS7OrJk1PrC69LUdQWxuF6IybHrX
+        LRI7JrtZdoDAo1XmbjMyD+tjSXxGcXRmnYg5ttD9QuxDhN0uUgDOmbvNTpPOJaGAo2K36cyaGZvOFIfd
+        KlSA8/zRh9ABIDUG+1JpAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="fctb.Text" xml:space="preserve">
+    <value>using System.Collections.Generic;
+using System;
+using System.Text;
+using System.Drawing;
+
+namespace FastColoredTextBoxNS
+{
+    /// &lt;summary&gt;
+    /// Line of text
+    /// &lt;/summary&gt;
+    public class Line : List&lt;Char&gt;
+    {
+        List&lt;int&gt; cutOffPositions;
+
+        public string FoldingStartMarker { get; set; }
+        public string FoldingEndMarker { get; set; }
+        /// &lt;summary&gt;
+        /// Text of line was changed
+        /// &lt;/summary&gt;
+        public bool IsChanged { get; set; }
+        /// &lt;summary&gt;
+        /// Time of last visit of caret in this line
+        /// &lt;/summary&gt;
+        /// &lt;remarks&gt;This property can be used for forward/backward navigating&lt;/remarks&gt;
+        public DateTime LastVisit { get; set; }
+        //Y coordinate of line on screen
+        internal int startY = -1;
+        /// &lt;summary&gt;
+        /// Visible state
+        /// &lt;/summary&gt;
+        public VisibleState VisibleState { get; set; }
+        /// &lt;summary&gt;
+        /// AutoIndent level for this line
+        /// &lt;/summary&gt;
+        public int IndentLevel { get; set; }
+        /// &lt;summary&gt;
+        /// Background brush.
+        /// &lt;/summary&gt;
+        public Brush BackgroundBrush { get; set;}
+        /// &lt;summary&gt;
+        /// User tag
+        /// &lt;/summary&gt;
+        public object Tag { get; set; }
+        /// &lt;summary&gt;
+        /// Unique ID
+        /// &lt;/summary&gt;
+        public int UniqueId { get; private set; }
+        /// &lt;summary&gt;
+        /// Count of needed start spaces for AutoIndent
+        /// &lt;/summary&gt;
+        public int AutoIndentSpacesNeededCount
+        {
+            get;
+            internal set;
+        }
+
+        internal Line(int uid)
+        {
+            this.UniqueId = uid;
+        }
+
+        /// &lt;summary&gt;
+        /// Clears style of chars, delete folding markers
+        /// &lt;/summary&gt;
+        public void ClearStyle(StyleIndex styleIndex)
+        {
+            VisibleState = VisibleState.Visible;
+            FoldingStartMarker = null;
+            FoldingEndMarker = null;
+            for (int i = 0; i &lt; Count; i++)
+            {
+                Char c = this[i];
+                c.style &amp;= ~styleIndex;
+                this[i] = c;
+            }
+        }
+
+        /// &lt;summary&gt;
+        /// Text of the line
+        /// &lt;/summary&gt;
+        public string Text
+        {
+            get{
+                StringBuilder sb = new StringBuilder(Count);
+                foreach(Char c in this)
+                    sb.Append(c.c);
+                return sb.ToString();
+            }
+        }
+
+        /// &lt;summary&gt;
+        /// Clears folding markers
+        /// &lt;/summary&gt;
+        public void ClearFoldingMarkers()
+        {
+            FoldingStartMarker = null;
+            FoldingEndMarker = null;
+        }
+
+        /// &lt;summary&gt;
+        /// Positions for wordwrap cutoffs
+        /// &lt;/summary&gt;
+        public List&lt;int&gt; CutOffPositions
+        {
+            get
+            {
+                if (cutOffPositions == null)
+                    cutOffPositions = new List&lt;int&gt;();
+                return cutOffPositions;
+            }
+        }
+
+        /// &lt;summary&gt;
+        /// Count of wordwrap string count for this line
+        /// &lt;/summary&gt;
+        public int WordWrapStringsCount
+        {
+            get
+            {
+                if (VisibleState == VisibleState.Hidden) 
+                    return 0;
+                if (VisibleState == VisibleState.StartOfHiddenBlock)
+                    return 1;
+                if (cutOffPositions == null)
+                    return 1;
+                return cutOffPositions.Count + 1;
+            }
+        }
+
+        internal int GetWordWrapStringStartPosition(int iWordWrapLine)
+        {
+            return iWordWrapLine == 0 ? 0 : CutOffPositions[iWordWrapLine - 1];
+        }
+
+        internal int GetWordWrapStringFinishPosition(int iWordWrapLine)
+        {
+            if (WordWrapStringsCount &lt;= 0)
+                return 0;
+            return iWordWrapLine == WordWrapStringsCount - 1 ? Count - 1 : CutOffPositions[iWordWrapLine] - 1;
+        }
+
+        /// &lt;summary&gt;
+        /// Gets index of wordwrap string for given char position
+        /// &lt;/summary&gt;
+        public int GetWordWrapStringIndex(int iChar)
+        {
+            if (cutOffPositions == null || cutOffPositions.Count == 0) return 0;
+            for (int i = 0; i &lt; cutOffPositions.Count; i++)
+                if (cutOffPositions[i] &gt;/*&gt;=*/ iChar)
+                    return i;
+            return cutOffPositions.Count;
+        }
+
+        /// &lt;summary&gt;
+        /// Calculates wordwrap cutoffs
+        /// &lt;/summary&gt;
+        internal void CalcCutOffs(int maxCharsPerLine, bool allowIME, bool charWrap)
+        {
+            int segmentLength = 0;
+            int cutOff = 0;
+            CutOffPositions.Clear();
+
+            for (int i = 0; i &lt; Count; i++)
+            {
+                char c = this[i].c;
+                if (charWrap)
+                {
+                    //char wrapping
+                    cutOff = Math.Min(i + 1, Count - 1);
+                }
+                else
+                {
+                    //word wrapping
+                    if (allowIME &amp;&amp; isCJKLetter(c))//in CJK languages cutoff can be in any letter
+                    {
+                        cutOff = i;
+                    }
+                    else
+                        if (!char.IsLetterOrDigit(c) &amp;&amp; c != '_')
+                            cutOff = Math.Min(i + 1, Count - 1);
+                }
+
+                segmentLength++;
+
+                if (segmentLength == maxCharsPerLine)
+                {
+                    if (cutOff == 0 || (cutOffPositions.Count &gt; 0 &amp;&amp; cutOff == cutOffPositions[cutOffPositions.Count - 1]))
+                        cutOff = i + 1;
+                    CutOffPositions.Add(cutOff);
+                    segmentLength = 1 + i - cutOff;
+                }
+            }
+        }
+
+        private bool isCJKLetter(char c)
+        {
+            int code = Convert.ToInt32(c);
+            return 
+            (code &gt;= 0x3300 &amp;&amp; code &lt;= 0x33FF) ||
+            (code &gt;= 0xFE30 &amp;&amp; code &lt;= 0xFE4F) ||
+            (code &gt;= 0xF900 &amp;&amp; code &lt;= 0xFAFF) ||
+            (code &gt;= 0x2E80 &amp;&amp; code &lt;= 0x2EFF) ||
+            (code &gt;= 0x31C0 &amp;&amp; code &lt;= 0x31EF) ||
+            (code &gt;= 0x4E00 &amp;&amp; code &lt;= 0x9FFF) ||
+            (code &gt;= 0x3400 &amp;&amp; code &lt;= 0x4DBF) ||
+            (code &gt;= 0x3200 &amp;&amp; code &lt;= 0x32FF) ||
+            (code &gt;= 0x2460 &amp;&amp; code &lt;= 0x24FF) ||
+            (code &gt;= 0x3040 &amp;&amp; code &lt;= 0x309F) ||
+            (code &gt;= 0x2F00 &amp;&amp; code &lt;= 0x2FDF) ||
+            (code &gt;= 0x31A0 &amp;&amp; code &lt;= 0x31BF) ||
+            (code &gt;= 0x4DC0 &amp;&amp; code &lt;= 0x4DFF) ||
+            (code &gt;= 0x3100 &amp;&amp; code &lt;= 0x312F) ||
+            (code &gt;= 0x30A0 &amp;&amp; code &lt;= 0x30FF) ||
+            (code &gt;= 0x31F0 &amp;&amp; code &lt;= 0x31FF) ||
+            (code &gt;= 0x2FF0 &amp;&amp; code &lt;= 0x2FFF) ||
+            (code &gt;= 0x1100 &amp;&amp; code &lt;= 0x11FF) ||
+            (code &gt;= 0xA960 &amp;&amp; code &lt;= 0xA97F) ||
+            (code &gt;= 0xD7B0 &amp;&amp; code &lt;= 0xD7FF) ||
+            (code &gt;= 0x3130 &amp;&amp; code &lt;= 0x318F) ||
+            (code &gt;= 0xAC00 &amp;&amp; code &lt;= 0xD7AF);
+
+        }
+
+        /// &lt;summary&gt;
+        /// Count of start spaces
+        /// &lt;/summary&gt;
+        public int StartSpacesCount
+        {
+            get
+            {
+                int spacesCount = 0;
+                for (int i = 0; i &lt; Count; i++)
+                    if (this[i].c == ' ')
+                        spacesCount++;
+                    else
+                        break;
+                return spacesCount;
+            }
+        }
+    }
+
+    public enum VisibleState
+    {
+        Visible, StartOfHiddenBlock, Hidden
+    }
+
+    public enum IndentMarker
+    {
+        None,
+        Increased,
+        Decreased
+    }
+}
+
+</value>
+  </data>
+</root>

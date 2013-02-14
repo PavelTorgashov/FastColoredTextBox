@@ -1,0 +1,408 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{EBE443EE-F4C7-49E6-AC22-959CA62FAA05}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Tester</RootNamespace>
+    <AssemblyName>Tester</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="TabStrip">
+      <HintPath>..\..\Components\TabStrip_demo\TabStrip.Demo\TabStrip.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AutocompleteSample.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AutocompleteSample.Designer.cs">
+      <DependentUpon>AutocompleteSample.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AutocompleteSample2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AutocompleteSample2.Designer.cs">
+      <DependentUpon>AutocompleteSample2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AutoIndentSample.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AutoIndentSample.Designer.cs">
+      <DependentUpon>AutoIndentSample.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BilingualHighlighterSample.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BilingualHighlighterSample.Designer.cs">
+      <DependentUpon>BilingualHighlighterSample.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConsoleSample.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConsoleSample.Designer.cs">
+      <DependentUpon>ConsoleSample.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PredefinedStylesSample.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PredefinedStylesSample.Designer.cs">
+      <DependentUpon>PredefinedStylesSample.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ReadOnlyBlocksSample.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ReadOnlyBlocksSample.Designer.cs">
+      <DependentUpon>ReadOnlyBlocksSample.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CustomHint.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CustomHint.Designer.cs">
+      <DependentUpon>CustomHint.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CustomTextSourceSample.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CustomTextSourceSample.Designer.cs">
+      <DependentUpon>CustomTextSourceSample.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CustomFoldingSample.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CustomFoldingSample.Designer.cs">
+      <DependentUpon>CustomFoldingSample.cs</DependentUpon>
+    </Compile>
+    <Compile Include="HintSample.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="HintSample.Designer.cs">
+      <DependentUpon>HintSample.cs</DependentUpon>
+    </Compile>
+    <Compile Include="HyperlinkSample.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="HyperlinkSample.Designer.cs">
+      <DependentUpon>HyperlinkSample.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LazyLoadingSample.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LazyLoadingSample.Designer.cs">
+      <DependentUpon>LazyLoadingSample.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SplitSample.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SplitSample.Designer.cs">
+      <DependentUpon>SplitSample.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TooltipSample.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TooltipSample.Designer.cs">
+      <DependentUpon>TooltipSample.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GifImageDrawingSample.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GifImageDrawingSample.Designer.cs">
+      <DependentUpon>GifImageDrawingSample.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LoggerSample.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LoggerSample.Designer.cs">
+      <DependentUpon>LoggerSample.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MarkerToolSample.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MarkerToolSample.Designer.cs">
+      <DependentUpon>MarkerToolSample.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CustomStyleSample.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CustomStyleSample.Designer.cs">
+      <DependentUpon>CustomStyleSample.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DynamicSyntaxHighlighting.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DynamicSyntaxHighlighting.Designer.cs">
+      <DependentUpon>DynamicSyntaxHighlighting.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IMEsample.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="IMEsample.Designer.cs">
+      <DependentUpon>IMEsample.cs</DependentUpon>
+    </Compile>
+    <Compile Include="JokeSample.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="JokeSample.Designer.cs">
+      <DependentUpon>JokeSample.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PowerfulCSharpEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PowerfulCSharpEditor.Designer.cs">
+      <DependentUpon>PowerfulCSharpEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SimplestCodeFoldingSample.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SimplestCodeFoldingSample.Designer.cs">
+      <DependentUpon>SimplestCodeFoldingSample.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SimplestSyntaxHighlightingSample.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SimplestSyntaxHighlightingSample.Designer.cs">
+      <DependentUpon>SimplestSyntaxHighlightingSample.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SyntaxHighlightingByXmlDescription.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SyntaxHighlightingByXmlDescription.Designer.cs">
+      <DependentUpon>SyntaxHighlightingByXmlDescription.cs</DependentUpon>
+    </Compile>
+    <Compile Include="VisibleRangeChangedDelayedSample.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="VisibleRangeChangedDelayedSample.Designer.cs">
+      <DependentUpon>VisibleRangeChangedDelayedSample.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PowerfulSample.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PowerfulSample.Designer.cs">
+      <DependentUpon>PowerfulSample.cs</DependentUpon>
+    </Compile>
+    <Compile Include="BookmarksSample.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BookmarksSample.Designer.cs">
+      <DependentUpon>BookmarksSample.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="AutocompleteSample.resx">
+      <DependentUpon>AutocompleteSample.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AutocompleteSample2.resx">
+      <DependentUpon>AutocompleteSample2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AutoIndentSample.resx">
+      <DependentUpon>AutoIndentSample.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BilingualHighlighterSample.resx">
+      <DependentUpon>BilingualHighlighterSample.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConsoleSample.resx">
+      <DependentUpon>ConsoleSample.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PredefinedStylesSample.resx">
+      <DependentUpon>PredefinedStylesSample.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ReadOnlyBlocksSample.resx">
+      <DependentUpon>ReadOnlyBlocksSample.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CustomHint.resx">
+      <DependentUpon>CustomHint.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CustomTextSourceSample.resx">
+      <DependentUpon>CustomTextSourceSample.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CustomFoldingSample.resx">
+      <DependentUpon>CustomFoldingSample.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CustomStyleSample.resx">
+      <DependentUpon>CustomStyleSample.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DynamicSyntaxHighlighting.resx">
+      <DependentUpon>DynamicSyntaxHighlighting.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GifImageDrawingSample.resx">
+      <DependentUpon>GifImageDrawingSample.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="HintSample.resx">
+      <DependentUpon>HintSample.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="HyperlinkSample.resx">
+      <DependentUpon>HyperlinkSample.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IMEsample.resx">
+      <DependentUpon>IMEsample.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="JokeSample.resx">
+      <DependentUpon>JokeSample.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LazyLoadingSample.resx">
+      <DependentUpon>LazyLoadingSample.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LoggerSample.resx">
+      <DependentUpon>LoggerSample.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MarkerToolSample.resx">
+      <DependentUpon>MarkerToolSample.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PowerfulCSharpEditor.resx">
+      <DependentUpon>PowerfulCSharpEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SimplestCodeFoldingSample.resx">
+      <DependentUpon>SimplestCodeFoldingSample.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SimplestSyntaxHighlightingSample.resx">
+      <DependentUpon>SimplestSyntaxHighlightingSample.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SplitSample.resx">
+      <DependentUpon>SplitSample.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SyntaxHighlightingByXmlDescription.resx">
+      <DependentUpon>SyntaxHighlightingByXmlDescription.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TooltipSample.resx">
+      <DependentUpon>TooltipSample.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="VisibleRangeChangedDelayedSample.resx">
+      <DependentUpon>VisibleRangeChangedDelayedSample.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PowerfulSample.resx">
+      <DependentUpon>PowerfulSample.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="BookmarksSample.resx">
+      <DependentUpon>BookmarksSample.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\undo_16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\redo_16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\class_libraries.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\forward_16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\backward0_16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\property.png" />
+    <None Include="Resources\lightning.png" />
+    <None Include="Resources\box.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\smile_16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sad_16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FastColoredTextBox\FastColoredTextBox.csproj">
+      <Project>{6DD14A85-CCFC-4774-BD26-0F5772512319}</Project>
+      <Name>FastColoredTextBox</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\edit-padding-top.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bookmark--plus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\layer--plus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\layer--minus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bye.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\lol.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\rolleyes.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\unsure.gif" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
