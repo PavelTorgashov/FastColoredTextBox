@@ -42,8 +42,9 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="TabStrip">
-      <HintPath>..\..\Components\TabStrip_demo\TabStrip.Demo\TabStrip.dll</HintPath>
+    <Reference Include="TabStrip, Version=2.0.2523.29272, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\TabStrip.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -396,6 +397,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\unsure.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="htmlDesc.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TabStrip.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
