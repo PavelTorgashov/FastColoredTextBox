@@ -8,7 +8,8 @@ using System.Windows.Forms;
 namespace FastColoredTextBoxNS
 {
     /// <summary>
-    /// Collection of Hints
+    /// Collection of Hints.
+    /// This is temporary buffer for currently displayed hints.
     /// </summary>
     public class Hints : ICollection<Hint>, IDisposable
     {
@@ -94,7 +95,7 @@ namespace FastColoredTextBoxNS
         }
 
         /// <summary>
-        /// Clears all hints
+        /// Clears all displayed hints
         /// </summary>
         public void Clear()
         {

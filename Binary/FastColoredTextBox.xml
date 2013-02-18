@@ -1328,7 +1328,8 @@
         </member>
         <member name="M:FastColoredTextBoxNS.FastColoredTextBox.RemoveLinePrefix(System.String)">
             <summary>
-            Remove prefix from front of seletcted lines
+            Remove prefix from front of selected lines
+            This method ignores forward spaces of the line
             </summary>
         </member>
         <member name="M:FastColoredTextBoxNS.FastColoredTextBox.BeginAutoUndo">
@@ -1414,8 +1415,10 @@
         </member>
         <member name="P:FastColoredTextBoxNS.FastColoredTextBox.Hints">
             <summary>
-            Hints
+            Collection of Hints.
+            This is temporary buffer for currently displayed hints.
             </summary>
+            <remarks>You can asynchronously add, remove and clear hints. Appropriate hints will be shown or hidden from the screen.</remarks>
         </member>
         <member name="P:FastColoredTextBoxNS.FastColoredTextBox.ToolTipDelay">
             <summary>
@@ -2460,12 +2463,13 @@
         </member>
         <member name="T:FastColoredTextBoxNS.Hints">
             <summary>
-            Collection of Hints
+            Collection of Hints.
+            This is temporary buffer for currently displayed hints.
             </summary>
         </member>
         <member name="M:FastColoredTextBoxNS.Hints.Clear">
             <summary>
-            Clears all hints
+            Clears all displayed hints
             </summary>
         </member>
         <member name="M:FastColoredTextBoxNS.Hints.Add(FastColoredTextBoxNS.Hint)">

@@ -206,8 +206,10 @@ namespace FastColoredTextBoxNS
         }
 
         /// <summary>
-        /// Hints
+        /// Collection of Hints.
+        /// This is temporary buffer for currently displayed hints.
         /// </summary>
+        /// <remarks>You can asynchronously add, remove and clear hints. Appropriate hints will be shown or hidden from the screen.</remarks>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
          EditorBrowsable(EditorBrowsableState.Never)]
         public Hints Hints
@@ -3522,24 +3524,26 @@ namespace FastColoredTextBoxNS
             {
                 if (!AcceptsTab)
                     return false;
-
-                if (Selection.Start.iLine == Selection.End.iLine)
+                if (lastModifiers != Keys.Shift)
                 {
-                    ClearSelected();
-                    //insert tab as spaces
-                    int spaces = TabLength - (Selection.Start.iChar%TabLength);
-                    //replace mode? select forward chars
-                    if (IsReplaceMode)
+                    if (Selection.Start.iLine == Selection.End.iLine)
                     {
-                        for (int i = 0; i < spaces; i++)
-                            Selection.GoRight(true);
-                        Selection.Inverse();
+                        ClearSelected();
+                        //insert tab as spaces
+                        int spaces = TabLength - (Selection.Start.iChar%TabLength);
+                        //replace mode? select forward chars
+                        if (IsReplaceMode)
+                        {
+                            for (int i = 0; i < spaces; i++)
+                                Selection.GoRight(true);
+                            Selection.Inverse();
+                        }
+                        if (!Selection.ReadOnly)
+                            InsertText(new String(' ', spaces));
                     }
-                    if (!Selection.ReadOnly)
-                        InsertText(new String(' ', spaces));
+                    else if ((lastModifiers & Keys.Shift) == 0)
+                        IncreaseIndent();
                 }
-                else if ((lastModifiers & Keys.Shift) == 0)
-                    IncreaseIndent();
             }
             else
             {
@@ -3796,7 +3800,6 @@ namespace FastColoredTextBoxNS
 #endif
             visibleMarkers.Clear();
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-            //FCTBRenderingHints.SetGridFitTextHint(e.Graphics);
             //
             var servicePen = new Pen(ServiceLinesColor);
             Brush changedLineBrush = new SolidBrush(ChangedLineColor);
@@ -3847,7 +3850,7 @@ namespace FastColoredTextBoxNS
             //
             int startLine = YtoLineIndex(VerticalScroll.Value);
             int iLine;
-            //draw chars
+            //draw text
             for (iLine = startLine; iLine < lines.Count; iLine++)
             {
                 Line line = lines[iLine];
@@ -3886,7 +3889,7 @@ namespace FastColoredTextBoxNS
                     bookmarksByLineIndex[iLine].Paint(e.Graphics,
                                                       new Rectangle(LeftIndent, y, Width,
                                                                     CharHeight*lineInfo.WordWrapStringsCount));
-                //OnPaint event
+                //OnPaintLine event
                 if (lineInfo.VisibleState == VisibleState.Visible)
                     OnPaintLine(new PaintLineEventArgs(iLine,
                                                        new Rectangle(LeftIndent, y, Width,
@@ -4002,6 +4005,7 @@ namespace FastColoredTextBoxNS
             paddingBrush.Dispose();
             //
 #if debug
+            sw.Stop();
             Console.WriteLine("OnPaint: "+ sw.ElapsedMilliseconds);
 #endif
             //
@@ -5278,7 +5282,10 @@ namespace FastColoredTextBoxNS
         public void DecreaseIndent()
         {
             if (Selection.Start == Selection.End)
+            {
+                DecreaseIndentOfSingleLine();
                 return;
+            }
 
             bool carretAtEnd = Selection.Start > Selection.End;
             bool lastLineIsNotSelected = carretAtEnd && Selection.Start.iChar == 0 && !Selection.ColumnSelectionMode;
@@ -5318,8 +5325,30 @@ namespace FastColoredTextBoxNS
                 Selection.Inverse();
 
             needRecalc = true;
-            EndUpdate();
             Selection.EndUpdate();
+            EndUpdate();
+            Invalidate();
+        }
+
+        private void DecreaseIndentOfSingleLine()
+        {
+            if (Selection.Start != Selection.End)
+                return;
+
+            var old = Selection.Start;
+            var iLine = Selection.Start.iLine;
+            var spaces = this[iLine].StartSpacesCount;
+            spaces = Math.Min(spaces, TabLength);
+            if (spaces == 0) return;
+
+            Selection.BeginUpdate();
+            Selection.Start = new Place(0, iLine);
+            Selection.End = new Place(spaces, iLine);
+            ClearSelected();
+            Selection.Start = new Place(Math.Max(0, old.iChar - spaces), iLine);
+            Selection.EndUpdate();
+
+            Invalidate();
         }
 
         /// <summary>
@@ -5375,7 +5404,8 @@ namespace FastColoredTextBoxNS
         }
 
         /// <summary>
-        /// Remove prefix from front of seletcted lines
+        /// Remove prefix from front of selected lines
+        /// This method ignores forward spaces of the line
         /// </summary>
         public void RemoveLinePrefix(string prefix)
         {
