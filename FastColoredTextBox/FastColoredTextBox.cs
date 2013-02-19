@@ -346,7 +346,7 @@ namespace FastColoredTextBoxNS
         }
 
         /// <summary>
-        /// Height of char in pixels
+        /// Height of char in pixels (includes LineInterval)
         /// </summary>
         [Description("Height of char in pixels")]
         public int CharHeight
@@ -4280,7 +4280,7 @@ namespace FastColoredTextBoxNS
                 Selection.ColumnSelectionMode = true;
             }
             else
-                //change selection type to Range
+            //change selection type to Range
             {
                 Selection.ColumnSelectionMode = false;
             }
@@ -4293,16 +4293,65 @@ namespace FastColoredTextBoxNS
             if (lastModifiers == Keys.Control)
             {
                 ChangeFontSize(Math.Sign(e.Delta));
-                /*ChangeFontSize(1f + e.Delta / 900f);
-                DoRangeVisible(Selection, true);*/
+                OnVisibleRangeChanged();
             }
             else
+            if(VerticalScroll.Visible)
             {
-                base.OnMouseWheel(e);
-            }
+                //base.OnMouseWheel(e);
 
-            OnVisibleRangeChanged();
+                int lineHeight = CharHeight;
+
+                // Determine scoll offset
+                int numberOfVisibleLines = ClientSize.Height / lineHeight;
+                int mouseWheelScrollLinesSetting = GetControlPanelWheelScrollLinesValue();
+
+                int offset;
+                if ((mouseWheelScrollLinesSetting == -1) || (mouseWheelScrollLinesSetting > numberOfVisibleLines))
+                    offset = lineHeight * numberOfVisibleLines;
+                else
+                    offset = lineHeight * mouseWheelScrollLinesSetting;
+
+                var newScrollPos = VerticalScroll.Value - Math.Sign(e.Delta)* offset;
+
+                var ea = new ScrollEventArgs(e.Delta < 0 ? ScrollEventType.SmallIncrement : ScrollEventType.SmallDecrement, 
+                    VerticalScroll.Value, 
+                    newScrollPos,
+                    ScrollOrientation.VerticalScroll);
+
+                OnScroll(ea);
+            }
         }
+
+        /// <summary>
+        /// Gets the value for the system control panel mouse wheel scroll settings.
+        /// The value returns the number of lines that shall be scolled if the user turns the mouse wheet one step.
+        /// </summary>
+        /// <remarks>
+        /// This methods gets the "WheelScrollLines" value our from the registry key "HKEY_CURRENT_USER\Control Panel\Desktop".
+        /// If the value of this option is 0, the screen will not scroll when the mouse wheel is turned.
+        /// If the value of this option is -1 or is greater than the number of lines visible in the window,
+        /// the screen will scroll up or down by one page.
+        /// </remarks>
+        /// <returns>
+        /// Number of lines to scrol l when the mouse wheel is turned
+        /// </returns>
+        private static int GetControlPanelWheelScrollLinesValue()
+        {
+            try
+            {
+                using (RegistryKey key = Registry.CurrentUser.OpenSubKey(@"Control Panel\Desktop", false))
+                {
+                    return Convert.ToInt32(key.GetValue("WheelScrollLines"));
+                }
+            }
+            catch
+            {
+                // Use default value
+                return 1;
+            }
+        }
+
 
         public void ChangeFontSize(int step)
         {

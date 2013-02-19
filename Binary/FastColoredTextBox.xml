@@ -1150,6 +1150,21 @@
             Draw control
             </summary>
         </member>
+        <member name="M:FastColoredTextBoxNS.FastColoredTextBox.GetControlPanelWheelScrollLinesValue">
+            <summary>
+            Gets the value for the system control panel mouse wheel scroll settings.
+            The value returns the number of lines that shall be scolled if the user turns the mouse wheet one step.
+            </summary>
+            <remarks>
+            This methods gets the "WheelScrollLines" value our from the registry key "HKEY_CURRENT_USER\Control Panel\Desktop".
+            If the value of this option is 0, the screen will not scroll when the mouse wheel is turned.
+            If the value of this option is -1 or is greater than the number of lines visible in the window,
+            the screen will scroll up or down by one page.
+            </remarks>
+            <returns>
+            Number of lines to scrol l when the mouse wheel is turned
+            </returns>
+        </member>
         <member name="M:FastColoredTextBoxNS.FastColoredTextBox.PointToPlace(System.Drawing.Point)">
             <summary>
             Gets nearest line and char position from coordinates
@@ -1482,7 +1497,7 @@
         </member>
         <member name="P:FastColoredTextBoxNS.FastColoredTextBox.CharHeight">
             <summary>
-            Height of char in pixels
+            Height of char in pixels (includes LineInterval)
             </summary>
         </member>
         <member name="P:FastColoredTextBoxNS.FastColoredTextBox.LineInterval">

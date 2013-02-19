@@ -37,6 +37,8 @@ namespace Tester
             this.replaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.setSelectedAsReadonlyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.setSelectedAsWritableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem8 = new System.Windows.Forms.ToolStripSeparator();
             this.collapseSelectedBlockToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
             this.collapseAllregionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -66,8 +68,6 @@ namespace Tester
             this.hTMLToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.miChangeColors = new System.Windows.Forms.ToolStripMenuItem();
             this.fctb = new FastColoredTextBoxNS.FastColoredTextBox();
-            this.setSelectedAsWritableToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem8 = new System.Windows.Forms.ToolStripSeparator();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fctb)).BeginInit();
             this.SuspendLayout();
@@ -140,6 +140,18 @@ namespace Tester
             this.setSelectedAsReadonlyToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
             this.setSelectedAsReadonlyToolStripMenuItem.Text = "Set selected as readonly";
             this.setSelectedAsReadonlyToolStripMenuItem.Click += new System.EventHandler(this.setSelectedAsReadonlyToolStripMenuItem_Click);
+            // 
+            // setSelectedAsWritableToolStripMenuItem
+            // 
+            this.setSelectedAsWritableToolStripMenuItem.Name = "setSelectedAsWritableToolStripMenuItem";
+            this.setSelectedAsWritableToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.setSelectedAsWritableToolStripMenuItem.Text = "Set selected as writable";
+            this.setSelectedAsWritableToolStripMenuItem.Click += new System.EventHandler(this.setSelectedAsWritableToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem8
+            // 
+            this.toolStripMenuItem8.Name = "toolStripMenuItem8";
+            this.toolStripMenuItem8.Size = new System.Drawing.Size(224, 6);
             // 
             // collapseSelectedBlockToolStripMenuItem
             // 
@@ -364,18 +376,6 @@ namespace Tester
             this.fctb.TextChanged += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.fctb_TextChanged);
             this.fctb.SelectionChangedDelayed += new System.EventHandler(this.fctb_SelectionChangedDelayed);
             this.fctb.AutoIndentNeeded += new System.EventHandler<FastColoredTextBoxNS.AutoIndentEventArgs>(this.fctb_AutoIndentNeeded);
-            // 
-            // setSelectedAsWritableToolStripMenuItem
-            // 
-            this.setSelectedAsWritableToolStripMenuItem.Name = "setSelectedAsWritableToolStripMenuItem";
-            this.setSelectedAsWritableToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
-            this.setSelectedAsWritableToolStripMenuItem.Text = "Set selected as writable";
-            this.setSelectedAsWritableToolStripMenuItem.Click += new System.EventHandler(this.setSelectedAsWritableToolStripMenuItem_Click);
-            // 
-            // toolStripMenuItem8
-            // 
-            this.toolStripMenuItem8.Name = "toolStripMenuItem8";
-            this.toolStripMenuItem8.Size = new System.Drawing.Size(224, 6);
             // 
             // PowerfulSample
             // 
