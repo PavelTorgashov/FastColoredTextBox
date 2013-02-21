@@ -349,9 +349,6 @@ namespace Tester
             // 
             // fctb
             // 
-            this.fctb.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.fctb.AutoIndentExistingLines = false;
             this.fctb.AutoScrollMinSize = new System.Drawing.Size(284, 285);
             this.fctb.BackBrush = null;
@@ -360,17 +357,18 @@ namespace Tester
             this.fctb.DelayedEventsInterval = 200;
             this.fctb.DelayedTextChangedInterval = 500;
             this.fctb.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.fctb.Dock = System.Windows.Forms.DockStyle.Fill;
             this.fctb.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.fctb.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.fctb.IndentBackColor = System.Drawing.Color.WhiteSmoke;
             this.fctb.IsReplaceMode = false;
             this.fctb.LeftBracket = '(';
-            this.fctb.Location = new System.Drawing.Point(7, 27);
+            this.fctb.Location = new System.Drawing.Point(0, 24);
             this.fctb.Name = "fctb";
             this.fctb.Paddings = new System.Windows.Forms.Padding(0);
             this.fctb.RightBracket = ')';
             this.fctb.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
-            this.fctb.Size = new System.Drawing.Size(348, 297);
+            this.fctb.Size = new System.Drawing.Size(367, 312);
             this.fctb.TabIndex = 3;
             this.fctb.Text = resources.GetString("fctb.Text");
             this.fctb.TextChanged += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.fctb_TextChanged);

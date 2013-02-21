@@ -140,7 +140,7 @@ namespace FastColoredTextBoxNS
                 return;
             }
             //start of declaration
-            if (Regex.IsMatch(args.LineText, @"\b(Class|Property|Enum|Structure|Sub|Function|Namespace|Interface|Get|Set)\b", RegexOptions.IgnoreCase))
+            if (Regex.IsMatch(args.LineText, @"\b(Class|Property|Enum|Structure|Sub|Function|Namespace|Interface|Get)\b|(Set\s*\()", RegexOptions.IgnoreCase))
             {
                 args.ShiftNextLines = args.TabLength;
                 return;

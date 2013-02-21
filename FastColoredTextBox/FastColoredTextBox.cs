@@ -4300,17 +4300,15 @@ namespace FastColoredTextBoxNS
             {
                 //base.OnMouseWheel(e);
 
-                int lineHeight = CharHeight;
-
                 // Determine scoll offset
-                int numberOfVisibleLines = ClientSize.Height / lineHeight;
+                int numberOfVisibleLines = ClientSize.Height / CharHeight;
                 int mouseWheelScrollLinesSetting = GetControlPanelWheelScrollLinesValue();
 
                 int offset;
                 if ((mouseWheelScrollLinesSetting == -1) || (mouseWheelScrollLinesSetting > numberOfVisibleLines))
-                    offset = lineHeight * numberOfVisibleLines;
+                    offset = CharHeight * numberOfVisibleLines;
                 else
-                    offset = lineHeight * mouseWheelScrollLinesSetting;
+                    offset = CharHeight * mouseWheelScrollLinesSetting;
 
                 var newScrollPos = VerticalScroll.Value - Math.Sign(e.Delta)* offset;
 
