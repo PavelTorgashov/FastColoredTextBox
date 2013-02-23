@@ -186,6 +186,7 @@ namespace FastColoredTextBoxNS
             ToolTip = new ToolTip();
             timer3.Interval = 500;
             hints = new Hints(this);
+            SelectionHighlightingForLineBreaksEnabled = true;
             //
             base.AutoScroll = true;
             timer.Tick += timer_Tick;
@@ -1095,6 +1096,24 @@ namespace FastColoredTextBoxNS
             }
         }
 
+        private bool selectionHighlightingForLineBreaksEnabled;
+        /// <summary>
+        /// If <c>true</c> then line breaks included into the selection will be selected too.
+        /// Then line breaks will be shown as selected blank character.
+        /// </summary>
+        [DefaultValue(true)]
+        [Description("If enabled then line ends included into the selection will be selected too. " +
+            "Then line ends will be shown as selected blank character.")]
+        public bool SelectionHighlightingForLineBreaksEnabled
+        {
+            get { return selectionHighlightingForLineBreaksEnabled; }
+            set
+            {
+                selectionHighlightingForLineBreaksEnabled = value;
+                Invalidate();
+            }
+        }
+
 
         [Browsable(false)]
         public FindForm findForm { get; private set; }
@@ -1374,7 +1393,7 @@ namespace FastColoredTextBoxNS
             {
                 selectionColor = value;
                 if (selectionColor.A == 255)
-                    selectionColor = Color.FromArgb(50, selectionColor);
+                    selectionColor = Color.FromArgb(60, selectionColor);
                 SelectionStyle = new SelectionStyle(new SolidBrush(selectionColor));
                 Invalidate();
             }
@@ -4134,6 +4153,7 @@ namespace FastColoredTextBoxNS
             }
 
             //draw selection
+            if (SelectionHighlightingForLineBreaksEnabled  && iWordWrapLine == lineInfo.WordWrapStringsCount - 1) lastChar++;//draw selection for CR
             if (!Selection.IsEmpty && lastChar >= firstChar)
             {
                 e.Graphics.SmoothingMode = SmoothingMode.None;

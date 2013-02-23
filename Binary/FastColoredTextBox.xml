@@ -1800,6 +1800,12 @@
             WordWrap mode.
             </summary>
         </member>
+        <member name="P:FastColoredTextBoxNS.FastColoredTextBox.SelectionHighlightingForLineBreaksEnabled">
+            <summary>
+            If <c>true</c> then line breaks included into the selection will be selected too.
+            Then line breaks will be shown as selected blank character.
+            </summary>
+        </member>
         <member name="P:FastColoredTextBoxNS.FastColoredTextBox.AutoScroll">
             <summary>
             Do not change this property
