@@ -107,7 +107,6 @@
             // 
             // fctb
             // 
-            this.fctb.AllowDrop = true;
             this.fctb.AutoIndent = false;
             this.fctb.AutoScrollMinSize = new System.Drawing.Size(0, 105);
             this.fctb.BackBrush = null;

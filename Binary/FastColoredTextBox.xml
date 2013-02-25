@@ -456,6 +456,62 @@
             This text will be saved in the file
             </summary>
         </member>
+        <member name="T:FastColoredTextBoxNS.MacrosManager">
+            <summary>
+            This class records, stores and executes the macros.
+            </summary>
+        </member>
+        <member name="M:FastColoredTextBoxNS.MacrosManager.ExecuteMacros">
+            <summary>
+            Executes recorded macro
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:FastColoredTextBoxNS.MacrosManager.AddCharToMacros(System.Char,System.Windows.Forms.Keys)">
+            <summary>
+            Adds the char to current macro
+            </summary>
+        </member>
+        <member name="M:FastColoredTextBoxNS.MacrosManager.AddKeyToMacros(System.Windows.Forms.Keys,System.Windows.Forms.Keys)">
+            <summary>
+            Adds keyboard key to current macro
+            </summary>
+        </member>
+        <member name="M:FastColoredTextBoxNS.MacrosManager.ClearMacros">
+            <summary>
+            Clears last recorded macro
+            </summary>
+        </member>
+        <member name="P:FastColoredTextBoxNS.MacrosManager.ActivateRecordingKey">
+            <summary>
+            Keys combination for record activate/deactivate
+            </summary>
+        </member>
+        <member name="P:FastColoredTextBoxNS.MacrosManager.ExecutingKey">
+            <summary>
+            Keys combination for executing of the macros
+            </summary>
+        </member>
+        <member name="P:FastColoredTextBoxNS.MacrosManager.AllowMacroRecordingByUser">
+            <summary>
+            Allows to user to record macros
+            </summary>
+        </member>
+        <member name="P:FastColoredTextBoxNS.MacrosManager.IsRecording">
+            <summary>
+            Returns current recording state. Set to True/False to start/stop recording programmatically.
+            </summary>
+        </member>
+        <member name="P:FastColoredTextBoxNS.MacrosManager.UnderlayingControl">
+            <summary>
+            FCTB
+            </summary>
+        </member>
+        <member name="P:FastColoredTextBoxNS.MacrosManager.MacroIsEmpty">
+            <summary>
+            Returns True if last macro is empty
+            </summary>
+        </member>
         <member name="F:FastColoredTextBoxNS.GoToForm.components">
             <summary>
             Required designer variable.
@@ -1073,6 +1129,11 @@
             Scroll control for display given range
             </summary>
         </member>
+        <member name="M:FastColoredTextBoxNS.FastColoredTextBox.ProcessKey(System.Windows.Forms.Keys,System.Windows.Forms.Keys)">
+            <summary>
+            Process control keys
+            </summary>
+        </member>
         <member name="M:FastColoredTextBoxNS.FastColoredTextBox.GotoNextBookmark(System.Int32)">
             <summary>
             Scrolls to nearest bookmark or to first bookmark
@@ -1124,6 +1185,17 @@
             <summary>
             Insert/remove comment prefix into selected lines
             </summary>
+        </member>
+        <member name="M:FastColoredTextBoxNS.FastColoredTextBox.ProcessKey(System.Char,System.Windows.Forms.Keys)">
+            <summary>
+            Process "real" keys (non control)
+            </summary>
+        </member>
+        <member name="M:FastColoredTextBoxNS.FastColoredTextBox.FindChar(System.Char)">
+            <summary>
+            Finds given char after current caret position, moves the caret to found pos.
+            </summary>
+            <param name="c"></param>
         </member>
         <member name="M:FastColoredTextBoxNS.FastColoredTextBox.DoAutoIndent(System.Int32)">
             <summary>
@@ -1323,12 +1395,12 @@
         </member>
         <member name="M:FastColoredTextBoxNS.FastColoredTextBox.IncreaseIndent">
             <summary>
-            Insert TAB into front of seletcted lines
+            Insert TAB into front of seletcted lines.
             </summary>
         </member>
         <member name="M:FastColoredTextBoxNS.FastColoredTextBox.DecreaseIndent">
             <summary>
-            Remove TAB from front of seletcted lines
+            Remove TAB from front of seletcted lines.
             </summary>
         </member>
         <member name="M:FastColoredTextBoxNS.FastColoredTextBox.DoAutoIndent">
@@ -1423,6 +1495,11 @@
             Removes given lines
             </summary>
         </member>
+        <member name="P:FastColoredTextBoxNS.FastColoredTextBox.MacrosManager">
+            <summary>
+            MacrosManager records, stores and executes the macroses.
+            </summary>
+        </member>
         <member name="P:FastColoredTextBoxNS.FastColoredTextBox.AllowDrop">
             <summary>
             Allows drag and drop
@@ -1478,6 +1555,16 @@
         <member name="P:FastColoredTextBoxNS.FastColoredTextBox.CaretVisible">
             <summary>
             Shows or hides the caret
+            </summary>
+        </member>
+        <member name="P:FastColoredTextBoxNS.FastColoredTextBox.TextAreaBorderColor">
+            <summary>
+            Color of border of text area
+            </summary>
+        </member>
+        <member name="P:FastColoredTextBoxNS.FastColoredTextBox.TextAreaBorder">
+            <summary>
+            Type of border of text area
             </summary>
         </member>
         <member name="P:FastColoredTextBoxNS.FastColoredTextBox.CurrentLineColor">
@@ -1539,6 +1626,11 @@
         <member name="P:FastColoredTextBoxNS.FastColoredTextBox.ShowFoldingLines">
             <summary>
             Shows vertical lines between folding start line and folding end line.
+            </summary>
+        </member>
+        <member name="P:FastColoredTextBoxNS.FastColoredTextBox.TextAreaRect">
+            <summary>
+            Rectangle where located text
             </summary>
         </member>
         <member name="P:FastColoredTextBoxNS.FastColoredTextBox.LineNumberColor">
@@ -1684,6 +1776,11 @@
         <member name="P:FastColoredTextBoxNS.FastColoredTextBox.AllowSeveralTextStyleDrawing">
             <summary>
             Allows text rendering several styles same time.
+            </summary>
+        </member>
+        <member name="P:FastColoredTextBoxNS.FastColoredTextBox.AllowMacroRecording">
+            <summary>
+            Allows to record macros.
             </summary>
         </member>
         <member name="P:FastColoredTextBoxNS.FastColoredTextBox.AutoIndent">
@@ -2480,6 +2577,11 @@
         <member name="T:FastColoredTextBoxNS.MultiRangeCommand">
             <summary>
             Wrapper for multirange commands
+            </summary>
+        </member>
+        <member name="T:FastColoredTextBoxNS.SelectCommand">
+            <summary>
+            Remembers current selection and restore it after Undo
             </summary>
         </member>
         <member name="T:FastColoredTextBoxNS.Hints">

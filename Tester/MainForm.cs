@@ -157,5 +157,10 @@ namespace Tester
         {
             new PredefinedStylesSample().Show();
         }
+
+        private void button29_Click(object sender, EventArgs e)
+        {
+            new MacrosSample().Show();
+        }
     }
 }

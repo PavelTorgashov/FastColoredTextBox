@@ -36,9 +36,10 @@
             this.cbSimple = new System.Windows.Forms.CheckBox();
             this.tbFind = new System.Windows.Forms.TextBox();
             this.cbDock = new System.Windows.Forms.CheckBox();
-            this.fctb = new FastColoredTextBoxNS.FastColoredTextBox();
             this.label2 = new System.Windows.Forms.Label();
+            this.fctb = new FastColoredTextBoxNS.FastColoredTextBox();
             this.panel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.fctb)).BeginInit();
             this.SuspendLayout();
             // 
             // btFind
@@ -108,29 +109,6 @@
             this.cbDock.Text = "Dock";
             this.cbDock.UseVisualStyleBackColor = true;
             // 
-            // fctb
-            // 
-            this.fctb.AllowDrop = true;
-            this.fctb.AutoScrollMinSize = new System.Drawing.Size(0, 270);
-            this.fctb.BackBrush = null;
-            this.fctb.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.fctb.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-            this.fctb.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.fctb.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.fctb.IsReplaceMode = false;
-            this.fctb.Language = FastColoredTextBoxNS.Language.CSharp;
-            this.fctb.LeftBracket = '(';
-            this.fctb.Location = new System.Drawing.Point(0, 87);
-            this.fctb.Name = "fctb";
-            this.fctb.Paddings = new System.Windows.Forms.Padding(0);
-            this.fctb.RightBracket = ')';
-            this.fctb.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
-            this.fctb.Size = new System.Drawing.Size(491, 325);
-            this.fctb.TabIndex = 0;
-            this.fctb.Text = resources.GetString("fctb.Text");
-            this.fctb.WordWrap = true;
-            this.fctb.HintClick += new System.EventHandler<FastColoredTextBoxNS.HintClickEventArgs>(this.fctb_HintClick);
-            // 
             // label2
             // 
             this.label2.Dock = System.Windows.Forms.DockStyle.Top;
@@ -142,11 +120,36 @@
             this.label2.Text = "The example shows usage of Hints. Press Find to add some hints. Press Esc to remo" +
     "ve all hints.";
             // 
+            // fctb
+            // 
+            this.fctb.AutoScrollMinSize = new System.Drawing.Size(0, 290);
+            this.fctb.BackBrush = null;
+            this.fctb.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.fctb.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.fctb.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.fctb.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.fctb.IsReplaceMode = false;
+            this.fctb.Language = FastColoredTextBoxNS.Language.CSharp;
+            this.fctb.LeftBracket = '(';
+            this.fctb.Location = new System.Drawing.Point(0, 87);
+            this.fctb.Name = "fctb";
+            this.fctb.PaddingBackColor = System.Drawing.Color.WhiteSmoke;
+            this.fctb.Paddings = new System.Windows.Forms.Padding(10);
+            this.fctb.RightBracket = ')';
+            this.fctb.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
+            this.fctb.Size = new System.Drawing.Size(491, 399);
+            this.fctb.TabIndex = 0;
+            this.fctb.Text = resources.GetString("fctb.Text");
+            this.fctb.TextAreaBorder = FastColoredTextBoxNS.TextAreaBorderType.Shadow;
+            this.fctb.TextAreaBorderColor = System.Drawing.Color.Gray;
+            this.fctb.WordWrap = true;
+            this.fctb.HintClick += new System.EventHandler<FastColoredTextBoxNS.HintClickEventArgs>(this.fctb_HintClick);
+            // 
             // HintSample
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(491, 412);
+            this.ClientSize = new System.Drawing.Size(491, 486);
             this.Controls.Add(this.fctb);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.label2);
@@ -154,6 +157,7 @@
             this.Text = "HintSample";
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.fctb)).EndInit();
             this.ResumeLayout(false);
 
         }

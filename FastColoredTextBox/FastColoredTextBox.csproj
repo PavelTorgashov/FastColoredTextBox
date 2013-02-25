@@ -55,6 +55,7 @@
     </Compile>
     <Compile Include="Hints.cs" />
     <Compile Include="LinesAccessor.cs" />
+    <Compile Include="MacrosManager.cs" />
     <Compile Include="PlatformType.cs" />
     <Compile Include="SyntaxDescriptor.cs" />
     <Compile Include="SyntaxHighlighter.cs" />

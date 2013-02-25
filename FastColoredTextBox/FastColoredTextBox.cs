@@ -140,7 +140,7 @@ namespace FastColoredTextBoxNS
             Cursor = Cursors.IBeam;
             BackColor = Color.White;
             LineNumberColor = Color.Teal;
-            IndentBackColor = Color.White;
+            IndentBackColor = Color.WhiteSmoke;
             ServiceLinesColor = Color.Silver;
             FoldingIndicatorColor = Color.Green;
             CurrentLineColor = Color.Transparent;
@@ -187,6 +187,9 @@ namespace FastColoredTextBoxNS
             timer3.Interval = 500;
             hints = new Hints(this);
             SelectionHighlightingForLineBreaksEnabled = true;
+            textAreaBorder = TextAreaBorderType.None;
+            textAreaBorderColor = Color.Black;
+            macrosManager = new MacrosManager(this);
             //
             base.AutoScroll = true;
             timer.Tick += timer_Tick;
@@ -194,6 +197,13 @@ namespace FastColoredTextBoxNS
             timer3.Tick += timer3_Tick;
             //
         }
+
+        MacrosManager macrosManager;
+        /// <summary>
+        /// MacrosManager records, stores and executes the macroses.
+        /// </summary>
+        [Browsable(false)]
+        public MacrosManager MacrosManager { get { return macrosManager; } }
 
         /// <summary>
         /// Allows drag and drop
@@ -300,6 +310,39 @@ namespace FastColoredTextBoxNS
             }
         }
 
+        Color textAreaBorderColor;
+
+        /// <summary>
+        /// Color of border of text area
+        /// </summary>
+        [DefaultValue(typeof(Color), "Black")]
+        [Description("Color of border of text area")]
+        public Color TextAreaBorderColor
+        {
+            get { return textAreaBorderColor; }
+            set
+            {
+                textAreaBorderColor = value;
+                Invalidate();
+            }
+        }
+
+        TextAreaBorderType textAreaBorder;
+        /// <summary>
+        /// Type of border of text area
+        /// </summary>
+        [DefaultValue(typeof(TextAreaBorderType), "None")]
+        [Description("Type of border of text area")]
+        public TextAreaBorderType TextAreaBorder
+        {
+            get { return textAreaBorder; }
+            set
+            {
+                textAreaBorder = value;
+                Invalidate();
+            }
+        }
+
         /// <summary>
         /// Background color for current line
         /// </summary>
@@ -319,9 +362,7 @@ namespace FastColoredTextBoxNS
         /// Background color for highlighting of changed lines
         /// </summary>
         [DefaultValue(typeof (Color), "Transparent")]
-        [Description(
-            "Background color for highlighting of changed lines. Set to Color.Transparent to hide changed line highlighting"
-            )]
+        [Description("Background color for highlighting of changed lines. Set to Color.Transparent to hide changed line highlighting")]
         public Color ChangedLineColor
         {
             get { return changedLineColor; }
@@ -349,7 +390,7 @@ namespace FastColoredTextBoxNS
         /// <summary>
         /// Height of char in pixels (includes LineInterval)
         /// </summary>
-        [Description("Height of char in pixels")]
+        [Browsable(false)]
         public int CharHeight
         {
             get { return charHeight; }
@@ -379,7 +420,7 @@ namespace FastColoredTextBoxNS
         /// <summary>
         /// Width of char in pixels
         /// </summary>
-        [Description("Width of char in pixels")]
+        [Browsable(false)]
         public int CharWidth { get; private set; }
 
         /// <summary>
@@ -452,6 +493,25 @@ namespace FastColoredTextBoxNS
         }
 
         /// <summary>
+        /// Rectangle where located text
+        /// </summary>
+        [Browsable(false)]
+        public Rectangle TextAreaRect
+        {
+            get 
+            {
+                int rightPaddingStartX = LeftIndent + maxLineLength * CharWidth + Paddings.Left + 1;
+                rightPaddingStartX = Math.Max(ClientSize.Width - Paddings.Right, rightPaddingStartX);
+                int bottomPaddingStartY = TextHeight + Paddings.Top;
+                bottomPaddingStartY = Math.Max(ClientSize.Height - Paddings.Bottom, bottomPaddingStartY);
+                var top = Math.Max(0, Paddings.Top - 1) - VerticalScroll.Value;
+                var left = LeftIndent - HorizontalScroll.Value - 2 + Math.Max(0, Paddings.Left - 1);
+                var rect = Rectangle.FromLTRB(left, top, rightPaddingStartX - HorizontalScroll.Value, bottomPaddingStartY - VerticalScroll.Value);
+                return rect;
+            }
+        }
+
+        /// <summary>
         /// Color of line numbers.
         /// </summary>
         [DefaultValue(typeof (Color), "Teal")]
@@ -485,7 +545,7 @@ namespace FastColoredTextBoxNS
         /// <summary>
         /// Background color of indent area
         /// </summary>
-        [DefaultValue(typeof (Color), "White")]
+        [DefaultValue(typeof(Color), "WhiteSmoke")]
         [Description("Background color of indent area")]
         public Color IndentBackColor
         {
@@ -756,6 +816,18 @@ namespace FastColoredTextBoxNS
         [DefaultValue(false)]
         [Description("Allows text rendering several styles same time.")]
         public bool AllowSeveralTextStyleDrawing { get; set; }
+
+        /// <summary>
+        /// Allows to record macros.
+        /// </summary>
+        [Browsable(true)]
+        [DefaultValue(true)]
+        [Description("Allows to record macros.")]
+        public bool AllowMacroRecording 
+        { 
+            get { return macrosManager.AllowMacroRecordingByUser; }
+            set { macrosManager.AllowMacroRecordingByUser = value; }
+        }
 
         /// <summary>
         /// Allows AutoIndent. Inserts spaces before new line.
@@ -2901,11 +2973,14 @@ namespace FastColoredTextBoxNS
                 lastModifiers &= ~Keys.Control;
         }
 
+
+        bool findCharMode;
+
         protected override void OnKeyDown(KeyEventArgs e)
         {
             base.OnKeyDown(e);
 
-            if (Focused)
+            if (Focused)//??? 
                 lastModifiers = e.Modifiers;
 
             handledChar = false;
@@ -2916,124 +2991,160 @@ namespace FastColoredTextBoxNS
                 return;
             }
 
-            switch (e.KeyCode)
+            if (ProcessKey(e.KeyCode, e.Modifiers))
+                return;
+
+            e.Handled = true;
+
+            DoCaretVisible();
+            Invalidate();
+        }
+
+        protected override bool ProcessDialogKey(Keys keyData)
+        {
+            if ((keyData & Keys.Alt) > 0)
+            {
+                switch (keyData)
+                {
+                    case Keys.Alt | Keys.F:
+                        ProcessKey(Keys.F, Keys.Alt);
+                        return true;
+                }
+            }
+
+            return base.ProcessDialogKey(keyData);
+        }
+
+        /// <summary>
+        /// Process control keys
+        /// </summary>
+        public virtual bool ProcessKey(Keys keyCode, Keys modifiers)
+        {
+            if (macrosManager != null)
+            if (macrosManager.ProcessKey(keyCode, modifiers))
+                 return true;
+
+            bool shift = (modifiers & Keys.Shift) > 0;
+
+            switch (keyCode)
             {
                 case Keys.G:
-                    if (e.Modifiers == Keys.Control)
+                    if (modifiers == Keys.Control)
                         ShowGoToDialog();
                     break;
                 case Keys.F:
-                    if (e.Modifiers == Keys.Control)
+                    if (modifiers == Keys.Control)
                         ShowFindDialog();
+                    if (modifiers == Keys.Alt)
+                        findCharMode = true;
                     break;
                 case Keys.F3:
-                    if (e.Modifiers == Keys.None)
+                    if (modifiers == Keys.None)
                         if (findForm == null || findForm.tbFind.Text == "")
                             ShowFindDialog();
                         else
                             findForm.FindNext(findForm.tbFind.Text);
                     break;
                 case Keys.H:
-                    if (e.Modifiers == Keys.Control)
+                    if (modifiers == Keys.Control)
                         ShowReplaceDialog();
                     break;
                 case Keys.C:
-                    if (e.Modifiers == Keys.Control)
+                    if (modifiers == Keys.Control)
                         Copy();
-                    if (e.Modifiers == (Keys.Control | Keys.Shift))
+                    if (modifiers == (Keys.Control | Keys.Shift))
                         CommentSelected();
                     break;
                 case Keys.X:
-                    if (e.Modifiers == Keys.Control && !Selection.ReadOnly)
+                    if (modifiers == Keys.Control && !Selection.ReadOnly)
                         Cut();
                     break;
                 case Keys.V:
-                    if (e.Modifiers == Keys.Control && !Selection.ReadOnly)
+                    if (modifiers == Keys.Control && !Selection.ReadOnly)
                         Paste();
                     break;
                 case Keys.A:
-                    if (e.Modifiers == Keys.Control)
+                    if (modifiers == Keys.Control)
                         Selection.SelectAll();
                     break;
                 case Keys.Z:
-                    if (e.Modifiers == Keys.Control && !ReadOnly)
+                    if (modifiers == Keys.Control && !ReadOnly)
                         Undo();
                     break;
                 case Keys.R:
-                    if (e.Modifiers == Keys.Control && !ReadOnly)
+                    if (modifiers == Keys.Control && !ReadOnly)
                         Redo();
                     break;
                 case Keys.U:
-                    if (e.Modifiers == (Keys.Control | Keys.Shift))
+                    if (modifiers == (Keys.Control | Keys.Shift))
                         LowerCase();
-                    if (e.Modifiers == Keys.Control)
+                    if (modifiers == Keys.Control)
                         UpperCase();
                     break;
                 case Keys.Tab:
-                    if (e.Modifiers == Keys.Shift && !Selection.ReadOnly)
+                    if (modifiers == Keys.Shift && !Selection.ReadOnly)
                         DecreaseIndent();
                     break;
                 case Keys.OemMinus:
-                    if (e.Modifiers == Keys.Control)
+                    if (modifiers == Keys.Control)
                         NavigateBackward();
-                    if (e.Modifiers == (Keys.Control | Keys.Shift))
+                    if (modifiers == (Keys.Control | Keys.Shift))
                         NavigateForward();
                     break;
 
                 case Keys.B:
-                    if (e.Modifiers == (Keys.Control | Keys.Shift))
+                    if (modifiers == (Keys.Control | Keys.Shift))
                         UnbookmarkLine(Selection.Start.iLine);
-                    else if (e.Modifiers == Keys.Control)
+                    else if (modifiers == Keys.Control)
                         BookmarkLine(Selection.Start.iLine);
                     break;
 
                 case Keys.N:
-                    if (e.Modifiers == Keys.Control)
+                    if (modifiers == Keys.Control)
                         GotoNextBookmark(Selection.Start.iLine);
-                    else if (e.Modifiers == (Keys.Control | Keys.Shift))
+                    else if (modifiers == (Keys.Control | Keys.Shift))
                         GotoPrevBookmark(Selection.Start.iLine);
                     break;
 
                 case Keys.Back:
                     if (Selection.ReadOnly) break;
-                    if (e.Modifiers == Keys.Alt)
+                    if (modifiers == Keys.Alt)
                         Undo();
-                    else if (e.Modifiers == Keys.None || e.Modifiers == Keys.Shift)
+                    else if (modifiers == Keys.None || modifiers == Keys.Shift)
                     {
                         if (OnKeyPressing('\b')) //KeyPress event processed key
                             break;
                         if (!Selection.IsEmpty)
                             ClearSelected();
-                        else
-                            if (!Selection.IsReadOnlyLeftChar())//is not left char readonly?
-                                InsertChar('\b');
+                        else if (!Selection.IsReadOnlyLeftChar()) //is not left char readonly?
+                            InsertChar('\b');
 
                         OnKeyPressed('\b');
                     }
-                    else if (e.Modifiers == Keys.Control)
+                    else if (modifiers == Keys.Control)
                     {
                         if (OnKeyPressing('\b')) //KeyPress event processed key
                             break;
                         if (!Selection.IsEmpty)
                             ClearSelected();
                         Selection.GoWordLeft(true);
-                        if(!Selection.ReadOnly)
+                        if (!Selection.ReadOnly)
                             ClearSelected();
                         OnKeyPressed('\b');
                     }
                     break;
 
                 case Keys.Insert:
-                    if (e.Modifiers == Keys.None)
+                    if (modifiers == Keys.None)
                     {
                         if (!ReadOnly)
                             isReplaceMode = !isReplaceMode;
                     }
-                    else if (e.Modifiers == Keys.Control)
+                    else if (modifiers == Keys.Control)
                     {
                         Copy();
                     }
-                    else if (e.Modifiers == Keys.Shift)
+                    else if (modifiers == Keys.Shift)
                     {
                         if (!Selection.ReadOnly)
                             Paste();
@@ -3042,7 +3153,7 @@ namespace FastColoredTextBoxNS
 
                 case Keys.Delete:
                     if (Selection.ReadOnly) break;
-                    if (e.Modifiers == Keys.None)
+                    if (modifiers == Keys.None)
                     {
                         if (OnKeyPressing((char) 0xff)) //KeyPress event processed key
                             break;
@@ -3055,21 +3166,21 @@ namespace FastColoredTextBoxNS
                                 RemoveSpacesAfterCaret();
 
                             if (!Selection.IsReadOnlyRightChar())
-                            if (Selection.GoRightThroughFolded())
-                            {
-                                int iLine = Selection.Start.iLine;
+                                if (Selection.GoRightThroughFolded())
+                                {
+                                    int iLine = Selection.Start.iLine;
 
-                                InsertChar('\b');
+                                    InsertChar('\b');
 
-                                //if removed \n then trim spaces
-                                if (iLine != Selection.Start.iLine && AutoIndent)
-                                    if (Selection.Start.iChar > 0)
-                                        RemoveSpacesAfterCaret();
-                            }
+                                    //if removed \n then trim spaces
+                                    if (iLine != Selection.Start.iLine && AutoIndent)
+                                        if (Selection.Start.iChar > 0)
+                                            RemoveSpacesAfterCaret();
+                                }
                         }
                         OnKeyPressed((char) 0xff);
                     }
-                    else if (e.Modifiers == Keys.Control)
+                    else if (modifiers == Keys.Control)
                     {
                         if (OnKeyPressing((char) 0xff)) //KeyPress event processed key
                             break;
@@ -3078,12 +3189,12 @@ namespace FastColoredTextBoxNS
                         else
                         {
                             Selection.GoWordRight(true);
-                            if(!Selection.ReadOnly)
+                            if (!Selection.ReadOnly)
                                 ClearSelected();
                         }
                         OnKeyPressed((char) 0xff);
                     }
-                    else if (e.Modifiers == Keys.Shift)
+                    else if (modifiers == Keys.Shift)
                     {
                         if (OnKeyPressing((char) 0xff)) //KeyPress event processed key
                             break;
@@ -3094,7 +3205,7 @@ namespace FastColoredTextBoxNS
                     break;
 
                 case Keys.Space:
-                    if (e.Modifiers == Keys.None || e.Modifiers == Keys.Shift)
+                    if (modifiers == Keys.None || modifiers == Keys.Shift)
                     {
                         if (OnKeyPressing(' ')) //KeyPress event processed key
                             break;
@@ -3118,11 +3229,11 @@ namespace FastColoredTextBoxNS
                     break;
 
                 case Keys.Left:
-                    if (e.Modifiers == Keys.Control || e.Modifiers == (Keys.Control | Keys.Shift))
-                        Selection.GoWordLeft(e.Shift);
-                    if (e.Modifiers == Keys.None || e.Modifiers == Keys.Shift)
-                        Selection.GoLeft(e.Shift);
-                    if (e.Modifiers == AltShift)
+                    if (modifiers == Keys.Control || modifiers == (Keys.Control | Keys.Shift))
+                        Selection.GoWordLeft(shift);
+                    if (modifiers == Keys.None || modifiers == Keys.Shift)
+                        Selection.GoLeft(shift);
+                    if (modifiers == AltShift)
                     {
                         CheckAndChangeSelectionType();
                         if (Selection.ColumnSelectionMode)
@@ -3130,11 +3241,11 @@ namespace FastColoredTextBoxNS
                     }
                     break;
                 case Keys.Right:
-                    if (e.Modifiers == Keys.Control || e.Modifiers == (Keys.Control | Keys.Shift))
-                        Selection.GoWordRight(e.Shift);
-                    if (e.Modifiers == Keys.None || e.Modifiers == Keys.Shift)
-                        Selection.GoRight(e.Shift);
-                    if (e.Modifiers == AltShift)
+                    if (modifiers == Keys.Control || modifiers == (Keys.Control | Keys.Shift))
+                        Selection.GoWordRight(shift);
+                    if (modifiers == Keys.None || modifiers == Keys.Shift)
+                        Selection.GoRight(shift);
+                    if (modifiers == AltShift)
                     {
                         CheckAndChangeSelectionType();
                         if (Selection.ColumnSelectionMode)
@@ -3142,94 +3253,91 @@ namespace FastColoredTextBoxNS
                     }
                     break;
                 case Keys.Up:
-                    if (e.Modifiers == Keys.None || e.Modifiers == Keys.Shift)
+                    if (modifiers == Keys.None || modifiers == Keys.Shift)
                     {
-                        Selection.GoUp(e.Shift);
+                        Selection.GoUp(shift);
                         ScrollLeft();
                     }
-                    if (e.Modifiers == AltShift)
+                    if (modifiers == AltShift)
                     {
                         CheckAndChangeSelectionType();
                         if (Selection.ColumnSelectionMode)
                             Selection.GoUp_ColumnSelectionMode();
                     }
-                    if (e.Modifiers == Keys.Alt)
+                    if (modifiers == Keys.Alt)
                     {
                         if (!Selection.ColumnSelectionMode)
                             MoveSelectedLinesUp();
                     }
                     break;
                 case Keys.Down:
-                    if (e.Modifiers == Keys.None || e.Modifiers == Keys.Shift)
+                    if (modifiers == Keys.None || modifiers == Keys.Shift)
                     {
-                        Selection.GoDown(e.Shift);
+                        Selection.GoDown(shift);
                         ScrollLeft();
                     }
-                    else if (e.Modifiers == AltShift)
+                    else if (modifiers == AltShift)
                     {
                         CheckAndChangeSelectionType();
                         if (Selection.ColumnSelectionMode)
                             Selection.GoDown_ColumnSelectionMode();
                     }
-                    if (e.Modifiers == Keys.Alt)
+                    if (modifiers == Keys.Alt)
                     {
                         if (!Selection.ColumnSelectionMode)
                             MoveSelectedLinesDown();
                     }
                     break;
                 case Keys.PageUp:
-                    if (e.Modifiers == Keys.None || e.Modifiers == Keys.Shift)
+                    if (modifiers == Keys.None || modifiers == Keys.Shift)
                     {
-                        Selection.GoPageUp(e.Shift);
+                        Selection.GoPageUp(shift);
                         ScrollLeft();
                     }
                     break;
                 case Keys.PageDown:
-                    if (e.Modifiers == Keys.None || e.Modifiers == Keys.Shift)
+                    if (modifiers == Keys.None || modifiers == Keys.Shift)
                     {
-                        Selection.GoPageDown(e.Shift);
+                        Selection.GoPageDown(shift);
                         ScrollLeft();
                     }
                     break;
                 case Keys.Home:
-                    if (e.Modifiers == Keys.Control || e.Modifiers == (Keys.Control | Keys.Shift))
-                        Selection.GoFirst(e.Shift);
-                    if (e.Modifiers == Keys.None || e.Modifiers == Keys.Shift)
+                    if (modifiers == Keys.Control || modifiers == (Keys.Control | Keys.Shift))
+                        Selection.GoFirst(shift);
+                    if (modifiers == Keys.None || modifiers == Keys.Shift)
                     {
-                        GoHome(e.Shift);
+                        GoHome(shift);
                         ScrollLeft();
                     }
                     break;
                 case Keys.End:
-                    if (e.Modifiers == Keys.Control || e.Modifiers == (Keys.Control | Keys.Shift))
-                        Selection.GoLast(e.Shift);
-                    if (e.Modifiers == Keys.None || e.Modifiers == Keys.Shift)
-                        Selection.GoEnd(e.Shift);
+                    if (modifiers == Keys.Control || modifiers == (Keys.Control | Keys.Shift))
+                        Selection.GoLast(shift);
+                    if (modifiers == Keys.None || modifiers == Keys.Shift)
+                        Selection.GoEnd(shift);
                     break;
                 case Keys.Escape:
-                    if (e.Modifiers == Keys.None)
+                    if (modifiers == Keys.None)
                         ClearHints();
                     break;
                 case Keys.Alt:
-                    return;
+                    return true;
                 default:
-                    if ((e.Modifiers & Keys.Control) != 0)
-                        return;
-                    if ((e.Modifiers & Keys.Alt) != 0)
+                    if ((modifiers & Keys.Control) != 0)
+                        return true;
+                    if ((modifiers & Keys.Alt) != 0)
                     {
                         if ((MouseButtons & MouseButtons.Left) != 0)
                             CheckAndChangeSelectionType();
-                        return;
+                        return true;
                     }
-                    if (e.KeyCode == Keys.ShiftKey)
-                        return;
+                    if (keyCode == Keys.ShiftKey)
+                        return true;
                     break;
             }
 
-            e.Handled = true;
-
-            DoCaretVisible();
-            Invalidate();
+            return false;
         }
 
         /// <summary>
@@ -3474,6 +3582,12 @@ namespace FastColoredTextBoxNS
 
         private bool OnKeyPressing(char c)
         {
+            if (findCharMode)
+            {
+                findCharMode = false;
+                FindChar(c);
+                return true;
+            }
             var args = new KeyPressEventArgs(c);
             OnKeyPressing(args);
             return args.Handled;
@@ -3486,30 +3600,30 @@ namespace FastColoredTextBoxNS
                 KeyPressed(this, args);
         }
 
-        /*
-        protected override void OnKeyPress(KeyPressEventArgs e)
-        {
-            base.OnKeyPress(e);
-            ProcessKeyPress(e.KeyChar);
-        }*/
-
         protected override bool ProcessMnemonic(char charCode)
         {
             if (Focused)
-                return ProcessKeyPress(charCode) || base.ProcessMnemonic(charCode);
+                return ProcessKey(charCode, lastModifiers) || base.ProcessMnemonic(charCode);
             else
                 return false;
         }
 
-        private bool ProcessKeyPress(char c)
+        /// <summary>
+        /// Process "real" keys (non control)
+        /// </summary>
+        public virtual bool ProcessKey(char c, Keys modifiers)
         {
             if (handledChar)
+                return true;
+
+            if (macrosManager != null)
+            if (macrosManager.ProcessKey(c, modifiers))
                 return true;
 
             if (c == ' ')
                 return true;
 
-            if (c == '\b' && (lastModifiers & Keys.Alt) != 0)
+            if (c == '\b' && (modifiers & Keys.Alt) != 0)
                 return true;
 
             if (char.IsControl(c) && c != '\r' && c != '\t')
@@ -3519,11 +3633,11 @@ namespace FastColoredTextBoxNS
                 return false;
 
 
-            if (lastModifiers != Keys.None &&
-                lastModifiers != Keys.Shift &&
-                lastModifiers != (Keys.Control | Keys.Alt) && //ALT+CTRL is special chars (AltGr)
-                lastModifiers != (Keys.Shift | Keys.Control | Keys.Alt) && //SHIFT + ALT + CTRL is special chars (AltGr)
-                (lastModifiers != (Keys.Alt) || char.IsLetterOrDigit(c)) //may be ALT+LetterOrDigit is mnemonic code
+            if (modifiers != Keys.None &&
+                modifiers != Keys.Shift &&
+                modifiers != (Keys.Control | Keys.Alt) && //ALT+CTRL is special chars (AltGr)
+                modifiers != (Keys.Shift | Keys.Control | Keys.Alt) && //SHIFT + ALT + CTRL is special chars (AltGr)
+                (modifiers != (Keys.Alt) || char.IsLetterOrDigit(c)) //may be ALT+LetterOrDigit is mnemonic code
                 )
                 return false; //do not process Ctrl+? and Alt+? keys
 
@@ -3531,11 +3645,11 @@ namespace FastColoredTextBoxNS
             if (OnKeyPressing(sourceC)) //KeyPress event processed key
                 return true;
 
-            if (c == '\r' && !AcceptsReturn)
-                return false;
-
             //
             if (Selection.ReadOnly)
+                return false;
+            //
+            if (c == '\r' && !AcceptsReturn)
                 return false;
 
             //tab?
@@ -3543,13 +3657,13 @@ namespace FastColoredTextBoxNS
             {
                 if (!AcceptsTab)
                     return false;
-                if (lastModifiers != Keys.Shift)
+                if (modifiers != Keys.Shift)
                 {
                     if (Selection.Start.iLine == Selection.End.iLine)
                     {
                         ClearSelected();
                         //insert tab as spaces
-                        int spaces = TabLength - (Selection.Start.iChar%TabLength);
+                        int spaces = TabLength - (Selection.Start.iChar % TabLength);
                         //replace mode? select forward chars
                         if (IsReplaceMode)
                         {
@@ -3560,7 +3674,7 @@ namespace FastColoredTextBoxNS
                         if (!Selection.ReadOnly)
                             InsertText(new String(' ', spaces));
                     }
-                    else if ((lastModifiers & Keys.Shift) == 0)
+                    else if ((modifiers & Keys.Shift) == 0)
                         IncreaseIndent();
                 }
             }
@@ -3589,6 +3703,27 @@ namespace FastColoredTextBoxNS
             OnKeyPressed(sourceC);
 
             return true;
+        }
+
+        /// <summary>
+        /// Finds given char after current caret position, moves the caret to found pos.
+        /// </summary>
+        /// <param name="c"></param>
+        protected virtual void FindChar(char c)
+        {
+            if (c == '\r')
+                c = '\n';
+
+            var r = Selection.Clone();
+            while (r.GoRight())
+            {
+                if (r.CharBeforeStart == c)
+                {
+                    Selection = r;
+                    DoCaretVisible();
+                    return;
+                }
+            }
         }
 
         private void DoAutoIndentIfNeed()
@@ -3827,25 +3962,21 @@ namespace FastColoredTextBoxNS
             Brush currentLineBrush =
                 new SolidBrush(Color.FromArgb(CurrentLineColor.A == 255 ? 50 : CurrentLineColor.A, CurrentLineColor));
             //draw padding area
+            var textAreaRect = TextAreaRect;
             //top
-            e.Graphics.FillRectangle(paddingBrush, 0, -VerticalScroll.Value, ClientSize.Width,
-                                     Math.Max(0, Paddings.Top - 1));
+            e.Graphics.FillRectangle(paddingBrush, 0, -VerticalScroll.Value, ClientSize.Width, Math.Max(0, Paddings.Top - 1));
             //bottom
-            int bottomPaddingStartY = TextHeight + Paddings.Top;
-            e.Graphics.FillRectangle(paddingBrush, 0, bottomPaddingStartY - VerticalScroll.Value, ClientSize.Width,
-                                     ClientSize.Height);
+            e.Graphics.FillRectangle(paddingBrush, 0, textAreaRect.Bottom, ClientSize.Width,ClientSize.Height);
             //right
-            int rightPaddingStartX = LeftIndent + maxLineLength*CharWidth + Paddings.Left + 1;
-            e.Graphics.FillRectangle(paddingBrush, rightPaddingStartX - HorizontalScroll.Value, 0, ClientSize.Width,
-                                     ClientSize.Height);
+            e.Graphics.FillRectangle(paddingBrush, textAreaRect.Right, 0, ClientSize.Width, ClientSize.Height);
             //left
             e.Graphics.FillRectangle(paddingBrush, LeftIndentLine, 0, LeftIndent - LeftIndentLine - 1, ClientSize.Height);
             if (HorizontalScroll.Value <= Paddings.Left)
                 e.Graphics.FillRectangle(paddingBrush, LeftIndent - HorizontalScroll.Value - 2, 0,
                                          Math.Max(0, Paddings.Left - 1), ClientSize.Height);
-
+            //
             int leftTextIndent = Math.Max(LeftIndent, LeftIndent + Paddings.Left - HorizontalScroll.Value);
-            int textWidth = rightPaddingStartX - HorizontalScroll.Value - leftTextIndent;
+            int textWidth = textAreaRect.Width;
             //draw indent area
             e.Graphics.FillRectangle(indentBrush, 0, 0, LeftIndentLine, ClientSize.Height);
             if (LeftIndent > minLeftIndent)
@@ -3855,10 +3986,13 @@ namespace FastColoredTextBoxNS
                 e.Graphics.DrawLine(servicePen,
                                     new Point(
                                         LeftIndent + Paddings.Left + PreferredLineWidth*CharWidth -
-                                        HorizontalScroll.Value + 1, 0),
+                                        HorizontalScroll.Value + 1, textAreaRect.Top + 1),
                                     new Point(
                                         LeftIndent + Paddings.Left + PreferredLineWidth*CharWidth -
-                                        HorizontalScroll.Value + 1, Height));
+                                        HorizontalScroll.Value + 1, textAreaRect.Bottom - 1));
+
+            //draw text area border
+            DrawTextAreaBorder(e.Graphics);
             //
             int firstChar = (Math.Max(0, HorizontalScroll.Value - Paddings.Left))/CharWidth;
             int lastChar = (HorizontalScroll.Value + ClientSize.Width)/CharWidth;
@@ -3889,13 +4023,13 @@ namespace FastColoredTextBoxNS
                 if (lineInfo.VisibleState == VisibleState.Visible)
                     if (line.BackgroundBrush != null)
                         e.Graphics.FillRectangle(line.BackgroundBrush,
-                                                 new Rectangle(leftTextIndent, y, textWidth,
+                                                 new Rectangle(textAreaRect.Left, y, textAreaRect.Width,
                                                                CharHeight*lineInfo.WordWrapStringsCount));
                 //draw current line background
                 if (CurrentLineColor != Color.Transparent && iLine == Selection.Start.iLine)
                     if (Selection.IsEmpty)
                         e.Graphics.FillRectangle(currentLineBrush,
-                                                 new Rectangle(leftTextIndent, y, textWidth, CharHeight));
+                                                 new Rectangle(textAreaRect.Left, y, textAreaRect.Width, CharHeight));
                 //draw changed line marker
                 if (ChangedLineColor != Color.Transparent && line.IsChanged)
                     e.Graphics.FillRectangle(changedLineBrush,
@@ -4016,6 +4150,9 @@ namespace FastColoredTextBoxNS
                 using (var brush = new SolidBrush(DisabledColor))
                     e.Graphics.FillRectangle(brush, ClientRectangle);
 
+            if (MacrosManager.IsRecording)
+                DrawRecordingHint(e.Graphics);
+
             //dispose resources
             servicePen.Dispose();
             changedLineBrush.Dispose();
@@ -4029,6 +4166,60 @@ namespace FastColoredTextBoxNS
 #endif
             //
             base.OnPaint(e);
+        }
+
+        private void DrawRecordingHint(Graphics graphics)
+        {
+            const int w = 75;
+            const int h = 13;
+            var rect = new Rectangle(ClientRectangle.Right - w, ClientRectangle.Bottom - h, w, h);
+            var iconRect = new Rectangle(-h/2 + 3, -h/2 + 3, h - 7, h - 7);
+            var state = graphics.Save();
+            graphics.SmoothingMode = SmoothingMode.HighQuality;
+            graphics.TranslateTransform(rect.Left + h/2, rect.Top + h/2);
+            var ts = new TimeSpan(DateTime.Now.Ticks);
+            graphics.RotateTransform(180 * (DateTime.Now.Millisecond/1000f));
+            using (var pen = new Pen(Color.Red, 2))
+            {
+                graphics.DrawArc(pen, iconRect, 0, 90);
+                graphics.DrawArc(pen, iconRect, 180, 90);
+            }
+            graphics.DrawEllipse(Pens.Red, iconRect);
+            graphics.Restore(state);
+            using (var font = new Font(FontFamily.GenericSansSerif, 8f))
+                graphics.DrawString("Recording...", font, Brushes.Red, new PointF(rect.Left + h, rect.Top));
+            System.Threading.Timer tm = null;
+            tm = new System.Threading.Timer(
+                (o) => {
+                    Invalidate(rect);
+                    tm.Dispose();
+                }, null, 200, System.Threading.Timeout.Infinite);
+        }
+
+        private void DrawTextAreaBorder(Graphics graphics)
+        {
+            if (TextAreaBorder == TextAreaBorderType.None)
+                return;
+
+            var rect = TextAreaRect;
+
+            if (TextAreaBorder == TextAreaBorderType.Shadow)
+            {
+                const int shadowSize = 4;
+                var rBottom = new Rectangle(rect.Left + shadowSize, rect.Bottom, rect.Width - shadowSize, shadowSize);
+                var rCorner = new Rectangle(rect.Right, rect.Bottom, shadowSize, shadowSize);
+                var rRight = new Rectangle(rect.Right, rect.Top + shadowSize, shadowSize, rect.Height - shadowSize);
+
+                using (var brush = new SolidBrush(Color.FromArgb(80, TextAreaBorderColor)))
+                {
+                    graphics.FillRectangle(brush, rBottom);
+                    graphics.FillRectangle(brush, rRight);
+                    graphics.FillRectangle(brush, rCorner);
+                }
+            }
+
+            using(Pen pen = new Pen(TextAreaBorderColor))
+                graphics.DrawRectangle(pen, rect);
         }
 
         private void PaintHintBrackets(Graphics gr)
@@ -4213,6 +4404,8 @@ namespace FastColoredTextBoxNS
         protected override void OnMouseDown(MouseEventArgs e)
         {
             base.OnMouseDown(e);
+
+            MacrosManager.IsRecording = false;
 
             Select();
             ActiveControl = null;
@@ -5294,45 +5487,55 @@ namespace FastColoredTextBoxNS
         }
 
         /// <summary>
-        /// Insert TAB into front of seletcted lines
+        /// Insert TAB into front of seletcted lines.
         /// </summary>
         public void IncreaseIndent()
         {
             if (Selection.Start == Selection.End)
                 return;
 
-            bool carretAtEnd = Selection.Start > Selection.End;
-            bool lastLineIsNotSelected = carretAtEnd && Selection.Start.iChar == 0 && !Selection.ColumnSelectionMode;
+            bool carretAtEnd = (Selection.Start > Selection.End) && !Selection.ColumnSelectionMode;
 
             int startChar = 0; // Only move selection when in 'ColumnSelectionMode'
             if (Selection.ColumnSelectionMode)
                 startChar = Math.Min(Selection.End.iChar, Selection.Start.iChar);
 
-
-            int from = Math.Min(Selection.Start.iLine, Selection.End.iLine);
-            int to = Math.Max(Selection.Start.iLine, Selection.End.iLine);
-            int maxLineLength = 0;
-
             BeginUpdate();
             Selection.BeginUpdate();
             lines.Manager.BeginAutoUndoCommands();
+
+            var old = Selection.Clone();
+            lines.Manager.ExecuteCommand(new SelectCommand(TextSource));//remember selection
+
+            //
+            Selection.Normalize();
+            Range currentSelection = this.Selection.Clone();
+            int from = Selection.Start.iLine;
+            int to = Selection.End.iLine;
+
+            if (!Selection.ColumnSelectionMode)
+                if (Selection.End.iChar == 0) to--;
+
             for (int i = from; i <= to; i++)
             {
                 if (lines[i].Count == 0) continue;
-                if (i == to && lastLineIsNotSelected) continue;
                 Selection.Start = new Place(startChar, i);
                 lines.Manager.ExecuteCommand(new InsertTextCommand(TextSource, new String(' ', TabLength)));
-                if (lines[i].Count > maxLineLength)
-                    maxLineLength = lines[i].Count;
+            }
+
+            // Restore selection
+            if (Selection.ColumnSelectionMode == false)
+            {
+                int newSelectionStartCharacterIndex = currentSelection.Start.iChar + this.TabLength;
+                int newSelectionEndCharacterIndex = currentSelection.End.iChar + (currentSelection.End.iLine == to?this.TabLength : 0);
+                this.Selection.Start = new Place(newSelectionStartCharacterIndex, currentSelection.Start.iLine);
+                this.Selection.End = new Place(newSelectionEndCharacterIndex, currentSelection.End.iLine);
+            }
+            else
+            {
+                Selection = old;
             }
             lines.Manager.EndAutoUndoCommands();
-
-            Selection.Start = new Place(Selection.ColumnSelectionMode ? startChar :  0, from);
-
-            if (lastLineIsNotSelected)
-                Selection.End = new Place(Selection.ColumnSelectionMode ? startChar : 0, to);
-            else
-                Selection.End = new Place(Selection.ColumnSelectionMode ? maxLineLength : lines[to].Count, to);
 
             if (carretAtEnd)
                 Selection.Inverse();
@@ -5344,52 +5547,81 @@ namespace FastColoredTextBoxNS
         }
 
         /// <summary>
-        /// Remove TAB from front of seletcted lines
+        /// Remove TAB from front of seletcted lines.
         /// </summary>
         public void DecreaseIndent()
         {
-            if (Selection.Start == Selection.End)
+            if (Selection.Start.iLine == Selection.End.iLine)
             {
                 DecreaseIndentOfSingleLine();
                 return;
             }
 
-            bool carretAtEnd = Selection.Start > Selection.End;
-            bool lastLineIsNotSelected = carretAtEnd && Selection.Start.iChar == 0 && !Selection.ColumnSelectionMode;
-
-            int startChar = 0;// Only move selection when in 'ColumnSelectionMode'
+            int startCharIndex = 0;
             if (Selection.ColumnSelectionMode)
-                startChar = Math.Min(Selection.End.iChar, Selection.Start.iChar);
-
-            int from = Math.Min(Selection.Start.iLine, Selection.End.iLine);
-            int to = Math.Max(Selection.Start.iLine, Selection.End.iLine);
-            int maxLineLength = 0;
+                startCharIndex = Math.Min(Selection.End.iChar, Selection.Start.iChar);
 
             BeginUpdate();
             Selection.BeginUpdate();
             lines.Manager.BeginAutoUndoCommands();
+            var old = Selection.Clone();
+            lines.Manager.ExecuteCommand(new SelectCommand(TextSource));//remember selection
+
+            // Remember current selection infos
+            Range currentSelection = this.Selection.Clone();
+            Selection.Normalize();
+            int from = Selection.Start.iLine;
+            int to = Selection.End.iLine;
+
+            if (!Selection.ColumnSelectionMode)
+                if (Selection.End.iChar == 0) to--;
+
+            int numberOfDeletedWhitespacesOfFirstLine = 0;
+            int numberOfDeletetWhitespacesOfLastLine = 0;
+
             for (int i = from; i <= to; i++)
             {
-                if (i == to && lastLineIsNotSelected) continue;
-                Selection.Start = new Place(startChar, i);
-                //Use corrected start position
-                Selection.End = new Place(Math.Min(lines[i].Count, startChar + TabLength), i);
-                if (Selection.Text.Trim() == "")
-                    ClearSelected();
-                if (lines[i].Count > maxLineLength)
-                    maxLineLength = lines[i].Count;
+                if (startCharIndex > lines[i].Count)
+                    continue;
+                // Select first characters from the line
+                int endIndex = Math.Min(this.lines[i].Count, startCharIndex + this.TabLength);
+                string wasteText = this.lines[i].Text.Substring(startCharIndex, endIndex-startCharIndex);
+
+                // Only select the first whitespace characters
+                endIndex = Math.Min(endIndex, startCharIndex + wasteText.Length - wasteText.TrimStart().Length);
+
+                // Select the characters to remove
+                this.Selection = new Range(this, new Place(startCharIndex, i), new Place(endIndex, i));
+
+                // Remember characters to remove for first and last line
+                int numberOfWhitespacesToRemove = endIndex - startCharIndex;
+                if (i == currentSelection.Start.iLine)
+                {
+                    numberOfDeletedWhitespacesOfFirstLine = numberOfWhitespacesToRemove;
+                }
+                if (i == currentSelection.End.iLine)
+                {
+                    numberOfDeletetWhitespacesOfLastLine = numberOfWhitespacesToRemove;
+                }
+
+                // Remove marked/selected whitespace characters
+                if(!Selection.IsEmpty)
+                    this.ClearSelected();
+            }
+
+            // Restore selection
+            if (Selection.ColumnSelectionMode == false)
+            {
+                int newSelectionStartCharacterIndex = Math.Max(0, currentSelection.Start.iChar - numberOfDeletedWhitespacesOfFirstLine);
+                int newSelectionEndCharacterIndex = Math.Max(0, currentSelection.End.iChar - numberOfDeletetWhitespacesOfLastLine);
+                this.Selection.Start = new Place(newSelectionStartCharacterIndex, currentSelection.Start.iLine);
+                this.Selection.End = new Place(newSelectionEndCharacterIndex, currentSelection.End.iLine);
+            }
+            else
+            {
+                Selection = old;
             }
             lines.Manager.EndAutoUndoCommands();
-
-            Selection.Start = new Place(Selection.ColumnSelectionMode ? startChar : 0, from);
-
-            if (lastLineIsNotSelected)
-                Selection.End = new Place(Selection.ColumnSelectionMode ? startChar : 0, to);
-            else
-                Selection.End = new Place(Selection.ColumnSelectionMode ? maxLineLength : lines[to].Count, to);
-
-            if (carretAtEnd)
-                Selection.Inverse();
 
             needRecalc = true;
             Selection.EndUpdate();
@@ -5399,24 +5631,21 @@ namespace FastColoredTextBoxNS
 
         private void DecreaseIndentOfSingleLine()
         {
-            if (Selection.Start != Selection.End)
-                return;
-
-            var old = Selection.Start;
-            var iLine = Selection.Start.iLine;
-            var spaces = this[iLine].StartSpacesCount;
-            spaces = Math.Min(spaces, TabLength);
-            if (spaces == 0) return;
-
-            Selection.BeginUpdate();
-            Selection.Start = new Place(0, iLine);
-            Selection.End = new Place(spaces, iLine);
-            ClearSelected();
-            Selection.Start = new Place(Math.Max(0, old.iChar - spaces), iLine);
-            Selection.EndUpdate();
-
-            Invalidate();
+            var old = Selection.Clone();
+            var r = new Range(this, 0, Selection.Start.iLine, Selection.FromX, Selection.Start.iLine);
+            foreach (var range in r.GetRanges("\\s{1,"+TabLength+"}", RegexOptions.RightToLeft))
+            {
+                lines.Manager.BeginAutoUndoCommands();
+                lines.Manager.ExecuteCommand(new SelectCommand(TextSource));
+                Selection = range;
+                ClearSelected();
+                lines.Manager.EndAutoUndoCommands();
+                var rangeLength = range.End.iChar - range.Start.iChar;
+                Selection = new Range(this, old.Start.iChar - rangeLength, old.Start.iLine, old.End.iChar - rangeLength, old.End.iLine);
+                break;
+            }
         }
+
 
         /// <summary>
         /// Insert autoindents into selected lines
@@ -6383,5 +6612,12 @@ window.status = ""#print"";
         }
 
         public Hint Hint { get; private set; }
+    }
+
+    public enum TextAreaBorderType
+    {
+        None,
+        Single,
+        Shadow
     }
 }

@@ -84,6 +84,8 @@
             this.button27 = new System.Windows.Forms.Button();
             this.label28 = new System.Windows.Forms.Label();
             this.button28 = new System.Windows.Forms.Button();
+            this.label29 = new System.Windows.Forms.Label();
+            this.button29 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -627,11 +629,32 @@
             this.button28.UseVisualStyleBackColor = true;
             this.button28.Click += new System.EventHandler(this.button28_Click);
             // 
+            // label29
+            // 
+            this.label29.Location = new System.Drawing.Point(633, 152);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(189, 35);
+            this.label29.TabIndex = 57;
+            this.label29.Text = "This sample shows how to use macros for hard formatting of the code.";
+            this.label29.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // button29
+            // 
+            this.button29.Location = new System.Drawing.Point(828, 153);
+            this.button29.Name = "button29";
+            this.button29.Size = new System.Drawing.Size(75, 23);
+            this.button29.TabIndex = 56;
+            this.button29.Text = "Show";
+            this.button29.UseVisualStyleBackColor = true;
+            this.button29.Click += new System.EventHandler(this.button29_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(915, 561);
+            this.Controls.Add(this.label29);
+            this.Controls.Add(this.button29);
             this.Controls.Add(this.label28);
             this.Controls.Add(this.button28);
             this.Controls.Add(this.label27);
@@ -753,5 +776,7 @@
         private System.Windows.Forms.Button button27;
         private System.Windows.Forms.Label label28;
         private System.Windows.Forms.Button button28;
+        private System.Windows.Forms.Label label29;
+        private System.Windows.Forms.Button button29;
     }
 }

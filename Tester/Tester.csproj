@@ -36,9 +36,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -77,6 +75,12 @@
     </Compile>
     <Compile Include="ConsoleSample.Designer.cs">
       <DependentUpon>ConsoleSample.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MacrosSample.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MacrosSample.Designer.cs">
+      <DependentUpon>MacrosSample.cs</DependentUpon>
     </Compile>
     <Compile Include="PredefinedStylesSample.cs">
       <SubType>Form</SubType>
@@ -245,6 +249,9 @@
     <EmbeddedResource Include="ConsoleSample.resx">
       <DependentUpon>ConsoleSample.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MacrosSample.resx">
+      <DependentUpon>MacrosSample.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PredefinedStylesSample.resx">
       <DependentUpon>PredefinedStylesSample.cs</DependentUpon>

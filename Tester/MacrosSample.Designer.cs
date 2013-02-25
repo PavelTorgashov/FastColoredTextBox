@@ -1,6 +1,6 @@
 ﻿namespace Tester
 {
-    partial class CustomStyleSample
+    partial class MacrosSample
     {
         /// <summary>
         /// Required designer variable.
@@ -29,60 +29,56 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CustomStyleSample));
-            this.label1 = new System.Windows.Forms.Label();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MacrosSample));
+            this.label2 = new System.Windows.Forms.Label();
             this.fctb = new FastColoredTextBoxNS.FastColoredTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.fctb)).BeginInit();
             this.SuspendLayout();
             // 
-            // label1
+            // label2
             // 
-            this.label1.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.label1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label1.Location = new System.Drawing.Point(0, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(600, 39);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "This example shows how to create own custom style.";
+            this.label2.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.label2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label2.Location = new System.Drawing.Point(0, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(720, 256);
+            this.label2.TabIndex = 5;
+            this.label2.Text = resources.GetString("label2.Text");
             // 
             // fctb
             // 
-            this.fctb.AutoIndent = false;
-            this.fctb.AutoScrollMinSize = new System.Drawing.Size(595, 180);
+            this.fctb.AutoScrollMinSize = new System.Drawing.Size(0, 170);
             this.fctb.BackBrush = null;
             this.fctb.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.fctb.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.fctb.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.fctb.Font = new System.Drawing.Font("Consolas", 9.75F);
+            this.fctb.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.fctb.IsReplaceMode = false;
+            this.fctb.Language = FastColoredTextBoxNS.Language.CSharp;
             this.fctb.LeftBracket = '(';
-            this.fctb.LeftPadding = 3;
-            this.fctb.Location = new System.Drawing.Point(0, 39);
+            this.fctb.Location = new System.Drawing.Point(0, 256);
             this.fctb.Name = "fctb";
             this.fctb.PaddingBackColor = System.Drawing.Color.WhiteSmoke;
-            this.fctb.Paddings = new System.Windows.Forms.Padding(15);
-            this.fctb.PreferredLineWidth = 80;
+            this.fctb.Paddings = new System.Windows.Forms.Padding(10);
             this.fctb.RightBracket = ')';
             this.fctb.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
-            this.fctb.ShowLineNumbers = false;
-            this.fctb.Size = new System.Drawing.Size(600, 266);
-            this.fctb.TabIndex = 2;
+            this.fctb.ServiceLinesColor = System.Drawing.Color.WhiteSmoke;
+            this.fctb.Size = new System.Drawing.Size(720, 230);
+            this.fctb.TabIndex = 0;
             this.fctb.Text = resources.GetString("fctb.Text");
-            this.fctb.TextAreaBorder = FastColoredTextBoxNS.TextAreaBorderType.Shadow;
+            this.fctb.TextAreaBorderColor = System.Drawing.Color.Gray;
             this.fctb.WordWrap = true;
-            this.fctb.WordWrapMode = FastColoredTextBoxNS.WordWrapMode.WordWrapPreferredWidth;
-            this.fctb.TextChanged += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.fctb_TextChanged);
             // 
-            // CustomStyleSample
+            // MacrosSample
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(600, 305);
+            this.ClientSize = new System.Drawing.Size(720, 486);
             this.Controls.Add(this.fctb);
-            this.Controls.Add(this.label1);
-            this.Name = "CustomStyleSample";
-            this.Text = "Custom style sample";
+            this.Controls.Add(this.label2);
+            this.Name = "MacrosSample";
+            this.Text = "MacrosSample";
             ((System.ComponentModel.ISupportInitialize)(this.fctb)).EndInit();
             this.ResumeLayout(false);
 
@@ -90,8 +86,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Label label1;
         private FastColoredTextBoxNS.FastColoredTextBox fctb;
+        private System.Windows.Forms.Label label2;
     }
 }
-

@@ -117,9 +117,33 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="label2.Text" xml:space="preserve">
+    <value>The FCTB supports recording of macros. 
+When recording is activated, FCTB remembers all pressed keys. Later you can execute recorded sequence.
+To start/stop recording press Ctrl-M, to execute macro - press Ctrl-E.
+Also you can use useful feature - char finding. Press Alt-F and any char. Entered char will be found in the text.
+
+This sample shows how to use macros for hard formatting of the code. Follow instructions:
+Set caret to start of the text.
+Press Ctrl+M (start macro recording)
+Press Alt+F and = (first char = will be found)
+Type ' new char[] {'
+Press End key.
+Type '};'
+Press Home and Down keys.
+Press Ctrl+M (stop recording)
+Press Ctrl+E several times (the macro will be executed).</value>
+  </data>
   <data name="fctb.Text" xml:space="preserve">
-    <value>
-Available historical resources suggest that Babylon was at first a small town which had sprung up by the beginning of the 3rd millennium BC. The town flourished and attained prominence and political repute with the rise of the First Babylonian Dynasty. Claiming to be the successor of the ancient Eridu, Babylon eclipsed Nippur as the \"holy city\" of Mesopotamia around the time Hammurabi first unified the Babylonian Empire, and again became the seat of the Neo-Babylonian Empire from 612 to 539 BC. The Hanging Gardens of Babylon were one of the Seven Wonders of the Ancient World.
-</value>
+    <value>var foo11 = 'd','s','f','j'
+var foo14 = 'd','s','f','j'
+var foo167 = 'd','s','f','j'
+var foo16 = 'd','s','f','j'
+var foo14 =  'd','s','f','j'
+var foo2='d','s','f','j'
+var foo81 = 'd','s','f','j'
+var foo91 = 'd','s','f','j'
+var foo189 = 'd','s','f','j'
+var foo1 ='d','s','f','j'</value>
   </data>
 </root>

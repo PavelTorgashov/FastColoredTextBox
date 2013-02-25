@@ -94,7 +94,8 @@ namespace Tester
         {
             //draw current line marker
             if (e.LineIndex == fctb.Selection.Start.iLine)
-                e.Graphics.FillEllipse(new LinearGradientBrush(new Rectangle(0, e.LineRect.Top, 15, 15), Color.LightPink, Color.Red, 45), 0, e.LineRect.Top, 15, 15);
+                using (var brush = new LinearGradientBrush(new Rectangle(0, e.LineRect.Top, 15, 15), Color.LightPink, Color.Red, 45))
+                    e.Graphics.FillEllipse(brush, 0, e.LineRect.Top, 15, 15);
         }
 
         private void fctb_Resize(object sender, EventArgs e)

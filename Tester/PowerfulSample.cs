@@ -358,6 +358,16 @@ namespace Tester
             fctb.Selection.ReadOnly = false;
         }
 
+        private void startStopMacroRecordingToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            fctb.MacrosManager.IsRecording = !fctb.MacrosManager.IsRecording;
+        }
+
+        private void executeMacroToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            fctb.MacrosManager.ExecuteMacros();
+        }
+
         /*
         private void saveFoldingsToolStripMenuItem_Click(object sender, EventArgs e)
         {

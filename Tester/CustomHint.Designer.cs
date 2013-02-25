@@ -63,11 +63,12 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.button1);
             this.Name = "CustomHint";
-            this.Size = new System.Drawing.Size(211, 45);
+            this.Size = new System.Drawing.Size(219, 43);
             this.ResumeLayout(false);
             this.PerformLayout();
 
