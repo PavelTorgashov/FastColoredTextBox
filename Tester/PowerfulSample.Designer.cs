@@ -390,6 +390,7 @@ namespace Tester
             this.fctb.Location = new System.Drawing.Point(0, 24);
             this.fctb.Name = "fctb";
             this.fctb.Paddings = new System.Windows.Forms.Padding(0);
+            this.fctb.ReservedCountOfLineNumberChars = 2;
             this.fctb.RightBracket = ')';
             this.fctb.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.fctb.Size = new System.Drawing.Size(387, 332);

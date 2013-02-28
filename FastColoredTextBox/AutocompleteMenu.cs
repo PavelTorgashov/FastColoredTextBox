@@ -561,7 +561,7 @@ namespace FastColoredTextBoxNS
             SetAutocompleteItems(list);
         }
 
-        public void SetAutocompleteItems(ICollection<AutocompleteItem> items)
+        public void SetAutocompleteItems(IEnumerable<AutocompleteItem> items)
         {
             sourceItems = items;
         }

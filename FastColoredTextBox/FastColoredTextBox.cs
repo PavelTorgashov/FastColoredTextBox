@@ -111,6 +111,7 @@ namespace FastColoredTextBoxNS
         private Range visibleRange;
         private bool wordWrap;
         private WordWrapMode wordWrapMode = WordWrapMode.WordWrapControlWidth;
+        private int reservedCountOfLineNumberChars = 1;
 
         /// <summary>
         /// Constructor
@@ -1482,6 +1483,27 @@ namespace FastColoredTextBoxNS
         }
 
         /// <summary>
+        /// Reserved space for line number characters.
+        /// If smaller than needed (e. g. line count >= 10 and this value set to 1) this value will have no impact.
+        /// If you want to reserve space, e. g. for line numbers >= 10 or >= 100 than you can set this value to 2 or 3 or higher.
+        /// </summary>
+        [DefaultValue(1)]
+        [Description(
+            "Reserved space for line number characters. If smaller than needed (e. g. line count >= 10 and " +
+            "this value set to 1) this value will have no impact. If you want to reserve space, e. g. for line " +
+            "numbers >= 10 or >= 100, than you can set this value to 2 or 3 or higher.")]
+        public int ReservedCountOfLineNumberChars
+        {
+            get { return reservedCountOfLineNumberChars; }
+            set
+            {
+                reservedCountOfLineNumberChars = value;
+                NeedRecalc();
+                Invalidate();
+            }
+        }
+
+        /// <summary>
         /// Occurs when mouse is moving over text and tooltip is needed
         /// </summary>
         [Browsable(true)]
@@ -2656,13 +2678,18 @@ namespace FastColoredTextBoxNS
 
 #if debug
             var sw = Stopwatch.StartNew();
-            #endif
+#endif
 
             needRecalc = false;
             //calc min left indent
             LeftIndent = LeftPadding;
             long maxLineNumber = LinesCount + lineNumberStartValue - 1;
             int charsForLineNumber = 2 + (maxLineNumber > 0 ? (int) Math.Log10(maxLineNumber) : 0);
+
+            // If there are reserved character for line numbers: correct this
+            if (this.ReservedCountOfLineNumberChars + 1 > charsForLineNumber)
+                charsForLineNumber = this.ReservedCountOfLineNumberChars + 1;
+
             if (Created)
             {
                 if (ShowLineNumbers)
@@ -4676,7 +4703,7 @@ namespace FastColoredTextBoxNS
         private void CancelToolTip()
         {
             timer3.Stop();
-            if (ToolTip != null)
+            if (ToolTip != null && !string.IsNullOrEmpty(ToolTip.GetToolTip(this)))
             {
                 ToolTip.Hide(this);
                 ToolTip.SetToolTip(this, null);
@@ -5629,6 +5656,7 @@ namespace FastColoredTextBoxNS
             Invalidate();
         }
 
+        /*
         private void DecreaseIndentOfSingleLine()
         {
             var old = Selection.Clone();
@@ -5644,6 +5672,65 @@ namespace FastColoredTextBoxNS
                 Selection = new Range(this, old.Start.iChar - rangeLength, old.Start.iLine, old.End.iChar - rangeLength, old.End.iLine);
                 break;
             }
+        }*/
+
+        /// <summary>
+        /// Remove TAB in front of the caret ot the selected line.
+        /// </summary>
+        private void DecreaseIndentOfSingleLine()
+        {
+            if (this.Selection.Start.iLine != this.Selection.End.iLine)
+                return;
+
+            // Remeber current selection infos
+            Range currentSelection = this.Selection.Clone();
+            int currentLineIndex = this.Selection.Start.iLine;
+            int currentLeftSelectionStartIndex = Math.Min(this.Selection.Start.iChar, this.Selection.End.iChar);
+
+            // Determine number of whitespaces to remove
+            string lineText = this.lines[currentLineIndex].Text;
+            Match whitespacesLeftOfSelectionStartMatch = new Regex(@"\s*", RegexOptions.RightToLeft).Match(lineText, currentLeftSelectionStartIndex);
+            int leftOffset = whitespacesLeftOfSelectionStartMatch.Index;
+            int countOfWhitespaces = whitespacesLeftOfSelectionStartMatch.Length;
+            int numberOfCharactersToRemove = 0;
+            if (countOfWhitespaces > 0)
+            {
+                int remainder = (this.TabLength > 0)
+                    ? currentLeftSelectionStartIndex % this.TabLength
+                    : 0;
+                numberOfCharactersToRemove = (remainder != 0)
+                    ? Math.Min(remainder, countOfWhitespaces)
+                    : Math.Min(this.TabLength, countOfWhitespaces);
+            }
+
+            // Remove whitespaces if available
+            if (numberOfCharactersToRemove > 0)
+            {
+                // Start selection update
+                this.BeginUpdate();
+                this.Selection.BeginUpdate();
+                lines.Manager.BeginAutoUndoCommands();
+                lines.Manager.ExecuteCommand(new SelectCommand(TextSource));//remember selection
+
+                // Remove whitespaces
+                this.Selection.Start = new Place(leftOffset, currentLineIndex);
+                this.Selection.End = new Place(leftOffset + numberOfCharactersToRemove, currentLineIndex);
+                ClearSelected();
+
+                // Restore selection
+                int newSelectionStartCharacterIndex = currentSelection.Start.iChar - numberOfCharactersToRemove;
+                int newSelectionEndCharacterIndex = currentSelection.End.iChar - numberOfCharactersToRemove;
+                this.Selection.Start = new Place(newSelectionStartCharacterIndex, currentLineIndex);
+                this.Selection.End = new Place(newSelectionEndCharacterIndex, currentLineIndex);
+
+                lines.Manager.ExecuteCommand(new SelectCommand(TextSource));//remember selection
+                // End selection update
+                lines.Manager.EndAutoUndoCommands();
+                this.Selection.EndUpdate();
+                this.EndUpdate();
+            }
+
+            Invalidate();
         }
 
 

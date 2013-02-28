@@ -230,6 +230,12 @@
             This autocomplete item appears after dot
             </summary>
         </member>
+        <member name="T:FastColoredTextBoxNS.SuggestItem">
+            <summary>
+            This Item does not check correspondence to current text fragment.
+            SuggestItem is intended for dynamic menus.
+            </summary>
+        </member>
         <member name="T:FastColoredTextBoxNS.Style">
             <summary>
             Style of chars
@@ -1403,6 +1409,11 @@
             Remove TAB from front of seletcted lines.
             </summary>
         </member>
+        <member name="M:FastColoredTextBoxNS.FastColoredTextBox.DecreaseIndentOfSingleLine">
+            <summary>
+            Remove TAB in front of the caret ot the selected line.
+            </summary>
+        </member>
         <member name="M:FastColoredTextBoxNS.FastColoredTextBox.DoAutoIndent">
             <summary>
             Insert autoindents into selected lines
@@ -1984,6 +1995,13 @@
         <member name="P:FastColoredTextBoxNS.FastColoredTextBox.SelectionColor">
             <summary>
             Color of selected area
+            </summary>
+        </member>
+        <member name="P:FastColoredTextBoxNS.FastColoredTextBox.ReservedCountOfLineNumberChars">
+            <summary>
+            Reserved space for line number characters.
+            If smaller than needed (e. g. line count >= 10 and this value set to 1) this value will have no impact.
+            If you want to reserve space, e. g. for line numbers >= 10 or >= 100 than you can set this value to 2 or 3 or higher.
             </summary>
         </member>
         <member name="E:FastColoredTextBoxNS.FastColoredTextBox.ToolTipNeeded">
