@@ -33,6 +33,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.fctb = new FastColoredTextBoxNS.FastColoredTextBox();
+            ((System.ComponentModel.ISupportInitialize)(this.fctb)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -64,6 +65,7 @@
             this.fctb.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.fctb.Dock = System.Windows.Forms.DockStyle.Fill;
             this.fctb.Font = new System.Drawing.Font("Consolas", 9.75F);
+            this.fctb.IsReplaceMode = false;
             this.fctb.Language = FastColoredTextBoxNS.Language.CSharp;
             this.fctb.LeftBracket = '(';
             this.fctb.Location = new System.Drawing.Point(0, 85);
@@ -84,6 +86,7 @@
             this.Controls.Add(this.label1);
             this.Name = "AutocompleteSample2";
             this.Text = "AutocompleteSample2";
+            ((System.ComponentModel.ISupportInitialize)(this.fctb)).EndInit();
             this.ResumeLayout(false);
 
         }

@@ -70,6 +70,7 @@ namespace Tester
             this.miExport = new System.Windows.Forms.ToolStripMenuItem();
             this.hTMLToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.miChangeColors = new System.Windows.Forms.ToolStripMenuItem();
+            this.changeHotkeysToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fctb = new FastColoredTextBoxNS.FastColoredTextBox();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.fctb)).BeginInit();
@@ -81,10 +82,11 @@ namespace Tester
             this.editToolStripMenuItem,
             this.miLanguage,
             this.miExport,
-            this.miChangeColors});
+            this.miChangeColors,
+            this.changeHotkeysToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(387, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(371, 24);
             this.menuStrip1.TabIndex = 4;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -368,9 +370,16 @@ namespace Tester
             // 
             this.miChangeColors.Enabled = false;
             this.miChangeColors.Name = "miChangeColors";
-            this.miChangeColors.Size = new System.Drawing.Size(134, 20);
-            this.miChangeColors.Text = "Change color scheme";
+            this.miChangeColors.Size = new System.Drawing.Size(95, 20);
+            this.miChangeColors.Text = "Change colors";
             this.miChangeColors.Click += new System.EventHandler(this.miChangeColors_Click);
+            // 
+            // changeHotkeysToolStripMenuItem
+            // 
+            this.changeHotkeysToolStripMenuItem.Name = "changeHotkeysToolStripMenuItem";
+            this.changeHotkeysToolStripMenuItem.Size = new System.Drawing.Size(104, 20);
+            this.changeHotkeysToolStripMenuItem.Text = "Change hotkeys";
+            this.changeHotkeysToolStripMenuItem.Click += new System.EventHandler(this.changeHotkeysToolStripMenuItem_Click);
             // 
             // fctb
             // 
@@ -393,7 +402,7 @@ namespace Tester
             this.fctb.ReservedCountOfLineNumberChars = 2;
             this.fctb.RightBracket = ')';
             this.fctb.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
-            this.fctb.Size = new System.Drawing.Size(387, 332);
+            this.fctb.Size = new System.Drawing.Size(371, 317);
             this.fctb.TabIndex = 3;
             this.fctb.Text = resources.GetString("fctb.Text");
             this.fctb.TextChanged += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.fctb_TextChanged);
@@ -404,7 +413,7 @@ namespace Tester
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(387, 356);
+            this.ClientSize = new System.Drawing.Size(371, 341);
             this.Controls.Add(this.fctb);
             this.Controls.Add(this.menuStrip1);
             this.ImeMode = System.Windows.Forms.ImeMode.Hiragana;
@@ -461,6 +470,7 @@ namespace Tester
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem9;
         private System.Windows.Forms.ToolStripMenuItem startStopMacroRecordingToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem executeMacroToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem changeHotkeysToolStripMenuItem;
     }
 }
 

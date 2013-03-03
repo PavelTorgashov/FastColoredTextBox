@@ -58,6 +58,7 @@
             this.fctb.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.fctb.Dock = System.Windows.Forms.DockStyle.Fill;
             this.fctb.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.fctb.Hotkeys = resources.GetString("fctb.Hotkeys");
             this.fctb.IsReplaceMode = false;
             this.fctb.LeftBracket = '(';
             this.fctb.Location = new System.Drawing.Point(0, 50);

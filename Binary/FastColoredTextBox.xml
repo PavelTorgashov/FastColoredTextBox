@@ -478,7 +478,7 @@
             Adds the char to current macro
             </summary>
         </member>
-        <member name="M:FastColoredTextBoxNS.MacrosManager.AddKeyToMacros(System.Windows.Forms.Keys,System.Windows.Forms.Keys)">
+        <member name="M:FastColoredTextBoxNS.MacrosManager.AddKeyToMacros(System.Windows.Forms.Keys)">
             <summary>
             Adds keyboard key to current macro
             </summary>
@@ -486,16 +486,6 @@
         <member name="M:FastColoredTextBoxNS.MacrosManager.ClearMacros">
             <summary>
             Clears last recorded macro
-            </summary>
-        </member>
-        <member name="P:FastColoredTextBoxNS.MacrosManager.ActivateRecordingKey">
-            <summary>
-            Keys combination for record activate/deactivate
-            </summary>
-        </member>
-        <member name="P:FastColoredTextBoxNS.MacrosManager.ExecutingKey">
-            <summary>
-            Keys combination for executing of the macros
             </summary>
         </member>
         <member name="P:FastColoredTextBoxNS.MacrosManager.AllowMacroRecordingByUser">
@@ -821,6 +811,29 @@
             Set this property to True/False to mark chars of the range as Readonly/Writable.
             </summary>
         </member>
+        <member name="F:FastColoredTextBoxNS.HotkeysEditorForm.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:FastColoredTextBoxNS.HotkeysEditorForm.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:FastColoredTextBoxNS.HotkeysEditorForm.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="M:FastColoredTextBoxNS.HotkeysEditorForm.GetHotkeys">
+            <summary>
+            Returns edited hotkey map
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:FastColoredTextBoxNS.ExportToHTML">
             <summary>
             Exports colored text as HTML
@@ -1135,7 +1148,7 @@
             Scroll control for display given range
             </summary>
         </member>
-        <member name="M:FastColoredTextBoxNS.FastColoredTextBox.ProcessKey(System.Windows.Forms.Keys,System.Windows.Forms.Keys)">
+        <member name="M:FastColoredTextBoxNS.FastColoredTextBox.ProcessKey(System.Windows.Forms.Keys)">
             <summary>
             Process control keys
             </summary>
@@ -1714,6 +1727,16 @@
             <summary>
             Styles
             Maximum style count is 16
+            </summary>
+        </member>
+        <member name="P:FastColoredTextBoxNS.FastColoredTextBox.Hotkeys">
+            <summary>
+            Hotkeys. Do not use this property in your code, use HotkeysMapping property.
+            </summary>
+        </member>
+        <member name="P:FastColoredTextBoxNS.FastColoredTextBox.HotkeysMapping">
+            <summary>
+            Hotkeys mapping
             </summary>
         </member>
         <member name="P:FastColoredTextBoxNS.FastColoredTextBox.DefaultStyle">
@@ -2600,6 +2623,16 @@
         <member name="T:FastColoredTextBoxNS.SelectCommand">
             <summary>
             Remembers current selection and restore it after Undo
+            </summary>
+        </member>
+        <member name="T:FastColoredTextBoxNS.HotkeysMapping">
+            <summary>
+            Dictionary of shortcuts for FCTB
+            </summary>
+        </member>
+        <member name="T:FastColoredTextBoxNS.FCTBAction">
+            <summary>
+            Actions for shortcuts
             </summary>
         </member>
         <member name="T:FastColoredTextBoxNS.Hints">

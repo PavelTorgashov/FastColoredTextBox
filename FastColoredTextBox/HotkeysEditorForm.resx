@@ -117,14 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="fctb.Hotkeys" xml:space="preserve">
-    <value>Ctrl+Back=ClearWordLeft, Alt+Back=Undo, Tab=IndentIncrease, Shift+Tab=IndentDecrease, Escape=ClearHints, Ctrl+Space=AutocompleteMenu, PgUp=GoPageUp, Shift+PgUp=GoPageUpWithSelection, PgDn=GoPageDown, Shift+PgDn=GoPageDownWithSelection, End=GoEnd, Shift+End=GoEndWithSelection, Ctrl+End=GoLastLine, Ctrl+Shift+End=GoLastLineWithSelection, Home=GoHome, Shift+Home=GoHomeWithSelection, Ctrl+Home=GoFirstLine, Ctrl+Shift+Home=GoFirstLineWithSelection, Left=GoLeft, Shift+Left=GoLeftWithSelection, Ctrl+Left=GoWordLeft, Ctrl+Shift+Left=GoWordLeftWithSelection, Alt+Shift+Left=GoLeft_ColumnSelectionMode, Up=GoUp, Shift+Up=GoUpWithSelection, Ctrl+Up=ScrollUp, Alt+Up=MoveSelectedLinesUp, Alt+Shift+Up=GoUp_ColumnSelectionMode, Right=GoRight, Shift+Right=GoRightWithSelection, Ctrl+Right=GoWordRight, Ctrl+Shift+Right=GoWordRightWithSelection, Alt+Shift+Right=GoRight_ColumnSelectionMode, Down=GoDown, Shift+Down=GoDownWithSelection, Ctrl+Down=ScrollDown, Alt+Down=MoveSelectedLinesDown, Alt+Shift+Down=GoDown_ColumnSelectionMode, Ins=ReplaceMode, Shift+Ins=Paste, Ctrl+Ins=Copy, Del=DeleteCharRight, Shift+Del=Cut, Ctrl+Del=ClearWordRight, Ctrl+0=ZoomNormal, Ctrl+A=SelectAll, Ctrl+B=BookmarkLine, Ctrl+Shift+B=UnbookmarkLine, Ctrl+C=Copy, Ctrl+Shift+C=CommentSelected, Ctrl+E=MacroExecute, Ctrl+F=FindDialog, Alt+F=FindChar, Ctrl+G=GoToDialog, Ctrl+H=ReplaceDialog, Ctrl+M=MacroRecord, Ctrl+N=GoNextBookmark, Ctrl+Shift+N=GoPrevBookmark, Ctrl+R=Redo, Ctrl+U=UpperCase, Ctrl+Shift+U=LowerCase, Ctrl+V=Paste, Ctrl+X=Cut, Ctrl+Z=Undo, Ctrl+Add=ZoomIn, Ctrl+Subtract=ZoomOut, F3=FindNext, Ctrl+OemMinus=NavigateBackward, Ctrl+Shift+OemMinus=NavigateForward</value>
-  </data>
-  <data name="fctb.Text" xml:space="preserve">
-    <value>You can start enter any word. Control will offer variants of the insert.
-You can insert proposed variant by ENTER key.
-Key ESC closes popup menu.
-Also you can press CTRL+SPACE or CTRL-K for forced show of popup menu.
-</value>
-  </data>
+  <metadata name="cbModifiers.UserAddedColumn" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="cbKey.UserAddedColumn" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="cbAction.UserAddedColumn" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
 </root>

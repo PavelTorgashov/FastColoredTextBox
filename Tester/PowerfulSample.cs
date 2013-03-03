@@ -368,6 +368,13 @@ namespace Tester
             fctb.MacrosManager.ExecuteMacros();
         }
 
+        private void changeHotkeysToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var form = new HotkeysEditorForm(fctb.HotkeysMapping);
+            if(form.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                fctb.HotkeysMapping = form.GetHotkeys();
+        }
+
         /*
         private void saveFoldingsToolStripMenuItem_Click(object sender, EventArgs e)
         {

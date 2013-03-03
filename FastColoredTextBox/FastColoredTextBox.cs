@@ -15,6 +15,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Drawing.Drawing2D;
@@ -191,6 +192,8 @@ namespace FastColoredTextBoxNS
             textAreaBorder = TextAreaBorderType.None;
             textAreaBorderColor = Color.Black;
             macrosManager = new MacrosManager(this);
+            HotkeysMapping = new HotkeysMapping();
+            HotkeysMapping.InitDefault();
             //
             base.AutoScroll = true;
             timer.Tick += timer_Tick;
@@ -413,7 +416,7 @@ namespace FastColoredTextBoxNS
             set
             {
                 lineInterval = value;
-                Font = Font;
+                SetFont(Font);
                 Invalidate();
             }
         }
@@ -684,9 +687,7 @@ namespace FastColoredTextBoxNS
         /// Set to 0 for disable drawing of vertical line.
         /// </summary>
         [DefaultValue(0)]
-        [Description(
-            "This property draws vertical line after defined char position. Set to 0 for disable drawing of vertical line."
-            )]
+        [Description("This property draws vertical line after defined char position. Set to 0 for disable drawing of vertical line.")]
         public int PreferredLineWidth
         {
             get { return preferredLineWidth; }
@@ -706,6 +707,24 @@ namespace FastColoredTextBoxNS
         {
             get { return lines.Styles; }
         }
+
+        /// <summary>
+        /// Hotkeys. Do not use this property in your code, use HotkeysMapping property.
+        /// </summary>
+        [Description("Here you can change hotkeys for FastColoredTextBox.")]
+        [Editor(typeof(HotkeysEditor), typeof(UITypeEditor))]
+        [DefaultValue("Tab=IndentIncrease, Escape=ClearHints, PgUp=GoPageUp, PgDn=GoPageDown, End=GoEnd, Home=GoHome, Left=GoLeft, Up=GoUp, Right=GoRight, Down=GoDown, Ins=ReplaceMode, Del=DeleteCharRight, F3=FindNext, Shift+Tab=IndentDecrease, Shift+PgUp=GoPageUpWithSelection, Shift+PgDn=GoPageDownWithSelection, Shift+End=GoEndWithSelection, Shift+Home=GoHomeWithSelection, Shift+Left=GoLeftWithSelection, Shift+Up=GoUpWithSelection, Shift+Right=GoRightWithSelection, Shift+Down=GoDownWithSelection, Shift+Ins=Paste, Shift+Del=Cut, Ctrl+Back=ClearWordLeft, Ctrl+Space=AutocompleteMenu, Ctrl+End=GoLastLine, Ctrl+Home=GoFirstLine, Ctrl+Left=GoWordLeft, Ctrl+Up=ScrollUp, Ctrl+Right=GoWordRight, Ctrl+Down=ScrollDown, Ctrl+Ins=Copy, Ctrl+Del=ClearWordRight, Ctrl+0=ZoomNormal, Ctrl+A=SelectAll, Ctrl+B=BookmarkLine, Ctrl+C=Copy, Ctrl+E=MacroExecute, Ctrl+F=FindDialog, Ctrl+G=GoToDialog, Ctrl+H=ReplaceDialog, Ctrl+M=MacroRecord, Ctrl+N=GoNextBookmark, Ctrl+R=Redo, Ctrl+U=UpperCase, Ctrl+V=Paste, Ctrl+X=Cut, Ctrl+Z=Undo, Ctrl+Add=ZoomIn, Ctrl+Subtract=ZoomOut, Ctrl+OemMinus=NavigateBackward, Ctrl+Shift+End=GoLastLineWithSelection, Ctrl+Shift+Home=GoFirstLineWithSelection, Ctrl+Shift+Left=GoWordLeftWithSelection, Ctrl+Shift+Right=GoWordRightWithSelection, Ctrl+Shift+B=UnbookmarkLine, Ctrl+Shift+C=CommentSelected, Ctrl+Shift+N=GoPrevBookmark, Ctrl+Shift+U=LowerCase, Ctrl+Shift+OemMinus=NavigateForward, Alt+Back=Undo, Alt+Up=MoveSelectedLinesUp, Alt+Down=MoveSelectedLinesDown, Alt+F=FindChar, Alt+Shift+Left=GoLeft_ColumnSelectionMode, Alt+Shift+Up=GoUp_ColumnSelectionMode, Alt+Shift+Right=GoRight_ColumnSelectionMode, Alt+Shift+Down=GoDown_ColumnSelectionMode")]
+        public string Hotkeys { 
+            get { return HotkeysMapping.ToString(); }
+            set { HotkeysMapping = HotkeysMapping.Parse(value); }
+        }
+
+        /// <summary>
+        /// Hotkeys mapping
+        /// </summary>
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public HotkeysMapping HotkeysMapping{ get; set;}
 
         /// <summary>
         /// Default text style
@@ -1349,25 +1368,30 @@ namespace FastColoredTextBoxNS
         public override Font Font
         {
             get { return base.Font; }
-            set
-            {
-                base.Font = value;
-                //check monospace font
-                SizeF sizeM = GetCharSize(base.Font, 'M');
-                SizeF sizeDot = GetCharSize(base.Font, '.');
-                if (sizeM != sizeDot)
-                    base.Font = new Font("Courier New", base.Font.SizeInPoints, FontStyle.Regular, GraphicsUnit.Point);
-                //clac size
-                SizeF size = GetCharSize(base.Font, 'M');
-                CharWidth = (int) Math.Round(size.Width*1f /*0.85*/) - 1 /*0*/;
-                CharHeight = lineInterval + (int) Math.Round(size.Height*1f /*0.9*/) - 1 /*0*/;
-                //
-                if (wordWrap)
-                    RecalcWordWrap(0, Lines.Count - 1);
-                NeedRecalc();
-                //
-                Invalidate();
+            set {
+                originalFont = (Font)value.Clone();
+                SetFont(value);
             }
+        }
+
+        private void SetFont(Font newFont)
+        {
+            base.Font = newFont;
+            //check monospace font
+            SizeF sizeM = GetCharSize(base.Font, 'M');
+            SizeF sizeDot = GetCharSize(base.Font, '.');
+            if (sizeM != sizeDot)
+                base.Font = new Font("Courier New", base.Font.SizeInPoints, FontStyle.Regular, GraphicsUnit.Point);
+            //clac size
+            SizeF size = GetCharSize(base.Font, 'M');
+            CharWidth = (int) Math.Round(size.Width*1f /*0.85*/) - 1 /*0*/;
+            CharHeight = lineInterval + (int) Math.Round(size.Height*1f /*0.9*/) - 1 /*0*/;
+            //
+            if (wordWrap)
+                RecalcWordWrap(0, Lines.Count - 1);
+            NeedRecalc();
+            //
+            Invalidate();
         }
 
 
@@ -3018,7 +3042,7 @@ namespace FastColoredTextBoxNS
                 return;
             }
 
-            if (ProcessKey(e.KeyCode, e.Modifiers))
+            if (ProcessKey(e.KeyData))
                 return;
 
             e.Handled = true;
@@ -3031,156 +3055,240 @@ namespace FastColoredTextBoxNS
         {
             if ((keyData & Keys.Alt) > 0)
             {
-                switch (keyData)
+                if (HotkeysMapping.ContainsKey(keyData))
                 {
-                    case Keys.Alt | Keys.F:
-                        ProcessKey(Keys.F, Keys.Alt);
-                        return true;
+                    ProcessKey(keyData);
+                    return true;
                 }
             }
 
             return base.ProcessDialogKey(keyData);
         }
 
+        static Dictionary<FCTBAction, bool> scrollActions = new Dictionary<FCTBAction, bool>() { { FCTBAction.ScrollDown, true }, { FCTBAction.ScrollUp, true }, { FCTBAction.ZoomOut, true }, { FCTBAction.ZoomIn, true }, { FCTBAction.ZoomNormal, true } };
+
         /// <summary>
         /// Process control keys
         /// </summary>
-        public virtual bool ProcessKey(Keys keyCode, Keys modifiers)
+        public virtual bool ProcessKey(Keys keyData)
         {
+            KeyEventArgs a = new KeyEventArgs(keyData);
+
+            if(a.KeyCode == Keys.Tab && !AcceptsTab)
+                 return false;
+
+
             if (macrosManager != null)
-            if (macrosManager.ProcessKey(keyCode, modifiers))
-                 return true;
+            if (!HotkeysMapping.ContainsKey(keyData) || (HotkeysMapping[keyData] != FCTBAction.MacroExecute && HotkeysMapping[keyData] != FCTBAction.MacroRecord))
+                macrosManager.ProcessKey(keyData);
 
-            bool shift = (modifiers & Keys.Shift) > 0;
 
-            switch (keyCode)
+            if (HotkeysMapping.ContainsKey(keyData))
             {
-                case Keys.G:
-                    if (modifiers == Keys.Control)
-                        ShowGoToDialog();
-                    break;
-                case Keys.F:
-                    if (modifiers == Keys.Control)
-                        ShowFindDialog();
-                    if (modifiers == Keys.Alt)
-                        findCharMode = true;
-                    break;
-                case Keys.F3:
-                    if (modifiers == Keys.None)
-                        if (findForm == null || findForm.tbFind.Text == "")
-                            ShowFindDialog();
-                        else
-                            findForm.FindNext(findForm.tbFind.Text);
-                    break;
-                case Keys.H:
-                    if (modifiers == Keys.Control)
-                        ShowReplaceDialog();
-                    break;
-                case Keys.C:
-                    if (modifiers == Keys.Control)
-                        Copy();
-                    if (modifiers == (Keys.Control | Keys.Shift))
-                        CommentSelected();
-                    break;
-                case Keys.X:
-                    if (modifiers == Keys.Control && !Selection.ReadOnly)
-                        Cut();
-                    break;
-                case Keys.V:
-                    if (modifiers == Keys.Control && !Selection.ReadOnly)
-                        Paste();
-                    break;
-                case Keys.A:
-                    if (modifiers == Keys.Control)
-                        Selection.SelectAll();
-                    break;
-                case Keys.Z:
-                    if (modifiers == Keys.Control && !ReadOnly)
-                        Undo();
-                    break;
-                case Keys.R:
-                    if (modifiers == Keys.Control && !ReadOnly)
-                        Redo();
-                    break;
-                case Keys.U:
-                    if (modifiers == (Keys.Control | Keys.Shift))
-                        LowerCase();
-                    if (modifiers == Keys.Control)
-                        UpperCase();
-                    break;
-                case Keys.Tab:
-                    if (modifiers == Keys.Shift && !Selection.ReadOnly)
-                        DecreaseIndent();
-                    break;
-                case Keys.OemMinus:
-                    if (modifiers == Keys.Control)
-                        NavigateBackward();
-                    if (modifiers == (Keys.Control | Keys.Shift))
-                        NavigateForward();
-                    break;
+                var act = HotkeysMapping[keyData];
+                DoAction(act);
+                if (scrollActions.ContainsKey(act))
+                    return true;
+            }
+            else
+            {
+                //space
+                if (a.KeyCode == Keys.Space && (a.Modifiers == Keys.None || a.Modifiers == Keys.Shift))
+                {
+                    if (OnKeyPressing(' ')) //KeyPress event processed key
+                        return false;
 
-                case Keys.B:
-                    if (modifiers == (Keys.Control | Keys.Shift))
-                        UnbookmarkLine(Selection.Start.iLine);
-                    else if (modifiers == Keys.Control)
-                        BookmarkLine(Selection.Start.iLine);
-                    break;
+                    if (Selection.ReadOnly) return false;
 
-                case Keys.N:
-                    if (modifiers == Keys.Control)
-                        GotoNextBookmark(Selection.Start.iLine);
-                    else if (modifiers == (Keys.Control | Keys.Shift))
-                        GotoPrevBookmark(Selection.Start.iLine);
-                    break;
+                    if (!Selection.IsEmpty)
+                        ClearSelected();
 
-                case Keys.Back:
-                    if (Selection.ReadOnly) break;
-                    if (modifiers == Keys.Alt)
-                        Undo();
-                    else if (modifiers == Keys.None || modifiers == Keys.Shift)
+                    //replace mode? select forward char
+                    if (IsReplaceMode)
                     {
-                        if (OnKeyPressing('\b')) //KeyPress event processed key
-                            break;
-                        if (!Selection.IsEmpty)
-                            ClearSelected();
-                        else if (!Selection.IsReadOnlyLeftChar()) //is not left char readonly?
+                        Selection.GoRight(true);
+                        Selection.Inverse();
+                        if (Selection.ReadOnly) return false;
+                    }
+
+                    InsertChar(' ');
+                    OnKeyPressed(' ');
+                    return false;
+                }
+
+                if (a.KeyCode == Keys.Back && (a.Modifiers == Keys.None || a.Modifiers == Keys.Shift))
+                {
+                    if (OnKeyPressing('\b')) //KeyPress event processed key
+                        return false;
+                    if (!Selection.IsEmpty)
+                        ClearSelected();
+                    else
+                        if (!Selection.IsReadOnlyLeftChar()) //is not left char readonly?
                             InsertChar('\b');
 
-                        OnKeyPressed('\b');
-                    }
-                    else if (modifiers == Keys.Control)
-                    {
-                        if (OnKeyPressing('\b')) //KeyPress event processed key
-                            break;
-                        if (!Selection.IsEmpty)
-                            ClearSelected();
-                        Selection.GoWordLeft(true);
-                        if (!Selection.ReadOnly)
-                            ClearSelected();
-                        OnKeyPressed('\b');
-                    }
+                    OnKeyPressed('\b');
+                    return false;
+                }
+
+                //
+                if (a.KeyCode == Keys.Alt)
+                    return true;
+
+                if ((a.Modifiers & Keys.Control) != 0)
+                    return true;
+
+                if ((a.Modifiers & Keys.Alt) != 0)
+                {
+                    if ((MouseButtons & MouseButtons.Left) != 0)
+                        CheckAndChangeSelectionType();
+                    return true;
+                }
+
+                if (a.KeyCode == Keys.ShiftKey)
+                    return true;
+            }
+
+            return false;
+        }
+
+        private void DoAction(FCTBAction action)
+        {
+            switch (action)
+            {
+                case FCTBAction.ZoomIn:
+                    ChangeFontSize(2);
+                    break;
+                case FCTBAction.ZoomOut:
+                    ChangeFontSize(-2);
+                    break;
+                case FCTBAction.ZoomNormal:
+                    RestoreFontSize();
+                    break;
+                case FCTBAction.ScrollDown:
+                    DoScrollVertical(1, -1);
                     break;
 
-                case Keys.Insert:
-                    if (modifiers == Keys.None)
-                    {
-                        if (!ReadOnly)
-                            isReplaceMode = !isReplaceMode;
-                    }
-                    else if (modifiers == Keys.Control)
-                    {
-                        Copy();
-                    }
-                    else if (modifiers == Keys.Shift)
-                    {
-                        if (!Selection.ReadOnly)
-                            Paste();
-                    }
+                case FCTBAction.ScrollUp:
+                    DoScrollVertical(1, 1);
                     break;
 
-                case Keys.Delete:
-                    if (Selection.ReadOnly) break;
-                    if (modifiers == Keys.None)
+                case FCTBAction.GoToDialog:
+                    ShowGoToDialog();
+                    break;
+
+                case FCTBAction.FindDialog:
+                    ShowFindDialog();
+                    break;
+
+                case FCTBAction.FindChar:
+                    findCharMode = true;
+                    break;
+
+                case FCTBAction.FindNext:
+                    if (findForm == null || findForm.tbFind.Text == "")
+                        ShowFindDialog();
+                    else
+                        findForm.FindNext(findForm.tbFind.Text);
+                    break;
+
+                case FCTBAction.ReplaceDialog:
+                    ShowReplaceDialog();
+                    break;
+
+                case FCTBAction.Copy:
+                    Copy();
+                    break;
+
+                case FCTBAction.CommentSelected:
+                    CommentSelected();
+                    break;
+
+                case FCTBAction.Cut:
+                    if (!Selection.ReadOnly)
+                        Cut();
+                    break;
+
+                case FCTBAction.Paste:
+                    if (!Selection.ReadOnly)
+                        Paste();
+                    break;
+
+                case FCTBAction.SelectAll:
+                    Selection.SelectAll();
+                    break;
+
+                case FCTBAction.Undo:
+                    if (!ReadOnly)
+                        Undo();
+                    break;
+
+                case FCTBAction.Redo:
+                    if (!ReadOnly)
+                        Redo();
+                    break;
+
+                case FCTBAction.LowerCase:
+                    if (!Selection.ReadOnly)
+                        LowerCase();
+                    break;
+
+                case FCTBAction.UpperCase:
+                    if (!Selection.ReadOnly)
+                        UpperCase();
+                    break;
+
+                case FCTBAction.IndentDecrease:
+                    if (!Selection.ReadOnly)
+                        DecreaseIndent();
+                    break;
+
+                case FCTBAction.IndentIncrease:
+                    if (!Selection.ReadOnly)
+                        IncreaseIndent();
+                    break;
+
+                case FCTBAction.NavigateBackward:
+                    NavigateBackward();
+                    break;
+
+                case FCTBAction.NavigateForward:
+                    NavigateForward();
+                    break;
+
+                case FCTBAction.UnbookmarkLine:
+                    UnbookmarkLine(Selection.Start.iLine);
+                    break;
+
+                case FCTBAction.BookmarkLine:
+                    BookmarkLine(Selection.Start.iLine);
+                    break;
+
+                case FCTBAction.GoNextBookmark:
+                    GotoNextBookmark(Selection.Start.iLine);
+                    break;
+
+                case FCTBAction.GoPrevBookmark:
+                    GotoPrevBookmark(Selection.Start.iLine);
+                    break;
+
+                case FCTBAction.ClearWordLeft:
+                    if (OnKeyPressing('\b')) //KeyPress event processed key
+                        break;
+                    if (!Selection.IsEmpty)
+                        ClearSelected();
+                    Selection.GoWordLeft(true);
+                    if (!Selection.ReadOnly)
+                        ClearSelected();
+                    OnKeyPressed('\b');
+                    break;
+
+                case FCTBAction.ReplaceMode:
+                    if (!ReadOnly)
+                        isReplaceMode = !isReplaceMode;
+                    break;
+
+                case FCTBAction.DeleteCharRight:
+                    if (!Selection.ReadOnly)
                     {
                         if (OnKeyPressing((char) 0xff)) //KeyPress event processed key
                             break;
@@ -3207,164 +3315,197 @@ namespace FastColoredTextBoxNS
                         }
                         OnKeyPressed((char) 0xff);
                     }
-                    else if (modifiers == Keys.Control)
+                    break;
+
+                case FCTBAction.ClearWordRight:
+                    if (OnKeyPressing((char) 0xff)) //KeyPress event processed key
+                        break;
+                    if (!Selection.IsEmpty)
+                        ClearSelected();
+                    else
                     {
-                        if (OnKeyPressing((char) 0xff)) //KeyPress event processed key
-                            break;
-                        if (!Selection.IsEmpty)
-                            ClearSelected();
-                        else
-                        {
-                            Selection.GoWordRight(true);
-                            if (!Selection.ReadOnly)
-                                ClearSelected();
-                        }
-                        OnKeyPressed((char) 0xff);
-                    }
-                    else if (modifiers == Keys.Shift)
-                    {
-                        if (OnKeyPressing((char) 0xff)) //KeyPress event processed key
-                            break;
+                        Selection.GoWordRight(true);
                         if (!Selection.ReadOnly)
-                            Cut();
-                        OnKeyPressed((char) 0xff);
-                    }
-                    break;
-
-                case Keys.Space:
-                    if (modifiers == Keys.None || modifiers == Keys.Shift)
-                    {
-                        if (OnKeyPressing(' ')) //KeyPress event processed key
-                            break;
-
-                        if (Selection.ReadOnly) break;
-
-                        if (!Selection.IsEmpty)
                             ClearSelected();
-
-                        //replace mode? select forward char
-                        if (IsReplaceMode)
-                        {
-                            Selection.GoRight(true);
-                            Selection.Inverse();
-                            if (Selection.ReadOnly) break;
-                        }
-
-                        InsertChar(' ');
-                        OnKeyPressed(' ');
                     }
+                    OnKeyPressed((char) 0xff);
                     break;
 
-                case Keys.Left:
-                    if (modifiers == Keys.Control || modifiers == (Keys.Control | Keys.Shift))
-                        Selection.GoWordLeft(shift);
-                    if (modifiers == Keys.None || modifiers == Keys.Shift)
-                        Selection.GoLeft(shift);
-                    if (modifiers == AltShift)
+                case FCTBAction.GoWordLeft:
+                    Selection.GoWordLeft(false);
+                    break;
+
+                case FCTBAction.GoWordLeftWithSelection:
+                    Selection.GoWordLeft(true);
+                    break;
+
+                case FCTBAction.GoLeft:
+                    Selection.GoLeft(false);
+                    break;
+
+                case FCTBAction.GoLeftWithSelection:
+                    Selection.GoLeft(true);
+                    break;
+
+                case FCTBAction.GoLeft_ColumnSelectionMode:
+                    CheckAndChangeSelectionType();
+                    if (Selection.ColumnSelectionMode)
+                        Selection.GoLeft_ColumnSelectionMode();
+                    Invalidate();
+                    break;
+
+                case FCTBAction.GoWordRight:
+                    Selection.GoWordRight(false);
+                    break;
+
+                case FCTBAction.GoWordRightWithSelection:
+                    Selection.GoWordRight(true);
+                    break;
+
+                case FCTBAction.GoRight:
+                    Selection.GoRight(false);
+                    break;
+
+                case FCTBAction.GoRightWithSelection:
+                    Selection.GoRight(true);
+                    break;
+
+                case FCTBAction.GoRight_ColumnSelectionMode:
+                    CheckAndChangeSelectionType();
+                    if (Selection.ColumnSelectionMode)
+                        Selection.GoRight_ColumnSelectionMode();
+                    Invalidate();
+                    break;
+
+                case FCTBAction.GoUp:
+                    Selection.GoUp(false);
+                    ScrollLeft();
+                    break;
+
+                case FCTBAction.GoUpWithSelection:
+                    Selection.GoUp(true);
+                    ScrollLeft();
+                    break;
+
+                case FCTBAction.GoUp_ColumnSelectionMode:
+                    CheckAndChangeSelectionType();
+                    if (Selection.ColumnSelectionMode)
+                        Selection.GoUp_ColumnSelectionMode();
+                    Invalidate();
+                    break;
+
+                case FCTBAction.MoveSelectedLinesUp:
+                    if (!Selection.ColumnSelectionMode)
+                        MoveSelectedLinesUp();
+                    break;
+
+                case FCTBAction.GoDown:
+                    Selection.GoDown(false);
+                    ScrollLeft();
+                    break;
+
+                case FCTBAction.GoDownWithSelection:
+                    Selection.GoDown(true);
+                    ScrollLeft();
+                    break;
+
+                case FCTBAction.GoDown_ColumnSelectionMode:
+                    CheckAndChangeSelectionType();
+                    if (Selection.ColumnSelectionMode)
+                        Selection.GoDown_ColumnSelectionMode();
+                    Invalidate();
+                    break;
+
+                case FCTBAction.MoveSelectedLinesDown:
+                    if (!Selection.ColumnSelectionMode)
+                        MoveSelectedLinesDown();
+                    break;
+                case FCTBAction.GoPageUp:
+                    Selection.GoPageUp(false);
+                    ScrollLeft();
+                    break;
+
+                case FCTBAction.GoPageUpWithSelection:
+                    Selection.GoPageUp(true);
+                    ScrollLeft();
+                    break;
+
+                case FCTBAction.GoPageDown:
+                    Selection.GoPageDown(false);
+                    ScrollLeft();
+                    break;
+
+                case FCTBAction.GoPageDownWithSelection:
+                    Selection.GoPageDown(true);
+                    ScrollLeft();
+                    break;
+
+                case FCTBAction.GoFirstLine:
+                    Selection.GoFirst(false);
+                    break;
+
+                case FCTBAction.GoFirstLineWithSelection:
+                    Selection.GoFirst(true);
+                    break;
+
+                case FCTBAction.GoHome:
+                    GoHome(false);
+                    ScrollLeft();
+                    break;
+
+                case FCTBAction.GoHomeWithSelection:
+                    GoHome(true);
+                    ScrollLeft();
+                    break;
+
+                case FCTBAction.GoLastLine:
+                    Selection.GoLast(false);
+                    break;
+
+                case FCTBAction.GoLastLineWithSelection:
+                    Selection.GoLast(true);
+                    break;
+
+                case FCTBAction.GoEnd:
+                    Selection.GoEnd(false);
+                    break;
+
+                case FCTBAction.GoEndWithSelection:
+                    Selection.GoEnd(true);
+                    break;
+
+                case FCTBAction.ClearHints:
+                    ClearHints();
+                    if(MacrosManager != null)
+                        MacrosManager.IsRecording = false;
+                    break;
+
+                case FCTBAction.MacroRecord:
+                    if(MacrosManager != null)
                     {
-                        CheckAndChangeSelectionType();
-                        if (Selection.ColumnSelectionMode)
-                            Selection.GoLeft_ColumnSelectionMode();
+                        if (MacrosManager.AllowMacroRecordingByUser)
+                            MacrosManager.IsRecording = !MacrosManager.IsRecording;
+                        if (MacrosManager.IsRecording)
+                            MacrosManager.ClearMacros();
                     }
                     break;
-                case Keys.Right:
-                    if (modifiers == Keys.Control || modifiers == (Keys.Control | Keys.Shift))
-                        Selection.GoWordRight(shift);
-                    if (modifiers == Keys.None || modifiers == Keys.Shift)
-                        Selection.GoRight(shift);
-                    if (modifiers == AltShift)
+
+                case FCTBAction.MacroExecute:
+                    if (MacrosManager != null)
                     {
-                        CheckAndChangeSelectionType();
-                        if (Selection.ColumnSelectionMode)
-                            Selection.GoRight_ColumnSelectionMode();
+                        MacrosManager.IsRecording = false;
+                        MacrosManager.ExecuteMacros();
                     }
-                    break;
-                case Keys.Up:
-                    if (modifiers == Keys.None || modifiers == Keys.Shift)
-                    {
-                        Selection.GoUp(shift);
-                        ScrollLeft();
-                    }
-                    if (modifiers == AltShift)
-                    {
-                        CheckAndChangeSelectionType();
-                        if (Selection.ColumnSelectionMode)
-                            Selection.GoUp_ColumnSelectionMode();
-                    }
-                    if (modifiers == Keys.Alt)
-                    {
-                        if (!Selection.ColumnSelectionMode)
-                            MoveSelectedLinesUp();
-                    }
-                    break;
-                case Keys.Down:
-                    if (modifiers == Keys.None || modifiers == Keys.Shift)
-                    {
-                        Selection.GoDown(shift);
-                        ScrollLeft();
-                    }
-                    else if (modifiers == AltShift)
-                    {
-                        CheckAndChangeSelectionType();
-                        if (Selection.ColumnSelectionMode)
-                            Selection.GoDown_ColumnSelectionMode();
-                    }
-                    if (modifiers == Keys.Alt)
-                    {
-                        if (!Selection.ColumnSelectionMode)
-                            MoveSelectedLinesDown();
-                    }
-                    break;
-                case Keys.PageUp:
-                    if (modifiers == Keys.None || modifiers == Keys.Shift)
-                    {
-                        Selection.GoPageUp(shift);
-                        ScrollLeft();
-                    }
-                    break;
-                case Keys.PageDown:
-                    if (modifiers == Keys.None || modifiers == Keys.Shift)
-                    {
-                        Selection.GoPageDown(shift);
-                        ScrollLeft();
-                    }
-                    break;
-                case Keys.Home:
-                    if (modifiers == Keys.Control || modifiers == (Keys.Control | Keys.Shift))
-                        Selection.GoFirst(shift);
-                    if (modifiers == Keys.None || modifiers == Keys.Shift)
-                    {
-                        GoHome(shift);
-                        ScrollLeft();
-                    }
-                    break;
-                case Keys.End:
-                    if (modifiers == Keys.Control || modifiers == (Keys.Control | Keys.Shift))
-                        Selection.GoLast(shift);
-                    if (modifiers == Keys.None || modifiers == Keys.Shift)
-                        Selection.GoEnd(shift);
-                    break;
-                case Keys.Escape:
-                    if (modifiers == Keys.None)
-                        ClearHints();
-                    break;
-                case Keys.Alt:
-                    return true;
-                default:
-                    if ((modifiers & Keys.Control) != 0)
-                        return true;
-                    if ((modifiers & Keys.Alt) != 0)
-                    {
-                        if ((MouseButtons & MouseButtons.Left) != 0)
-                            CheckAndChangeSelectionType();
-                        return true;
-                    }
-                    if (keyCode == Keys.ShiftKey)
-                        return true;
                     break;
             }
+        }
 
-            return false;
+        Font originalFont;
+
+        private void RestoreFontSize()
+        {
+            if (originalFont != null)
+                SetFont((Font)originalFont.Clone());
         }
 
         /// <summary>
@@ -3643,9 +3784,9 @@ namespace FastColoredTextBoxNS
             if (handledChar)
                 return true;
 
+
             if (macrosManager != null)
-            if (macrosManager.ProcessKey(c, modifiers))
-                return true;
+                macrosManager.ProcessKey(c, modifiers);
 
             if (c == ' ')
                 return true;
@@ -3679,33 +3820,8 @@ namespace FastColoredTextBoxNS
             if (c == '\r' && !AcceptsReturn)
                 return false;
 
-            //tab?
-            if (c == '\t')
-            {
-                if (!AcceptsTab)
-                    return false;
-                if (modifiers != Keys.Shift)
-                {
-                    if (Selection.Start.iLine == Selection.End.iLine)
-                    {
-                        ClearSelected();
-                        //insert tab as spaces
-                        int spaces = TabLength - (Selection.Start.iChar % TabLength);
-                        //replace mode? select forward chars
-                        if (IsReplaceMode)
-                        {
-                            for (int i = 0; i < spaces; i++)
-                                Selection.GoRight(true);
-                            Selection.Inverse();
-                        }
-                        if (!Selection.ReadOnly)
-                            InsertText(new String(' ', spaces));
-                    }
-                    else if ((modifiers & Keys.Shift) == 0)
-                        IncreaseIndent();
-                }
-            }
-            else
+            //is not tab?
+            if (c != '\t')
             {
                 //replace \r on \n
                 if (c == '\r')
@@ -4532,8 +4648,7 @@ namespace FastColoredTextBoxNS
 
             if (lastModifiers == Keys.Control)
             {
-                ChangeFontSize(Math.Sign(e.Delta));
-                OnVisibleRangeChanged();
+                ChangeFontSize(2 * Math.Sign(e.Delta));
             }
             else
             if(VerticalScroll.Visible)
@@ -4541,24 +4656,30 @@ namespace FastColoredTextBoxNS
                 //base.OnMouseWheel(e);
 
                 // Determine scoll offset
-                int numberOfVisibleLines = ClientSize.Height / CharHeight;
                 int mouseWheelScrollLinesSetting = GetControlPanelWheelScrollLinesValue();
 
-                int offset;
-                if ((mouseWheelScrollLinesSetting == -1) || (mouseWheelScrollLinesSetting > numberOfVisibleLines))
-                    offset = CharHeight * numberOfVisibleLines;
-                else
-                    offset = CharHeight * mouseWheelScrollLinesSetting;
-
-                var newScrollPos = VerticalScroll.Value - Math.Sign(e.Delta)* offset;
-
-                var ea = new ScrollEventArgs(e.Delta < 0 ? ScrollEventType.SmallIncrement : ScrollEventType.SmallDecrement, 
-                    VerticalScroll.Value, 
-                    newScrollPos,
-                    ScrollOrientation.VerticalScroll);
-
-                OnScroll(ea);
+                DoScrollVertical(mouseWheelScrollLinesSetting, e.Delta);
             }
+        }
+
+        private void DoScrollVertical(int countLines, int direction)
+        {
+            int numberOfVisibleLines = ClientSize.Height / CharHeight;
+
+            int offset;
+            if ((countLines == -1) || (countLines > numberOfVisibleLines))
+                offset = CharHeight*numberOfVisibleLines;
+            else
+                offset = CharHeight*countLines;
+
+            var newScrollPos = VerticalScroll.Value - Math.Sign(direction) * offset;
+
+            var ea = new ScrollEventArgs(direction < 0 ? ScrollEventType.SmallIncrement : ScrollEventType.SmallDecrement,
+                                         VerticalScroll.Value,
+                                         newScrollPos,
+                                         ScrollOrientation.VerticalScroll);
+
+            OnScroll(ea);
         }
 
         /// <summary>
@@ -4593,6 +4714,9 @@ namespace FastColoredTextBoxNS
 
         public void ChangeFontSize(int step)
         {
+            //remmber first displayed line
+            var iLine = YtoLineIndex(VerticalScroll.Value);
+            //
             var points = Font.SizeInPoints;
             using (var gr = Graphics.FromHwnd(Handle))
             {
@@ -4602,12 +4726,19 @@ namespace FastColoredTextBoxNS
                 if (points < 3f || points > 300f) return;
 
                 var oldFont = Font;
-                Font = new Font(Font.FontFamily, points, Font.Style, GraphicsUnit.Point);
+                SetFont(new Font(Font.FontFamily, points, Font.Style, GraphicsUnit.Point));
                 oldFont.Dispose();
             }
 
-            NeedRecalc();
+            NeedRecalc(true);
+
+            //restore first displayed line
+            if (iLine < LinesCount)
+                VerticalScroll.Value = LineInfos[iLine].startY;
+            UpdateScrollbars();
+            //
             Invalidate();
+            OnVisibleRangeChanged();
         }
 
         protected override void OnMouseLeave(EventArgs e)
@@ -5004,8 +5135,6 @@ namespace FastColoredTextBoxNS
             //
             startFoldingLine = -1;
             endFoldingLine = -1;
-            //
-            string marker = null;
             int counter = 0;
             for (int i = Selection.Start.iLine; i >= Math.Max(Selection.Start.iLine - maxLinesForFolding, 0); i--)
             {
@@ -5021,7 +5150,6 @@ namespace FastColoredTextBoxNS
                     if (counter == -1) //found start folding
                     {
                         startFoldingLine = i;
-                        marker = lines[i].FoldingStartMarker;
                         break;
                     }
                 }
@@ -5056,6 +5184,7 @@ namespace FastColoredTextBoxNS
 
         protected override void OnLostFocus(EventArgs e)
         {
+            lastModifiers = Keys.None;
             base.OnLostFocus(e);
             //Invalidate(new Rectangle(PlaceToPoint(Selection.Start), new Size(2, CharHeight+1)));
             Invalidate();
@@ -5519,7 +5648,23 @@ namespace FastColoredTextBoxNS
         public void IncreaseIndent()
         {
             if (Selection.Start == Selection.End)
+            {
+                if (!Selection.ReadOnly)
+                {
+                    //insert tab as spaces
+                    int spaces = TabLength - (Selection.Start.iChar % TabLength);
+                    //replace mode? select forward chars
+                    if (IsReplaceMode)
+                    {
+                        for (int i = 0; i < spaces; i++)
+                            Selection.GoRight(true);
+                        Selection.Inverse();
+                    }
+
+                    InsertText(new String(' ', spaces));
+                }
                 return;
+            }
 
             bool carretAtEnd = (Selection.Start > Selection.End) && !Selection.ColumnSelectionMode;
 
@@ -6151,9 +6296,12 @@ window.status = ""#print"";
 
                 if (replaceForm != null)
                     replaceForm.Dispose();
-
+                /*
                 if (Font != null)
                     Font.Dispose();
+
+                if (originalFont != null)
+                    originalFont.Dispose();*/
 
                 if (TextSource != null)
                     TextSource.Dispose();

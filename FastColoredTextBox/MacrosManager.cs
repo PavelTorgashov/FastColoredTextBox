@@ -8,25 +8,13 @@ namespace FastColoredTextBoxNS
     /// </summary>
     public class MacrosManager
     {
-        private readonly List<KeyValuePair<object, Keys>> macro = new List<KeyValuePair<object, Keys>>();
+        private readonly List<object> macro = new List<object>();
 
         internal MacrosManager(FastColoredTextBox ctrl)
         {
-            ActivateRecordingKey = Keys.M | Keys.Control;
-            ExecutingKey = Keys.E | Keys.Control;
-
             UnderlayingControl = ctrl;
             AllowMacroRecordingByUser = true;
         }
-
-        /// <summary>
-        /// Keys combination for record activate/deactivate
-        /// </summary>
-        public Keys ActivateRecordingKey { get; set; }
-        /// <summary>
-        /// Keys combination for executing of the macros
-        /// </summary>
-        public Keys ExecutingKey { get; set; }
 
         /// <summary>
         /// Allows to user to record macros
@@ -56,22 +44,27 @@ namespace FastColoredTextBoxNS
         public bool ExecuteMacros()
         {
             IsRecording = false;
+            UnderlayingControl.BeginUpdate();
+            UnderlayingControl.Selection.BeginUpdate();
             UnderlayingControl.BeginAutoUndo();
             foreach (var item in macro)
             {
-                if (item.Key is Keys)
-                    UnderlayingControl.ProcessKey((Keys) item.Key, item.Value);
-                if (item.Key is char)
-                    UnderlayingControl.ProcessKey((char) item.Key, item.Value);
+                if (item is Keys)
+                {
+                    UnderlayingControl.ProcessKey((Keys)item);
+                }
+                if (item is KeyValuePair<char, Keys>)
+                {
+                    var p = (KeyValuePair<char, Keys>)item;
+                    UnderlayingControl.ProcessKey(p.Key, p.Value);
+                }
+                
             }
             UnderlayingControl.EndAutoUndo();
+            UnderlayingControl.Selection.EndUpdate();
+            UnderlayingControl.EndUpdate();
 
             return false;
-        }
-
-        private void Add(object key, Keys modifiers)
-        {
-            macro.Add(new KeyValuePair<object, Keys>(key, modifiers));
         }
 
         /// <summary>
@@ -79,15 +72,15 @@ namespace FastColoredTextBoxNS
         /// </summary>
         public void AddCharToMacros(char c, Keys modifiers)
         {
-            Add(c, modifiers);
+            macro.Add(new KeyValuePair<char, Keys>(c, modifiers));
         }
 
         /// <summary>
         /// Adds keyboard key to current macro
         /// </summary>
-        public void AddKeyToMacros(Keys key, Keys modifiers)
+        public void AddKeyToMacros(Keys keyData)
         {
-            Add(key, modifiers);
+            macro.Add(keyData);
         }
 
         /// <summary>
@@ -99,46 +92,16 @@ namespace FastColoredTextBoxNS
         }
 
 
-        internal bool ProcessKey(Keys keyCode, Keys modifiers)
+        internal void ProcessKey(Keys keyData)
         {
-            if ((keyCode | modifiers) == ActivateRecordingKey && AllowMacroRecordingByUser)
-            {
-                IsRecording = !IsRecording;
-                if (IsRecording)
-                    ClearMacros();
-                return true;
-            }
-
-            if (keyCode == Keys.Escape)
-            {
-                IsRecording = false;
-                return false;
-            }
-
-            if ((keyCode | modifiers) == ExecutingKey && AllowMacroRecordingByUser)
-            {
-                IsRecording = false;
-                ExecuteMacros();
-                return true;
-            }
             if (IsRecording)
-            {
-                AddKeyToMacros(keyCode, modifiers);
-                return false;
-            }
-
-            return false;
+                AddKeyToMacros(keyData);
         }
 
-        internal bool ProcessKey(char c, Keys modifiers)
+        internal void ProcessKey(char c, Keys modifiers)
         {
             if (IsRecording)
-            {
                 AddCharToMacros(c, modifiers);
-                return false;
-            }
-
-            return false;
         }
 
         /// <summary>
