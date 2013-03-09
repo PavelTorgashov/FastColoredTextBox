@@ -1519,6 +1519,22 @@
             Removes given lines
             </summary>
         </member>
+        <member name="M:FastColoredTextBoxNS.FastColoredTextBox.ActivateMiddleClickScrollingMode(System.Windows.Forms.MouseEventArgs)">
+            <summary>
+            Activates the scrolling mode (middle click button).
+            </summary>
+            <param name="e">MouseEventArgs</param>
+        </member>
+        <member name="M:FastColoredTextBoxNS.FastColoredTextBox.DeactivateMiddleClickScrollingMode">
+            <summary>
+            Deactivates the scrolling mode (middle click button).
+            </summary>
+        </member>
+        <member name="M:FastColoredTextBoxNS.FastColoredTextBox.RestoreScrollsAfterMiddleClickScrollingMode">
+            <summary>
+            Restore scrolls
+            </summary>
+        </member>
         <member name="P:FastColoredTextBoxNS.FastColoredTextBox.MacrosManager">
             <summary>
             MacrosManager records, stores and executes the macroses.
@@ -2787,6 +2803,11 @@
         <member name="P:FastColoredTextBoxNS.Hint.Inline">
             <summary>
             Inlining. If True then hint will moves apart text.
+            </summary>
+        </member>
+        <member name="T:FastColoredTextBoxNS.ScrollDirection">
+            <summary>
+            Defined direction.
             </summary>
         </member>
     </members>

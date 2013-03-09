@@ -35,7 +35,7 @@ namespace FastColoredTextBoxNS
     /// <summary>
     /// Fast colored textbox
     /// </summary>
-    public class FastColoredTextBox : UserControl, ISupportInitialize
+    public partial class FastColoredTextBox : UserControl, ISupportInitialize
     {
         internal const int minLeftIndent = 8;
         private const int maxBracketSearchIterations = 1000;
@@ -45,7 +45,6 @@ namespace FastColoredTextBoxNS
         private const int WM_HSCROLL = 0x114;
         private const int WM_VSCROLL = 0x115;
         private const int SB_ENDSCROLL = 0x8;
-        private const Keys AltShift = Keys.Alt | Keys.Shift;
 
         public readonly List<LineInfo> LineInfos = new List<LineInfo>();
         private readonly Range selection;
@@ -199,6 +198,7 @@ namespace FastColoredTextBoxNS
             timer.Tick += timer_Tick;
             timer2.Tick += timer2_Tick;
             timer3.Tick += timer3_Tick;
+            middleClickScrollingTimer.Tick += middleClickScrollingTimer_Tick;
             //
         }
 
@@ -2622,8 +2622,9 @@ namespace FastColoredTextBoxNS
                 VerticalScroll.Value = Math.Max(VerticalScroll.Minimum, Math.Min(VerticalScroll.Maximum, newValue));
             }
             if (se.ScrollOrientation == ScrollOrientation.HorizontalScroll)
-                HorizontalScroll.Value = se.NewValue;
+                HorizontalScroll.Value = Math.Max(HorizontalScroll.Minimum, Math.Min(HorizontalScroll.Maximum, se.NewValue));
             UpdateScrollbars();
+
             Invalidate();
             //
             base.OnScroll(se);
@@ -4296,6 +4297,9 @@ namespace FastColoredTextBoxNS
             if (MacrosManager.IsRecording)
                 DrawRecordingHint(e.Graphics);
 
+            if (middleClickScrollingActivated)
+                DrawMiddleClickScrolling(e.Graphics);
+
             //dispose resources
             servicePen.Dispose();
             changedLineBrush.Dispose();
@@ -4539,14 +4543,25 @@ namespace FastColoredTextBoxNS
             base.OnMouseUp(e);
             isLineSelect = false;
 
-            if(e.Button == System.Windows.Forms.MouseButtons.Left)
-                if(mouseIsDragDrop)
+            if (e.Button == System.Windows.Forms.MouseButtons.Left)
+            {
+                if (mouseIsDragDrop)
                     OnMouseClickText(e);
+            }
         }
 
         protected override void OnMouseDown(MouseEventArgs e)
         {
             base.OnMouseDown(e);
+
+            if (middleClickScrollingActivated)
+            {
+                DeactivateMiddleClickScrollingMode();
+                mouseIsDrag = false;
+                if(e.Button == System.Windows.Forms.MouseButtons.Middle)
+                    RestoreScrollsAfterMiddleClickScrollingMode();
+                return;
+            }
 
             MacrosManager.IsRecording = false;
 
@@ -4596,6 +4611,11 @@ namespace FastColoredTextBoxNS
                     Selection.EndUpdate();
                     Invalidate();
                 }
+            }
+            else
+            if (e.Button == MouseButtons.Middle)
+            {
+                ActivateMiddleClickScrollingMode(e);
             }
         }
 
@@ -4660,6 +4680,8 @@ namespace FastColoredTextBoxNS
 
                 DoScrollVertical(mouseWheelScrollLinesSetting, e.Delta);
             }
+
+            DeactivateMiddleClickScrollingMode();
         }
 
         private void DoScrollVertical(int countLines, int direction)
@@ -4674,7 +4696,7 @@ namespace FastColoredTextBoxNS
 
             var newScrollPos = VerticalScroll.Value - Math.Sign(direction) * offset;
 
-            var ea = new ScrollEventArgs(direction < 0 ? ScrollEventType.SmallIncrement : ScrollEventType.SmallDecrement,
+            var ea = new ScrollEventArgs(direction > 0 ? ScrollEventType.SmallDecrement : ScrollEventType.SmallIncrement,
                                          VerticalScroll.Value,
                                          newScrollPos,
                                          ScrollOrientation.VerticalScroll);
@@ -4753,6 +4775,9 @@ namespace FastColoredTextBoxNS
         protected override void OnMouseMove(MouseEventArgs e)
         {
             base.OnMouseMove(e);
+
+            if (middleClickScrollingActivated)
+                return;
 
             if (lastMouseCoord != e.Location)
             {
@@ -5178,15 +5203,14 @@ namespace FastColoredTextBoxNS
         {
             SetAsCurrentTB();
             base.OnGotFocus(e);
-            //Invalidate(new Rectangle(PlaceToPoint(Selection.Start), new Size(2, CharHeight+1)));
             Invalidate();
         }
 
         protected override void OnLostFocus(EventArgs e)
         {
             lastModifiers = Keys.None;
+            DeactivateMiddleClickScrollingMode();
             base.OnLostFocus(e);
-            //Invalidate(new Rectangle(PlaceToPoint(Selection.Start), new Size(2, CharHeight+1)));
             Invalidate();
         }
 
@@ -6290,6 +6314,7 @@ window.status = ""#print"";
                     SyntaxHighlighter.Dispose();
                 timer.Dispose();
                 timer2.Dispose();
+                middleClickScrollingTimer.Dispose();
 
                 if (findForm != null)
                     findForm.Dispose();
