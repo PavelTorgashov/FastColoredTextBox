@@ -162,5 +162,10 @@ namespace Tester
         {
             new MacrosSample().Show();
         }
+
+        private void button30_Click(object sender, EventArgs e)
+        {
+            new OpenTypeFontSample().Show();
+        }
     }
 }

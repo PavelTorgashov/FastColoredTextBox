@@ -22,6 +22,8 @@ namespace FastColoredTextBoxNS
         {
             if (!middleClickScrollingActivated)
             {
+                if ((!HorizontalScroll.Visible) && (!VerticalScroll.Visible))
+                    return;
                 middleClickScrollingActivated = true;
                 middleClickScrollingOriginPoint = e.Location;
                 middleClickScrollingOriginScroll = new Point(HorizontalScroll.Value, VerticalScroll.Value);
@@ -87,51 +89,73 @@ namespace FastColoredTextBoxNS
             Capture = true;
 
             // Calculate angle and distance between current position point and origin point
-            int distanceX = middleClickScrollingOriginPoint.X - currentMouseLocation.X;
-            int distanceY = middleClickScrollingOriginPoint.Y - currentMouseLocation.Y;
+            int distanceX = this.middleClickScrollingOriginPoint.X - currentMouseLocation.X;
+            int distanceY = this.middleClickScrollingOriginPoint.Y - currentMouseLocation.Y;
 
             if (!VerticalScroll.Visible) distanceY = 0;
             if (!HorizontalScroll.Visible) distanceX = 0;
 
-            var absDistanceX = Math.Abs(distanceX);
-            var absDistanceY = Math.Abs(distanceY);
+            double angleInDegree = 180 - Math.Atan2(distanceY, distanceX) * 180 / Math.PI;
+            double distance = Math.Sqrt(Math.Pow(distanceX, 2) + Math.Pow(distanceY, 2));
 
-            if (absDistanceX + absDistanceY > 15)
+            // determine scrolling direction depending on the angle
+            if (distance > 10)
             {
-                if (absDistanceX > absDistanceY)
-                    middleClickScollDirection = distanceX > 0 ? ScrollDirection.Left : ScrollDirection.Right;
+                if (angleInDegree >= 325 || angleInDegree <= 35)
+                    this.middleClickScollDirection = ScrollDirection.Right;
+                else if (angleInDegree <= 55)
+                    this.middleClickScollDirection = ScrollDirection.Right | ScrollDirection.Up;
+                else if (angleInDegree <= 125)
+                    this.middleClickScollDirection = ScrollDirection.Up;
+                else if (angleInDegree <= 145)
+                    this.middleClickScollDirection = ScrollDirection.Up | ScrollDirection.Left;
+                else if (angleInDegree <= 215)
+                    this.middleClickScollDirection = ScrollDirection.Left;
+                else if (angleInDegree <= 235)
+                    this.middleClickScollDirection = ScrollDirection.Left | ScrollDirection.Down;
+                else if (angleInDegree <= 305)
+                    this.middleClickScollDirection = ScrollDirection.Down;
                 else
-                    middleClickScollDirection = distanceY > 0 ? ScrollDirection.Up : ScrollDirection.Down;
+                    this.middleClickScollDirection = ScrollDirection.Down | ScrollDirection.Right;
             }
             else
-                middleClickScollDirection = ScrollDirection.None;
-
-            switch (middleClickScollDirection)
             {
-                case ScrollDirection.Down: base.Cursor = Cursors.PanSouth; break;
-                case ScrollDirection.Up: base.Cursor = Cursors.PanNorth; break;
+                this.middleClickScollDirection = ScrollDirection.None;
+            }
+
+            // Set mouse cursor
+            switch (this.middleClickScollDirection)
+            {
                 case ScrollDirection.Right: base.Cursor = Cursors.PanEast; break;
+                case ScrollDirection.Right | ScrollDirection.Up: base.Cursor = Cursors.PanNE; break;
+                case ScrollDirection.Up: base.Cursor = Cursors.PanNorth; break;
+                case ScrollDirection.Up | ScrollDirection.Left: base.Cursor = Cursors.PanNW; break;
                 case ScrollDirection.Left: base.Cursor = Cursors.PanWest; break;
+                case ScrollDirection.Left | ScrollDirection.Down: base.Cursor = Cursors.PanSW; break;
+                case ScrollDirection.Down: base.Cursor = Cursors.PanSouth; break;
+                case ScrollDirection.Down | ScrollDirection.Right: base.Cursor = Cursors.PanSE; break;
                 default: base.Cursor = defaultCursor; return;
             }
 
             var xScrollOffset = (int)(-distanceX / 5.0);
-            var yScrollOffset = (int)(-distanceY / 40.0);
+            var yScrollOffset = (int)(-distanceY / 5.0);
 
             var xea = new ScrollEventArgs(xScrollOffset < 0 ? ScrollEventType.SmallIncrement : ScrollEventType.SmallDecrement,
                 HorizontalScroll.Value,
                 HorizontalScroll.Value + xScrollOffset,
                 ScrollOrientation.HorizontalScroll);
 
-            switch (middleClickScollDirection)
-            {
-                case ScrollDirection.Down:
-                case ScrollDirection.Up:
-                    DoScrollVertical(1 + Math.Abs(yScrollOffset), Math.Sign(distanceY)); break;
-                case ScrollDirection.Right:
-                case ScrollDirection.Left: 
-                    OnScroll(xea); break;
-            }
+            var yea = new ScrollEventArgs(yScrollOffset < 0 ? ScrollEventType.SmallDecrement: ScrollEventType.SmallIncrement,
+                VerticalScroll.Value,
+                VerticalScroll.Value + yScrollOffset,
+                ScrollOrientation.VerticalScroll);
+
+            if((middleClickScollDirection & (ScrollDirection.Down | ScrollDirection.Up)) > 0)
+                    //DoScrollVertical(1 + Math.Abs(yScrollOffset), Math.Sign(distanceY));
+                    OnScroll(yea, false);
+
+            if((middleClickScollDirection & (ScrollDirection.Right | ScrollDirection.Left)) > 0)
+                    OnScroll(xea);
 
             // Enable drawing
             SendMessage(Handle, WM_SETREDRAW, 1, 0);

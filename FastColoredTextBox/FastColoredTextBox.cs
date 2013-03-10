@@ -398,9 +398,10 @@ namespace FastColoredTextBoxNS
         public int CharHeight
         {
             get { return charHeight; }
-            private set
+            set
             {
                 charHeight = value;
+                NeedRecalc();
                 OnCharSizeChanged();
             }
         }
@@ -425,7 +426,7 @@ namespace FastColoredTextBoxNS
         /// Width of char in pixels
         /// </summary>
         [Browsable(false)]
-        public int CharWidth { get; private set; }
+        public int CharWidth { get; set; }
 
         /// <summary>
         /// Spaces count for tab
@@ -1367,23 +1368,39 @@ namespace FastColoredTextBoxNS
         [DefaultValue(typeof (Font), "Courier New, 9.75")]
         public override Font Font
         {
-            get { return base.Font; }
+            get { return BaseFont; }
             set {
                 originalFont = (Font)value.Clone();
                 SetFont(value);
             }
         }
 
+
+        Font baseFont;
+        /// <summary>
+        /// Font
+        /// </summary>
+        /// <remarks>Use only monospaced font</remarks>
+        [DefaultValue(typeof(Font), "Courier New, 9.75")]
+        private Font BaseFont
+        {
+            get { return baseFont; }
+            set
+            {
+                baseFont = value;
+            }
+        }
+
         private void SetFont(Font newFont)
         {
-            base.Font = newFont;
+            BaseFont = newFont;
             //check monospace font
-            SizeF sizeM = GetCharSize(base.Font, 'M');
-            SizeF sizeDot = GetCharSize(base.Font, '.');
+            SizeF sizeM = GetCharSize(BaseFont, 'M');
+            SizeF sizeDot = GetCharSize(BaseFont, '.');
             if (sizeM != sizeDot)
-                base.Font = new Font("Courier New", base.Font.SizeInPoints, FontStyle.Regular, GraphicsUnit.Point);
+                BaseFont = new Font("Courier New", BaseFont.SizeInPoints, FontStyle.Regular, GraphicsUnit.Point);
             //clac size
-            SizeF size = GetCharSize(base.Font, 'M');
+            SizeF size = GetCharSize(BaseFont, 'M');
             CharWidth = (int) Math.Round(size.Width*1f /*0.85*/) - 1 /*0*/;
             CharHeight = lineInterval + (int) Math.Round(size.Height*1f /*0.9*/) - 1 /*0*/;
             //
@@ -2610,14 +2627,14 @@ namespace FastColoredTextBoxNS
                 }
         }
 
-        protected override void OnScroll(ScrollEventArgs se)
+        protected void OnScroll(ScrollEventArgs se, bool alignByLines)
         {
-            //
             if (se.ScrollOrientation == ScrollOrientation.VerticalScroll)
             {
                 //align by line height
                 int newValue = se.NewValue;
-                newValue = (int) (Math.Ceiling(1d*newValue/CharHeight)*CharHeight);
+                if (alignByLines)
+                    newValue = (int)(Math.Ceiling(1d * newValue / CharHeight) * CharHeight);
                 //
                 VerticalScroll.Value = Math.Max(VerticalScroll.Minimum, Math.Min(VerticalScroll.Maximum, newValue));
             }
@@ -2629,6 +2646,11 @@ namespace FastColoredTextBoxNS
             //
             base.OnScroll(se);
             OnVisibleRangeChanged();
+        }
+
+        protected override void OnScroll(ScrollEventArgs se)
+        {
+            OnScroll(se, true);
         }
 
         private void InsertChar(char c)
@@ -3030,6 +3052,9 @@ namespace FastColoredTextBoxNS
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
+            if (middleClickScrollingActivated)
+                return;
+
             base.OnKeyDown(e);
 
             if (Focused)//??? 
@@ -3771,6 +3796,9 @@ namespace FastColoredTextBoxNS
 
         protected override bool ProcessMnemonic(char charCode)
         {
+            if (middleClickScrollingActivated)
+                return false;
+
             if (Focused)
                 return ProcessKey(charCode, lastModifiers) || base.ProcessMnemonic(charCode);
             else
@@ -3784,7 +3812,6 @@ namespace FastColoredTextBoxNS
         {
             if (handledChar)
                 return true;
-
 
             if (macrosManager != null)
                 macrosManager.ProcessKey(c, modifiers);

@@ -811,68 +811,25 @@
             Set this property to True/False to mark chars of the range as Readonly/Writable.
             </summary>
         </member>
-        <member name="F:FastColoredTextBoxNS.HotkeysEditorForm.components">
-            <summary>
-            Required designer variable.
-            </summary>
-        </member>
-        <member name="M:FastColoredTextBoxNS.HotkeysEditorForm.Dispose(System.Boolean)">
-            <summary>
-            Clean up any resources being used.
-            </summary>
-            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        </member>
-        <member name="M:FastColoredTextBoxNS.HotkeysEditorForm.InitializeComponent">
-            <summary>
-            Required method for Designer support - do not modify
-            the contents of this method with the code editor.
-            </summary>
-        </member>
-        <member name="M:FastColoredTextBoxNS.HotkeysEditorForm.GetHotkeys">
-            <summary>
-            Returns edited hotkey map
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="T:FastColoredTextBoxNS.ExportToHTML">
-            <summary>
-            Exports colored text as HTML
-            </summary>
-            <remarks>At this time only TextStyle renderer is supported. Other styles is not exported.</remarks>
-        </member>
-        <member name="P:FastColoredTextBoxNS.ExportToHTML.UseNbsp">
-            <summary>
-            Use nbsp; instead space
-            </summary>
-        </member>
-        <member name="P:FastColoredTextBoxNS.ExportToHTML.UseForwardNbsp">
-            <summary>
-            Use nbsp; instead space in beginning of line
-            </summary>
-        </member>
-        <member name="P:FastColoredTextBoxNS.ExportToHTML.UseOriginalFont">
-            <summary>
-            Use original font
-            </summary>
-        </member>
-        <member name="P:FastColoredTextBoxNS.ExportToHTML.UseStyleTag">
-            <summary>
-            Use style tag instead style attribute
-            </summary>
-        </member>
-        <member name="P:FastColoredTextBoxNS.ExportToHTML.UseBr">
-            <summary>
-            Use br tag instead \n
-            </summary>
-        </member>
-        <member name="P:FastColoredTextBoxNS.ExportToHTML.IncludeLineNumbers">
-            <summary>
-            Includes line numbers
-            </summary>
-        </member>
         <member name="T:FastColoredTextBoxNS.FastColoredTextBox">
             <summary>
             Fast colored textbox
+            </summary>
+        </member>
+        <member name="M:FastColoredTextBoxNS.FastColoredTextBox.ActivateMiddleClickScrollingMode(System.Windows.Forms.MouseEventArgs)">
+            <summary>
+            Activates the scrolling mode (middle click button).
+            </summary>
+            <param name="e">MouseEventArgs</param>
+        </member>
+        <member name="M:FastColoredTextBoxNS.FastColoredTextBox.DeactivateMiddleClickScrollingMode">
+            <summary>
+            Deactivates the scrolling mode (middle click button).
+            </summary>
+        </member>
+        <member name="M:FastColoredTextBoxNS.FastColoredTextBox.RestoreScrollsAfterMiddleClickScrollingMode">
+            <summary>
+            Restore scrolls
             </summary>
         </member>
         <member name="M:FastColoredTextBoxNS.FastColoredTextBox.#ctor">
@@ -1519,22 +1476,6 @@
             Removes given lines
             </summary>
         </member>
-        <member name="M:FastColoredTextBoxNS.FastColoredTextBox.ActivateMiddleClickScrollingMode(System.Windows.Forms.MouseEventArgs)">
-            <summary>
-            Activates the scrolling mode (middle click button).
-            </summary>
-            <param name="e">MouseEventArgs</param>
-        </member>
-        <member name="M:FastColoredTextBoxNS.FastColoredTextBox.DeactivateMiddleClickScrollingMode">
-            <summary>
-            Deactivates the scrolling mode (middle click button).
-            </summary>
-        </member>
-        <member name="M:FastColoredTextBoxNS.FastColoredTextBox.RestoreScrollsAfterMiddleClickScrollingMode">
-            <summary>
-            Restore scrolls
-            </summary>
-        </member>
         <member name="P:FastColoredTextBoxNS.FastColoredTextBox.MacrosManager">
             <summary>
             MacrosManager records, stores and executes the macroses.
@@ -2011,6 +1952,12 @@
             </summary>
             <remarks>Use only monospaced font</remarks>
         </member>
+        <member name="P:FastColoredTextBoxNS.FastColoredTextBox.BaseFont">
+            <summary>
+            Font
+            </summary>
+            <remarks>Use only monospaced font</remarks>
+        </member>
         <member name="P:FastColoredTextBoxNS.FastColoredTextBox.ImeAllowed">
             <summary>
             Indicates that IME is allowed (for CJK language entering)
@@ -2157,6 +2104,70 @@
             Occurs when undo/redo stack is changed
             </summary>
             <remarks></remarks>
+        </member>
+        <member name="T:FastColoredTextBoxNS.ScrollDirection">
+            <summary>
+            Defined direction.
+            </summary>
+        </member>
+        <member name="F:FastColoredTextBoxNS.HotkeysEditorForm.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:FastColoredTextBoxNS.HotkeysEditorForm.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:FastColoredTextBoxNS.HotkeysEditorForm.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="M:FastColoredTextBoxNS.HotkeysEditorForm.GetHotkeys">
+            <summary>
+            Returns edited hotkey map
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:FastColoredTextBoxNS.ExportToHTML">
+            <summary>
+            Exports colored text as HTML
+            </summary>
+            <remarks>At this time only TextStyle renderer is supported. Other styles is not exported.</remarks>
+        </member>
+        <member name="P:FastColoredTextBoxNS.ExportToHTML.UseNbsp">
+            <summary>
+            Use nbsp; instead space
+            </summary>
+        </member>
+        <member name="P:FastColoredTextBoxNS.ExportToHTML.UseForwardNbsp">
+            <summary>
+            Use nbsp; instead space in beginning of line
+            </summary>
+        </member>
+        <member name="P:FastColoredTextBoxNS.ExportToHTML.UseOriginalFont">
+            <summary>
+            Use original font
+            </summary>
+        </member>
+        <member name="P:FastColoredTextBoxNS.ExportToHTML.UseStyleTag">
+            <summary>
+            Use style tag instead style attribute
+            </summary>
+        </member>
+        <member name="P:FastColoredTextBoxNS.ExportToHTML.UseBr">
+            <summary>
+            Use br tag instead \n
+            </summary>
+        </member>
+        <member name="P:FastColoredTextBoxNS.ExportToHTML.IncludeLineNumbers">
+            <summary>
+            Includes line numbers
+            </summary>
         </member>
         <member name="P:FastColoredTextBoxNS.LineInsertedEventArgs.Index">
             <summary>
@@ -2803,11 +2814,6 @@
         <member name="P:FastColoredTextBoxNS.Hint.Inline">
             <summary>
             Inlining. If True then hint will moves apart text.
-            </summary>
-        </member>
-        <member name="T:FastColoredTextBoxNS.ScrollDirection">
-            <summary>
-            Defined direction.
             </summary>
         </member>
     </members>
