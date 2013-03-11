@@ -47,7 +47,8 @@
     </Compile>
     <Compile Include="Bookmarks.cs" />
     <Compile Include="Char.cs" />
-    <Compile Include="Export.cs" />
+    <Compile Include="ExportToHTML.cs" />
+    <Compile Include="ExportToRTF.cs" />
     <Compile Include="FastColoredTextBox_MiddleClickScrolling.cs">
       <SubType>UserControl</SubType>
     </Compile>

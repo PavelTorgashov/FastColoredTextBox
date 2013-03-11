@@ -127,6 +127,8 @@ Partial Class PowerfulSample
         '
         Me.FastColoredTextBox1.AutoScrollMinSize = New System.Drawing.Size(158, 15)
         Me.FastColoredTextBox1.BackBrush = Nothing
+        Me.FastColoredTextBox1.CharHeight = 15
+        Me.FastColoredTextBox1.CharWidth = 7
         Me.FastColoredTextBox1.CommentPrefix = "'"
         Me.FastColoredTextBox1.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.FastColoredTextBox1.DisabledColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer))

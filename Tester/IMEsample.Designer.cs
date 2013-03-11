@@ -28,9 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(IMEsample));
             this.label1 = new System.Windows.Forms.Label();
             this.fctb = new FastColoredTextBoxNS.FastColoredTextBox();
+            ((System.ComponentModel.ISupportInitialize)(this.fctb)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -47,15 +49,22 @@
             // 
             this.fctb.AutoIndent = false;
             this.fctb.AutoScrollMinSize = new System.Drawing.Size(0, 264);
+            this.fctb.BackBrush = null;
             this.fctb.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.fctb.CharHeight = 24;
+            this.fctb.CharWidth = 12;
             this.fctb.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.fctb.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.fctb.Dock = System.Windows.Forms.DockStyle.Fill;
             this.fctb.Font = new System.Drawing.Font("Consolas", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.fctb.ImeMode = System.Windows.Forms.ImeMode.On;
+            this.fctb.IsReplaceMode = false;
             this.fctb.LeftBracket = '(';
             this.fctb.Location = new System.Drawing.Point(0, 85);
             this.fctb.Name = "fctb";
+            this.fctb.Paddings = new System.Windows.Forms.Padding(0);
             this.fctb.RightBracket = ')';
+            this.fctb.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.fctb.ShowLineNumbers = false;
             this.fctb.Size = new System.Drawing.Size(417, 217);
             this.fctb.TabIndex = 2;
@@ -71,6 +80,7 @@
             this.Controls.Add(this.label1);
             this.Name = "IMEsample";
             this.Text = "IMEsample";
+            ((System.ComponentModel.ISupportInitialize)(this.fctb)).EndInit();
             this.ResumeLayout(false);
 
         }

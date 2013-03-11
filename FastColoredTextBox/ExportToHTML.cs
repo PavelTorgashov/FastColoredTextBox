@@ -29,7 +29,7 @@ namespace FastColoredTextBoxNS
         /// </summary>
         public bool UseStyleTag { get; set; }
         /// <summary>
-        /// Use br tag instead \n
+        /// Use 'br' tag instead of '\n'
         /// </summary>
         public bool UseBr { get; set; }
         /// <summary>
@@ -67,8 +67,6 @@ namespace FastColoredTextBoxNS
             styles[currentStyleId] = null;
             //
             if (UseOriginalFont)
-                /*sb.AppendFormat("<font style=\"font-family: {0}, monospace; font-size: {1}px; line-height: {2}px;\">",
-                                r.tb.Font.Name, r.tb.CharHeight - r.tb.LineInterval, r.tb.CharHeight);*/
                 sb.AppendFormat("<font style=\"font-family: {0}, monospace; font-size: {1}pt; line-height: {2}px;\">",
                                                 r.tb.Font.Name, r.tb.Font.SizeInPoints, r.tb.CharHeight);
 
@@ -204,8 +202,6 @@ namespace FastColoredTextBoxNS
         private void Flush(StringBuilder sb, StringBuilder tempSB, StyleIndex currentStyle)
         {
             //find textRenderer
-            //var textStyle = styles.Where(s => s is TextStyle).FirstOrDefault();
-            //
             if (tempSB.Length == 0)
                 return;
             if (UseStyleTag)

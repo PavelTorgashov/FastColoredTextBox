@@ -69,6 +69,7 @@ namespace Tester
             this.jSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.miExport = new System.Windows.Forms.ToolStripMenuItem();
             this.hTMLToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.rTFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.miChangeColors = new System.Windows.Forms.ToolStripMenuItem();
             this.changeHotkeysToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fctb = new FastColoredTextBoxNS.FastColoredTextBox();
@@ -354,7 +355,8 @@ namespace Tester
             // miExport
             // 
             this.miExport.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.hTMLToolStripMenuItem1});
+            this.hTMLToolStripMenuItem1,
+            this.rTFToolStripMenuItem});
             this.miExport.Name = "miExport";
             this.miExport.Size = new System.Drawing.Size(52, 20);
             this.miExport.Text = "Export";
@@ -365,6 +367,13 @@ namespace Tester
             this.hTMLToolStripMenuItem1.Size = new System.Drawing.Size(107, 22);
             this.hTMLToolStripMenuItem1.Text = "HTML";
             this.hTMLToolStripMenuItem1.Click += new System.EventHandler(this.hTMLToolStripMenuItem1_Click);
+            // 
+            // rTFToolStripMenuItem
+            // 
+            this.rTFToolStripMenuItem.Name = "rTFToolStripMenuItem";
+            this.rTFToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
+            this.rTFToolStripMenuItem.Text = "RTF";
+            this.rTFToolStripMenuItem.Click += new System.EventHandler(this.rTFToolStripMenuItem_Click);
             // 
             // miChangeColors
             // 
@@ -387,6 +396,8 @@ namespace Tester
             this.fctb.AutoScrollMinSize = new System.Drawing.Size(284, 285);
             this.fctb.BackBrush = null;
             this.fctb.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.fctb.CharHeight = 15;
+            this.fctb.CharWidth = 7;
             this.fctb.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.fctb.DelayedEventsInterval = 200;
             this.fctb.DelayedTextChangedInterval = 500;
@@ -471,6 +482,7 @@ namespace Tester
         private System.Windows.Forms.ToolStripMenuItem startStopMacroRecordingToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem executeMacroToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem changeHotkeysToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem rTFToolStripMenuItem;
     }
 }
 

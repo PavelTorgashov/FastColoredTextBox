@@ -375,6 +375,17 @@ namespace Tester
                 fctb.HotkeysMapping = form.GetHotkeys();
         }
 
+        private void rTFToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.Filter = "RTF|*.rtf";
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                string rtf = fctb.Rtf;
+                File.WriteAllText(sfd.FileName, rtf);
+            }
+        }
+
         /*
         private void saveFoldingsToolStripMenuItem_Click(object sender, EventArgs e)
         {

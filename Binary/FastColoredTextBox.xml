@@ -272,6 +272,12 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="M:FastColoredTextBoxNS.Style.GetRTF">
+            <summary>
+            Returns RTF descriptor for export to RTF
+            </summary>
+            <returns></returns>
+        </member>
         <member name="P:FastColoredTextBoxNS.Style.IsExportable">
             <summary>
             This style is exported to outer formats (HTML for example)
@@ -1931,6 +1937,12 @@
             </summary>
             <remarks>For more flexibility you can use ExportToHTML class also</remarks>
         </member>
+        <member name="P:FastColoredTextBoxNS.FastColoredTextBox.Rtf">
+            <summary>
+            Gets colored text as RTF
+            </summary>
+            <remarks>For more flexibility you can use ExportToRTF class also</remarks>
+        </member>
         <member name="P:FastColoredTextBoxNS.FastColoredTextBox.SelectedText">
             <summary>
             Text of current selection
@@ -2132,42 +2144,6 @@
             Returns edited hotkey map
             </summary>
             <returns></returns>
-        </member>
-        <member name="T:FastColoredTextBoxNS.ExportToHTML">
-            <summary>
-            Exports colored text as HTML
-            </summary>
-            <remarks>At this time only TextStyle renderer is supported. Other styles is not exported.</remarks>
-        </member>
-        <member name="P:FastColoredTextBoxNS.ExportToHTML.UseNbsp">
-            <summary>
-            Use nbsp; instead space
-            </summary>
-        </member>
-        <member name="P:FastColoredTextBoxNS.ExportToHTML.UseForwardNbsp">
-            <summary>
-            Use nbsp; instead space in beginning of line
-            </summary>
-        </member>
-        <member name="P:FastColoredTextBoxNS.ExportToHTML.UseOriginalFont">
-            <summary>
-            Use original font
-            </summary>
-        </member>
-        <member name="P:FastColoredTextBoxNS.ExportToHTML.UseStyleTag">
-            <summary>
-            Use style tag instead style attribute
-            </summary>
-        </member>
-        <member name="P:FastColoredTextBoxNS.ExportToHTML.UseBr">
-            <summary>
-            Use br tag instead \n
-            </summary>
-        </member>
-        <member name="P:FastColoredTextBoxNS.ExportToHTML.IncludeLineNumbers">
-            <summary>
-            Includes line numbers
-            </summary>
         </member>
         <member name="P:FastColoredTextBoxNS.LineInsertedEventArgs.Index">
             <summary>
@@ -2652,6 +2628,22 @@
             Remembers current selection and restore it after Undo
             </summary>
         </member>
+        <member name="T:FastColoredTextBoxNS.ExportToRTF">
+            <summary>
+            Exports colored text as RTF
+            </summary>
+            <remarks>At this time only TextStyle renderer is supported. Other styles is not exported.</remarks>
+        </member>
+        <member name="P:FastColoredTextBoxNS.ExportToRTF.IncludeLineNumbers">
+            <summary>
+            Includes line numbers
+            </summary>
+        </member>
+        <member name="P:FastColoredTextBoxNS.ExportToRTF.UseOriginalFont">
+            <summary>
+            Use original font
+            </summary>
+        </member>
         <member name="T:FastColoredTextBoxNS.HotkeysMapping">
             <summary>
             Dictionary of shortcuts for FCTB
@@ -2814,6 +2806,42 @@
         <member name="P:FastColoredTextBoxNS.Hint.Inline">
             <summary>
             Inlining. If True then hint will moves apart text.
+            </summary>
+        </member>
+        <member name="T:FastColoredTextBoxNS.ExportToHTML">
+            <summary>
+            Exports colored text as HTML
+            </summary>
+            <remarks>At this time only TextStyle renderer is supported. Other styles is not exported.</remarks>
+        </member>
+        <member name="P:FastColoredTextBoxNS.ExportToHTML.UseNbsp">
+            <summary>
+            Use nbsp; instead space
+            </summary>
+        </member>
+        <member name="P:FastColoredTextBoxNS.ExportToHTML.UseForwardNbsp">
+            <summary>
+            Use nbsp; instead space in beginning of line
+            </summary>
+        </member>
+        <member name="P:FastColoredTextBoxNS.ExportToHTML.UseOriginalFont">
+            <summary>
+            Use original font
+            </summary>
+        </member>
+        <member name="P:FastColoredTextBoxNS.ExportToHTML.UseStyleTag">
+            <summary>
+            Use style tag instead style attribute
+            </summary>
+        </member>
+        <member name="P:FastColoredTextBoxNS.ExportToHTML.UseBr">
+            <summary>
+            Use 'br' tag instead of '\n'
+            </summary>
+        </member>
+        <member name="P:FastColoredTextBoxNS.ExportToHTML.IncludeLineNumbers">
+            <summary>
+            Includes line numbers
             </summary>
         </member>
     </members>

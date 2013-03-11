@@ -295,6 +295,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="IMEsample.resx">
       <DependentUpon>IMEsample.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="JokeSample.resx">
       <DependentUpon>JokeSample.cs</DependentUpon>
@@ -338,6 +339,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="BookmarksSample.resx">
       <DependentUpon>BookmarksSample.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

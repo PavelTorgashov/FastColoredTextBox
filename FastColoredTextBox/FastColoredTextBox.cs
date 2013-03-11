@@ -1325,6 +1325,20 @@ namespace FastColoredTextBoxNS
         }
 
         /// <summary>
+        /// Gets colored text as RTF
+        /// </summary>
+        /// <remarks>For more flexibility you can use ExportToRTF class also</remarks>
+        [Browsable(false)]
+        public string Rtf
+        {
+            get
+            {
+                var exporter = new ExportToRTF();
+                return exporter.GetRtf(this);
+            }
+        }
+
+        /// <summary>
         /// Text of current selection
         /// </summary>
         [Browsable(false)]
@@ -2238,6 +2252,7 @@ namespace FastColoredTextBoxNS
                 var data = new DataObject();
                 data.SetData(DataFormats.UnicodeText, true, Selection.Text);
                 data.SetData(DataFormats.Html, PrepareHtmlForClipboard(html));
+                data.SetData(DataFormats.Rtf, new ExportToRTF().GetRtf(Selection.Clone()));
                 //
                 var thread = new Thread(() => SetClipboard(data));
                 thread.SetApartmentState(ApartmentState.STA);

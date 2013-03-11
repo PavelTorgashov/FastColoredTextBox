@@ -85,6 +85,15 @@ namespace FastColoredTextBoxNS
         {
             return "";
         }
+
+        /// <summary>
+        /// Returns RTF descriptor for export to RTF
+        /// </summary>
+        /// <returns></returns>
+        public virtual RTFStyleDescriptor GetRTF()
+        {
+            return new RTFStyleDescriptor();
+        }
     }
 
     /// <summary>
@@ -189,6 +198,28 @@ namespace FastColoredTextBoxNS
                 result += "text-decoration:line-through;";
             if ((FontStyle & FontStyle.Underline) != 0)
                 result += "text-decoration:underline;";
+
+            return result;
+        }
+
+        public override RTFStyleDescriptor GetRTF()
+        {
+            var result = new RTFStyleDescriptor();
+
+            if (BackgroundBrush is SolidBrush)
+                result.BackColor = (BackgroundBrush as SolidBrush).Color;
+            
+            if (ForeBrush is SolidBrush)
+                result.ForeColor = (ForeBrush as SolidBrush).Color;
+            
+            if ((FontStyle & FontStyle.Bold) != 0)
+                result.AdditionalTags += @"\b";
+            if ((FontStyle & FontStyle.Italic) != 0)
+                result.AdditionalTags += @"\i";
+            if ((FontStyle & FontStyle.Strikeout) != 0)
+                result.AdditionalTags += @"\strike";
+            if ((FontStyle & FontStyle.Underline) != 0)
+                result.AdditionalTags += @"\ul";
 
             return result;
         }
