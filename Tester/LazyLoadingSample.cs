@@ -112,5 +112,90 @@ namespace Tester
             var iLines = fctb.FindLines(@"^\s*$", RegexOptions.None);
             fctb.RemoveLines(iLines);
         }
+
+        private void removeAllSpacesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            RemoveSpaces();
+        }
+
+        
+         public void RemoveSpaces()
+         {
+             lock (this.fctb)
+             {
+                 try
+                 {
+                     // pattern to search for
+                     String pattern = @"\s";
+
+                     fctb.BeginUpdate();
+
+                     // range to search in
+                     Range range = rangeSelected();
+
+                     // collect all ranges that match for the pattern " "
+                     var ranges = new List<Range>();
+                     foreach (var r in range.GetRangesByLines(pattern, RegexOptions.None | RegexOptions.Compiled))
+                     {
+                         ranges.Add(r);
+                     }
+
+                     // remove all collected ranges
+                     if (ranges.Count > 0)
+                     {
+                         fctb.TextSource.Manager.ExecuteCommand(new ReplaceTextCommand(fctb.TextSource, ranges, String.Empty));
+                         // clear selection
+                         fctb.Selection = new Range(this.fctb);
+                     }
+                     // update screen
+                     fctb.Invalidate();
+                 }
+                 catch (Exception exp)
+                 {
+                     //ShowException(exp);
+                 }
+                 finally
+                 {
+                     // unlock
+                     fctb.EndUpdate();
+                 }
+             }
+         }
+
+
+         /// <summary>
+         /// Calculates the range of the whole document if no selection exists. Else return range containing the selection.
+         /// </summary>
+         /// <returns>returns either the range ALL or SELECTION if it exists</returns>
+         private Range rangeSelected()
+         {
+             var t = fctb;
+             var r = new Range(t);
+
+             lock (this.fctb)
+             {
+                 t.Selection.BeginUpdate();
+
+                 if ((t.Selection.Start.iLine == t.Selection.End.iLine) &&
+                      (t.Selection.Start.iChar == t.Selection.End.iChar))
+                 {
+                     // No selection - set range over all
+                     r.Start = new Place(0, 0);
+
+                     var lastLine = t.LinesCount - 1;
+                     r.End = new Place(t.GetLineLength(lastLine), lastLine);
+                 }
+                 else
+                 {
+                     // Use available selection
+                     r.Start = t.Selection.Start;
+                     r.End = t.Selection.End;
+                 }
+
+                 // unlock
+                 t.Selection.EndUpdate();
+             }
+             return r;
+         }
     }
 }

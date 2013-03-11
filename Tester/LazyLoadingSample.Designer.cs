@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LazyLoadingSample));
             this.ofd = new System.Windows.Forms.OpenFileDialog();
             this.ms = new System.Windows.Forms.MenuStrip();
@@ -43,7 +44,9 @@
             this.sfd = new System.Windows.Forms.SaveFileDialog();
             this.label2 = new System.Windows.Forms.Label();
             this.fctb = new FastColoredTextBoxNS.FastColoredTextBox();
+            this.removeAllSpacesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ms.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.fctb)).BeginInit();
             this.SuspendLayout();
             // 
             // ofd
@@ -99,7 +102,8 @@
             this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.collapseAllFoldingBlocksToolStripMenuItem,
             this.expandAllCollapsedBlocksToolStripMenuItem,
-            this.removeEmptyLinesToolStripMenuItem});
+            this.removeEmptyLinesToolStripMenuItem,
+            this.removeAllSpacesToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this.editToolStripMenuItem.Text = "Edit";
@@ -151,11 +155,14 @@
             // 
             this.fctb.AutoScrollMinSize = new System.Drawing.Size(480, 45);
             this.fctb.BackBrush = null;
+            this.fctb.CharHeight = 15;
+            this.fctb.CharWidth = 7;
             this.fctb.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.fctb.DelayedEventsInterval = 300;
             this.fctb.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.fctb.Dock = System.Windows.Forms.DockStyle.Fill;
             this.fctb.Font = new System.Drawing.Font("Consolas", 9.75F);
+            this.fctb.IsReplaceMode = false;
             this.fctb.Location = new System.Drawing.Point(0, 86);
             this.fctb.Name = "fctb";
             this.fctb.Paddings = new System.Windows.Forms.Padding(0);
@@ -165,8 +172,16 @@
             this.fctb.Text = "Press \"Create test file\", select target directory and press Save.\r\nWill be create" +
     "d large file (approx. 50mb). \r\nThen bind file to the control in menu File/Bind t" +
     "o file.";
+            this.fctb.Zoom = 100;
             this.fctb.TextChangedDelayed += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.fctb_TextChangedDelayed);
             this.fctb.VisibleRangeChangedDelayed += new System.EventHandler(this.fctb_VisibleRangeChangedDelayed);
+            // 
+            // removeAllSpacesToolStripMenuItem
+            // 
+            this.removeAllSpacesToolStripMenuItem.Name = "removeAllSpacesToolStripMenuItem";
+            this.removeAllSpacesToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            this.removeAllSpacesToolStripMenuItem.Text = "Remove all spaces";
+            this.removeAllSpacesToolStripMenuItem.Click += new System.EventHandler(this.removeAllSpacesToolStripMenuItem_Click);
             // 
             // LazyLoadingSample
             // 
@@ -182,6 +197,7 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.LazyLoadingSample_FormClosing);
             this.ms.ResumeLayout(false);
             this.ms.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.fctb)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -203,5 +219,6 @@
         private System.Windows.Forms.ToolStripMenuItem collapseAllFoldingBlocksToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem expandAllCollapsedBlocksToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem removeEmptyLinesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem removeAllSpacesToolStripMenuItem;
     }
 }

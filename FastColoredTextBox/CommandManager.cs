@@ -187,7 +187,7 @@ namespace FastColoredTextBoxNS
         }
     }
 
-    internal abstract class UndoableCommand : Command
+    public abstract class UndoableCommand : Command
     {
         internal RangeInfo sel;
         internal RangeInfo lastSel;

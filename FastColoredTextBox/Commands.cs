@@ -7,7 +7,7 @@ namespace FastColoredTextBoxNS
     /// Insert single char
     /// </summary>
     /// <remarks>This operation includes also insertion of new line and removing char by backspace</remarks>
-    internal class InsertCharCommand: UndoableCommand
+    public class InsertCharCommand : UndoableCommand
     {
         internal char c;
         char deletedChar = '\x0';
@@ -188,7 +188,7 @@ namespace FastColoredTextBoxNS
     /// <summary>
     /// Insert text
     /// </summary>
-    internal class InsertTextCommand : UndoableCommand
+    public class InsertTextCommand : UndoableCommand
     {
         internal string insertedText;
 
@@ -252,7 +252,7 @@ namespace FastColoredTextBoxNS
     /// <summary>
     /// Insert text into given ranges
     /// </summary>
-    internal class ReplaceTextCommand : UndoableCommand
+    public class ReplaceTextCommand : UndoableCommand
     {
         string insertedText;
         List<Range> ranges;
@@ -288,6 +288,7 @@ namespace FastColoredTextBoxNS
             var tb = ts.CurrentTB;
 
             ts.OnTextChanging();
+            tb.BeginUpdate();
 
             tb.Selection.BeginUpdate();
             for (int i = 0; i<ranges.Count; i++)
@@ -295,11 +296,14 @@ namespace FastColoredTextBoxNS
                 tb.Selection.Start = ranges[i].Start;
                 for (int j = 0; j < insertedText.Length; j++)
                     tb.Selection.GoRight(true);
-                ClearSelectedCommand.ClearSelected(ts);
+                ClearSelected(ts);
                 InsertTextCommand.InsertText(prevText[prevText.Count - i - 1], ts);
-                ts.OnTextChanged(ranges[i].Start.iLine, ranges[i].Start.iLine);
             }
             tb.Selection.EndUpdate();
+            tb.EndUpdate();
+
+            if (ranges.Count > 0)
+                ts.OnTextChanged(ranges[0].Start.iLine, ranges[ranges.Count - 1].End.iLine);
 
             ts.NeedRecalc(new TextSource.TextChangedEventArgs(0, 1));
         }
@@ -315,15 +319,19 @@ namespace FastColoredTextBoxNS
             ts.OnTextChanging(ref insertedText);
 
             tb.Selection.BeginUpdate();
+            tb.BeginUpdate();
             for (int i = ranges.Count - 1; i >= 0; i--)
             {
                 tb.Selection.Start = ranges[i].Start;
                 tb.Selection.End = ranges[i].End;
                 prevText.Add(tb.Selection.Text);
-                ClearSelectedCommand.ClearSelected(ts);
-                InsertTextCommand.InsertText(insertedText, ts);
-                ts.OnTextChanged(ranges[i].Start.iLine, ranges[i].End.iLine);
+                ClearSelected(ts);
+                if (insertedText  != "")
+                    InsertTextCommand.InsertText(insertedText, ts);
             }
+            if(ranges.Count > 0)
+                ts.OnTextChanged(ranges[0].Start.iLine, ranges[ranges.Count - 1].End.iLine);
+            tb.EndUpdate();
             tb.Selection.EndUpdate();
             ts.NeedRecalc(new TextSource.TextChangedEventArgs(0, 1));
 
@@ -334,12 +342,35 @@ namespace FastColoredTextBoxNS
         {
             return new ReplaceTextCommand(ts, new List<Range>(ranges), insertedText);
         }
+
+        internal static void ClearSelected(TextSource ts)
+        {
+            var tb = ts.CurrentTB;
+
+            Place start = tb.Selection.Start;
+            Place end = tb.Selection.End;
+            int fromLine = Math.Min(end.iLine, start.iLine);
+            int toLine = Math.Max(end.iLine, start.iLine);
+            int fromChar = tb.Selection.FromX;
+            int toChar = tb.Selection.ToX;
+            if (fromLine < 0) return;
+            //
+            if (fromLine == toLine)
+                ts[fromLine].RemoveRange(fromChar, toChar - fromChar);
+            else
+            {
+                ts[fromLine].RemoveRange(fromChar, ts[fromLine].Count - fromChar);
+                ts[toLine].RemoveRange(0, toChar);
+                ts.RemoveLine(fromLine + 1, toLine - fromLine - 1);
+                InsertCharCommand.MergeLines(fromLine, ts);
+            }
+        }
     }
 
     /// <summary>
     /// Clear selected text
     /// </summary>
-    internal class ClearSelectedCommand : UndoableCommand
+    public class ClearSelectedCommand : UndoableCommand
     {
         string deletedText;
 
@@ -418,7 +449,7 @@ namespace FastColoredTextBoxNS
     /// <summary>
     /// Replaces text
     /// </summary>
-    internal class ReplaceMultipleTextCommand : UndoableCommand
+    public class ReplaceMultipleTextCommand : UndoableCommand
     {
         List<ReplaceRange> ranges;
         List<string> prevText = new List<string>();
@@ -509,7 +540,7 @@ namespace FastColoredTextBoxNS
     /// <summary>
     /// Removes lines
     /// </summary>
-    internal class RemoveLinesCommand : UndoableCommand
+    public class RemoveLinesCommand : UndoableCommand
     {
         List<int> iLines;
         List<string> prevText = new List<string>();
@@ -603,7 +634,7 @@ namespace FastColoredTextBoxNS
     /// <summary>
     /// Wrapper for multirange commands
     /// </summary>
-    internal class MultiRangeCommand : UndoableCommand
+    public class MultiRangeCommand : UndoableCommand
     {
         private UndoableCommand cmd;
         private Range range;
@@ -725,7 +756,7 @@ namespace FastColoredTextBoxNS
     /// <summary>
     /// Remembers current selection and restore it after Undo
     /// </summary>
-    internal class SelectCommand : UndoableCommand
+    public class SelectCommand : UndoableCommand
     {
         public SelectCommand(TextSource ts):base(ts)
         {

@@ -2132,11 +2132,23 @@ namespace FastColoredTextBoxNS
                 VisibleRangeChangedDelayed(this, new EventArgs());
         }
 
+        Dictionary<Timer, Timer> timersToReset = new Dictionary<Timer, Timer>();
+
         private void ResetTimer(Timer timer)
         {
             timer.Stop();
             if (IsHandleCreated)
                 timer.Start();
+            else
+                timersToReset[timer] = timer;
+        }
+
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            base.OnHandleCreated(e);
+            foreach (var timer in new List<Timer>(timersToReset.Keys))
+                ResetTimer(timer);
+            timersToReset.Clear();
         }
 
         /// <summary>
