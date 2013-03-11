@@ -895,6 +895,12 @@ namespace Tester
             if (CurrentTB != null)
                 CurrentTB.Invalidate();
         }
+
+        private void Zoom_click(object sender, EventArgs e)
+        {
+            if (CurrentTB != null)
+                CurrentTB.Zoom = int.Parse((sender as ToolStripItem).Tag.ToString());
+        }
     }
 
     public class InvisibleCharsRenderer : Style

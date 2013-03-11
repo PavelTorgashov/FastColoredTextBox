@@ -2117,6 +2117,16 @@
             </summary>
             <remarks></remarks>
         </member>
+        <member name="E:FastColoredTextBoxNS.FastColoredTextBox.ZoomChanged">
+            <summary>
+            Occurs when component was zoomed
+            </summary>
+        </member>
+        <member name="P:FastColoredTextBoxNS.FastColoredTextBox.Zoom">
+            <summary>
+            Zooming (in percentages)
+            </summary>
+        </member>
         <member name="T:FastColoredTextBoxNS.ScrollDirection">
             <summary>
             Defined direction.

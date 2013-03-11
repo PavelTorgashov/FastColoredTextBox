@@ -112,6 +112,7 @@ namespace FastColoredTextBoxNS
         private bool wordWrap;
         private WordWrapMode wordWrapMode = WordWrapMode.WordWrapControlWidth;
         private int reservedCountOfLineNumberChars = 1;
+        private int zoom = 100;
 
         /// <summary>
         /// Constructor
@@ -1862,6 +1863,13 @@ namespace FastColoredTextBoxNS
         [Description("Occurs when undo/redo stack is changed.")]
         public event EventHandler<EventArgs> UndoRedoStateChanged;
 
+        /// <summary>
+        /// Occurs when component was zoomed
+        /// </summary>
+        [Browsable(true)]
+        [Description("Occurs when component was zoomed.")]
+        public event EventHandler ZoomChanged;
+
 
         /// <summary>
         /// Returns list of styles of given place
@@ -3545,8 +3553,7 @@ namespace FastColoredTextBoxNS
 
         private void RestoreFontSize()
         {
-            if (originalFont != null)
-                SetFont((Font)originalFont.Clone());
+            DoZoom(1f);
         }
 
         /// <summary>
@@ -4778,21 +4785,50 @@ namespace FastColoredTextBoxNS
 
         public void ChangeFontSize(int step)
         {
-            //remmber first displayed line
-            var iLine = YtoLineIndex(VerticalScroll.Value);
-            //
             var points = Font.SizeInPoints;
             using (var gr = Graphics.FromHwnd(Handle))
             {
                 var dpi = gr.DpiY;
-                points += step * 72f / dpi;
-
-                if (points < 3f || points > 300f) return;
-
-                var oldFont = Font;
-                SetFont(new Font(Font.FontFamily, points, Font.Style, GraphicsUnit.Point));
-                oldFont.Dispose();
+                var newPoints = points + step * 72f / dpi;
+                if(newPoints < 1f) return;
+                var k = newPoints / originalFont.SizeInPoints;
+                DoZoom(k);
             }
+        }
+
+        /// <summary>
+        /// Zooming (in percentages)
+        /// </summary>
+        [Browsable(false)]
+        public int Zoom 
+        {
+            get { return zoom; }
+            set {
+                zoom = value;
+                DoZoom(zoom / 100f);
+                OnZoomChanged();
+            }
+        }
+
+        protected virtual void OnZoomChanged()
+        {
+            if (ZoomChanged != null)
+                ZoomChanged(this, EventArgs.Empty);
+        }
+
+        private void DoZoom(float koeff)
+        {
+            //remmber first displayed line
+            var iLine = YtoLineIndex(VerticalScroll.Value);
+            //
+            var points = originalFont.SizeInPoints;
+            points *= koeff;
+
+            if (points < 1f || points > 300f) return;
+
+            var oldFont = Font;
+            SetFont(new Font(Font.FontFamily, points, Font.Style, GraphicsUnit.Point));
+            oldFont.Dispose();
 
             NeedRecalc(true);
 
