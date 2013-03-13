@@ -411,6 +411,11 @@
             Occurs when recalc is needed
             </summary>
         </member>
+        <member name="E:FastColoredTextBoxNS.TextSource.RecalcWordWrap">
+            <summary>
+            Occurs when recalc wordwrap is needed
+            </summary>
+        </member>
         <member name="E:FastColoredTextBoxNS.TextSource.TextChanging">
             <summary>
             Occurs before text changing
@@ -910,6 +915,11 @@
             </summary>
         </member>
         <member name="M:FastColoredTextBoxNS.FastColoredTextBox.NeedRecalc(System.Boolean)">
+            <summary>
+            Call this method if the recalc of the position of lines is needed.
+            </summary>
+        </member>
+        <member name="M:FastColoredTextBoxNS.FastColoredTextBox.NeedRecalc(System.Boolean,System.Boolean)">
             <summary>
             Call this method if the recalc of the position of lines is needed.
             </summary>

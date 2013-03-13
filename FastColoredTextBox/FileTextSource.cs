@@ -116,7 +116,9 @@ namespace FastColoredTextBoxNS
             for (int i = 0; i < linesCount; i++)
                 LoadLineFromSourceFile(i);
             //
-            NeedRecalc(new TextChangedEventArgs(0, 1));
+            NeedRecalc(new TextChangedEventArgs(0, linesCount - 1));
+            if (CurrentTB.WordWrap)
+                OnRecalcWordWrap(new TextChangedEventArgs(0, linesCount - 1));
         }
 
         private int DefineShift(Encoding enc)
@@ -182,7 +184,14 @@ namespace FastColoredTextBoxNS
         public void CloseFile()
         {
             if(fs!=null)
-                fs.Dispose();
+                try
+                {
+                    fs.Dispose();
+                }
+                catch
+                {
+                    ;
+                }
             fs = null;
         }
 
@@ -311,6 +320,9 @@ namespace FastColoredTextBoxNS
             foreach (var c in s)
                 line.Add(new Char(c));
             base.lines[i] = line;
+
+            if (CurrentTB.WordWrap)
+                OnRecalcWordWrap(new TextChangedEventArgs(i, i));
         }
 
         public override void InsertLine(int index, Line line)

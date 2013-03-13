@@ -91,6 +91,8 @@ namespace FastColoredTextBoxNS
         private bool mouseIsDragDrop;
         private bool multiline;
         private bool needRecalc;
+        private bool needRecalcWordWrap;
+        private Point needRecalcWordWrapInterval;
         private bool needRecalcFoldingLines;
         private bool needRiseSelectionChangedDelayed;
         private bool needRiseTextChangedDelayed;
@@ -1906,6 +1908,7 @@ namespace FastColoredTextBoxNS
                 ts.LineRemoved -= ts_LineRemoved;
                 ts.TextChanged -= ts_TextChanged;
                 ts.RecalcNeeded -= ts_RecalcNeeded;
+                ts.RecalcWordWrap -= ts_RecalcWordWrap;
                 ts.TextChanging -= ts_TextChanging;
 
                 lines.Dispose();
@@ -1921,6 +1924,7 @@ namespace FastColoredTextBoxNS
                 ts.LineRemoved += ts_LineRemoved;
                 ts.TextChanged += ts_TextChanged;
                 ts.RecalcNeeded += ts_RecalcNeeded;
+                ts.RecalcWordWrap += ts_RecalcWordWrap;
                 ts.TextChanging += ts_TextChanging;
 
                 while (LineInfos.Count < ts.Count)
@@ -1929,6 +1933,11 @@ namespace FastColoredTextBoxNS
 
             isChanged = false;
             needRecalc = true;
+        }
+
+        private void ts_RecalcWordWrap(object sender, TextSource.TextChangedEventArgs e)
+        {
+            RecalcWordWrap(e.iFromLine, e.iToLine);
         }
 
         private void ts_TextChanging(object sender, TextChangingEventArgs e)
@@ -1962,7 +1971,22 @@ namespace FastColoredTextBoxNS
         /// </summary>
         public void NeedRecalc(bool forced)
         {
+            NeedRecalc(forced, false);
+        }
+
+        /// <summary>
+        /// Call this method if the recalc of the position of lines is needed.
+        /// </summary>
+        public void NeedRecalc(bool forced, bool wordWrapRecalc)
+        {
             needRecalc = true;
+
+            if(wordWrapRecalc)
+            {
+                needRecalcWordWrapInterval = new Point(0, LinesCount - 1);
+                needRecalcWordWrap = true;
+            }
+
             if (forced)
                 Recalc();
         }
@@ -2652,7 +2676,7 @@ namespace FastColoredTextBoxNS
             if (m.Msg == WM_HSCROLL || m.Msg == WM_VSCROLL)
                 if (m.WParam.ToInt32() != SB_ENDSCROLL)
                     Invalidate();
-
+            
             base.WndProc(ref m);
 
             if (ImeAllowed)
@@ -2757,6 +2781,9 @@ namespace FastColoredTextBoxNS
         {
             if (!needRecalc)
                 return;
+
+            if (needRecalcWordWrap)
+                RecalcWordWrap(needRecalcWordWrapInterval.X, needRecalcWordWrapInterval.Y);
 
 #if debug
             var sw = Stopwatch.StartNew();
@@ -2880,6 +2907,8 @@ namespace FastColoredTextBoxNS
             int maxCharsPerLine = 0;
             bool charWrap = false;
 
+            toLine = Math.Min(LinesCount - 1, toLine);
+
             switch (WordWrapMode)
             {
                 case WordWrapMode.WordWrapControlWidth:
@@ -2911,6 +2940,7 @@ namespace FastColoredTextBoxNS
                     }
                 }
             needRecalc = true;
+            needRecalcWordWrap = false;
         }
 
         protected override void OnClientSizeChanged(EventArgs e)
@@ -4152,6 +4182,7 @@ namespace FastColoredTextBoxNS
         {
             if (needRecalc)
                 Recalc();
+
             if (needRecalcFoldingLines)
                 RecalcFoldingLines();
 #if debug
@@ -5017,6 +5048,9 @@ namespace FastColoredTextBoxNS
             point.Offset(HorizontalScroll.Value, VerticalScroll.Value);
             point.Offset(-LeftIndent - Paddings.Left, 0);
             int iLine = YtoLineIndex(point.Y);
+            if (iLine < 0)
+                return Place.Empty;
+
             int y = 0;
 
             for (; iLine < lines.Count; iLine++)
@@ -6457,9 +6491,9 @@ window.status = ""#print"";
         /// <param name="enc"></param>
         public void OpenBindingFile(string fileName, Encoding enc)
         {
+            var fts = new FileTextSource(this);
             try
             {
-                var fts = new FileTextSource(this);
                 InitTextSource(fts);
                 fts.OpenFile(fileName, enc);
                 IsChanged = false;
@@ -6467,11 +6501,13 @@ window.status = ""#print"";
             }
             catch
             {
+                fts.CloseFile();
                 InitTextSource(CreateTextSource());
                 lines.InsertLine(0, TextSource.CreateLine());
                 IsChanged = false;
                 throw;
             }
+            Invalidate();
         }
 
         /// <summary>

@@ -40,6 +40,10 @@ namespace FastColoredTextBoxNS
         /// </summary>
         public event EventHandler<TextChangedEventArgs> RecalcNeeded;
         /// <summary>
+        /// Occurs when recalc wordwrap is needed
+        /// </summary>
+        public event EventHandler<TextChangedEventArgs> RecalcWordWrap;
+        /// <summary>
         /// Occurs before text changing
         /// </summary>
         public event EventHandler<TextChangingEventArgs> TextChanging;
@@ -272,6 +276,12 @@ namespace FastColoredTextBoxNS
         {
             if (RecalcNeeded != null)
                 RecalcNeeded(this, args);
+        }
+
+        internal virtual void OnRecalcWordWrap(TextChangedEventArgs args)
+        {
+            if (RecalcWordWrap != null)
+                RecalcWordWrap(this, args);
         }
 
         internal virtual void OnTextChanging()

@@ -184,7 +184,7 @@ namespace Tester
 
                 fctb.CharWidth = measureSize.Width;
                 fctb.CharHeight = measureSize.Height + fctb.LineInterval;
-                fctb.NeedRecalc(true);
+                fctb.NeedRecalc(true, true);
             }
         }
 
