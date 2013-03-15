@@ -1307,7 +1307,7 @@ namespace FastColoredTextBoxNS
         [Browsable(false)]
         public IList<string> Lines
         {
-            get { return lines.Lines; }
+            get { return lines.GetLines(); }
         }
 
         /// <summary>
@@ -2368,6 +2368,13 @@ namespace FastColoredTextBoxNS
         {
             if (!Selection.IsEmpty)
             {
+                Copy();
+                ClearSelected();
+            }
+            else
+            if (LinesCount == 1)
+            {
+                Selection.SelectAll();
                 Copy();
                 ClearSelected();
             }

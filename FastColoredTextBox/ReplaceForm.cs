@@ -102,13 +102,24 @@ namespace FastColoredTextBoxNS
                 Hide();
         }
 
-        private void FindForm_FormClosing(object sender, FormClosingEventArgs e)
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData) // David
+        {
+            if (keyData == Keys.Escape)
+            {
+                this.Close();
+                return true;
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
+        private void ReplaceForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (e.CloseReason == CloseReason.UserClosing)
             {
                 e.Cancel = true;
                 Hide();
             }
+            this.tb.Focus();
         }
 
         private void btReplace_Click(object sender, EventArgs e)

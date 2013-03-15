@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.label = new System.Windows.Forms.Label();
-            this.textBox = new System.Windows.Forms.TextBox();
+            this.tbLineNumber = new System.Windows.Forms.TextBox();
             this.btnOk = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.SuspendLayout();
@@ -43,14 +43,14 @@
             this.label.TabIndex = 0;
             this.label.Text = "Line Number (1/1):";
             // 
-            // textBox
+            // tbLineNumber
             // 
-            this.textBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox.Location = new System.Drawing.Point(12, 29);
-            this.textBox.Name = "textBox";
-            this.textBox.Size = new System.Drawing.Size(296, 20);
-            this.textBox.TabIndex = 1;
+            this.tbLineNumber.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbLineNumber.Location = new System.Drawing.Point(12, 29);
+            this.tbLineNumber.Name = "tbLineNumber";
+            this.tbLineNumber.Size = new System.Drawing.Size(296, 20);
+            this.tbLineNumber.TabIndex = 1;
             // 
             // btnOk
             // 
@@ -61,6 +61,7 @@
             this.btnOk.TabIndex = 2;
             this.btnOk.Text = "OK";
             this.btnOk.UseVisualStyleBackColor = true;
+            this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
             // 
             // btnCancel
             // 
@@ -71,6 +72,7 @@
             this.btnCancel.TabIndex = 3;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
+            this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // GoToForm
             // 
@@ -81,7 +83,7 @@
             this.ClientSize = new System.Drawing.Size(320, 106);
             this.Controls.Add(this.btnCancel);
             this.Controls.Add(this.btnOk);
-            this.Controls.Add(this.textBox);
+            this.Controls.Add(this.tbLineNumber);
             this.Controls.Add(this.label);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.MaximizeBox = false;
@@ -101,7 +103,7 @@
         #endregion
 
         private System.Windows.Forms.Label label;
-        private System.Windows.Forms.TextBox textBox;
+        private System.Windows.Forms.TextBox tbLineNumber;
         private System.Windows.Forms.Button btnOk;
         private System.Windows.Forms.Button btnCancel;
     }

@@ -28,17 +28,20 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CustomTextSourceSample));
             this.fctb = new FastColoredTextBoxNS.FastColoredTextBox();
             this.label1 = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.fctb)).BeginInit();
             this.SuspendLayout();
             // 
             // fctb
             // 
-            this.fctb.AllowDrop = true;
             this.fctb.AutoIndent = false;
-            this.fctb.AutoScrollMinSize = new System.Drawing.Size(27, 17);
+            this.fctb.AutoScrollMinSize = new System.Drawing.Size(0, 17);
             this.fctb.BackBrush = null;
+            this.fctb.CharHeight = 15;
+            this.fctb.CharWidth = 7;
             this.fctb.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.fctb.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.fctb.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -53,6 +56,8 @@
             this.fctb.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.fctb.Size = new System.Drawing.Size(569, 266);
             this.fctb.TabIndex = 0;
+            this.fctb.WordWrap = true;
+            this.fctb.Zoom = 100;
             this.fctb.VisibleRangeChanged += new System.EventHandler(this.fctb_VisibleRangeChanged);
             // 
             // label1
@@ -75,6 +80,7 @@
             this.Name = "CustomTextSourceSample";
             this.Text = "CustomTextSourceSample";
             this.Shown += new System.EventHandler(this.CustomTextSourceSample_Shown);
+            ((System.ComponentModel.ISupportInitialize)(this.fctb)).EndInit();
             this.ResumeLayout(false);
 
         }

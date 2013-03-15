@@ -118,6 +118,10 @@ namespace Tester
             var linesCount = Math.Min(lines.Count, CurrentTB.Height / CurrentTB.CharHeight);
             for (int i = 0; i < linesCount; i++)
                 LoadLineFromSourceString(i);
+
+            NeedRecalc(new TextChangedEventArgs(0, linesCount - 1));
+            if (CurrentTB.WordWrap)
+                OnRecalcWordWrap(new TextChangedEventArgs(0, linesCount - 1));
         }
 
         public override void ClearIsChanged()
@@ -158,6 +162,9 @@ namespace Tester
                 line.Add(new FastColoredTextBoxNS.Char(c));
 
             base.lines[i] = line;
+
+            if (CurrentTB.WordWrap)
+                OnRecalcWordWrap(new TextChangedEventArgs(i, i));
         }
 
         public override void InsertLine(int index, Line line)

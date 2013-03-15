@@ -391,6 +391,11 @@
             Maximum style count is 16
             </summary>
         </member>
+        <member name="M:FastColoredTextBoxNS.TextSource.GetLines">
+            <summary>
+            Text lines
+            </summary>
+        </member>
         <member name="E:FastColoredTextBoxNS.TextSource.LineInserted">
             <summary>
             Occurs when line was inserted/added
@@ -435,11 +440,6 @@
             <summary>
             Default text style
             This style is using when no one other TextStyle is not defined in Char.style
-            </summary>
-        </member>
-        <member name="P:FastColoredTextBoxNS.TextSource.Lines">
-            <summary>
-            Text lines
             </summary>
         </member>
         <member name="P:FastColoredTextBoxNS.TextSource.Count">

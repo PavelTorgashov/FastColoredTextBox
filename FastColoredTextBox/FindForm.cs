@@ -97,6 +97,17 @@ namespace FastColoredTextBoxNS
                 e.Cancel = true;
                 Hide();
             }
+            this.tb.Focus();
+        }
+
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == Keys.Escape)
+            {
+                this.Close();
+                return true;
+            }
+            return base.ProcessCmdKey(ref msg, keyData);
         }
 
         protected override void OnActivated(EventArgs e)

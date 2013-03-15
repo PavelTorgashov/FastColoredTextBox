@@ -16,8 +16,38 @@ namespace FastColoredTextBoxNS
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+
+            this.tbLineNumber.Text = this.SelectedLineNumber.ToString();
+
             this.label.Text = String.Format("Line number (1 - {0}):", this.TotalLineCount);
-            this.textBox.DataBindings.Add("Text", this, "SelectedLineNumber", true, DataSourceUpdateMode.OnPropertyChanged);
         }
+
+        protected override void OnShown(EventArgs e)
+        {
+            base.OnShown(e);
+
+            this.tbLineNumber.Focus();
+        }
+
+        private void btnOk_Click(object sender, EventArgs e)
+        {
+            int enteredLine;
+            if (int.TryParse(this.tbLineNumber.Text, out enteredLine))
+            {
+                enteredLine = Math.Min(enteredLine, this.TotalLineCount);
+                enteredLine = Math.Max(1, enteredLine);
+
+                this.SelectedLineNumber = enteredLine;
+            }
+
+            this.DialogResult = DialogResult.OK;
+            this.Close();
+        }
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.Cancel;
+            this.Close();
+         }
     }
 }

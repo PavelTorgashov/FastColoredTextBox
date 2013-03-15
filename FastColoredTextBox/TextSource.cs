@@ -118,12 +118,9 @@ namespace FastColoredTextBoxNS
         /// <summary>
         /// Text lines
         /// </summary>
-        public virtual IList<string> Lines
+        public virtual IList<string> GetLines()
         {
-            get
-            {
-                return linesAccessor;
-            }
+            return linesAccessor;
         }
 
         public IEnumerator<Line> GetEnumerator()
@@ -272,25 +269,25 @@ namespace FastColoredTextBoxNS
                 return false;
         }
 
-        internal virtual void NeedRecalc(TextChangedEventArgs args)
+        public virtual void NeedRecalc(TextChangedEventArgs args)
         {
             if (RecalcNeeded != null)
                 RecalcNeeded(this, args);
         }
 
-        internal virtual void OnRecalcWordWrap(TextChangedEventArgs args)
+        public virtual void OnRecalcWordWrap(TextChangedEventArgs args)
         {
             if (RecalcWordWrap != null)
                 RecalcWordWrap(this, args);
         }
 
-        internal virtual void OnTextChanging()
+        public virtual void OnTextChanging()
         {
             string temp = null;
             OnTextChanging(ref temp);
         }
 
-        internal virtual void OnTextChanging(ref string text)
+        public virtual void OnTextChanging(ref string text)
         {
             if (TextChanging != null)
             {
