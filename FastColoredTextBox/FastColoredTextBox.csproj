@@ -49,9 +49,6 @@
     <Compile Include="Char.cs" />
     <Compile Include="ExportToHTML.cs" />
     <Compile Include="ExportToRTF.cs" />
-    <Compile Include="FastColoredTextBox_MiddleClickScrolling.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
     <Compile Include="GoToForm.cs">
       <SubType>Form</SubType>
     </Compile>

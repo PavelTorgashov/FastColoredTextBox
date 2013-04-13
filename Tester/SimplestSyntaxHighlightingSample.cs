@@ -8,7 +8,7 @@ namespace Tester
     public partial class SimplestSyntaxHighlightingSample : Form
     {
         //Create style for highlighting
-        TextStyle maroonStyle = new TextStyle(Brushes.Maroon, null, FontStyle.Regular);
+        TextStyle brownStyle = new TextStyle(Brushes.Brown, null, FontStyle.Regular);
 
         public SimplestSyntaxHighlightingSample()
         {
@@ -18,9 +18,9 @@ namespace Tester
         private void fctb_TextChanged(object sender, FastColoredTextBoxNS.TextChangedEventArgs e)
         {
             //clear previous highlighting
-            e.ChangedRange.ClearStyle(maroonStyle);
+            e.ChangedRange.ClearStyle(brownStyle);
             //highlight tags
-            e.ChangedRange.SetStyle(maroonStyle, "<[^>]+>");
+            e.ChangedRange.SetStyle(brownStyle, "<[^>]+>");
         }
     }
 }

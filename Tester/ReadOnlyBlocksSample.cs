@@ -20,6 +20,7 @@ namespace Tester
                 fctb.Selection.ReadOnly &&
                 fctb.Selection.CharBeforeStart == '>' &&
                 fctb.Selection.CharAfterStart == '<')
+            if (e.KeyChar != '\b')
             {
                 //Ha ha... The user completely remove whole tag body and now he cannot insert any text here
                 //so, we help him...

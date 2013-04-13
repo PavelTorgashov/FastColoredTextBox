@@ -822,25 +822,32 @@
             Set this property to True/False to mark chars of the range as Readonly/Writable.
             </summary>
         </member>
+        <member name="F:FastColoredTextBoxNS.HotkeysEditorForm.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:FastColoredTextBoxNS.HotkeysEditorForm.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:FastColoredTextBoxNS.HotkeysEditorForm.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="M:FastColoredTextBoxNS.HotkeysEditorForm.GetHotkeys">
+            <summary>
+            Returns edited hotkey map
+            </summary>
+            <returns></returns>
+        </member>
         <member name="T:FastColoredTextBoxNS.FastColoredTextBox">
             <summary>
             Fast colored textbox
-            </summary>
-        </member>
-        <member name="M:FastColoredTextBoxNS.FastColoredTextBox.ActivateMiddleClickScrollingMode(System.Windows.Forms.MouseEventArgs)">
-            <summary>
-            Activates the scrolling mode (middle click button).
-            </summary>
-            <param name="e">MouseEventArgs</param>
-        </member>
-        <member name="M:FastColoredTextBoxNS.FastColoredTextBox.DeactivateMiddleClickScrollingMode">
-            <summary>
-            Deactivates the scrolling mode (middle click button).
-            </summary>
-        </member>
-        <member name="M:FastColoredTextBoxNS.FastColoredTextBox.RestoreScrollsAfterMiddleClickScrollingMode">
-            <summary>
-            Restore scrolls
             </summary>
         </member>
         <member name="M:FastColoredTextBoxNS.FastColoredTextBox.#ctor">
@@ -1492,6 +1499,22 @@
             Removes given lines
             </summary>
         </member>
+        <member name="M:FastColoredTextBoxNS.FastColoredTextBox.ActivateMiddleClickScrollingMode(System.Windows.Forms.MouseEventArgs)">
+            <summary>
+            Activates the scrolling mode (middle click button).
+            </summary>
+            <param name="e">MouseEventArgs</param>
+        </member>
+        <member name="M:FastColoredTextBoxNS.FastColoredTextBox.DeactivateMiddleClickScrollingMode">
+            <summary>
+            Deactivates the scrolling mode (middle click button).
+            </summary>
+        </member>
+        <member name="M:FastColoredTextBoxNS.FastColoredTextBox.RestoreScrollsAfterMiddleClickScrollingMode">
+            <summary>
+            Restore scrolls
+            </summary>
+        </member>
         <member name="P:FastColoredTextBoxNS.FastColoredTextBox.MacrosManager">
             <summary>
             MacrosManager records, stores and executes the macroses.
@@ -2136,34 +2159,6 @@
             <summary>
             Zooming (in percentages)
             </summary>
-        </member>
-        <member name="T:FastColoredTextBoxNS.ScrollDirection">
-            <summary>
-            Defined direction.
-            </summary>
-        </member>
-        <member name="F:FastColoredTextBoxNS.HotkeysEditorForm.components">
-            <summary>
-            Required designer variable.
-            </summary>
-        </member>
-        <member name="M:FastColoredTextBoxNS.HotkeysEditorForm.Dispose(System.Boolean)">
-            <summary>
-            Clean up any resources being used.
-            </summary>
-            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        </member>
-        <member name="M:FastColoredTextBoxNS.HotkeysEditorForm.InitializeComponent">
-            <summary>
-            Required method for Designer support - do not modify
-            the contents of this method with the code editor.
-            </summary>
-        </member>
-        <member name="M:FastColoredTextBoxNS.HotkeysEditorForm.GetHotkeys">
-            <summary>
-            Returns edited hotkey map
-            </summary>
-            <returns></returns>
         </member>
         <member name="P:FastColoredTextBoxNS.LineInsertedEventArgs.Index">
             <summary>

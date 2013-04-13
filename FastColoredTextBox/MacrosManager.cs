@@ -41,7 +41,7 @@ namespace FastColoredTextBoxNS
         /// Executes recorded macro
         /// </summary>
         /// <returns></returns>
-        public bool ExecuteMacros()
+        public void ExecuteMacros()
         {
             IsRecording = false;
             UnderlayingControl.BeginUpdate();
@@ -63,8 +63,6 @@ namespace FastColoredTextBoxNS
             UnderlayingControl.EndAutoUndo();
             UnderlayingControl.Selection.EndUpdate();
             UnderlayingControl.EndUpdate();
-
-            return false;
         }
 
         /// <summary>

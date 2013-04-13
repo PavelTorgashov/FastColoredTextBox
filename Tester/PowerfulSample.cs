@@ -231,7 +231,7 @@ namespace Tester
 
         void GoLeftBracket(FastColoredTextBox tb, char leftBracket, char rightBracket)
         {
-            Range range = tb.Selection.Clone();//need clone because we will move caret
+            Range range = tb.Selection.Clone();//need to clone because we will move caret
             int counter = 0;
             int maxIterations = maxBracketSearchIterations;
             while (range.GoLeftThroughFolded())//move caret left
@@ -385,39 +385,5 @@ namespace Tester
                 File.WriteAllText(sfd.FileName, rtf);
             }
         }
-
-        /*
-        private void saveFoldingsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            var tb = fastColoredTextBox1;
-            //save folded blocks
-            List<int> collapsedBlocks = new List<int>();
-            VisibleState prev = VisibleState.Visible;
-            for(int i=0;i<tb.LinesCount;i++)
-            {
-                if (tb[i].VisibleState != VisibleState.Visible && prev == VisibleState.Visible)
-                    collapsedBlocks.Add(i);//start of folded block
-                if (tb[i].VisibleState == VisibleState.Visible && prev != VisibleState.Visible)
-                    collapsedBlocks.Add(i-1);//end of folded block
-                prev = tb[i].VisibleState;
-             }
-            if (prev != VisibleState.Visible)
-                collapsedBlocks.Add(tb.LinesCount - 1);
-            //
-            using(var fs = File.Create("c:\\myFolded.bin"))
-                new BinaryFormatter().Serialize(fs, collapsedBlocks);
-        }
-
-        private void loadFoldingsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            var tb = fastColoredTextBox1;
-            //load folded blocks
-            tb.ExpandBlock(0, tb.LinesCount-1);//expand all current foldings
-            List<int> collapsedBlocks;
-            using(var fs = File.Open("c:\\myFolded.bin", FileMode.Open))
-                collapsedBlocks = (List<int>)new BinaryFormatter().Deserialize(fs);
-            for (int i = 0; i < collapsedBlocks.Count; i += 2)
-                tb.CollapseBlock(collapsedBlocks[i], collapsedBlocks[i+1]);
-        }*/
     }
 }
