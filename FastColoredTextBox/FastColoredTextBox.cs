@@ -3218,7 +3218,7 @@ namespace FastColoredTextBoxNS
                     if (OnKeyPressing('\b')) //KeyPress event processed key
                         return false;
 
-
+                    if (Selection.ReadOnly) return false;
 
                     if (!Selection.IsEmpty)
                         ClearSelected();
@@ -3374,11 +3374,14 @@ namespace FastColoredTextBoxNS
                 case FCTBAction.ClearWordLeft:
                     if (OnKeyPressing('\b')) //KeyPress event processed key
                         break;
-                    if (!Selection.IsEmpty)
-                        ClearSelected();
-                    Selection.GoWordLeft(true);
                     if (!Selection.ReadOnly)
-                        ClearSelected();
+                    {
+                        if (!Selection.IsEmpty)
+                            ClearSelected();
+                        Selection.GoWordLeft(true);
+                        if (!Selection.ReadOnly)
+                            ClearSelected();
+                    }
                     OnKeyPressed('\b');
                     break;
 
@@ -3420,10 +3423,10 @@ namespace FastColoredTextBoxNS
                 case FCTBAction.ClearWordRight:
                     if (OnKeyPressing((char) 0xff)) //KeyPress event processed key
                         break;
-                    if (!Selection.IsEmpty)
-                        ClearSelected();
-                    else
+                    if (!Selection.ReadOnly)
                     {
+                        if (!Selection.IsEmpty)
+                            ClearSelected();
                         Selection.GoWordRight(true);
                         if (!Selection.ReadOnly)
                             ClearSelected();

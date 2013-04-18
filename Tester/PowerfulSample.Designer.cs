@@ -410,7 +410,6 @@ namespace Tester
             this.fctb.Name = "fctb";
             this.fctb.Paddings = new System.Windows.Forms.Padding(0);
             this.fctb.PreferredLineWidth = 80;
-            this.fctb.ReadOnly = true;
             this.fctb.ReservedCountOfLineNumberChars = 2;
             this.fctb.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.fctb.Size = new System.Drawing.Size(371, 317);
