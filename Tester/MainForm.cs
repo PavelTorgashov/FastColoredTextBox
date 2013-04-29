@@ -167,5 +167,10 @@ namespace Tester
         {
             new OpenTypeFontSample().Show();
         }
+
+        private void MainForm_DoubleClick(object sender, EventArgs e)
+        {
+            new Sandbox().ShowDialog();
+        }
     }
 }

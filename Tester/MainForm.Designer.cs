@@ -737,6 +737,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "MainForm";
             this.Text = "MainForm";
+            this.DoubleClick += new System.EventHandler(this.MainForm_DoubleClick);
             this.ResumeLayout(false);
 
         }

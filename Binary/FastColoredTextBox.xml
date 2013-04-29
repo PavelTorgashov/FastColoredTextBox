@@ -2057,7 +2057,7 @@
             Fake event for correct data binding
             </summary>
         </member>
-        <member name="E:FastColoredTextBoxNS.FastColoredTextBox.OnPaste">
+        <member name="E:FastColoredTextBoxNS.FastColoredTextBox.Pasting">
             <summary>
             Occurs when user paste text from clipboard
             </summary>

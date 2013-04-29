@@ -1737,7 +1737,7 @@ namespace FastColoredTextBoxNS
         /// Occurs when user paste text from clipboard
         /// </summary>
         [Description("Occurs when user paste text from clipboard")]
-        public event EventHandler<TextChangingEventArgs> OnPaste;
+        public event EventHandler<TextChangingEventArgs> Pasting;
 
         /// <summary>
         /// TextChanging event.
@@ -2404,7 +2404,7 @@ namespace FastColoredTextBoxNS
             thread.Start();
             thread.Join();
 
-            if (OnPaste != null)
+            if (Pasting != null)
             {
                 var args = new TextChangingEventArgs
                                {
@@ -2412,7 +2412,7 @@ namespace FastColoredTextBoxNS
                                    InsertingText = text
                                };
 
-                OnPaste(this, args);
+                Pasting(this, args);
 
                 if (args.Cancel)
                     text = string.Empty;
@@ -2704,6 +2704,7 @@ namespace FastColoredTextBoxNS
             }
             if (se.ScrollOrientation == ScrollOrientation.HorizontalScroll)
                 HorizontalScroll.Value = Math.Max(HorizontalScroll.Minimum, Math.Min(HorizontalScroll.Maximum, se.NewValue));
+
             UpdateScrollbars();
 
             Invalidate();
@@ -4773,6 +4774,7 @@ namespace FastColoredTextBoxNS
             if (lastModifiers == Keys.Control)
             {
                 ChangeFontSize(2 * Math.Sign(e.Delta));
+                ((HandledMouseEventArgs)e).Handled = true;
             }
             else
             if(VerticalScroll.Visible)
@@ -4783,6 +4785,8 @@ namespace FastColoredTextBoxNS
                 int mouseWheelScrollLinesSetting = GetControlPanelWheelScrollLinesValue();
 
                 DoScrollVertical(mouseWheelScrollLinesSetting, e.Delta);
+
+                ((HandledMouseEventArgs)e).Handled = true;
             }
 
             DeactivateMiddleClickScrollingMode();

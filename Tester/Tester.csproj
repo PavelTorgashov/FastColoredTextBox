@@ -137,6 +137,12 @@
     <Compile Include="LazyLoadingSample.Designer.cs">
       <DependentUpon>LazyLoadingSample.cs</DependentUpon>
     </Compile>
+    <Compile Include="Sandbox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Sandbox.Designer.cs">
+      <DependentUpon>Sandbox.cs</DependentUpon>
+    </Compile>
     <Compile Include="SplitSample.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -311,6 +317,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="PowerfulCSharpEditor.resx">
       <DependentUpon>PowerfulCSharpEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Sandbox.resx">
+      <DependentUpon>Sandbox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SimplestCodeFoldingSample.resx">
       <DependentUpon>SimplestCodeFoldingSample.cs</DependentUpon>
