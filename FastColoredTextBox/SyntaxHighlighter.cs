@@ -333,11 +333,11 @@ namespace FastColoredTextBoxNS
             for(int i=0;i<desc.styles.Count;i++)
                 range.tb.Styles[i] = desc.styles[i];
             //brackets
-            RememberBrackets();
-            if (range.tb.LeftBracket == null) range.tb.LeftBracket = desc.leftBracket;
-            if (range.tb.RightBracket == null) range.tb.RightBracket = desc.rightBracket;
-            if (range.tb.LeftBracket2 == null) range.tb.LeftBracket2 = desc.leftBracket2;
-            if (range.tb.RightBracket2 == null) range.tb.RightBracket2 = desc.rightBracket2;
+            var oldBrackets = RememberBrackets(range.tb);
+            range.tb.LeftBracket = desc.leftBracket;
+            range.tb.RightBracket = desc.rightBracket;
+            range.tb.LeftBracket2 = desc.leftBracket2;
+            range.tb.RightBracket2 = desc.rightBracket2;
             //clear styles of range
             range.ClearStyle(desc.styles.ToArray());
             //highlight syntax
@@ -348,11 +348,22 @@ namespace FastColoredTextBoxNS
             //folding markers
             foreach (var folding in desc.foldings)
                 range.SetFoldingMarkers(folding.startMarkerRegex, folding.finishMarkerRegex, folding.options);
+
+            //
+            RestoreBrackets(range.tb, oldBrackets);
         }
 
-        private void RememberBrackets()
+        private void RestoreBrackets(FastColoredTextBox tb, char[] oldBrackets)
         {
-            throw new NotImplementedException();
+            tb.LeftBracket = oldBrackets[0];
+            tb.RightBracket = oldBrackets[1];
+            tb.LeftBracket2 = oldBrackets[2];
+            tb.RightBracket2 = oldBrackets[3];
+        }
+
+        private char[] RememberBrackets(FastColoredTextBox tb)
+        {
+            return new char[]{tb.LeftBracket,tb.RightBracket,tb.LeftBracket2,tb.RightBracket2};
         }
 
         Regex CSharpStringRegex, CSharpCommentRegex1, CSharpCommentRegex2, CSharpCommentRegex3, CSharpNumberRegex, CSharpAttributeRegex, CSharpClassNameRegex, CSharpKeywordRegex;

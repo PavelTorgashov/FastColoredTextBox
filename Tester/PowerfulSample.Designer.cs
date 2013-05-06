@@ -364,14 +364,14 @@ namespace Tester
             // hTMLToolStripMenuItem1
             // 
             this.hTMLToolStripMenuItem1.Name = "hTMLToolStripMenuItem1";
-            this.hTMLToolStripMenuItem1.Size = new System.Drawing.Size(107, 22);
+            this.hTMLToolStripMenuItem1.Size = new System.Drawing.Size(152, 22);
             this.hTMLToolStripMenuItem1.Text = "HTML";
             this.hTMLToolStripMenuItem1.Click += new System.EventHandler(this.hTMLToolStripMenuItem1_Click);
             // 
             // rTFToolStripMenuItem
             // 
             this.rTFToolStripMenuItem.Name = "rTFToolStripMenuItem";
-            this.rTFToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
+            this.rTFToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.rTFToolStripMenuItem.Text = "RTF";
             this.rTFToolStripMenuItem.Click += new System.EventHandler(this.rTFToolStripMenuItem_Click);
             // 
@@ -393,7 +393,7 @@ namespace Tester
             // fctb
             // 
             this.fctb.AutoIndentExistingLines = false;
-            this.fctb.AutoScrollMinSize = new System.Drawing.Size(284, 285);
+            this.fctb.AutoScrollMinSize = new System.Drawing.Size(304, 285);
             this.fctb.BackBrush = null;
             this.fctb.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.fctb.CharHeight = 15;
