@@ -77,6 +77,12 @@
     <Compile Include="ConsoleSample.Designer.cs">
       <DependentUpon>ConsoleSample.cs</DependentUpon>
     </Compile>
+    <Compile Include="RulerSample.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RulerSample.Designer.cs">
+      <DependentUpon>RulerSample.cs</DependentUpon>
+    </Compile>
     <Compile Include="OpenTypeFontSample.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -262,6 +268,9 @@
     <EmbeddedResource Include="ConsoleSample.resx">
       <DependentUpon>ConsoleSample.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RulerSample.resx">
+      <DependentUpon>RulerSample.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="OpenTypeFontSample.resx">
       <DependentUpon>OpenTypeFontSample.cs</DependentUpon>

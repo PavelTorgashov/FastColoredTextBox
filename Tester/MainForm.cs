@@ -172,5 +172,10 @@ namespace Tester
         {
             new Sandbox().ShowDialog();
         }
+
+        private void button31_Click(object sender, EventArgs e)
+        {
+            new RulerSample().Show();
+        }
     }
 }

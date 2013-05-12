@@ -66,6 +66,12 @@
     <Compile Include="MacrosManager.cs" />
     <Compile Include="PlatformType.cs" />
     <Compile Include="Hotkeys.cs" />
+    <Compile Include="Ruler.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Ruler.Designer.cs">
+      <DependentUpon>Ruler.cs</DependentUpon>
+    </Compile>
     <Compile Include="SyntaxDescriptor.cs" />
     <Compile Include="SyntaxHighlighter.cs" />
     <Compile Include="ReplaceForm.cs">

@@ -112,7 +112,7 @@ namespace FastColoredTextBoxNS
 
             OnLineInserted(0, Count);
             //load first lines for calc width of the text
-            var linesCount = Math.Min(lines.Count, CurrentTB.Height/CurrentTB.CharHeight);
+            var linesCount = Math.Min(lines.Count, CurrentTB.ClientRectangle.Height/CurrentTB.CharHeight);
             for (int i = 0; i < linesCount; i++)
                 LoadLineFromSourceFile(i);
             //

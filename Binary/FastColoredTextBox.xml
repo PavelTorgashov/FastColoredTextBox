@@ -2259,6 +2259,11 @@
             Additional spaces count for next line, relative to previous line
             </summary>
         </member>
+        <member name="P:FastColoredTextBoxNS.AutoIndentEventArgs.AbsoluteIndentation">
+            <summary>
+            Absolute indentation of current line
+            </summary>
+        </member>
         <member name="T:FastColoredTextBoxNS.HighlightingRangeType">
             <summary>
             Type of highlighting
@@ -2857,6 +2862,23 @@
         <member name="P:FastColoredTextBoxNS.ExportToHTML.IncludeLineNumbers">
             <summary>
             Includes line numbers
+            </summary>
+        </member>
+        <member name="F:FastColoredTextBoxNS.Ruler.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:FastColoredTextBoxNS.Ruler.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:FastColoredTextBoxNS.Ruler.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
             </summary>
         </member>
     </members>

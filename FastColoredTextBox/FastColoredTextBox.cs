@@ -202,7 +202,6 @@ namespace FastColoredTextBoxNS
             timer2.Tick += timer2_Tick;
             timer3.Tick += timer3_Tick;
             middleClickScrollingTimer.Tick += middleClickScrollingTimer_Tick;
-            //
         }
 
         MacrosManager macrosManager;
@@ -1571,7 +1570,8 @@ namespace FastColoredTextBoxNS
         /// </summary>
         public void ClearHints()
         {
-            Hints.Clear();
+            if (Hints != null)
+                Hints.Clear();
         }
 
         /// <summary>
@@ -1913,6 +1913,9 @@ namespace FastColoredTextBoxNS
             }
 
             LineInfos.Clear();
+            ClearHints();
+            if (Bookmarks != null)
+                Bookmarks.Clear();
 
             lines = ts;
 
@@ -4053,19 +4056,25 @@ namespace FastColoredTextBoxNS
             int i;
             for (i = iLine - 1; i >= 0; i--)
             {
-                var args = new AutoIndentEventArgs(i, lines[i].Text, i > 0 ? lines[i - 1].Text : "", TabLength);
+                var args = new AutoIndentEventArgs(i, lines[i].Text, i > 0 ? lines[i - 1].Text : "", TabLength, 0);
                 calculator(this, args);
                 stack.Push(args);
-                if (args.Shift == 0 && args.LineText.Trim() != "")
+                if (args.Shift == 0 && args.AbsoluteIndentation == 0 && args.LineText.Trim() != "")
                     break;
             }
             int indent = lines[i >= 0 ? i : 0].StartSpacesCount;
             while (stack.Count != 0)
-                indent += stack.Pop().ShiftNextLines;
+            {
+                var arg = stack.Pop();
+                if (arg.AbsoluteIndentation != 0)
+                    indent = arg.AbsoluteIndentation + arg.ShiftNextLines;
+                else
+                    indent += arg.ShiftNextLines;
+            }
             //clalc shift for current line
-            var a = new AutoIndentEventArgs(iLine, lines[iLine].Text, iLine > 0 ? lines[iLine - 1].Text : "", TabLength);
+            var a = new AutoIndentEventArgs(iLine, lines[iLine].Text, iLine > 0 ? lines[iLine - 1].Text : "", TabLength, indent);
             calculator(this, a);
-            needSpaces = indent + a.Shift;
+            needSpaces = a.AbsoluteIndentation + a.Shift;
 
             return needSpaces;
         }
@@ -7130,12 +7139,13 @@ window.status = ""#print"";
 
     public class AutoIndentEventArgs : EventArgs
     {
-        public AutoIndentEventArgs(int iLine, string lineText, string prevLineText, int tabLength)
+        public AutoIndentEventArgs(int iLine, string lineText, string prevLineText, int tabLength, int currentIndentation)
         {
             this.iLine = iLine;
             LineText = lineText;
             PrevLineText = prevLineText;
             TabLength = tabLength;
+            AbsoluteIndentation = currentIndentation;
         }
 
         public int iLine { get; internal set; }
@@ -7152,6 +7162,11 @@ window.status = ""#print"";
         /// Additional spaces count for next line, relative to previous line
         /// </summary>
         public int ShiftNextLines { get; set; }
+
+        /// <summary>
+        /// Absolute indentation of current line
+        /// </summary>
+        public int AbsoluteIndentation { get; set; }
     }
 
     /// <summary>
