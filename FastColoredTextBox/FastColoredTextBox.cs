@@ -55,7 +55,7 @@ namespace FastColoredTextBoxNS
         public int TextHeight;
         internal bool allowInsertRemoveLines = true;
         private Brush backBrush;
-        private Bookmarks bookmarks;
+        private BaseBookmarks bookmarks;
         private bool caretVisible;
         private Color changedLineColor;
         private int charHeight;
@@ -267,7 +267,7 @@ namespace FastColoredTextBoxNS
         /// </summary>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
          EditorBrowsable(EditorBrowsableState.Never)]
-        public Bookmarks Bookmarks
+        public BaseBookmarks Bookmarks
         {
             get { return bookmarks; }
             set { bookmarks = value; }
@@ -7164,7 +7164,7 @@ window.status = ""#print"";
         public int ShiftNextLines { get; set; }
 
         /// <summary>
-        /// Absolute indentation of current line
+        /// Absolute indentation of current line. You can change this property if you want to set absolute indentation.
         /// </summary>
         public int AbsoluteIndentation { get; set; }
     }

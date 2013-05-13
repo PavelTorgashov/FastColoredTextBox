@@ -822,6 +822,23 @@
             Set this property to True/False to mark chars of the range as Readonly/Writable.
             </summary>
         </member>
+        <member name="F:FastColoredTextBoxNS.Ruler.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:FastColoredTextBoxNS.Ruler.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:FastColoredTextBoxNS.Ruler.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
+            the contents of this method with the code editor.
+            </summary>
+        </member>
         <member name="F:FastColoredTextBoxNS.HotkeysEditorForm.components">
             <summary>
             Required designer variable.
@@ -2261,7 +2278,7 @@
         </member>
         <member name="P:FastColoredTextBoxNS.AutoIndentEventArgs.AbsoluteIndentation">
             <summary>
-            Absolute indentation of current line
+            Absolute indentation of current line. You can change this property if you want to set absolute indentation.
             </summary>
         </member>
         <member name="T:FastColoredTextBoxNS.HighlightingRangeType">
@@ -2324,6 +2341,11 @@
         <member name="M:FastColoredTextBoxNS.Bookmarks.Remove(System.Int32)">
             <summary>
             Removes bookmark by line index
+            </summary>
+        </member>
+        <member name="M:FastColoredTextBoxNS.Bookmarks.GetBookmark(System.Int32)">
+            <summary>
+            Returns Bookmark by index.
             </summary>
         </member>
         <member name="T:FastColoredTextBoxNS.Bookmark">
@@ -2862,23 +2884,6 @@
         <member name="P:FastColoredTextBoxNS.ExportToHTML.IncludeLineNumbers">
             <summary>
             Includes line numbers
-            </summary>
-        </member>
-        <member name="F:FastColoredTextBoxNS.Ruler.components">
-            <summary> 
-            Required designer variable.
-            </summary>
-        </member>
-        <member name="M:FastColoredTextBoxNS.Ruler.Dispose(System.Boolean)">
-            <summary> 
-            Clean up any resources being used.
-            </summary>
-            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        </member>
-        <member name="M:FastColoredTextBoxNS.Ruler.InitializeComponent">
-            <summary> 
-            Required method for Designer support - do not modify 
-            the contents of this method with the code editor.
             </summary>
         </member>
     </members>
