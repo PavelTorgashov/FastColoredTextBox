@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BookmarksSample));
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.btAddBookmark = new System.Windows.Forms.ToolStripButton();
@@ -36,6 +37,7 @@
             this.fctb = new FastColoredTextBoxNS.FastColoredTextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.toolStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.fctb)).BeginInit();
             this.SuspendLayout();
             // 
             // toolStrip1
@@ -83,9 +85,10 @@
             // 
             // fctb
             // 
-            this.fctb.AllowDrop = true;
             this.fctb.AutoScrollMinSize = new System.Drawing.Size(0, 4065);
             this.fctb.BackBrush = null;
+            this.fctb.CharHeight = 15;
+            this.fctb.CharWidth = 7;
             this.fctb.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.fctb.DelayedEventsInterval = 500;
             this.fctb.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
@@ -104,6 +107,8 @@
             this.fctb.TabIndex = 0;
             this.fctb.Text = resources.GetString("fctb.Text");
             this.fctb.WordWrap = true;
+            this.fctb.Zoom = 100;
+            this.fctb.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.fctb_MouseDoubleClick);
             // 
             // label2
             // 
@@ -128,6 +133,7 @@
             this.Text = "Bookmarks Sample";
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.fctb)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

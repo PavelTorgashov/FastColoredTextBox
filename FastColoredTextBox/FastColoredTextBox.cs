@@ -807,7 +807,7 @@ namespace FastColoredTextBoxNS
         /// <summary>
         /// This property specifies which part of the text will be highlighted as you type (by built-in highlighter).
         /// </summary>
-        /// <remarks>When a user enters text, a component of rebuilding the highlight (because the text is changed).
+        /// <remarks>When a user enters text, a component refreshes highlighting (because the text was changed).
         /// This property specifies exactly which section of the text will be re-highlighted.
         /// This can be useful to highlight multi-line comments, for example.</remarks>
         [DefaultValue(typeof (HighlightingRangeType), "ChangedRange")]
@@ -5385,8 +5385,6 @@ namespace FastColoredTextBoxNS
         /// <summary>
         /// Gets line and char position from absolute text position
         /// </summary>
-        /// <param name="pos"></param>
-        /// <returns></returns>
         public Place PositionToPlace(int pos)
         {
             if (pos < 0)

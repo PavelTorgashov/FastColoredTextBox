@@ -37,7 +37,7 @@
             // 
             // fctb
             // 
-            this.fctb.AutoScrollMinSize = new System.Drawing.Size(499, 500);
+            this.fctb.AutoScrollMinSize = new System.Drawing.Size(269, 300);
             this.fctb.BackBrush = null;
             this.fctb.CharHeight = 15;
             this.fctb.CharWidth = 7;
@@ -64,7 +64,7 @@
             // 
             this.ruler.Dock = System.Windows.Forms.DockStyle.Top;
             this.ruler.Location = new System.Drawing.Point(0, 0);
-            this.ruler.MaximumSize = new System.Drawing.Size(1073741826, 24);
+            this.ruler.MaximumSize = new System.Drawing.Size(1073741824, 24);
             this.ruler.MinimumSize = new System.Drawing.Size(2, 24);
             this.ruler.Name = "ruler";
             this.ruler.Size = new System.Drawing.Size(458, 24);

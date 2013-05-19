@@ -393,7 +393,7 @@ namespace Tester
             // fctb
             // 
             this.fctb.AutoIndentExistingLines = false;
-            this.fctb.AutoScrollMinSize = new System.Drawing.Size(284, 310);
+            this.fctb.AutoScrollMinSize = new System.Drawing.Size(254, 285);
             this.fctb.BackBrush = null;
             this.fctb.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.fctb.CharHeight = 15;

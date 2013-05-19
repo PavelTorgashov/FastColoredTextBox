@@ -280,13 +280,15 @@ namespace FastColoredTextBoxNS
             int cutOff = 0;
             CutOffPositions.Clear();
 
-            for (int i = 0; i < line.Count; i++)
+            //for (int i = 0; i < line.Count; i++)
+            for (int i = 0; i < line.Count - 1; i++)
             {
                 char c = line[i].c;
                 if (charWrap)
                 {
                     //char wrapping
-                    cutOff = Math.Min(i + 1, line.Count - 1);
+                    //cutOff = Math.Min(i + 1, line.Count - 1);
+                    cutOff = i + 1;
                 }
                 else
                 {

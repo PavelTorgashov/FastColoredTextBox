@@ -1,5 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Text;
+using System.Threading;
 using System.Windows.Forms;
+using System.Xml;
 
 namespace FastColoredTextBoxNS
 {
@@ -106,5 +111,73 @@ namespace FastColoredTextBoxNS
         /// Returns True if last macro is empty
         /// </summary>
         public bool MacroIsEmpty { get { return macro.Count == 0; }}
+
+        /// <summary>
+        /// Macros as string.
+        /// </summary>
+        public string Macros
+        {
+            get
+            {
+                var cult = Thread.CurrentThread.CurrentUICulture;
+                Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
+                var kc = new KeysConverter();
+
+                StringBuilder sb = new StringBuilder();
+                sb.AppendLine("<macros>");
+                foreach (var item in macro)
+                {
+                    if (item is Keys)
+                    {
+                        sb.AppendFormat("<item key='{0}' />\r\n", kc.ConvertToString((Keys)item));
+                    }
+                    else if (item is KeyValuePair<char, Keys>)
+                    {
+                        var p = (KeyValuePair<char, Keys>)item;
+                        sb.AppendFormat("<item char='{0}' key='{1}' />\r\n", (int)p.Key, kc.ConvertToString(p.Value));
+                    }
+                }
+                sb.AppendLine("</macros>");
+
+                Thread.CurrentThread.CurrentUICulture = cult;
+
+                return sb.ToString();
+            }
+
+            set 
+            {
+                isRecording = false;
+                ClearMacros();
+
+                if (string.IsNullOrEmpty(value))
+                    return;
+
+                var doc = new XmlDocument();
+                doc.LoadXml(value);
+                var list = doc.SelectNodes("./macros/item");
+
+                var cult = Thread.CurrentThread.CurrentUICulture;
+                Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
+                var kc = new KeysConverter();
+
+                if(list != null)
+                foreach (XmlElement node in list)
+                {
+                    var ca = node.GetAttributeNode("char");
+                    var ka = node.GetAttributeNode("key");
+                    if (ca != null)
+                    {
+                        if(ka!=null)
+                            AddCharToMacros((char)int.Parse(ca.Value), (Keys)kc.ConvertFromString(ka.Value));
+                        else
+                            AddCharToMacros((char)int.Parse(ca.Value), Keys.None);
+                    }else
+                    if(ka!=null)
+                            AddKeyToMacros((Keys)kc.ConvertFromString(ka.Value));
+                }
+
+                Thread.CurrentThread.CurrentUICulture = cult;
+            }
+        }
     }
 }

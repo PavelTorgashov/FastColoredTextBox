@@ -519,6 +519,11 @@
             Returns True if last macro is empty
             </summary>
         </member>
+        <member name="P:FastColoredTextBoxNS.MacrosManager.Macros">
+            <summary>
+            Macros as string.
+            </summary>
+        </member>
         <member name="F:FastColoredTextBoxNS.GoToForm.components">
             <summary>
             Required designer variable.
@@ -1308,8 +1313,6 @@
             <summary>
             Gets line and char position from absolute text position
             </summary>
-            <param name="pos"></param>
-            <returns></returns>
         </member>
         <member name="M:FastColoredTextBoxNS.FastColoredTextBox.PositionToPoint(System.Int32)">
             <summary>
@@ -1811,7 +1814,7 @@
             <summary>
             This property specifies which part of the text will be highlighted as you type (by built-in highlighter).
             </summary>
-            <remarks>When a user enters text, a component of rebuilding the highlight (because the text is changed).
+            <remarks>When a user enters text, a component refreshes highlighting (because the text was changed).
             This property specifies exactly which section of the text will be re-highlighted.
             This can be useful to highlight multi-line comments, for example.</remarks>
         </member>
@@ -2331,6 +2334,11 @@
             <summary>
             Required method for Designer support - do not modify
             the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="T:FastColoredTextBoxNS.BaseBookmarks">
+            <summary>
+            Base class for bookmark collection
             </summary>
         </member>
         <member name="T:FastColoredTextBoxNS.Bookmarks">

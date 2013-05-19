@@ -21,6 +21,9 @@ namespace Tester
         
         private void cbFont_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (cbFont.SelectedItem == null)
+                return;
+
             var item = (ENUMLOGFONTEX)cbFont.SelectedItem;
             if (cbSize.SelectedItem != null)
             {

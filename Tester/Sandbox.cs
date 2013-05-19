@@ -15,5 +15,11 @@ namespace Tester
         {
             InitializeComponent();
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            var s = fctb.MacrosManager.Macros;
+            fctb.MacrosManager.Macros = "";
+        }
     }
 }

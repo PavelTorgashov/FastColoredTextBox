@@ -6,6 +6,9 @@ using System.Text;
 
 namespace FastColoredTextBoxNS
 {
+    /// <summary>
+    /// Base class for bookmark collection
+    /// </summary>
     public abstract class BaseBookmarks : ICollection<Bookmark>, IDisposable
     {
         #region ICollection

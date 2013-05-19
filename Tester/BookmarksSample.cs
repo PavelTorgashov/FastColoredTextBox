@@ -31,5 +31,17 @@ namespace Tester
                 item.Click += (o, a) => ((Bookmark)(o as ToolStripItem).Tag).DoVisible();
             }
         }
+
+        private void fctb_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if(e.X < fctb.LeftIndent)
+            {
+                var place = fctb.PointToPlace(e.Location);
+                if(fctb.Bookmarks.Contains(place.iLine))
+                    fctb.Bookmarks.Remove(place.iLine);
+                else
+                    fctb.Bookmarks.Add(place.iLine);
+            }
+        }
     }
 }
