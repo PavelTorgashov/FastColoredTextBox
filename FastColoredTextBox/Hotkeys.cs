@@ -204,7 +204,27 @@ namespace FastColoredTextBoxNS
         UpperCase,
         ZoomIn,
         ZoomNormal,
-        ZoomOut
+        ZoomOut,
+        CustomAction1,
+        CustomAction2,
+        CustomAction3,
+        CustomAction4,
+        CustomAction5,
+        CustomAction6,
+        CustomAction7,
+        CustomAction8,
+        CustomAction9,
+        CustomAction10,
+        CustomAction11,
+        CustomAction12,
+        CustomAction13,
+        CustomAction14,
+        CustomAction15,
+        CustomAction16,
+        CustomAction17,
+        CustomAction18,
+        CustomAction19,
+        CustomAction20
     }
 
     internal class HotkeysEditor : UITypeEditor

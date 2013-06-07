@@ -1292,6 +1292,16 @@
             Fires TextChanged event
             </summary>
         </member>
+        <member name="M:FastColoredTextBoxNS.FastColoredTextBox.BeginUpdate">
+            <summary>
+            Call this method before multiple text changing
+            </summary>
+        </member>
+        <member name="M:FastColoredTextBoxNS.FastColoredTextBox.EndUpdate">
+            <summary>
+            Call this method after multiple text changing
+            </summary>
+        </member>
         <member name="M:FastColoredTextBoxNS.FastColoredTextBox.OnTextChanged(FastColoredTextBoxNS.TextChangedEventArgs)">
             <summary>
             Fires TextChanged event
@@ -2175,6 +2185,11 @@
             Occurs when component was zoomed
             </summary>
         </member>
+        <member name="E:FastColoredTextBoxNS.FastColoredTextBox.CustomAction">
+            <summary>
+            Occurs when user pressed key, that specified as CustomAction
+            </summary>
+        </member>
         <member name="P:FastColoredTextBoxNS.FastColoredTextBox.Zoom">
             <summary>
             Zooming (in percentages)
@@ -2317,6 +2332,11 @@
         <member name="T:FastColoredTextBoxNS.HintClickEventArgs">
             <summary>
             HintClick event args
+            </summary>
+        </member>
+        <member name="T:FastColoredTextBoxNS.CustomActionEventArgs">
+            <summary>
+            CustomAction event args
             </summary>
         </member>
         <member name="F:FastColoredTextBoxNS.ReplaceForm.components">

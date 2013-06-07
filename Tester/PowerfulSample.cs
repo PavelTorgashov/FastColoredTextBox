@@ -385,5 +385,10 @@ namespace Tester
                 File.WriteAllText(sfd.FileName, rtf);
             }
         }
+
+        private void fctb_CustomAction(object sender, CustomActionEventArgs e)
+        {
+            MessageBox.Show(e.Action.ToString());
+        }
     }
 }

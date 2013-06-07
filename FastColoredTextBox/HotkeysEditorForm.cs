@@ -110,6 +110,7 @@ namespace FastColoredTextBoxNS
 
             foreach (var item in Enum.GetValues(typeof(FCTBAction)))
             if ((FCTBAction)item != FCTBAction.None)
+            if(!((FCTBAction)item).ToString().StartsWith("CustomAction"))
             {
                 if(!dic.ContainsKey((FCTBAction)item))
                     sb.Append(item+", ");

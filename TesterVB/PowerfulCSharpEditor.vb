@@ -11,10 +11,10 @@ Imports System.Text.RegularExpressions
 Imports System.Threading
 Imports System.Windows.Forms
 
-''' <summary>
-''' Note: this example is deprecated. See project Tester for newest code samples.
-''' For example: Bookmarks now is built-in feature. but this example implements bookmarks manually.
-''' </summary>
+'-----------------------------------------------------------------------------------------------------
+' Note: this sample is deprecated. See project Tester for newest code samples.
+' For example: Bookmarks now is built-in feature. But this sample implements bookmarks manually.
+'-----------------------------------------------------------------------------------------------------
 
 Namespace TesterVB
     Partial Public Class PowerfulCSharpEditor

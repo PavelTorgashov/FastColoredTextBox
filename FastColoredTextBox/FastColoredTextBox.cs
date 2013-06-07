@@ -1872,6 +1872,14 @@ namespace FastColoredTextBoxNS
 
 
         /// <summary>
+        /// Occurs when user pressed key, that specified as CustomAction
+        /// </summary>
+        [Browsable(true)]
+        [Description("Occurs when user pressed key, that specified as CustomAction.")]
+        public event EventHandler<CustomActionEventArgs> CustomAction;
+
+
+        /// <summary>
         /// Returns list of styles of given place
         /// </summary>
         public List<Style> GetStylesOfChar(Place place)
@@ -3604,7 +3612,35 @@ namespace FastColoredTextBoxNS
                         MacrosManager.ExecuteMacros();
                     }
                     break;
+                case FCTBAction.CustomAction1 :
+                case FCTBAction.CustomAction2 :
+                case FCTBAction.CustomAction3 :
+                case FCTBAction.CustomAction4 :
+                case FCTBAction.CustomAction5 :
+                case FCTBAction.CustomAction6 :
+                case FCTBAction.CustomAction7 :
+                case FCTBAction.CustomAction8 :
+                case FCTBAction.CustomAction9 :
+                case FCTBAction.CustomAction10:
+                case FCTBAction.CustomAction11:
+                case FCTBAction.CustomAction12:
+                case FCTBAction.CustomAction13:
+                case FCTBAction.CustomAction14:
+                case FCTBAction.CustomAction15:
+                case FCTBAction.CustomAction16:
+                case FCTBAction.CustomAction17:
+                case FCTBAction.CustomAction18:
+                case FCTBAction.CustomAction19:
+                case FCTBAction.CustomAction20:
+                    OnCustomAction(new CustomActionEventArgs(action));
+                    break;
             }
+        }
+
+        protected virtual void OnCustomAction(CustomActionEventArgs e)
+        {
+            if (CustomAction != null)
+                CustomAction(this, e);
         }
 
         Font originalFont;
@@ -4118,7 +4154,7 @@ namespace FastColoredTextBoxNS
         /// <summary>
         /// Undo last operation
         /// </summary>
-        public void Undo()
+        public virtual void Undo()
         {
             lines.Manager.Undo();
             DoCaretVisible();
@@ -4128,7 +4164,7 @@ namespace FastColoredTextBoxNS
         /// <summary>
         /// Redo
         /// </summary>
-        public void Redo()
+        public virtual void Redo()
         {
             lines.Manager.Redo();
             DoCaretVisible();
@@ -5185,6 +5221,9 @@ namespace FastColoredTextBoxNS
             OnTextChanged(new TextChangedEventArgs(r));
         }
 
+        /// <summary>
+        /// Call this method before multiple text changing
+        /// </summary>
         public void BeginUpdate()
         {
             if (updating == 0)
@@ -5192,6 +5231,9 @@ namespace FastColoredTextBoxNS
             updating++;
         }
 
+        /// <summary>
+        /// Call this method after multiple text changing
+        /// </summary>
         public void EndUpdate()
         {
             updating--;
@@ -7226,6 +7268,19 @@ window.status = ""#print"";
         }
 
         public Hint Hint { get; private set; }
+    }
+
+    /// <summary>
+    /// CustomAction event args
+    /// </summary>
+    public class CustomActionEventArgs : EventArgs
+    {
+        public FCTBAction Action { get; private set; }
+
+        public CustomActionEventArgs(FCTBAction action)
+        {
+            Action = action;
+        }
     }
 
     public enum TextAreaBorderType
