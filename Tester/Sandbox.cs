@@ -76,5 +76,14 @@ namespace Tester
                     return;
                 }
         }
+
+        private void fctb_KeyPressed(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == '<')
+            {
+                fctb.InsertText(">");
+                fctb.Selection.GoLeft();
+            }
+        }
     }
 }

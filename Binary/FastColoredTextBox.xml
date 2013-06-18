@@ -742,9 +742,16 @@
         </member>
         <member name="M:FastColoredTextBoxNS.Range.GetFragment(System.String)">
             <summary>
-            Get fragment of text around Start place. Returns maximal mathed to pattern fragment.
+            Get fragment of text around Start place. Returns maximal matched to pattern fragment.
             </summary>
             <param name="allowedSymbolsPattern">Allowed chars pattern for fragment</param>
+            <returns>Range of found fragment</returns>
+        </member>
+        <member name="M:FastColoredTextBoxNS.Range.GetFragment(FastColoredTextBoxNS.Style)">
+            <summary>
+            Get fragment of text around Start place. Returns maximal matched to given Style.
+            </summary>
+            <param name="style">Allowed style for fragment</param>
             <returns>Range of found fragment</returns>
         </member>
         <member name="M:FastColoredTextBoxNS.Range.GetFragment(System.String,System.Text.RegularExpressions.RegexOptions)">

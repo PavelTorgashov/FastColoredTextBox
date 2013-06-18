@@ -1063,13 +1063,49 @@ namespace FastColoredTextBoxNS
         }
 
         /// <summary>
-        /// Get fragment of text around Start place. Returns maximal mathed to pattern fragment.
+        /// Get fragment of text around Start place. Returns maximal matched to pattern fragment.
         /// </summary>
         /// <param name="allowedSymbolsPattern">Allowed chars pattern for fragment</param>
         /// <returns>Range of found fragment</returns>
         public Range GetFragment(string allowedSymbolsPattern)
         {
             return GetFragment(allowedSymbolsPattern, RegexOptions.None);
+        }
+
+        /// <summary>
+        /// Get fragment of text around Start place. Returns maximal matched to given Style.
+        /// </summary>
+        /// <param name="style">Allowed style for fragment</param>
+        /// <returns>Range of found fragment</returns>
+        public Range GetFragment(Style style)
+        {
+            var mask = tb.GetStyleIndexMask(new Style[] { style });
+            //
+            Range r = new Range(tb);
+            r.Start = Start;
+            //go left, check style
+            while (r.GoLeftThroughFolded())
+            {
+                if (r.Start.iChar < tb.GetLineLength(r.Start.iLine))
+                if ((tb[r.Start].style & mask) == 0)
+                {
+                    r.GoRightThroughFolded();
+                    break;
+                }
+            }
+            Place startFragment = r.Start;
+
+            r.Start = Start;
+            //go right, check style
+            do
+            {
+                if (r.Start.iChar < tb.GetLineLength(r.Start.iLine))
+                if ((tb[r.Start].style & mask) == 0)
+                    break;
+            } while (r.GoRightThroughFolded());
+            Place endFragment = r.Start;
+
+            return new Range(tb, startFragment, endFragment);
         }
 
         /// <summary>

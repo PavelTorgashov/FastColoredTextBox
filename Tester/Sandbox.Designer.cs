@@ -66,6 +66,7 @@
             this.fctb.Zoom = 100;
             this.fctb.TextChanging += new System.EventHandler<FastColoredTextBoxNS.TextChangingEventArgs>(this.fctb_TextChanging);
             this.fctb.TextChangedDelayed += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.fctb_TextChangedDelayed);
+            this.fctb.KeyPressed += new System.Windows.Forms.KeyPressEventHandler(this.fctb_KeyPressed);
             this.fctb.PaintLine += new System.EventHandler<FastColoredTextBoxNS.PaintLineEventArgs>(this.fctb_PaintLine);
             // 
             // Sandbox
