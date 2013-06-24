@@ -1077,7 +1077,7 @@ namespace FastColoredTextBoxNS
         /// </summary>
         /// <param name="style">Allowed style for fragment</param>
         /// <returns>Range of found fragment</returns>
-        public Range GetFragment(Style style)
+        public Range GetFragment(Style style, bool allowLineBreaks)
         {
             var mask = tb.GetStyleIndexMask(new Style[] { style });
             //
@@ -1086,6 +1086,8 @@ namespace FastColoredTextBoxNS
             //go left, check style
             while (r.GoLeftThroughFolded())
             {
+                if (!allowLineBreaks && r.CharAfterStart == '\n')
+                    break;
                 if (r.Start.iChar < tb.GetLineLength(r.Start.iLine))
                 if ((tb[r.Start].style & mask) == 0)
                 {
@@ -1099,6 +1101,8 @@ namespace FastColoredTextBoxNS
             //go right, check style
             do
             {
+                if (!allowLineBreaks && r.CharAfterStart == '\n')
+                    break;
                 if (r.Start.iChar < tb.GetLineLength(r.Start.iLine))
                 if ((tb[r.Start].style & mask) == 0)
                     break;

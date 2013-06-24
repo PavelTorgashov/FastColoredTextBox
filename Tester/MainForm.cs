@@ -177,5 +177,10 @@ namespace Tester
         {
             new RulerSample().Show();
         }
+
+        private void button32_Click(object sender, EventArgs e)
+        {
+            new AutocompleteSample3().Show();
+        }
     }
 }

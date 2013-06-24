@@ -77,6 +77,12 @@
     <Compile Include="ConsoleSample.Designer.cs">
       <DependentUpon>ConsoleSample.cs</DependentUpon>
     </Compile>
+    <Compile Include="AutocompleteSample3.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AutocompleteSample3.Designer.cs">
+      <DependentUpon>AutocompleteSample3.cs</DependentUpon>
+    </Compile>
     <Compile Include="RulerSample.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -268,6 +274,9 @@
     <EmbeddedResource Include="ConsoleSample.resx">
       <DependentUpon>ConsoleSample.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AutocompleteSample3.resx">
+      <DependentUpon>AutocompleteSample3.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="RulerSample.resx">
       <DependentUpon>RulerSample.cs</DependentUpon>

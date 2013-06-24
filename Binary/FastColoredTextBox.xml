@@ -747,7 +747,7 @@
             <param name="allowedSymbolsPattern">Allowed chars pattern for fragment</param>
             <returns>Range of found fragment</returns>
         </member>
-        <member name="M:FastColoredTextBoxNS.Range.GetFragment(FastColoredTextBoxNS.Style)">
+        <member name="M:FastColoredTextBoxNS.Range.GetFragment(FastColoredTextBoxNS.Style,System.Boolean)">
             <summary>
             Get fragment of text around Start place. Returns maximal matched to given Style.
             </summary>

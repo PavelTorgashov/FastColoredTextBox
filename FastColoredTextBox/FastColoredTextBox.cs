@@ -1674,7 +1674,7 @@ namespace FastColoredTextBoxNS
                 //show tooltip
                 ToolTip.ToolTipTitle = ea.ToolTipTitle;
                 ToolTip.ToolTipIcon = ea.ToolTipIcon;
-                ToolTip.SetToolTip(this, ea.ToolTipText);
+                //ToolTip.SetToolTip(this, ea.ToolTipText);
                 ToolTip.Show(ea.ToolTipText, this, new Point(lastMouseCoord.X, lastMouseCoord.Y + CharHeight));
             }
         }

@@ -17,6 +17,17 @@ namespace Tester
                 e.ToolTipTitle = e.HoveredWord;
                 e.ToolTipText = "This is tooltip for '" + e.HoveredWord + "'";
             }
+
+            /*
+             * Also you can get any fragment of the text for tooltip.
+             * Following example gets whole line for tooltip:
+            
+            var range = new Range(sender as FastColoredTextBox, e.Place, e.Place);
+            string hoveredWord = range.GetFragment("[^\n]").Text;
+            e.ToolTipTitle = hoveredWord;
+            e.ToolTipText = "This is tooltip for '" + hoveredWord + "'";
+
+             */
         }
     }
 }
