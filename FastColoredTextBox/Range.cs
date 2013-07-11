@@ -34,11 +34,11 @@ namespace FastColoredTextBoxNS
         /// </summary>
         public virtual bool IsEmpty
         {
-            get {
+            get
+            {
                 if (ColumnSelectionMode)
                     return Start.iChar == End.iChar;
-                else
-                    return Start == End;
+                return Start == End;
             }
         }
 
@@ -269,8 +269,7 @@ namespace FastColoredTextBoxNS
             {
                 if (Start.iChar >= tb[Start.iLine].Count)
                     return '\n';
-                else
-                    return tb[Start.iLine][Start.iChar].c;
+                return tb[Start.iLine][Start.iChar].c;
             }
         }
 
@@ -283,11 +282,9 @@ namespace FastColoredTextBoxNS
             {
                 if (Start.iChar > tb[Start.iLine].Count)
                     return '\n';
-
                 if (Start.iChar <= 0)
                     return '\n';
-                else
-                    return tb[Start.iLine][Start.iChar - 1].c;
+                return tb[Start.iLine][Start.iChar - 1].c;
             }
         }
 
@@ -1150,31 +1147,36 @@ namespace FastColoredTextBoxNS
             return char.IsLetterOrDigit(c) || c == '_';
         }
 
+        bool IsSpaceChar(char c)
+        {
+            return c == ' ' || c == '\t';
+        }
+
         public void GoWordLeft(bool shift)
         {
             ColumnSelectionMode = false;
 
-            if (!shift)
-            if (start > end)
+            if (!shift && start > end)
             {
                 Start = End;
                 return;
             }
 
             Range range = this.Clone();//for OnSelectionChanged disable
-
-            Place prev;
-            bool findIdentifier = IsIdentifierChar(range.CharBeforeStart);
-
-            do{
-                prev = range.Start;
-                if (IsIdentifierChar(range.CharBeforeStart) ^ findIdentifier)
-                    break;
-
-                //move left
+            bool wasSpace = false;
+            while (IsSpaceChar(range.CharBeforeStart))
+            {
+                wasSpace = true;
                 range.GoLeft(shift);
-            } while (prev != range.Start);
-
+            }
+            bool wasIdentifier = false;
+            while (IsIdentifierChar(range.CharBeforeStart))
+            {
+                wasIdentifier = true;
+                range.GoLeft(shift);
+            }
+            if (!wasIdentifier && (!wasSpace || range.CharBeforeStart != '\n'))
+                range.GoLeft(shift);
             this.Start = range.Start;
             this.End = range.End;
 
@@ -1186,28 +1188,27 @@ namespace FastColoredTextBoxNS
         {
             ColumnSelectionMode = false;
 
-            if (!shift)
-            if (start < end)
+            if (!shift && start < end)
             {
                 Start = End;
                 return;
             }
 
             Range range = this.Clone();//for OnSelectionChanged disable
-
-            Place prev;
-            bool findIdentifier = IsIdentifierChar(range.CharAfterStart);
-
-            do
+            bool wasSpace = false;
+            while (IsSpaceChar(range.CharAfterStart))
             {
-                prev = range.Start;
-                if (IsIdentifierChar(range.CharAfterStart) ^ findIdentifier)
-                    break;
-
-                //move right
+                wasSpace = true;
                 range.GoRight(shift);
-            } while (prev != range.Start);
-
+            }
+            bool wasIdentifier = false;
+            while (IsIdentifierChar(range.CharAfterStart))
+            {
+                wasIdentifier = true;
+                range.GoRight(shift);
+            }
+            if (!wasIdentifier && (!wasSpace || range.CharAfterStart != '\n'))
+                range.GoRight(shift);
             this.Start = range.Start;
             this.End = range.End;
 
