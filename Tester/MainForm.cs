@@ -182,5 +182,10 @@ namespace Tester
         {
             new AutocompleteSample3().Show();
         }
+
+        private void button33_Click(object sender, EventArgs e)
+        {
+            new AutocompleteSample4().Show(); 
+        }
     }
 }

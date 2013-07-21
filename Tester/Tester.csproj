@@ -83,6 +83,12 @@
     <Compile Include="AutocompleteSample3.Designer.cs">
       <DependentUpon>AutocompleteSample3.cs</DependentUpon>
     </Compile>
+    <Compile Include="AutocompleteSample4.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AutocompleteSample4.Designer.cs">
+      <DependentUpon>AutocompleteSample4.cs</DependentUpon>
+    </Compile>
     <Compile Include="RulerSample.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -278,6 +284,9 @@
     <EmbeddedResource Include="AutocompleteSample3.resx">
       <DependentUpon>AutocompleteSample3.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="AutocompleteSample4.resx">
+      <DependentUpon>AutocompleteSample4.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="RulerSample.resx">
       <DependentUpon>RulerSample.cs</DependentUpon>
     </EmbeddedResource>
@@ -453,9 +462,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy $(TargetDir)Tester.exe $(SolutionDir)Binary
-copy $(TargetDir)*.dll $(SolutionDir)Binary
-copy $(TargetDir)*.xml $(SolutionDir)Binary
+    <PostBuildEvent>copy "$(TargetDir)Tester.exe" "$(SolutionDir)Binary"
+copy "$(TargetDir)*.dll" "$(SolutionDir)Binary"
+copy "$(TargetDir)*.xml" "$(SolutionDir)Binary"
 </PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
