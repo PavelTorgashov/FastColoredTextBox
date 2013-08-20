@@ -347,6 +347,8 @@ namespace FastColoredTextBoxNS
         {
             var tb = ts.CurrentTB;
 
+            tb.Selection.Normalize();
+
             Place start = tb.Selection.Start;
             Place end = tb.Selection.End;
             int fromLine = Math.Min(end.iLine, start.iLine);

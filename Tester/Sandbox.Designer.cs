@@ -64,6 +64,7 @@
     "er text is readonly.\r\n";
             this.fctb.WordWrap = true;
             this.fctb.Zoom = 100;
+            this.fctb.AutoIndentNeeded += new System.EventHandler<FastColoredTextBoxNS.AutoIndentEventArgs>(this.fctb_AutoIndentNeeded);
             // 
             // Sandbox
             // 

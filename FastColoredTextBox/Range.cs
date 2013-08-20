@@ -836,7 +836,8 @@ namespace FastColoredTextBoxNS
             //create regex
             Regex regex = new Regex(regexPattern, options);
             //
-            var fts = tb.TextSource as FileTextSource;//<----!!!! ugly
+            var fts = tb.TextSource as FileTextSource; //<----!!!! ugly
+
             //enumaerate lines
             for (int iLine = Start.iLine; iLine <= End.iLine; iLine++)
             {
@@ -849,6 +850,44 @@ namespace FastColoredTextBoxNS
 
                 foreach (var foundRange in r.GetRanges(regex))
                     yield return foundRange;
+
+                if (!isLineLoaded)
+                    fts.UnloadLine(iLine);
+            }
+        }
+
+        /// <summary>
+        /// Finds ranges for given regex pattern.
+        /// Search is separately in each line (order of lines is reversed).
+        /// This method requires less memory than GetRanges().
+        /// </summary>
+        /// <param name="regexPattern">Regex pattern</param>
+        /// <returns>Enumeration of ranges</returns>
+        public IEnumerable<Range> GetRangesByLinesReversed(string regexPattern, RegexOptions options)
+        {
+            Normalize();
+            //create regex
+            Regex regex = new Regex(regexPattern, options);
+            //
+            var fts = tb.TextSource as FileTextSource; //<----!!!! ugly
+
+            //enumaerate lines
+            for (int iLine = End.iLine; iLine >= Start.iLine; iLine--)
+            {
+                //
+                bool isLineLoaded = fts != null ? fts.IsLineLoaded(iLine) : true;
+                //
+                var r = new Range(tb, new Place(0, iLine), new Place(tb[iLine].Count, iLine));
+                if (iLine == Start.iLine || iLine == End.iLine)
+                    r = r.GetIntersectionWith(this);
+
+                var list = new List<Range>();
+
+                foreach (var foundRange in r.GetRanges(regex))
+                    list.Add(foundRange);
+
+                for (int i = list.Count - 1; i >= 0; i--)
+                    yield return list[i];
 
                 if (!isLineLoaded)
                     fts.UnloadLine(iLine);
