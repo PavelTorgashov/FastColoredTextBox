@@ -5318,7 +5318,7 @@ namespace FastColoredTextBoxNS
         }
 
         /// <summary>
-        /// Fires SelectionCnaged event
+        /// Fires SelectionChanged event
         /// </summary>
         public virtual void OnSelectionChanged()
         {
