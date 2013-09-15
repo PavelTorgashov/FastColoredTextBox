@@ -54,6 +54,7 @@ namespace FastColoredTextBoxNS
             AutoSize = false;
             Margin = Padding.Empty;
             Padding = Padding.Empty;
+            BackColor = Color.White;
             listView = new AutocompleteListView(tb);
             host = new ToolStripControlHost(listView);
             host.Margin = new Padding(2, 2, 2, 2);
@@ -146,7 +147,6 @@ namespace FastColoredTextBoxNS
             visibleItems = new List<AutocompleteItem>();
             itemHeight = Font.Height + 2;
             VerticalScroll.SmallChange = itemHeight;
-            BackColor = Color.White;
             MaximumSize = new Size(Size.Width, 180);
             toolTip.ShowAlways = false;
             AppearInterval = 500;
@@ -363,7 +363,8 @@ namespace FastColoredTextBoxNS
                 }
                 if (i == hoveredItemIndex)
                     e.Graphics.DrawRectangle(Pens.Red, leftPadding, y, ClientSize.Width - 1 - leftPadding, itemHeight - 1);
-                e.Graphics.DrawString(visibleItems[i].ToString(), Font, Brushes.Black, leftPadding, y);
+                using(var brush = new SolidBrush(ForeColor))
+                    e.Graphics.DrawString(visibleItems[i].ToString(), Font, brush, leftPadding, y);
             }
         }
 

@@ -3921,8 +3921,18 @@ namespace FastColoredTextBoxNS
                 return false;
         }
 
+        const int WM_CHAR = 0x102;
+
+        protected override bool ProcessKeyMessage(ref Message m)
+        {
+            if (m.Msg == WM_CHAR)
+                ProcessMnemonic(Convert.ToChar(m.WParam.ToInt32()));
+
+            return base.ProcessKeyMessage(ref m);
+        }
+
         /// <summary>
-        /// Process "real" keys (non control)
+        /// Process "real" keys (no control)
         /// </summary>
         public virtual bool ProcessKey(char c, Keys modifiers)
         {

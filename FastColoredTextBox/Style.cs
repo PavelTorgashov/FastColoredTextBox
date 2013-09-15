@@ -122,46 +122,40 @@ namespace FastColoredTextBoxNS
             if (BackgroundBrush != null)
                 gr.FillRectangle(BackgroundBrush, position.X, position.Y, (range.End.iChar - range.Start.iChar) * range.tb.CharWidth, range.tb.CharHeight);
             //draw chars
-            Font f = new Font(range.tb.Font, FontStyle);
-            //Font fHalfSize = new Font(range.tb.Font.FontFamily, f.SizeInPoints/2, FontStyle);
-            Line line = range.tb[range.Start.iLine];
-            float dx = range.tb.CharWidth;
-            float y = position.Y + range.tb.LineInterval / 2;
-            float x = position.X - range.tb.CharWidth/3;
-
-            if(ForeBrush == null)
-                ForeBrush = new SolidBrush(range.tb.ForeColor);
-
-            //IME mode
-            if (range.tb.ImeAllowed)
-            for (int i = range.Start.iChar; i < range.End.iChar; i++)
+            using(var f = new Font(range.tb.Font, FontStyle))
             {
-                SizeF size = FastColoredTextBox.GetCharSize(f, line[i].c);
-                
-                var gs = gr.Save();
-                float k = size.Width>range.tb.CharWidth + 1?range.tb.CharWidth / size.Width:1;
-                gr.TranslateTransform(x, y+(1-k)*range.tb.CharHeight/2);
-                gr.ScaleTransform(k, (float)Math.Sqrt(k));
-                gr.DrawString(line[i].c.ToString(), f, ForeBrush, 0, 0, stringFormat);
-                gr.Restore(gs);
-                /*
-                if(size.Width>range.tb.CharWidth*1.5f)
-                    gr.DrawString(line[i].c.ToString(), fHalfSize, foreBrush, x, y+range.tb.CharHeight/4, stringFormat);
+                //Font fHalfSize = new Font(range.tb.Font.FontFamily, f.SizeInPoints/2, FontStyle);
+                Line line = range.tb[range.Start.iLine];
+                float dx = range.tb.CharWidth;
+                float y = position.Y + range.tb.LineInterval/2;
+                float x = position.X - range.tb.CharWidth/3;
+
+                if (ForeBrush == null)
+                    ForeBrush = new SolidBrush(range.tb.ForeColor);
+
+                //IME mode
+                if (range.tb.ImeAllowed)
+                for (int i = range.Start.iChar; i < range.End.iChar; i++)
+                {
+                    SizeF size = FastColoredTextBox.GetCharSize(f, line[i].c);
+
+                    var gs = gr.Save();
+                    float k = size.Width > range.tb.CharWidth + 1 ? range.tb.CharWidth/size.Width : 1;
+                    gr.TranslateTransform(x, y + (1 - k)*range.tb.CharHeight/2);
+                    gr.ScaleTransform(k, (float) Math.Sqrt(k));
+                    gr.DrawString(line[i].c.ToString(), f, ForeBrush, 0, 0, stringFormat);
+                    gr.Restore(gs);
+                    x += dx;
+                }
                 else
-                    gr.DrawString(line[i].c.ToString(), f, foreBrush, x, y, stringFormat);
-                 * */
-                x += dx;
+                //classic mode 
+                for (int i = range.Start.iChar; i < range.End.iChar; i++)
+                {
+                    //draw char
+                    gr.DrawString(line[i].c.ToString(), f, ForeBrush, x, y, stringFormat);
+                    x += dx;
+                }
             }
-            else
-            //classic mode 
-            for (int i = range.Start.iChar; i < range.End.iChar; i++)
-            {
-                //draw char
-                gr.DrawString(line[i].c.ToString(), f, ForeBrush, x, y, stringFormat);
-                x += dx;
-            }
-            //
-            f.Dispose();
         }
 
         public override void Dispose()

@@ -1225,7 +1225,7 @@
         </member>
         <member name="M:FastColoredTextBoxNS.FastColoredTextBox.ProcessKey(System.Char,System.Windows.Forms.Keys)">
             <summary>
-            Process "real" keys (non control)
+            Process "real" keys (no control)
             </summary>
         </member>
         <member name="M:FastColoredTextBoxNS.FastColoredTextBox.FindChar(System.Char)">

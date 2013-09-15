@@ -485,7 +485,7 @@
             // 
             // label21
             // 
-            this.label21.Location = new System.Drawing.Point(610, 4);
+            this.label21.Location = new System.Drawing.Point(610, 9);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(208, 23);
             this.label21.TabIndex = 41;
@@ -494,7 +494,7 @@
             // 
             // button21
             // 
-            this.button21.Location = new System.Drawing.Point(824, -1);
+            this.button21.Location = new System.Drawing.Point(824, 4);
             this.button21.Name = "button21";
             this.button21.Size = new System.Drawing.Size(75, 23);
             this.button21.TabIndex = 40;
