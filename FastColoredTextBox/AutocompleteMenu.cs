@@ -47,6 +47,26 @@ namespace FastColoredTextBoxNS
         /// </summary>
         public int AppearInterval { get { return listView.AppearInterval; } set { listView.AppearInterval = value; } }
 
+        /// <summary>
+        /// Back color of selected item
+        /// </summary>
+        [DefaultValue(typeof(Color), "Orange")]
+        public Color SelectedColor
+        {
+            get { return listView.SelectedColor; }
+            set { listView.SelectedColor = value; }
+        }
+
+        /// <summary>
+        /// Border color of hovered item
+        /// </summary>
+        [DefaultValue(typeof(Color), "Red")]
+        public Color HoveredColor
+        {
+            get { return listView.HoveredColor; }
+            set { listView.HoveredColor = value; }
+        }
+
         public AutocompleteMenu(FastColoredTextBox tb)
         {
             // create a new popup and add the list view to it 
@@ -140,6 +160,9 @@ namespace FastColoredTextBoxNS
         public ImageList ImageList { get; set; }
         internal int AppearInterval { get { return timer.Interval; } set { timer.Interval = value; } }
 
+        public Color SelectedColor { get; set; }
+        public Color HoveredColor { get; set; }
+
         internal AutocompleteListView(FastColoredTextBox tb)
         {
             SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint, true);
@@ -151,6 +174,8 @@ namespace FastColoredTextBoxNS
             toolTip.ShowAlways = false;
             AppearInterval = 500;
             timer.Tick += new EventHandler(timer_Tick);
+            SelectedColor = Color.Orange;
+            HoveredColor = Color.Red;
 
             this.tb = tb;
 
@@ -352,19 +377,29 @@ namespace FastColoredTextBoxNS
             {
                 y = i * itemHeight - VerticalScroll.Value;
 
+                var item = visibleItems[i];
+
+                if(item.BackColor != Color.Transparent)
+                using (var brush = new SolidBrush(item.BackColor))
+                    e.Graphics.FillRectangle(brush, 1, y, ClientSize.Width - 1 - 1, itemHeight - 1);
+
                 if (ImageList != null && visibleItems[i].ImageIndex >= 0)
-                    e.Graphics.DrawImage(ImageList.Images[visibleItems[i].ImageIndex], 1, y);
+                    e.Graphics.DrawImage(ImageList.Images[item.ImageIndex], 1, y);
 
                 if (i == selectedItemIndex)
+                using (var selectedBrush = new LinearGradientBrush(new Point(0, y - 3), new Point(0, y + itemHeight), Color.Transparent, SelectedColor))
+                using (var pen = new Pen(SelectedColor))
                 {
-                    Brush selectedBrush = new LinearGradientBrush(new Point(0, y - 3), new Point(0, y + itemHeight), Color.White, Color.Orange);
                     e.Graphics.FillRectangle(selectedBrush, leftPadding, y, ClientSize.Width - 1 - leftPadding, itemHeight - 1);
-                    e.Graphics.DrawRectangle(Pens.Orange, leftPadding, y, ClientSize.Width - 1 - leftPadding, itemHeight - 1);
+                    e.Graphics.DrawRectangle(pen, leftPadding, y, ClientSize.Width - 1 - leftPadding, itemHeight - 1);
                 }
+
                 if (i == hoveredItemIndex)
-                    e.Graphics.DrawRectangle(Pens.Red, leftPadding, y, ClientSize.Width - 1 - leftPadding, itemHeight - 1);
-                using(var brush = new SolidBrush(ForeColor))
-                    e.Graphics.DrawString(visibleItems[i].ToString(), Font, brush, leftPadding, y);
+                using(var pen = new Pen(HoveredColor))
+                    e.Graphics.DrawRectangle(pen, leftPadding, y, ClientSize.Width - 1 - leftPadding, itemHeight - 1);
+
+                using (var brush = new SolidBrush(item.ForeColor != Color.Transparent ? item.ForeColor : ForeColor))
+                    e.Graphics.DrawString(item.ToString(), Font, brush, leftPadding, y);
             }
         }
 

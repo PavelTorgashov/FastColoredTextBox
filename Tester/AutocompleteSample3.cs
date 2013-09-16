@@ -19,7 +19,9 @@ namespace Tester
 
             //create autocomplete popup menu
             popupMenu = new AutocompleteMenu(fctb);
-            popupMenu.ForeColor = Color.Navy;
+            popupMenu.ForeColor = Color.White;
+            popupMenu.BackColor = Color.Gray;
+            popupMenu.SelectedColor = Color.Purple;
             popupMenu.SearchPattern = @"[\w\.]";
             popupMenu.AllowTabKey = true;
             //assign DynamicCollection as items source

@@ -199,6 +199,16 @@
             Menu text. This text is displayed in the drop-down menu.
             </summary>
         </member>
+        <member name="P:FastColoredTextBoxNS.AutocompleteItem.ForeColor">
+            <summary>
+            Fore color of text of item
+            </summary>
+        </member>
+        <member name="P:FastColoredTextBoxNS.AutocompleteItem.BackColor">
+            <summary>
+            Back color of item
+            </summary>
+        </member>
         <member name="F:FastColoredTextBoxNS.CompareResult.Hidden">
             <summary>
             Item do not appears
@@ -371,6 +381,16 @@
         <member name="P:FastColoredTextBoxNS.AutocompleteMenu.AppearInterval">
             <summary>
             Interval of menu appear (ms)
+            </summary>
+        </member>
+        <member name="P:FastColoredTextBoxNS.AutocompleteMenu.SelectedColor">
+            <summary>
+            Back color of selected item
+            </summary>
+        </member>
+        <member name="P:FastColoredTextBoxNS.AutocompleteMenu.HoveredColor">
+            <summary>
+            Border color of hovered item
             </summary>
         </member>
         <member name="T:FastColoredTextBoxNS.FileTextSource">
@@ -1325,7 +1345,7 @@
         </member>
         <member name="M:FastColoredTextBoxNS.FastColoredTextBox.OnSelectionChanged">
             <summary>
-            Fires SelectionCnaged event
+            Fires SelectionChanged event
             </summary>
         </member>
         <member name="M:FastColoredTextBoxNS.FastColoredTextBox.PlaceToPosition(FastColoredTextBoxNS.Place)">

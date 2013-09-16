@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Drawing.Printing;
 
 namespace FastColoredTextBoxNS
@@ -108,6 +109,24 @@ namespace FastColoredTextBoxNS
         {
             get { return menuText; }
             set { menuText = value; }
+        }
+
+        /// <summary>
+        /// Fore color of text of item
+        /// </summary>
+        public virtual Color ForeColor
+        {
+            get { return Color.Transparent; }
+            set { throw new NotImplementedException("Override this property to change color"); }
+        }
+
+        /// <summary>
+        /// Back color of item
+        /// </summary>
+        public virtual Color BackColor
+        {
+            get { return Color.Transparent; }
+            set { throw new NotImplementedException("Override this property to change color"); }
         }
     }
 
