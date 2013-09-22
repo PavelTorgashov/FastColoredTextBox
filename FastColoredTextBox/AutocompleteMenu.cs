@@ -145,6 +145,8 @@ namespace FastColoredTextBoxNS
 
     public class AutocompleteListView : UserControl
     {
+        public event EventHandler SelectedItemIndexChanged;
+
         internal List<AutocompleteItem> visibleItems;
         IEnumerable<AutocompleteItem> sourceItems = new List<AutocompleteItem>();
         int selectedItemIndex = 0;
@@ -162,6 +164,19 @@ namespace FastColoredTextBoxNS
 
         public Color SelectedColor { get; set; }
         public Color HoveredColor { get; set; }
+        public int SelectedItemIndex
+        {
+            get { return selectedItemIndex; }
+            set
+            {
+                if (selectedItemIndex != value)
+                {
+                    selectedItemIndex = value;
+                    if (SelectedItemIndexChanged != null)
+                        SelectedItemIndexChanged(this, EventArgs.Empty);
+                }
+            }
+        }
 
         internal AutocompleteListView(FastColoredTextBox tb)
         {
@@ -240,7 +255,7 @@ namespace FastColoredTextBoxNS
             }
 
             visibleItems.Clear();
-            selectedItemIndex = 0;
+            SelectedItemIndex = 0;
             VerticalScroll.Value = 0;
             //get fragment around caret
             Range fragment = tb.Selection.GetFragment(Menu.SearchPattern);
@@ -265,7 +280,7 @@ namespace FastColoredTextBoxNS
                     if (res == CompareResult.VisibleAndSelected && !foundSelected)
                     {
                         foundSelected = true;
-                        selectedItemIndex = visibleItems.Count - 1;
+                        SelectedItemIndex = visibleItems.Count - 1;
                     }
                 }
 
@@ -386,7 +401,7 @@ namespace FastColoredTextBoxNS
                 if (ImageList != null && visibleItems[i].ImageIndex >= 0)
                     e.Graphics.DrawImage(ImageList.Images[item.ImageIndex], 1, y);
 
-                if (i == selectedItemIndex)
+                if (i == SelectedItemIndex)
                 using (var selectedBrush = new LinearGradientBrush(new Point(0, y - 3), new Point(0, y + itemHeight), Color.Transparent, SelectedColor))
                 using (var pen = new Pen(SelectedColor))
                 {
@@ -415,7 +430,7 @@ namespace FastColoredTextBoxNS
 
             if (e.Button == System.Windows.Forms.MouseButtons.Left)
             {
-                selectedItemIndex = PointToItemIndex(e.Location);
+                SelectedItemIndex = PointToItemIndex(e.Location);
                 DoSelectedVisible();
                 Invalidate();
             }
@@ -424,30 +439,30 @@ namespace FastColoredTextBoxNS
         protected override void OnMouseDoubleClick(MouseEventArgs e)
         {
             base.OnMouseDoubleClick(e);
-            selectedItemIndex = PointToItemIndex(e.Location);
+            SelectedItemIndex = PointToItemIndex(e.Location);
             Invalidate();
             OnSelecting();
         }
 
         internal virtual void OnSelecting()
         {
-            if (selectedItemIndex < 0 || selectedItemIndex >= visibleItems.Count)
+            if (SelectedItemIndex < 0 || SelectedItemIndex >= visibleItems.Count)
                 return;
             tb.TextSource.Manager.BeginAutoUndoCommands();
             try
             {
-                AutocompleteItem item = visibleItems[selectedItemIndex];
+                AutocompleteItem item = visibleItems[SelectedItemIndex];
                 SelectingEventArgs args = new SelectingEventArgs()
                 {
                     Item = item,
-                    SelectedIndex = selectedItemIndex
+                    SelectedIndex = SelectedItemIndex
                 };
 
                 Menu.OnSelecting(args);
 
                 if (args.Cancel)
                 {
-                    selectedItemIndex = args.SelectedIndex;
+                    SelectedItemIndex = args.SelectedIndex;
                     Invalidate();
                     return;
                 }
@@ -550,7 +565,7 @@ namespace FastColoredTextBoxNS
 
         public void SelectNext(int shift)
         {
-            selectedItemIndex = Math.Max(0, Math.Min(selectedItemIndex + shift, visibleItems.Count - 1));
+            SelectedItemIndex = Math.Max(0, Math.Min(SelectedItemIndex + shift, visibleItems.Count - 1));
             DoSelectedVisible();
             //
             Invalidate();
@@ -558,14 +573,14 @@ namespace FastColoredTextBoxNS
 
         private void DoSelectedVisible()
         {
-            if (selectedItemIndex >= 0 && selectedItemIndex < visibleItems.Count)
-                SetToolTip(visibleItems[selectedItemIndex]);
+            if (SelectedItemIndex >= 0 && SelectedItemIndex < visibleItems.Count)
+                SetToolTip(visibleItems[SelectedItemIndex]);
 
-            var y = selectedItemIndex * itemHeight - VerticalScroll.Value;
+            var y = SelectedItemIndex * itemHeight - VerticalScroll.Value;
             if (y < 0)
-                VerticalScroll.Value = selectedItemIndex * itemHeight;
+                VerticalScroll.Value = SelectedItemIndex * itemHeight;
             if (y > ClientSize.Height - itemHeight)
-                VerticalScroll.Value = Math.Min(VerticalScroll.Maximum, selectedItemIndex * itemHeight - ClientSize.Height + itemHeight);
+                VerticalScroll.Value = Math.Min(VerticalScroll.Maximum, SelectedItemIndex * itemHeight - ClientSize.Height + itemHeight);
             //some magic for update scrolls
             AutoScrollMinSize -= new Size(1, 0);
             AutoScrollMinSize += new Size(1, 0);
@@ -573,8 +588,8 @@ namespace FastColoredTextBoxNS
 
         private void SetToolTip(AutocompleteItem autocompleteItem)
         {
-            var title = visibleItems[selectedItemIndex].ToolTipTitle;
-            var text = visibleItems[selectedItemIndex].ToolTipText;
+            var title = visibleItems[SelectedItemIndex].ToolTipTitle;
+            var text = visibleItems[SelectedItemIndex].ToolTipText;
 
             if (string.IsNullOrEmpty(title))
             {
