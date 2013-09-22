@@ -178,6 +178,20 @@ namespace FastColoredTextBoxNS
             }
         }
 
+        public AutocompleteItem SelectedItem
+        {
+            get
+            {
+                if (SelectedItemIndex >= 0 && selectedItemIndex < visibleItems.Count)
+                    return visibleItems[selectedItemIndex];
+                return null;
+            }
+            set
+            {
+                SelectedItemIndex = visibleItems.IndexOf(value);
+            }
+        }
+
         internal AutocompleteListView(FastColoredTextBox tb)
         {
             SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint, true);
@@ -451,7 +465,7 @@ namespace FastColoredTextBoxNS
             tb.TextSource.Manager.BeginAutoUndoCommands();
             try
             {
-                AutocompleteItem item = visibleItems[SelectedItemIndex];
+                AutocompleteItem item = SelectedItem;
                 SelectingEventArgs args = new SelectingEventArgs()
                 {
                     Item = item,
@@ -574,7 +588,7 @@ namespace FastColoredTextBoxNS
         private void DoSelectedVisible()
         {
             if (SelectedItemIndex >= 0 && SelectedItemIndex < visibleItems.Count)
-                SetToolTip(visibleItems[SelectedItemIndex]);
+                SetToolTip(SelectedItem);
 
             var y = SelectedItemIndex * itemHeight - VerticalScroll.Value;
             if (y < 0)
@@ -588,8 +602,8 @@ namespace FastColoredTextBoxNS
 
         private void SetToolTip(AutocompleteItem autocompleteItem)
         {
-            var title = visibleItems[SelectedItemIndex].ToolTipTitle;
-            var text = visibleItems[SelectedItemIndex].ToolTipText;
+            var title = SelectedItem.ToolTipTitle;
+            var text = SelectedItem.ToolTipText;
 
             if (string.IsNullOrEmpty(title))
             {
