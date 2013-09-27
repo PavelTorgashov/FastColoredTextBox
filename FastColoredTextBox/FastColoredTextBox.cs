@@ -3655,7 +3655,7 @@ namespace FastColoredTextBoxNS
 
         private void RestoreFontSize()
         {
-            DoZoom(1f);
+            Zoom = 100;
         }
 
         /// <summary>
@@ -4914,7 +4914,7 @@ namespace FastColoredTextBoxNS
                 var newPoints = points + step * 72f / dpi;
                 if(newPoints < 1f) return;
                 var k = newPoints / originalFont.SizeInPoints;
-                DoZoom(k);
+                Zoom = (int)(100 * k);
             }
         }
 
