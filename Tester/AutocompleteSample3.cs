@@ -61,12 +61,20 @@ namespace Tester
                 yield break;
 
             //return static methods of the class
-            foreach (var methodName in type.GetMethods().AsEnumerable().Select(mi=>mi.Name).Distinct())
-                yield return new MethodAutocompleteItem(methodName + "()");
+            foreach (var methodName in type.GetMethods().AsEnumerable().Select(mi => mi.Name).Distinct())
+                yield return new MethodAutocompleteItem(methodName + "()")
+                {
+                    ToolTipTitle = methodName,
+                    ToolTipText = "Description of method " + methodName + " goes here.",
+                };
 
             //return static properties of the class
             foreach (var pi in type.GetProperties())
-                yield return new MethodAutocompleteItem(pi.Name);
+                yield return new MethodAutocompleteItem(pi.Name)
+                {
+                    ToolTipTitle = pi.Name,
+                    ToolTipText = "Description of property " + pi.Name + " goes here.",
+                };
         }
 
         Type FindTypeByName(string name)
