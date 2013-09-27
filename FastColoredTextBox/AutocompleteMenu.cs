@@ -145,9 +145,11 @@ namespace FastColoredTextBoxNS
 
     public class AutocompleteListView : UserControl
     {
+        public event EventHandler FocussedItemIndexChanged;
+
         internal List<AutocompleteItem> visibleItems;
         IEnumerable<AutocompleteItem> sourceItems = new List<AutocompleteItem>();
-        int selectedItemIndex = 0;
+        int focussedItemIndex = 0;
         int hoveredItemIndex = -1;
         int itemHeight;
         AutocompleteMenu Menu { get { return Parent as AutocompleteMenu; } }
@@ -162,6 +164,33 @@ namespace FastColoredTextBoxNS
 
         public Color SelectedColor { get; set; }
         public Color HoveredColor { get; set; }
+        public int FocussedItemIndex
+        {
+            get { return focussedItemIndex; }
+            set
+            {
+                if (focussedItemIndex != value)
+                {
+                    focussedItemIndex = value;
+                    if (FocussedItemIndexChanged != null)
+                        FocussedItemIndexChanged(this, EventArgs.Empty);
+                }
+            }
+        }
+
+        public AutocompleteItem FocussedItem
+        {
+            get
+            {
+                if (FocussedItemIndex >= 0 && focussedItemIndex < visibleItems.Count)
+                    return visibleItems[focussedItemIndex];
+                return null;
+            }
+            set
+            {
+                FocussedItemIndex = visibleItems.IndexOf(value);
+            }
+        }
 
         internal AutocompleteListView(FastColoredTextBox tb)
         {
@@ -191,13 +220,19 @@ namespace FastColoredTextBoxNS
                 form.FormClosing += (o, e) => Menu.Close();
                 form.LostFocus += (o, e) => Menu.Close();
             }
-            
+
             tb.LostFocus += (o, e) =>
             {
                 if (!Menu.Focused) Menu.Close();
             };
 
             tb.Scroll += (o, e) => Menu.Close();
+
+            this.VisibleChanged += (o, e) =>
+            {
+                if (this.Visible)
+                    DoSelectedVisible();
+            };
         }
 
         void tb_KeyPressed(object sender, KeyPressEventArgs e)
@@ -240,7 +275,7 @@ namespace FastColoredTextBoxNS
             }
 
             visibleItems.Clear();
-            selectedItemIndex = 0;
+            FocussedItemIndex = 0;
             VerticalScroll.Value = 0;
             //get fragment around caret
             Range fragment = tb.Selection.GetFragment(Menu.SearchPattern);
@@ -265,7 +300,7 @@ namespace FastColoredTextBoxNS
                     if (res == CompareResult.VisibleAndSelected && !foundSelected)
                     {
                         foundSelected = true;
-                        selectedItemIndex = visibleItems.Count - 1;
+                        FocussedItemIndex = visibleItems.Count - 1;
                     }
                 }
 
@@ -386,7 +421,7 @@ namespace FastColoredTextBoxNS
                 if (ImageList != null && visibleItems[i].ImageIndex >= 0)
                     e.Graphics.DrawImage(ImageList.Images[item.ImageIndex], 1, y);
 
-                if (i == selectedItemIndex)
+                if (i == FocussedItemIndex)
                 using (var selectedBrush = new LinearGradientBrush(new Point(0, y - 3), new Point(0, y + itemHeight), Color.Transparent, SelectedColor))
                 using (var pen = new Pen(SelectedColor))
                 {
@@ -415,7 +450,7 @@ namespace FastColoredTextBoxNS
 
             if (e.Button == System.Windows.Forms.MouseButtons.Left)
             {
-                selectedItemIndex = PointToItemIndex(e.Location);
+                FocussedItemIndex = PointToItemIndex(e.Location);
                 DoSelectedVisible();
                 Invalidate();
             }
@@ -424,30 +459,30 @@ namespace FastColoredTextBoxNS
         protected override void OnMouseDoubleClick(MouseEventArgs e)
         {
             base.OnMouseDoubleClick(e);
-            selectedItemIndex = PointToItemIndex(e.Location);
+            FocussedItemIndex = PointToItemIndex(e.Location);
             Invalidate();
             OnSelecting();
         }
 
         internal virtual void OnSelecting()
         {
-            if (selectedItemIndex < 0 || selectedItemIndex >= visibleItems.Count)
+            if (FocussedItemIndex < 0 || FocussedItemIndex >= visibleItems.Count)
                 return;
             tb.TextSource.Manager.BeginAutoUndoCommands();
             try
             {
-                AutocompleteItem item = visibleItems[selectedItemIndex];
+                AutocompleteItem item = FocussedItem;
                 SelectingEventArgs args = new SelectingEventArgs()
                 {
                     Item = item,
-                    SelectedIndex = selectedItemIndex
+                    SelectedIndex = FocussedItemIndex
                 };
 
                 Menu.OnSelecting(args);
 
                 if (args.Cancel)
                 {
-                    selectedItemIndex = args.SelectedIndex;
+                    FocussedItemIndex = args.SelectedIndex;
                     Invalidate();
                     return;
                 }
@@ -511,7 +546,7 @@ namespace FastColoredTextBoxNS
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             ProcessKey(keyData, Keys.None);
-
+            
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
@@ -550,7 +585,7 @@ namespace FastColoredTextBoxNS
 
         public void SelectNext(int shift)
         {
-            selectedItemIndex = Math.Max(0, Math.Min(selectedItemIndex + shift, visibleItems.Count - 1));
+            FocussedItemIndex = Math.Max(0, Math.Min(FocussedItemIndex + shift, visibleItems.Count - 1));
             DoSelectedVisible();
             //
             Invalidate();
@@ -558,14 +593,14 @@ namespace FastColoredTextBoxNS
 
         private void DoSelectedVisible()
         {
-            if (selectedItemIndex >= 0 && selectedItemIndex < visibleItems.Count)
-                SetToolTip(visibleItems[selectedItemIndex]);
+            if (FocussedItem != null)
+                SetToolTip(FocussedItem);
 
-            var y = selectedItemIndex * itemHeight - VerticalScroll.Value;
+            var y = FocussedItemIndex * itemHeight - VerticalScroll.Value;
             if (y < 0)
-                VerticalScroll.Value = selectedItemIndex * itemHeight;
+                VerticalScroll.Value = FocussedItemIndex * itemHeight;
             if (y > ClientSize.Height - itemHeight)
-                VerticalScroll.Value = Math.Min(VerticalScroll.Maximum, selectedItemIndex * itemHeight - ClientSize.Height + itemHeight);
+                VerticalScroll.Value = Math.Min(VerticalScroll.Maximum, FocussedItemIndex * itemHeight - ClientSize.Height + itemHeight);
             //some magic for update scrolls
             AutoScrollMinSize -= new Size(1, 0);
             AutoScrollMinSize += new Size(1, 0);
@@ -573,8 +608,8 @@ namespace FastColoredTextBoxNS
 
         private void SetToolTip(AutocompleteItem autocompleteItem)
         {
-            var title = visibleItems[selectedItemIndex].ToolTipTitle;
-            var text = visibleItems[selectedItemIndex].ToolTipText;
+            var title = autocompleteItem.ToolTipTitle;
+            var text = autocompleteItem.ToolTipText;
 
             if (string.IsNullOrEmpty(title))
             {
@@ -583,14 +618,18 @@ namespace FastColoredTextBoxNS
                 return;
             }
 
-            if(string.IsNullOrEmpty(text) )
+            IWin32Window window = this.Parent ?? this;
+            Point location = new Point((window == this ? Width : Right) + 3, 0);
+
+            if (string.IsNullOrEmpty(text))
             {
                 toolTip.ToolTipTitle = null;
-                toolTip.Show(title, this, Width + 3, 0, 3000);
-            }else
+                toolTip.Show(title, window, location.X, location.Y, 3000);
+            }
+            else
             {
                 toolTip.ToolTipTitle = title;
-                toolTip.Show(text, this, Width + 3, 0, 3000);
+                toolTip.Show(text, window, location.X, location.Y, 3000);
             }
         }
 
