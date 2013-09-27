@@ -141,6 +141,24 @@ namespace FastColoredTextBoxNS
         {
             Items.DoAutocomplete(forced);
         }
+
+        /// <summary>
+        /// Minimal size of menu
+        /// </summary>
+        public new Size MinimumSize
+        {
+            get { return Items.MinimumSize; }
+            set { Items.MinimumSize = value; }
+        }
+
+        /// <summary>
+        /// Image list of menu
+        /// </summary>
+        public new ImageList ImageList
+        {
+            get { return Items.ImageList; }
+            set { Items.ImageList = value; }
+        }
     }
 
     public class AutocompleteListView : UserControl

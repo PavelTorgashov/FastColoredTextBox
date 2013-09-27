@@ -20,9 +20,8 @@ namespace FastColoredTextBoxNS
         FastColoredTextBox currentTB;
         /// <summary>
         /// Styles
-        /// Maximum style count is 16
         /// </summary>
-        public readonly Style[] Styles = new Style[sizeof(ushort) * 8];
+        public readonly Style[] Styles;
         /// <summary>
         /// Occurs when line was inserted/added
         /// </summary>
@@ -92,6 +91,12 @@ namespace FastColoredTextBoxNS
             this.CurrentTB = currentTB;
             linesAccessor = new LinesAccessor(this);
             Manager = new CommandManager(this);
+
+            if (Enum.GetUnderlyingType(typeof(StyleIndex)) == typeof(UInt32))
+                Styles = new Style[32];
+            else
+                Styles = new Style[16];
+
             InitDefaultStyle();
         }
 
