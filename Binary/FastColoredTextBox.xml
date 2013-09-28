@@ -1797,7 +1797,6 @@
         <member name="P:FastColoredTextBoxNS.FastColoredTextBox.Styles">
             <summary>
             Styles
-            Maximum style count is 16
             </summary>
         </member>
         <member name="P:FastColoredTextBoxNS.FastColoredTextBox.Hotkeys">

@@ -711,7 +711,6 @@ namespace FastColoredTextBoxNS
 
         /// <summary>
         /// Styles
-        /// Maximum style count is 16
         /// </summary>
         [Browsable(false)]
         public Style[] Styles
@@ -1895,10 +1894,17 @@ namespace FastColoredTextBoxNS
             var result = new List<Style>();
             if (place.iLine < LinesCount && place.iChar < this[place.iLine].Count)
             {
-                var s = (ushort) this[place].style;
-                for (int i = 0; i < 16; i++)
-                    if ((s & (ushort) 1 << i) != 0)
+#if Styles32
+                var s = (uint) this[place].style;
+                for (int i = 0; i < 32; i++)
+                    if ((s & ((uint) 1) << i) != 0)
                         result.Add(Styles[i]);
+#else
+                var s = (ushort)this[place].style;
+                for (int i = 0; i < 16; i++)
+                    if ((s & ((ushort) 1) << i) != 0)
+                        result.Add(Styles[i]);
+#endif
             }
 
             return result;
@@ -4914,7 +4920,7 @@ namespace FastColoredTextBoxNS
                 var newPoints = points + step * 72f / dpi;
                 if(newPoints < 1f) return;
                 var k = newPoints / originalFont.SizeInPoints;
-                Zoom = (int)(100 * k);
+                 Zoom = (int)(100 * k);
             }
         }
 
