@@ -403,6 +403,16 @@
             Image list of menu
             </summary>
         </member>
+        <member name="P:FastColoredTextBoxNS.AutocompleteMenu.ToolTipDuration">
+            <summary>
+            Tooltip duration (ms)
+            </summary>
+        </member>
+        <member name="P:FastColoredTextBoxNS.AutocompleteMenu.ToolTip">
+            <summary>
+            Tooltip
+            </summary>
+        </member>
         <member name="T:FastColoredTextBoxNS.FileTextSource">
             <summary>
             This class contains the source text (chars and styles).

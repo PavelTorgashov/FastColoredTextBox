@@ -16,21 +16,33 @@ namespace Tester
         {
             InitializeComponent();
 
-            var rnd = new Random();
-            for (int i = 0; i < 32; i++)
-                styles.Add(new TextStyle(new SolidBrush(Color.FromArgb(rnd.Next(255), rnd.Next(255), rnd.Next(255))), null, FontStyle.Regular));
-
             var fctb = new FastColoredTextBox() { Parent = this, Dock = DockStyle.Fill };
             fctb.TextChanged += fctb_TextChanged;
-            fctb.Text = "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 19 20 21 22 23 24 25 26 27 28 29 30 31";
+            fctb.Text = @"; last modified 1 April 2001 by John Doe
+[owner]
+name=John Doe
+organization=Acme Widgets Inc.
+ 
+[database]
+; use IP address in case network name resolution is not working
+server=192.0.2.62     
+port=143
+file=""payroll.dat""
+";
         }
+
+        const string sectionRegex = @"^\[\w+\]$";
 
         private void fctb_TextChanged(object sender, TextChangedEventArgs e)
         {
-            e.ChangedRange.ClearStyle(StyleIndex.All);
-
-            for (int i = 0; i < styles.Count; i++)
-                e.ChangedRange.SetStyle(styles[i], @"\b" + i + @"\b");
+            //clear folding markers
+            e.ChangedRange.ClearFoldingMarkers();
+            //
+            foreach (var r in e.ChangedRange.GetRangesByLines(sectionRegex, RegexOptions.None))
+            {
+                if (r.Start.iLine > 0) r.tb[r.Start.iLine - 1].FoldingEndMarker = "section";
+                r.tb[r.Start.iLine].FoldingStartMarker = "section";
+            }
         }
     }
 }

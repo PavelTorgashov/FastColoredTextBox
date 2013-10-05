@@ -159,6 +159,24 @@ namespace FastColoredTextBoxNS
             get { return Items.ImageList; }
             set { Items.ImageList = value; }
         }
+
+        /// <summary>
+        /// Tooltip duration (ms)
+        /// </summary>
+        public int ToolTipDuration
+        {
+            get { return Items.ToolTipDuration; }
+            set { Items.ToolTipDuration = value; }
+        }
+
+        /// <summary>
+        /// Tooltip
+        /// </summary>
+        public ToolTip ToolTip
+        {
+            get { return Items.toolTip; }
+            set { Items.toolTip = value; }
+        }
     }
 
     public class AutocompleteListView : UserControl
@@ -179,6 +197,7 @@ namespace FastColoredTextBoxNS
         internal bool AllowTabKey { get; set; }
         public ImageList ImageList { get; set; }
         internal int AppearInterval { get { return timer.Interval; } set { timer.Interval = value; } }
+        internal int ToolTipDuration { get; set; }
 
         public Color SelectedColor { get; set; }
         public Color HoveredColor { get; set; }
@@ -223,6 +242,7 @@ namespace FastColoredTextBoxNS
             timer.Tick += new EventHandler(timer_Tick);
             SelectedColor = Color.Orange;
             HoveredColor = Color.Red;
+            ToolTipDuration = 3000;
 
             this.tb = tb;
 
@@ -642,12 +662,12 @@ namespace FastColoredTextBoxNS
             if (string.IsNullOrEmpty(text))
             {
                 toolTip.ToolTipTitle = null;
-                toolTip.Show(title, window, location.X, location.Y, 3000);
+                toolTip.Show(title, window, location.X, location.Y, ToolTipDuration);
             }
             else
             {
                 toolTip.ToolTipTitle = title;
-                toolTip.Show(text, window, location.X, location.Y, 3000);
+                toolTip.Show(text, window, location.X, location.Y, ToolTipDuration);
             }
         }
 
