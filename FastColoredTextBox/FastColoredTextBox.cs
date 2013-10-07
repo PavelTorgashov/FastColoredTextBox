@@ -2305,7 +2305,7 @@ namespace FastColoredTextBoxNS
         /// <summary>
         /// Copy selected text into Clipboard
         /// </summary>
-        public void Copy()
+        public virtual void Copy()
         {
             if (Selection.IsEmpty)
                 Selection.Expand();
@@ -2387,7 +2387,7 @@ namespace FastColoredTextBoxNS
         /// <summary>
         /// Cut selected text into Clipboard
         /// </summary>
-        public void Cut()
+        public virtual void Cut()
         {
             if (!Selection.IsEmpty)
             {
@@ -2417,7 +2417,7 @@ namespace FastColoredTextBoxNS
         /// <summary>
         /// Paste text from clipboard into selected position
         /// </summary>
-        public void Paste()
+        public virtual void Paste()
         {
             string text = null;
             var thread = new Thread(() =>
