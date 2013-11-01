@@ -504,7 +504,7 @@ namespace FastColoredTextBoxNS
                     StringStyle = RedStyle;
                     CommentStyle = GreenStyle;
                     NumberStyle = MagentaStyle;
-                    KeywordStyle = BlueStyle;
+                    KeywordStyle = BlueBoldStyle;
                     StatementsStyle = BlueBoldStyle;
                     FunctionsStyle = MaroonStyle;
                     VariableStyle = MaroonStyle;
