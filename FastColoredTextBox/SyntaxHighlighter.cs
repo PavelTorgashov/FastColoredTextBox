@@ -489,7 +489,6 @@ namespace FastColoredTextBoxNS
                     CommentStyle = GreenStyle;
                     NumberStyle = MagentaStyle;
                     KeywordStyle = BlueStyle;
-                    KeywordStyle = BlueStyle;
                     break;
                 case Language.PHP:
                     StringStyle = RedStyle;
@@ -504,7 +503,7 @@ namespace FastColoredTextBoxNS
                     StringStyle = RedStyle;
                     CommentStyle = GreenStyle;
                     NumberStyle = MagentaStyle;
-                    KeywordStyle = BlueStyle;
+                    KeywordStyle = BlueBoldStyle;
                     StatementsStyle = BlueBoldStyle;
                     FunctionsStyle = MaroonStyle;
                     VariableStyle = MaroonStyle;
