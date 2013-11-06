@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing.Drawing2D;
+using System.Threading;
 using System.Windows.Forms;
 using System.Drawing;
 using FastColoredTextBoxNS;
@@ -196,7 +197,6 @@ namespace Tester
         private void fctb_SelectionChangedDelayed(object sender, EventArgs e)
         {
             fctb.VisibleRange.ClearStyle(SameWordsStyle);
-
             if (!fctb.Selection.IsEmpty)
                 return;//user selected diapason
 
@@ -389,6 +389,16 @@ namespace Tester
         private void fctb_CustomAction(object sender, CustomActionEventArgs e)
         {
             MessageBox.Show(e.Action.ToString());
+        }
+
+        private void commentSelectedLinesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            fctb.InsertLinePrefix(@"//");
+        }
+
+        private void uncommentSelectedLinesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            fctb.RemoveLinePrefix(@"//");
         }
     }
 }

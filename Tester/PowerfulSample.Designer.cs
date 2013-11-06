@@ -29,7 +29,6 @@ namespace Tester
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PowerfulSample));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -46,6 +45,9 @@ namespace Tester
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.increaseIndentSiftTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.decreaseIndentTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem10 = new System.Windows.Forms.ToolStripSeparator();
+            this.commentSelectedLinesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.uncommentSelectedLinesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
             this.goBackwardCtrlToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.goForwardCtrlShiftToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -107,6 +109,9 @@ namespace Tester
             this.toolStripMenuItem2,
             this.increaseIndentSiftTabToolStripMenuItem,
             this.decreaseIndentTabToolStripMenuItem,
+            this.toolStripMenuItem10,
+            this.commentSelectedLinesToolStripMenuItem,
+            this.uncommentSelectedLinesToolStripMenuItem,
             this.toolStripMenuItem4,
             this.goBackwardCtrlToolStripMenuItem,
             this.goForwardCtrlShiftToolStripMenuItem,
@@ -206,6 +211,25 @@ namespace Tester
             this.decreaseIndentTabToolStripMenuItem.Size = new System.Drawing.Size(267, 22);
             this.decreaseIndentTabToolStripMenuItem.Text = "Decrease Indent [Shift + Tab]";
             this.decreaseIndentTabToolStripMenuItem.Click += new System.EventHandler(this.decreaseIndentTabToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem10
+            // 
+            this.toolStripMenuItem10.Name = "toolStripMenuItem10";
+            this.toolStripMenuItem10.Size = new System.Drawing.Size(264, 6);
+            // 
+            // commentSelectedLinesToolStripMenuItem
+            // 
+            this.commentSelectedLinesToolStripMenuItem.Name = "commentSelectedLinesToolStripMenuItem";
+            this.commentSelectedLinesToolStripMenuItem.Size = new System.Drawing.Size(267, 22);
+            this.commentSelectedLinesToolStripMenuItem.Text = "Comment selected lines";
+            this.commentSelectedLinesToolStripMenuItem.Click += new System.EventHandler(this.commentSelectedLinesToolStripMenuItem_Click);
+            // 
+            // uncommentSelectedLinesToolStripMenuItem
+            // 
+            this.uncommentSelectedLinesToolStripMenuItem.Name = "uncommentSelectedLinesToolStripMenuItem";
+            this.uncommentSelectedLinesToolStripMenuItem.Size = new System.Drawing.Size(267, 22);
+            this.uncommentSelectedLinesToolStripMenuItem.Text = "Uncomment selected lines";
+            this.uncommentSelectedLinesToolStripMenuItem.Click += new System.EventHandler(this.uncommentSelectedLinesToolStripMenuItem_Click);
             // 
             // toolStripMenuItem4
             // 
@@ -484,6 +508,9 @@ namespace Tester
         private System.Windows.Forms.ToolStripMenuItem executeMacroToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem changeHotkeysToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem rTFToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem10;
+        private System.Windows.Forms.ToolStripMenuItem commentSelectedLinesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem uncommentSelectedLinesToolStripMenuItem;
     }
 }
 

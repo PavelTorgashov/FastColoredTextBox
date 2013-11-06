@@ -370,7 +370,40 @@ namespace FastColoredTextBoxNS
 
         void InitCShaprRegex()
         {
-            CSharpStringRegex = new Regex( @"""""|@""""|''|@"".*?""|(?<!@)(?<range>"".*?[^\\]"")|'.*?[^\\]'", RegexCompiledOption);
+            //CSharpStringRegex = new Regex( @"""""|@""""|''|@"".*?""|(?<!@)(?<range>"".*?[^\\]"")|'.*?[^\\]'", RegexCompiledOption);
+
+            CSharpStringRegex = new Regex(@"
+                            # Character definitions:
+                            '
+                            (?> # disable backtracking
+                              (?:
+                                \\[^\r\n]|    # escaped meta char
+                                [^'\r\n]      # any character except '
+                              )*
+                            )
+                            '?
+                            |
+                            # Normal string & verbatim strings definitions:
+                            (?<verbatimIdentifier>@)?         # this group matches if it is an verbatim string
+                            ""
+                            (?> # disable backtracking
+                              (?:
+                                # match and consume an escaped character including escaped double quote ("") char
+                                (?(verbatimIdentifier)        # if it is a verbatim string ...
+                                  """"|                         #   then: only match an escaped double quote ("") char
+                                  \\.                         #   else: match an escaped sequence
+                                )
+                                | # OR
+            
+                                # match any char except double quote char ("")
+                                [^""]
+                              )*
+                            )
+                            ""
+                        ",
+                RegexOptions.ExplicitCapture | RegexOptions.Singleline | RegexOptions.IgnorePatternWhitespace| RegexCompiledOption
+            );//thanks to rittergig for this regex
+           
             CSharpCommentRegex1 = new Regex(@"//.*$", RegexOptions.Multiline | RegexCompiledOption);
             CSharpCommentRegex2 = new Regex(@"(/\*.*?\*/)|(/\*.*)", RegexOptions.Singleline | RegexCompiledOption);
             CSharpCommentRegex3 = new Regex(@"(/\*.*?\*/)|(.*\*/)", RegexOptions.Singleline | RegexOptions.RightToLeft | RegexCompiledOption);

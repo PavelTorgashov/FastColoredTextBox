@@ -6153,6 +6153,7 @@ namespace FastColoredTextBoxNS
             BeginUpdate();
             Selection.BeginUpdate();
             lines.Manager.BeginAutoUndoCommands();
+            lines.Manager.ExecuteCommand(new SelectCommand(TextSource));
             int spaces = GetMinStartSpacesCount(from, to);
             for (int i = from; i <= to; i++)
             {
@@ -6180,6 +6181,7 @@ namespace FastColoredTextBoxNS
             BeginUpdate();
             Selection.BeginUpdate();
             lines.Manager.BeginAutoUndoCommands();
+            lines.Manager.ExecuteCommand(new SelectCommand(TextSource));
             for (int i = from; i <= to; i++)
             {
                 string text = lines[i].Text;
