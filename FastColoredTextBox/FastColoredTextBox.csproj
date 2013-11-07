@@ -47,6 +47,9 @@
     </Compile>
     <Compile Include="Bookmarks.cs" />
     <Compile Include="Char.cs" />
+    <Compile Include="DocumentMap.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="ExportToHTML.cs" />
     <Compile Include="ExportToRTF.cs" />
     <Compile Include="GoToForm.cs">

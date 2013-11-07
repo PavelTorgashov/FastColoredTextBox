@@ -1,14 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
+using System.Drawing;
 using System.Windows.Forms;
 using FastColoredTextBoxNS;
+using System.Drawing.Drawing2D;
 
 namespace Tester
 {
-    public partial class Sandbox : Form
+    public partial class DocumentMapSample : Form
     {
-        public Sandbox()
+        public DocumentMapSample()
         {
             InitializeComponent();
         }

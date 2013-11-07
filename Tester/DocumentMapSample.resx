@@ -1,0 +1,481 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="fctb.Text" xml:space="preserve">
+    <value>using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Text;
+using System.Windows.Forms;
+
+namespace FastColoredTextBoxNS
+{
+    /// &lt;summary&gt;
+    /// Collection of Hints.
+    /// This is temporary buffer for currently displayed hints.
+    /// &lt;/summary&gt;
+    public class Hints : ICollection&lt;Hint&gt;, IDisposable
+    {
+        FastColoredTextBox tb;
+        List&lt;Hint&gt; items = new List&lt;Hint&gt;();
+
+        public Hints(FastColoredTextBox tb)
+        {
+            this.tb = tb;
+            tb.TextChanged += OnTextBoxTextChanged;
+            tb.KeyDown += OnTextBoxKeyDown;
+            tb.VisibleRangeChanged += OnTextBoxVisibleRangeChanged;
+        }
+
+        protected virtual void OnTextBoxKeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
+        {
+            if (e.KeyCode == System.Windows.Forms.Keys.Escape &amp;&amp; e.Modifiers == System.Windows.Forms.Keys.None)
+                Clear();
+        }
+
+        protected virtual void OnTextBoxTextChanged(object sender, TextChangedEventArgs e)
+        {
+            Clear();
+        }
+
+        public void Dispose()
+        {
+            tb.TextChanged -= OnTextBoxTextChanged;
+            tb.KeyDown -= OnTextBoxKeyDown;
+            tb.VisibleRangeChanged -= OnTextBoxVisibleRangeChanged;
+        }
+
+        void OnTextBoxVisibleRangeChanged(object sender, EventArgs e)
+        {
+            if (items.Count == 0)
+                return;
+
+            tb.NeedRecalc(true);
+            foreach (var item in items)
+            {
+                LayoutHint(item);
+                item.HostPanel.Invalidate();
+            }
+        }
+
+        private void LayoutHint(Hint hint)
+        {
+            if (hint.Inline || hint.Range.Start.iLine &gt;= tb.LinesCount - 1)
+            {
+                if (hint.Range.Start.iLine &lt; tb.LineInfos.Count - 1)
+                    hint.HostPanel.Top = tb.LineInfos[hint.Range.Start.iLine + 1].startY - hint.TopPadding - hint.HostPanel.Height - tb.VerticalScroll.Value;
+                else
+                    hint.HostPanel.Top = tb.TextHeight + tb.Paddings.Top - hint.HostPanel.Height - tb.VerticalScroll.Value;
+            }
+            else
+            {
+                hint.HostPanel.Top = tb.LineInfos[hint.Range.Start.iLine + 1].startY - tb.VerticalScroll.Value;
+            }
+
+            if (hint.Dock == DockStyle.Fill)
+            {
+                hint.Width = tb.ClientSize.Width - tb.LeftIndent - 2;
+                hint.HostPanel.Left = tb.LeftIndent;
+            }
+            else
+            {
+                var p1 = tb.PlaceToPoint(hint.Range.Start);
+                var p2 = tb.PlaceToPoint(hint.Range.End);
+                var cx = (p1.X + p2.X) / 2;
+                hint.HostPanel.Left = Math.Max( tb.LeftIndent, cx - hint.HostPanel.Width / 2);
+            }
+        }
+
+        public IEnumerator&lt;Hint&gt; GetEnumerator()
+        {
+            foreach (var item in items)
+                yield return item;
+        }
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        /// &lt;summary&gt;
+        /// Clears all displayed hints
+        /// &lt;/summary&gt;
+        public void Clear()
+        {
+            items.Clear();
+            if (tb.Controls.Count != 0)
+            {
+                tb.Controls.Clear();
+                for (int i = 0; i &lt; tb.LineInfos.Count; i++)
+                {
+                    var li = tb.LineInfos[i];
+                    li.bottomPadding = 0;
+                    tb.LineInfos[i] = li;
+                }
+                tb.NeedRecalc();
+                tb.Invalidate();
+                tb.Select();
+                tb.ActiveControl = null;
+            }
+        }
+
+        /// &lt;summary&gt;
+        /// Add and shows the hint
+        /// &lt;/summary&gt;
+        /// &lt;param name="hint"&gt;&lt;/param&gt;
+        public void Add(Hint hint)
+        {
+            items.Add(hint);
+
+            if (hint.Inline || hint.Range.Start.iLine &gt;= tb.LinesCount - 1)
+            {
+                var li = tb.LineInfos[hint.Range.Start.iLine];
+                hint.TopPadding = li.bottomPadding;
+                li.bottomPadding += hint.HostPanel.Height;
+                tb.LineInfos[hint.Range.Start.iLine] = li;
+                tb.NeedRecalc(true);
+            }
+
+            LayoutHint(hint);
+
+            tb.OnVisibleRangeChanged();
+
+            hint.HostPanel.Parent = tb;
+
+            tb.Select();
+            tb.ActiveControl = null;
+            tb.Invalidate();
+        }
+
+        /// &lt;summary&gt;
+        /// Is collection contains the hint?
+        /// &lt;/summary&gt;
+        public bool Contains(Hint item)
+        {
+            return items.Contains(item);
+        }
+
+        public void CopyTo(Hint[] array, int arrayIndex)
+        {
+            items.CopyTo(array, arrayIndex);
+        }
+
+        /// &lt;summary&gt;
+        /// Count of hints
+        /// &lt;/summary&gt;
+        public int Count
+        {
+            get { return items.Count; }
+        }
+
+        public bool IsReadOnly
+        {
+            get { return false; }
+        }
+
+        public bool Remove(Hint item)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    /// &lt;summary&gt;
+    /// Hint of FastColoredTextbox
+    /// &lt;/summary&gt;
+    public class Hint 
+    {
+        /// &lt;summary&gt;
+        /// Text of simple hint
+        /// &lt;/summary&gt;
+        public string Text { get { return HostPanel.Text; } set { HostPanel.Text = value; } }
+        /// &lt;summary&gt;
+        /// Linked range
+        /// &lt;/summary&gt;
+        public Range Range { get; set; }
+        /// &lt;summary&gt;
+        /// Backcolor
+        /// &lt;/summary&gt;
+        public Color BackColor { get { return HostPanel.BackColor; } set { HostPanel.BackColor = value; } }
+        /// &lt;summary&gt;
+        /// Second backcolor
+        /// &lt;/summary&gt;
+        public Color BackColor2 { get { return HostPanel.BackColor2; } set { HostPanel.BackColor2 = value; } }
+        /// &lt;summary&gt;
+        /// Border color
+        /// &lt;/summary&gt;
+        public Color BorderColor { get { return HostPanel.BorderColor; } set { HostPanel.BorderColor = value; } }
+        /// &lt;summary&gt;
+        /// Fore color
+        /// &lt;/summary&gt;
+        public Color ForeColor { get { return HostPanel.ForeColor; } set { HostPanel.ForeColor = value; } }
+        /// &lt;summary&gt;
+        /// Text alignment
+        /// &lt;/summary&gt;
+        public StringAlignment TextAlignment { get { return HostPanel.TextAlignment; } set { HostPanel.TextAlignment = value; } }
+        /// &lt;summary&gt;
+        /// Font
+        /// &lt;/summary&gt;
+        public Font Font { get { return HostPanel.Font; } set { HostPanel.Font = value; } }
+        /// &lt;summary&gt;
+        /// Occurs when user click on simple hint
+        /// &lt;/summary&gt;
+        public event EventHandler Click 
+        {
+            add { HostPanel.Click += value; }
+            remove { HostPanel.Click -= value; }
+        }
+        /// &lt;summary&gt;
+        /// Inner control
+        /// &lt;/summary&gt;
+        public Control InnerControl { get; set; }
+        /// &lt;summary&gt;
+        /// Docking (allows None and Fill only)
+        /// &lt;/summary&gt;
+        public DockStyle Dock { get; set; }
+        /// &lt;summary&gt;
+        /// Width of hint (if Dock is None)
+        /// &lt;/summary&gt;
+        public int Width { get { return HostPanel.Width; } set { HostPanel.Width = value; } }
+        /// &lt;summary&gt;
+        /// Height of hint
+        /// &lt;/summary&gt;
+        public int Height { get { return HostPanel.Height; } set { HostPanel.Height = value; } }
+        /// &lt;summary&gt;
+        /// Host panel
+        /// &lt;/summary&gt;
+        public UnfocusablePanel HostPanel { get; private set; }
+
+        internal int TopPadding { get; set; }
+        /// &lt;summary&gt;
+        /// Tag
+        /// &lt;/summary&gt;
+        public object Tag { get; set; }
+        /// &lt;summary&gt;
+        /// Cursor
+        /// &lt;/summary&gt;
+        public Cursor Cursor { get { return HostPanel.Cursor; } set { HostPanel.Cursor = value; } }
+        /// &lt;summary&gt;
+        /// Inlining. If True then hint will moves apart text.
+        /// &lt;/summary&gt;
+        public bool Inline{get; set;}
+
+        /// &lt;summary&gt;
+        /// Scroll textbox to the hint
+        /// &lt;/summary&gt;
+        public virtual void DoVisible()
+        {
+            Range.tb.DoRangeVisible(Range, true);
+            Range.tb.Invalidate();
+        }
+
+        private Hint(Range range, Control innerControl, string text, bool inline, bool dock)
+        {
+            this.Range = range;
+            this.Inline = inline;
+            this.InnerControl = innerControl;
+
+            Init();
+
+            Dock = dock ? DockStyle.Fill : DockStyle.None;
+            Text = text;
+        }
+
+        /// &lt;summary&gt;
+        /// Creates Hint
+        /// &lt;/summary&gt;
+        /// &lt;param name="range"&gt;Linked range&lt;/param&gt;
+        /// &lt;param name="text"&gt;Text for simple hint&lt;/param&gt;
+        /// &lt;param name="inline"&gt;Inlining. If True then hint will moves apart text&lt;/param&gt;
+        /// &lt;param name="dock"&gt;Docking. If True then hint will fill whole line&lt;/param&gt;
+        public Hint(Range range, string text, bool inline, bool dock) 
+            : this(range, null, text, inline, dock)
+        {
+        }
+
+        /// &lt;summary&gt;
+        /// Creates Hint
+        /// &lt;/summary&gt;
+        /// &lt;param name="range"&gt;Linked range&lt;/param&gt;
+        /// &lt;param name="text"&gt;Text for simple hint&lt;/param&gt;
+        public Hint(Range range, string text)
+            : this(range, null, text, true, true)
+        {
+        }
+
+        /// &lt;summary&gt;
+        /// Creates Hint
+        /// &lt;/summary&gt;
+        /// &lt;param name="range"&gt;Linked range&lt;/param&gt;
+        /// &lt;param name="innerControl"&gt;Inner control&lt;/param&gt;
+        /// &lt;param name="inline"&gt;Inlining. If True then hint will moves apart text&lt;/param&gt;
+        /// &lt;param name="dock"&gt;Docking. If True then hint will fill whole line&lt;/param&gt;
+        public Hint(Range range, Control innerControl, bool inline, bool dock)
+            : this(range, innerControl, null, inline, dock)
+        {
+        }
+
+        /// &lt;summary&gt;
+        /// Creates Hint
+        /// &lt;/summary&gt;
+        /// &lt;param name="range"&gt;Linked range&lt;/param&gt;
+        /// &lt;param name="innerControl"&gt;Inner control&lt;/param&gt;
+        public Hint(Range range, Control innerControl)
+            : this(range, innerControl, null, true, true)
+        {
+        }
+
+        protected virtual void Init()
+        {
+            HostPanel = new UnfocusablePanel();
+            HostPanel.Click += OnClick;
+
+            if (InnerControl != null)
+            {
+                HostPanel.Controls.Add(InnerControl);
+                HostPanel.Width = InnerControl.Width + 2;
+                HostPanel.Height = InnerControl.Height + 2;
+                InnerControl.Dock = DockStyle.Fill;
+                InnerControl.Visible = true;
+                BackColor = SystemColors.Control;
+            }
+            else
+            {
+                HostPanel.Height = Range.tb.CharHeight + 5;
+            }
+
+            Cursor = Cursors.Default;
+            BorderColor = Color.Silver;
+            BackColor2 = Color.White;
+            BackColor = InnerControl == null ? Color.Silver : SystemColors.Control;
+            ForeColor = Color.Black;
+            TextAlignment = StringAlignment.Near;
+            Font = Range.tb.Parent == null ? Range.tb.Font : Range.tb.Parent.Font;
+        }
+
+        protected virtual void OnClick(object sender, EventArgs e)
+        {
+            Range.tb.OnHintClick(this);
+        }
+    }
+}
+
+</value>
+  </data>
+</root>

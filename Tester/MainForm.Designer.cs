@@ -94,6 +94,8 @@
             this.button32 = new System.Windows.Forms.Button();
             this.label33 = new System.Windows.Forms.Label();
             this.button33 = new System.Windows.Forms.Button();
+            this.label34 = new System.Windows.Forms.Label();
+            this.button34 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
@@ -733,11 +735,32 @@
             this.button33.UseVisualStyleBackColor = true;
             this.button33.Click += new System.EventHandler(this.button33_Click);
             // 
+            // label34
+            // 
+            this.label34.Location = new System.Drawing.Point(629, 383);
+            this.label34.Name = "label34";
+            this.label34.Size = new System.Drawing.Size(189, 24);
+            this.label34.TabIndex = 67;
+            this.label34.Text = "Document map sample.";
+            this.label34.TextAlign = System.Drawing.ContentAlignment.TopRight;
+            // 
+            // button34
+            // 
+            this.button34.Location = new System.Drawing.Point(824, 378);
+            this.button34.Name = "button34";
+            this.button34.Size = new System.Drawing.Size(75, 23);
+            this.button34.TabIndex = 66;
+            this.button34.Text = "Show";
+            this.button34.UseVisualStyleBackColor = true;
+            this.button34.Click += new System.EventHandler(this.button34_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(915, 561);
+            this.Controls.Add(this.label34);
+            this.Controls.Add(this.button34);
             this.Controls.Add(this.label33);
             this.Controls.Add(this.button33);
             this.Controls.Add(this.label32);
@@ -880,5 +903,7 @@
         private System.Windows.Forms.Button button32;
         private System.Windows.Forms.Label label33;
         private System.Windows.Forms.Button button33;
+        private System.Windows.Forms.Label label34;
+        private System.Windows.Forms.Button button34;
     }
 }

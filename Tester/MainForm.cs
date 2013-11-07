@@ -187,5 +187,10 @@ namespace Tester
         {
             new AutocompleteSample4().Show(); 
         }
+
+        private void button34_Click(object sender, EventArgs e)
+        {
+            new DocumentMapSample().Show();
+        }
     }
 }

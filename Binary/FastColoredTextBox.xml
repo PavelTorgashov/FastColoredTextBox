@@ -1293,6 +1293,14 @@
             Redo
             </summary>
         </member>
+        <member name="M:FastColoredTextBoxNS.FastColoredTextBox.DrawText(System.Drawing.Graphics,FastColoredTextBoxNS.Place,System.Drawing.Size)">
+            <summary>
+            Draws text
+            </summary>
+            <param name="gr"></param>
+            <param name="start">Start place of drawing text</param>
+            <param name="size">Size of drawing</param>
+        </member>
         <member name="M:FastColoredTextBoxNS.FastColoredTextBox.OnPaint(System.Windows.Forms.PaintEventArgs)">
             <summary>
             Draw control
@@ -2966,6 +2974,21 @@
         <member name="P:FastColoredTextBoxNS.ExportToHTML.IncludeLineNumbers">
             <summary>
             Includes line numbers
+            </summary>
+        </member>
+        <member name="T:FastColoredTextBoxNS.DocumentMap">
+            <summary>
+            Shows document map of FCTB
+            </summary>
+        </member>
+        <member name="P:FastColoredTextBoxNS.DocumentMap.Scale">
+            <summary>
+            Scale
+            </summary>
+        </member>
+        <member name="P:FastColoredTextBoxNS.DocumentMap.ScrollbarVisible">
+            <summary>
+            Scrollbar visibility
             </summary>
         </member>
     </members>

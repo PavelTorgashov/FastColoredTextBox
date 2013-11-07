@@ -4258,6 +4258,60 @@ namespace FastColoredTextBoxNS
         }
 
         /// <summary>
+        /// Draws text
+        /// </summary>
+        /// <param name="gr"></param>
+        /// <param name="start">Start place of drawing text</param>
+        /// <param name="size">Size of drawing</param>
+        public void DrawText(Graphics gr, Place start, Size size)
+        {
+            if (needRecalc)
+                Recalc();
+
+            if (needRecalcFoldingLines)
+                RecalcFoldingLines();
+
+            var startPoint = PlaceToPoint(start);
+            var startY = startPoint.Y + VerticalScroll.Value;
+            var startX = startPoint.X + HorizontalScroll.Value - LeftIndent - Paddings.Left;
+            int firstChar = start.iChar;
+            int lastChar = (startX + size.Width) / CharWidth;
+
+            var startLine = start.iLine;
+            //draw text
+            for (int iLine = startLine; iLine < lines.Count; iLine++)
+            {
+                Line line = lines[iLine];
+                LineInfo lineInfo = LineInfos[iLine];
+                //
+                if (lineInfo.startY > startY + size.Height)
+                    break;
+                if (lineInfo.startY + lineInfo.WordWrapStringsCount * CharHeight < startY)
+                    continue;
+                if (lineInfo.VisibleState == VisibleState.Hidden)
+                    continue;
+
+                int y = lineInfo.startY - startY;
+                //
+                gr.SmoothingMode = SmoothingMode.None;
+                //draw line background
+                if (lineInfo.VisibleState == VisibleState.Visible)
+                    if (line.BackgroundBrush != null)
+                        gr.FillRectangle(line.BackgroundBrush, new Rectangle(0, y, size.Width, CharHeight * lineInfo.WordWrapStringsCount));
+                //
+                gr.SmoothingMode = SmoothingMode.AntiAlias;
+
+                //draw wordwrap strings of line
+                for (int iWordWrapLine = 0; iWordWrapLine < lineInfo.WordWrapStringsCount; iWordWrapLine++)
+                {
+                    y = lineInfo.startY + iWordWrapLine * CharHeight - startY;
+                    //draw chars
+                    DrawLineChars(gr, firstChar, lastChar, iLine, iWordWrapLine, -startX, y);
+                }
+            }
+        }
+
+        /// <summary>
         /// Draw control
         /// </summary>
         protected override void OnPaint(PaintEventArgs e)
@@ -4314,6 +4368,10 @@ namespace FastColoredTextBoxNS
             //
             int firstChar = (Math.Max(0, HorizontalScroll.Value - Paddings.Left))/CharWidth;
             int lastChar = (HorizontalScroll.Value + ClientSize.Width)/CharWidth;
+            //
+            var x = LeftIndent + Paddings.Left - HorizontalScroll.Value;
+            if (x < LeftIndent)
+                firstChar++;
             //create dictionary of bookmarks
             var bookmarksByLineIndex = new Dictionary<int, Bookmark>();
             foreach (Bookmark item in bookmarks)
@@ -4391,8 +4449,7 @@ namespace FastColoredTextBoxNS
                 {
                     y = lineInfo.startY + iWordWrapLine*CharHeight - VerticalScroll.Value;
                     //draw chars
-                    DrawLineChars(e, firstChar, lastChar, iLine, iWordWrapLine,
-                                  LeftIndent + Paddings.Left - HorizontalScroll.Value, y);
+                    DrawLineChars(e.Graphics, firstChar, lastChar, iLine, iWordWrapLine, x, y);
                 }
             }
 
@@ -4619,7 +4676,7 @@ namespace FastColoredTextBoxNS
                     }
         }
 
-        private void DrawLineChars(PaintEventArgs e, int firstChar, int lastChar, int iLine, int iWordWrapLine, int x,
+        private void DrawLineChars(Graphics gr, int firstChar, int lastChar, int iLine, int iWordWrapLine, int startX,
                                    int y)
         {
             Line line = lines[iLine];
@@ -4627,19 +4684,15 @@ namespace FastColoredTextBoxNS
             int from = lineInfo.GetWordWrapStringStartPosition(iWordWrapLine);
             int to = lineInfo.GetWordWrapStringFinishPosition(iWordWrapLine, line);
 
-            int startX = x;
-            if (startX < LeftIndent)
-                firstChar++;
-
             lastChar = Math.Min(to - from, lastChar);
 
-            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+            gr.SmoothingMode = SmoothingMode.AntiAlias;
 
             //folded block ?
             if (lineInfo.VisibleState == VisibleState.StartOfHiddenBlock)
             {
                 //rendering by FoldedBlockStyle
-                FoldedBlockStyle.Draw(e.Graphics, new Point(startX + firstChar*CharWidth, y),
+                FoldedBlockStyle.Draw(gr, new Point(startX + firstChar*CharWidth, y),
                                       new Range(this, from + firstChar, iLine, from + lastChar + 1, iLine));
             }
             else
@@ -4653,14 +4706,14 @@ namespace FastColoredTextBoxNS
                     StyleIndex style = line[from + iChar].style;
                     if (currentStyleIndex != style)
                     {
-                        FlushRendering(e.Graphics, currentStyleIndex,
+                        FlushRendering(gr, currentStyleIndex,
                                        new Point(startX + (iLastFlushedChar + 1)*CharWidth, y),
                                        new Range(this, from + iLastFlushedChar + 1, iLine, from + iChar, iLine));
                         iLastFlushedChar = iChar - 1;
                         currentStyleIndex = style;
                     }
                 }
-                FlushRendering(e.Graphics, currentStyleIndex, new Point(startX + (iLastFlushedChar + 1)*CharWidth, y),
+                FlushRendering(gr, currentStyleIndex, new Point(startX + (iLastFlushedChar + 1)*CharWidth, y),
                                new Range(this, from + iLastFlushedChar + 1, iLine, from + lastChar + 1, iLine));
             }
 
@@ -4668,12 +4721,12 @@ namespace FastColoredTextBoxNS
             if (SelectionHighlightingForLineBreaksEnabled  && iWordWrapLine == lineInfo.WordWrapStringsCount - 1) lastChar++;//draw selection for CR
             if (!Selection.IsEmpty && lastChar >= firstChar)
             {
-                e.Graphics.SmoothingMode = SmoothingMode.None;
+                gr.SmoothingMode = SmoothingMode.None;
                 var textRange = new Range(this, from + firstChar, iLine, from + lastChar + 1, iLine);
                 textRange = Selection.GetIntersectionWith(textRange);
                 if (textRange != null && SelectionStyle != null)
                 {
-                    SelectionStyle.Draw(e.Graphics, new Point(startX + (textRange.Start.iChar - from)*CharWidth, y),
+                    SelectionStyle.Draw(gr, new Point(startX + (textRange.Start.iChar - from)*CharWidth, y),
                                         textRange);
                 }
             }
@@ -5127,7 +5180,7 @@ namespace FastColoredTextBoxNS
         /// <returns>Line and char position</returns>
         public Place PointToPlace(Point point)
         {
-#if debug
+            #if debug
             var sw = Stopwatch.StartNew();
             #endif
             point.Offset(HorizontalScroll.Value, VerticalScroll.Value);
