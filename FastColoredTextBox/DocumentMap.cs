@@ -131,7 +131,10 @@ namespace FastColoredTextBoxNS
         {
             if (target == null)
                 return;
-            if (scale <= float.Epsilon)
+
+            var zoom = this.Scale * 100 / target.Zoom;
+
+            if (zoom <= float.Epsilon)
                 return;
 
             //calc startPlace
@@ -141,7 +144,7 @@ namespace FastColoredTextBoxNS
             else
             {
                 var endP = target.PlaceToPoint(r.End);
-                endP.Offset(0, -(int)(ClientSize.Height / scale) + target.CharHeight);
+                endP.Offset(0, -(int)(ClientSize.Height / zoom) + target.CharHeight);
                 var pp = target.PointToPlace(endP);
                 if (pp.iLine > startPlace.iLine)
                     startPlace.iLine = pp.iLine;
@@ -153,9 +156,9 @@ namespace FastColoredTextBoxNS
             var sp2 = (float)r.End.iLine / linesCount;
 
             //scale graphics
-            e.Graphics.ScaleTransform(scale, scale);
+            e.Graphics.ScaleTransform(zoom, zoom);
             //draw text
-            var size = new SizeF(ClientSize.Width / scale, ClientSize.Height / scale);
+            var size = new SizeF(ClientSize.Width / zoom, ClientSize.Height / zoom);
             target.DrawText(e.Graphics, startPlace, size.ToSize());
 
             //draw visible rect
@@ -168,9 +171,9 @@ namespace FastColoredTextBoxNS
             e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
 
             using (var brush = new SolidBrush(Color.FromArgb(50, ForeColor)))
-            using (var pen = new Pen(brush, 1 / scale))
+            using (var pen = new Pen(brush, 1 / zoom))
             {
-                var rect = new Rectangle(0, y1, (int)((ClientSize.Width - 1) / scale), y2 - y1);
+                var rect = new Rectangle(0, y1, (int)((ClientSize.Width - 1) / zoom), y2 - y1);
                 e.Graphics.FillRectangle(brush, rect);
                 e.Graphics.DrawRectangle(pen, rect);
             }
@@ -210,11 +213,14 @@ namespace FastColoredTextBoxNS
         {
             if (target == null)
                 return;
-            if (scale <= float.Epsilon)
+
+            var zoom = this.Scale*100/target.Zoom;
+
+            if (zoom <= float.Epsilon)
                 return;
 
             var p0 = target.PlaceToPoint(startPlace);
-            p0 = new Point(0, p0.Y + (int) (point.Y/scale));
+            p0 = new Point(0, p0.Y + (int) (point.Y/zoom));
             var pp = target.PointToPlace(p0);
             target.DoRangeVisible(new Range(target, pp, pp), true);
             BeginInvoke((MethodInvoker)OnScroll);

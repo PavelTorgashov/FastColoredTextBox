@@ -80,7 +80,7 @@ namespace FastColoredTextBoxNS
 
             Place s = start;
             Place e = end;
-
+            //normalize start and end
             if (s.iLine > e.iLine || (s.iLine == e.iLine && s.iChar > e.iChar))
             {
                 var temp = s;
@@ -88,8 +88,15 @@ namespace FastColoredTextBoxNS
                 e = temp;
             }
 
-            if (place.iLine == s.iLine && place.iChar < s.iChar) return false;
-            if (place.iLine == e.iLine && place.iChar > e.iChar) return false;
+            if (columnSelectionMode)
+            {
+                if (place.iChar < s.iChar || place.iChar > e.iChar) return false;
+            }
+            else
+            {
+                if (place.iLine == s.iLine && place.iChar < s.iChar) return false;
+                if (place.iLine == e.iLine && place.iChar > e.iChar) return false;
+            }
 
             return true;
         }

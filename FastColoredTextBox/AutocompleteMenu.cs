@@ -179,6 +179,7 @@ namespace FastColoredTextBoxNS
         }
     }
 
+    [System.ComponentModel.ToolboxItem(false)]
     public class AutocompleteListView : UserControl
     {
         public event EventHandler FocussedItemIndexChanged;

@@ -4258,7 +4258,7 @@ namespace FastColoredTextBoxNS
         }
 
         /// <summary>
-        /// Draws text
+        /// Draws text to given Graphics
         /// </summary>
         /// <param name="gr"></param>
         /// <param name="start">Start place of drawing text</param>
@@ -6805,13 +6805,141 @@ window.status = ""#print"";
             base.OnDragDrop(e);
         }
 
+        private void DoDragDrop_old(Place place, string text)
+        {
+            Range insertRange = new Range(this, place, place);
+
+            // Abort, if insertRange is read only
+            if (insertRange.ReadOnly)
+                return;
+
+            // Abort, if dragged range contains target place
+            if ((draggedRange != null) && (draggedRange.Contains(place) == true))
+                return;
+
+            // Determine, if the dragged string should be copied or moved
+            bool copyMode =
+                (draggedRange == null) ||       // drag from outside
+                (draggedRange.ReadOnly) ||      // dragged range is read only
+                ((ModifierKeys & Keys.Control) != Keys.None);
+
+            //drag from outside?
+            if (draggedRange == null)
+            {
+                Selection.BeginUpdate();
+                // Insert text
+                Selection.Start = place;
+                InsertText(text);
+                // Select inserted text
+                Selection = new Range(this, place, Selection.Start);
+                Selection.EndUpdate();
+                return;
+            }
+
+            //drag from me
+            Place caretPositionAfterInserting;
+            BeginAutoUndo();
+            Selection.BeginUpdate();
+
+            //remember dragged selection for undo/redo
+            Selection = draggedRange;
+            lines.Manager.ExecuteCommand(new SelectCommand(lines));
+            //
+            if (draggedRange.ColumnSelectionMode)
+            {
+                draggedRange.Normalize();
+                insertRange = new Range(this, place, new Place(place.iChar, place.iLine + draggedRange.End.iLine - draggedRange.Start.iLine)) { ColumnSelectionMode = true };
+                for (int i = LinesCount; i <= insertRange.End.iLine; i++)
+                {
+                    Selection.GoLast(false);
+                    InsertChar('\n');
+                }
+            }
+
+            if (!insertRange.ReadOnly)
+            {
+                if (place < draggedRange.Start)
+                {
+                    // Delete dragged range if not in copy mode
+                    if (copyMode == false)
+                    {
+                        Selection = draggedRange;
+                        ClearSelected();
+                    }
+
+                    // Insert text
+                    Selection = insertRange;
+                    Selection.ColumnSelectionMode = insertRange.ColumnSelectionMode;
+                    InsertText(text);
+                    caretPositionAfterInserting = Selection.Start;
+                }
+                else
+                {
+                    // Insert text
+                    Selection = insertRange;
+                    Selection.ColumnSelectionMode = insertRange.ColumnSelectionMode;
+                    InsertText(text);
+                    caretPositionAfterInserting = Selection.Start;
+                    var lineLength = this[caretPositionAfterInserting.iLine].Count;
+
+                    // Delete dragged range if not in copy mode
+                    if (copyMode == false)
+                    {
+                        Selection = draggedRange;
+                        ClearSelected();
+                    }
+
+                    var shift = lineLength - this[caretPositionAfterInserting.iLine].Count;
+                    caretPositionAfterInserting.iChar = caretPositionAfterInserting.iChar - shift;
+                    place.iChar = place.iChar - shift;
+                }
+
+                // Select inserted text
+                if (!draggedRange.ColumnSelectionMode)
+                {
+                    Selection = new Range(this, place, caretPositionAfterInserting);
+                }
+                else
+                {
+                    draggedRange.Normalize();
+                    Selection = new Range(this, place,
+                                            new Place(place.iChar + draggedRange.End.iChar - draggedRange.Start.iChar,
+                                                    place.iLine + draggedRange.End.iLine - draggedRange.Start.iLine)) { ColumnSelectionMode = true };
+                }
+            }
+
+            Selection.EndUpdate();
+            EndAutoUndo();
+            draggedRange = null;
+        }
+
         private void DoDragDrop(Place place, string text)
         {
+            Range insertRange = new Range(this, place, place);
+
+            // Abort, if insertRange is read only
+            if (insertRange.ReadOnly)
+                return;
+
+            // Abort, if dragged range contains target place
+            if ((draggedRange != null) && (draggedRange.Contains(place) == true))
+                return;
+
+            // Determine, if the dragged string should be copied or moved
+            bool copyMode =
+                (draggedRange == null) ||       // drag from outside
+                (draggedRange.ReadOnly) ||      // dragged range is read only
+                ((ModifierKeys & Keys.Control) != Keys.None);
+
             if (draggedRange == null)//drag from outside
             {
+                Selection.BeginUpdate();
+                // Insert text
                 Selection.Start = place;
-                if(!Selection.ReadOnly)
-                    InsertText(text);
+                InsertText(text);
+                // Select inserted text
+                Selection = new Range(this, place, Selection.Start);
+                Selection.EndUpdate();
             }
             else//drag from me
             {
@@ -6820,42 +6948,144 @@ window.status = ""#print"";
                     BeginAutoUndo();
                     Selection.BeginUpdate();
 
-                    var insertRange = new Range(this, place, place);
+                    //remember dragged selection for undo/redo
+                    Selection = draggedRange;
+                    lines.Manager.ExecuteCommand(new SelectCommand(lines));
+                    //
                     if (draggedRange.ColumnSelectionMode)
                     {
                         draggedRange.Normalize();
-                        insertRange = new Range(this, place, new Place(place.iChar, place.iLine + draggedRange.End.iLine - draggedRange.Start.iLine)) { ColumnSelectionMode = true};
-                        while (insertRange.End.iLine >= LinesCount)
+                        insertRange = new Range(this, place, new Place(place.iChar, place.iLine + draggedRange.End.iLine - draggedRange.Start.iLine)) { ColumnSelectionMode = true };
+                        for (int i = LinesCount; i <= insertRange.End.iLine; i++)
                         {
                             Selection.GoLast(false);
                             InsertChar('\n');
                         }
                     }
 
-                    if (!draggedRange.ReadOnly && !insertRange.ReadOnly)
+                    if (!insertRange.ReadOnly)
                     {
                         if (place < draggedRange.Start)
                         {
-                            Selection = draggedRange;
-                            ClearSelected();
+                            // Delete dragged range if not in copy mode
+                            if (copyMode == false)
+                            {
+                                Selection = draggedRange;
+                                ClearSelected();
+                            }
+
+                            // Insert text
                             Selection = insertRange;
+                            Selection.ColumnSelectionMode = insertRange.ColumnSelectionMode;
                             InsertText(text);
                         }
                         else
                         {
+                            // Insert text
                             Selection = insertRange;
+                            Selection.ColumnSelectionMode = insertRange.ColumnSelectionMode;
                             InsertText(text);
-                            Selection = draggedRange;
-                            ClearSelected();
+
+                            // Delete dragged range if not in copy mode
+                            if (copyMode == false)
+                            {
+                                Selection = draggedRange;
+                                ClearSelected();
+                            }
                         }
                     }
 
-                    Selection.Start = place;
-                    Selection.ColumnSelectionMode = false;
+                    // Selection start and end position
+                    Place startPosition = place;
+                    Place endPosition = Selection.Start;
 
-                    Selection.EndUpdate();
+                    // Correct selection
+                    Range dR = (draggedRange.End > draggedRange.Start)  // dragged selection
+                        ? this.GetRange(draggedRange.Start, draggedRange.End)
+                        : this.GetRange(draggedRange.End, draggedRange.Start);
+                    Place tP = place; // targetPlace
+                    int tS_S_Line;  // targetSelection.Start.iLine
+                    int tS_S_Char;  // targetSelection.Start.iChar
+                    int tS_E_Line;  // targetSelection.End.iLine
+                    int tS_E_Char;  // targetSelection.End.iChar
+                    if ((place > draggedRange.Start) && (copyMode == false))
+                    {
+                        if (draggedRange.ColumnSelectionMode == false)
+                        {
+                            // Normal selection mode:
+
+                            // Determine character/column position of target selection
+                            if (dR.Start.iLine != dR.End.iLine) // If more then one line was selected/dragged ...
+                            {
+                                tS_S_Char = (dR.End.iLine != tP.iLine)
+                                    ? tP.iChar
+                                    : dR.Start.iChar + (tP.iChar - dR.End.iChar);
+                                tS_E_Char = dR.End.iChar;
+                            }
+                            else // only one line was selected/dragged
+                            {
+                                if (dR.End.iLine == tP.iLine)
+                                {
+                                    tS_S_Char = tP.iChar - dR.Text.Length;
+                                    tS_E_Char = tP.iChar;
+                                }
+                                else
+                                {
+                                    tS_S_Char = tP.iChar;
+                                    tS_E_Char = tP.iChar + dR.Text.Length;
+                                }
+                            }
+
+                            // Determine line/row of target selection
+                            if (dR.End.iLine != tP.iLine)
+                            {
+                                tS_S_Line = tP.iLine - (dR.End.iLine - dR.Start.iLine);
+                                tS_E_Line = tP.iLine;
+                            }
+                            else
+                            {
+                                tS_S_Line = dR.Start.iLine;
+                                tS_E_Line = dR.End.iLine;
+                            }
+
+                            startPosition = new Place(tS_S_Char, tS_S_Line);
+                            endPosition = new Place(tS_E_Char, tS_E_Line);
+                        }
+                    }
+
+
+                    // Select inserted text
+                    if (!draggedRange.ColumnSelectionMode)
+                        Selection = new Range(this, startPosition, endPosition);
+                    else
+                    {
+                        if ((copyMode == false) &&
+                            (place.iLine >= dR.Start.iLine) && (place.iLine <= dR.End.iLine) &&
+                            (place.iChar >= dR.End.iChar))
+                        {
+                            tS_S_Char = tP.iChar - (dR.End.iChar - dR.Start.iChar);
+                            tS_E_Char = tP.iChar;
+                        }
+                        else
+                        {
+                            tS_S_Char = tP.iChar;
+                            tS_E_Char = tP.iChar + (dR.End.iChar - dR.Start.iChar);
+                        }
+                        tS_S_Line = tP.iLine;
+                        tS_E_Line = tP.iLine + (dR.End.iLine - dR.Start.iLine);
+
+                        startPosition = new Place(tS_S_Char, tS_S_Line);
+                        endPosition = new Place(tS_E_Char, tS_E_Line);
+                        Selection = new Range(this, startPosition, endPosition)
+                        {
+                            ColumnSelectionMode = true
+                        };
+                    }
+
+                    Range.EndUpdate();
                     EndAutoUndo();
                 }
+                this.selection.Inverse();
             }
             draggedRange = null;
         }
