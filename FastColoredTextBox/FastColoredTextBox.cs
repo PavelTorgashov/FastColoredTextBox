@@ -1173,7 +1173,8 @@ namespace FastColoredTextBoxNS
                 wordWrap = value;
                 if (wordWrap)
                     Selection.ColumnSelectionMode = false;
-                RecalcWordWrap(0, LinesCount - 1);
+                NeedRecalc(false, true);
+                //RecalcWordWrap(0, LinesCount - 1);
                 Invalidate();
             }
         }
@@ -1191,7 +1192,8 @@ namespace FastColoredTextBoxNS
             {
                 if (wordWrapMode == value) return;
                 wordWrapMode = value;
-                RecalcWordWrap(0, LinesCount - 1);
+                NeedRecalc(false, true);
+                //RecalcWordWrap(0, LinesCount - 1);
                 Invalidate();
             }
         }
@@ -1425,9 +1427,9 @@ namespace FastColoredTextBoxNS
             CharWidth = (int) Math.Round(size.Width*1f /*0.85*/) - 1 /*0*/;
             CharHeight = lineInterval + (int) Math.Round(size.Height*1f /*0.9*/) - 1 /*0*/;
             //
-            if (wordWrap)
-                RecalcWordWrap(0, Lines.Count - 1);
-            NeedRecalc();
+            //if (wordWrap)
+            //    RecalcWordWrap(0, Lines.Count - 1);
+            NeedRecalc(false, wordWrap);
             //
             Invalidate();
         }
@@ -2813,9 +2815,6 @@ namespace FastColoredTextBoxNS
             if (!needRecalc)
                 return;
 
-            if (needRecalcWordWrap)
-                RecalcWordWrap(needRecalcWordWrapInterval.X, needRecalcWordWrapInterval.Y);
-
 #if debug
             var sw = Stopwatch.StartNew();
 #endif
@@ -2834,9 +2833,17 @@ namespace FastColoredTextBoxNS
             {
                 if (ShowLineNumbers)
                     LeftIndent += charsForLineNumber*CharWidth + minLeftIndent + 1;
+
+                //calc wordwrapping
+                if (needRecalcWordWrap)
+                {
+                    RecalcWordWrap(needRecalcWordWrapInterval.X, needRecalcWordWrapInterval.Y);
+                    needRecalcWordWrap = false;
+                }
             }
             else
                 needRecalc = true;
+
             //calc max line length and count of wordWrapLines
             TextHeight = 0;
 
@@ -2971,7 +2978,6 @@ namespace FastColoredTextBoxNS
                     }
                 }
             needRecalc = true;
-            needRecalcWordWrap = false;
         }
 
         protected override void OnClientSizeChanged(EventArgs e)
@@ -2979,7 +2985,8 @@ namespace FastColoredTextBoxNS
             base.OnClientSizeChanged(e);
             if (WordWrap)
             {
-                RecalcWordWrap(0, lines.Count - 1);
+                //RecalcWordWrap(0, lines.Count - 1);
+                NeedRecalc(false, true);
                 Invalidate();
             }
             OnVisibleRangeChanged();

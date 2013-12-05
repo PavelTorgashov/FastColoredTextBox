@@ -18,6 +18,8 @@ namespace Tester
         public MarkerToolSample()
         {
             InitializeComponent();
+            //
+            BuildBackBrush();
             //add style explicitly to control for define priority of style drawing
             fctb.AddStyle(YellowStyle);//render first
             fctb.AddStyle(RedStyle);//red will be rendering over yellow
@@ -99,6 +101,11 @@ namespace Tester
         }
 
         private void fctb_Resize(object sender, EventArgs e)
+        {
+            BuildBackBrush();
+        }
+
+        private void BuildBackBrush()
         {
             fctb.BackBrush = new LinearGradientBrush(fctb.ClientRectangle, Color.White, Color.Silver,
                                                      LinearGradientMode.Vertical);

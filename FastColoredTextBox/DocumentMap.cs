@@ -30,8 +30,12 @@ namespace FastColoredTextBoxNS
             {
                 if (target != null)
                     UnSubscribe(target);
+
                 target = value;
-                Subscribe(target);
+                if (value != null)
+                {
+                    Subscribe(target);
+                }
                 OnTargetChanged();
             }
         }
@@ -89,29 +93,29 @@ namespace FastColoredTextBoxNS
 
         protected virtual void UnSubscribe(FastColoredTextBox target)
         {
-            target.Scroll -= new ScrollEventHandler(target_Scroll);
-            target.SelectionChangedDelayed -= new EventHandler(target_SelectionChanged);
-            target.VisibleRangeChanged -= new EventHandler(target_VisibleRangeChanged);
+            target.Scroll -= new ScrollEventHandler(Target_Scroll);
+            target.SelectionChangedDelayed -= new EventHandler(Target_SelectionChanged);
+            target.VisibleRangeChanged -= new EventHandler(Target_VisibleRangeChanged);
         }
 
         protected virtual void Subscribe(FastColoredTextBox target)
         {
-            target.Scroll += new ScrollEventHandler(target_Scroll);
-            target.SelectionChangedDelayed += new EventHandler(target_SelectionChanged);
-            target.VisibleRangeChanged += new EventHandler(target_VisibleRangeChanged);
+            target.Scroll += new ScrollEventHandler(Target_Scroll);
+            target.SelectionChangedDelayed += new EventHandler(Target_SelectionChanged);
+            target.VisibleRangeChanged += new EventHandler(Target_VisibleRangeChanged);
         }
 
-        void target_VisibleRangeChanged(object sender, EventArgs e)
+        protected virtual void Target_VisibleRangeChanged(object sender, EventArgs e)
         {
             NeedRepaint();
         }
 
-        void target_SelectionChanged(object sender, EventArgs e)
+        protected virtual void Target_SelectionChanged(object sender, EventArgs e)
         {
             NeedRepaint();
         }
 
-        protected virtual void target_Scroll(object sender, ScrollEventArgs e)
+        protected virtual void Target_Scroll(object sender, ScrollEventArgs e)
         {
             NeedRepaint();
         }
