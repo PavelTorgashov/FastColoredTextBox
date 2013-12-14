@@ -192,5 +192,10 @@ namespace Tester
         {
             new DocumentMapSample().Show();
         }
+
+        private void button35_Click(object sender, EventArgs e)
+        {
+            new DiffMergeSample().Show();
+        }
     }
 }
