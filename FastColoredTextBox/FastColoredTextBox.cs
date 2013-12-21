@@ -123,7 +123,8 @@ namespace FastColoredTextBoxNS
         private WordWrapMode wordWrapMode = WordWrapMode.WordWrapControlWidth;
         private int reservedCountOfLineNumberChars = 1;
         private int zoom = 100;
-
+        private Size localAutoScrollMinSize;
+ 
         /// <summary>
         /// Constructor
         /// </summary>
@@ -1434,8 +1435,7 @@ namespace FastColoredTextBoxNS
             Invalidate();
         }
 
-
-        private new Size AutoScrollMinSize
+        public new Size AutoScrollMinSize
         {
             set
             {
@@ -1444,7 +1444,7 @@ namespace FastColoredTextBoxNS
                     if (!base.AutoScroll)
                         base.AutoScroll = true;
                     Size newSize = value;
-                    if (WordWrap)
+                    if (WordWrap && WordWrapMode != FastColoredTextBoxNS.WordWrapMode.Custom)
                     {
                         int maxWidth = GetMaxLineWordWrapedWidth();
                         newSize = new Size(Math.Min(newSize.Width, maxWidth), newSize.Height);
@@ -1458,8 +1458,9 @@ namespace FastColoredTextBoxNS
                     base.AutoScrollMinSize = new Size(0, 0);
                     VerticalScroll.Visible = false;
                     HorizontalScroll.Visible = false;
-                    HorizontalScroll.Maximum = value.Width;
-                    VerticalScroll.Maximum = value.Height;
+                    VerticalScroll.Maximum = Math.Max(0, value.Height - ClientSize.Height);
+                    HorizontalScroll.Maximum = Math.Max(0, value.Width - ClientSize.Width);
+                    localAutoScrollMinSize = value;
                 }
             }
 
@@ -1468,7 +1469,8 @@ namespace FastColoredTextBoxNS
                 if (scrollBars)
                     return base.AutoScrollMinSize;
                 else
-                    return new Size(HorizontalScroll.Maximum, VerticalScroll.Maximum);
+                    //return new Size(HorizontalScroll.Maximum, VerticalScroll.Maximum);
+                    return localAutoScrollMinSize;
             }
         }
 
@@ -1887,6 +1889,13 @@ namespace FastColoredTextBoxNS
         [Description("Occurs when user pressed key, that specified as CustomAction.")]
         public event EventHandler<CustomActionEventArgs> CustomAction;
 
+        /// <summary>
+        /// Occurs when scroolbars are updated
+        /// </summary>
+        [Browsable(true)]
+        [Description("Occurs when scroolbars are updated.")]
+        public event EventHandler ScrollbarsUpdated;
+
 
         /// <summary>
         /// Returns list of styles of given place
@@ -2198,6 +2207,8 @@ namespace FastColoredTextBoxNS
             foreach (var timer in new List<Timer>(timersToReset.Keys))
                 ResetTimer(timer);
             timersToReset.Clear();
+
+            OnScrollbarsUpdated();
         }
 
         /// <summary>
@@ -2718,7 +2729,7 @@ namespace FastColoredTextBoxNS
                 }
         }
 
-        protected void OnScroll(ScrollEventArgs se, bool alignByLines)
+        public void OnScroll(ScrollEventArgs se, bool alignByLines)
         {
             if (se.ScrollOrientation == ScrollOrientation.VerticalScroll)
             {
@@ -2854,7 +2865,7 @@ namespace FastColoredTextBoxNS
             CalcMinAutosizeWidth(out minWidth, ref maxLineLength);
 
             AutoScrollMinSize = new Size(minWidth, TextHeight + Paddings.Top + Paddings.Bottom);
-
+            UpdateScrollbars();
 #if debug
             sw.Stop();
             Console.WriteLine("Recalc: " + sw.ElapsedMilliseconds);
@@ -2973,11 +2984,89 @@ namespace FastColoredTextBoxNS
                     else
                     {
                         LineInfo li = LineInfos[iLine];
-                        li.CalcCutOffs(maxCharsPerLine, ImeAllowed, charWrap, lines[iLine]);
+                        if (WordWrapMode == WordWrapMode.Custom)
+                        {
+                            if (WordWrapNeeded != null)
+                                WordWrapNeeded(this, new WordWrapNeededEventArgs(li.CutOffPositions, ImeAllowed, lines[iLine]));
+                        }
+                        else
+                            CalcCutOffs(li.CutOffPositions, maxCharsPerLine, ImeAllowed, charWrap, lines[iLine]);
                         LineInfos[iLine] = li;
                     }
                 }
             needRecalc = true;
+        }
+
+        public event EventHandler<WordWrapNeededEventArgs> WordWrapNeeded;
+
+        /// <summary>
+        /// Calculates wordwrap cutoffs
+        /// </summary>
+        public static void CalcCutOffs(List<int> cutOffPositions, int maxCharsPerLine, bool allowIME, bool charWrap, Line line)
+        {
+            int segmentLength = 0;
+            int cutOff = 0;
+            cutOffPositions.Clear();
+
+            for (int i = 0; i < line.Count - 1; i++)
+            {
+                char c = line[i].c;
+                if (charWrap)
+                {
+                    //char wrapping
+                    cutOff = i + 1;
+                }
+                else
+                {
+                    //word wrapping
+                    if (allowIME && IsCJKLetter(c))//in CJK languages cutoff can be in any letter
+                    {
+                        cutOff = i;
+                    }
+                    else
+                        if (!char.IsLetterOrDigit(c) && c != '_' && c != '\'')
+                            cutOff = Math.Min(i + 1, line.Count - 1);
+                }
+
+                segmentLength++;
+
+                if (segmentLength == maxCharsPerLine)
+                {
+                    if (cutOff == 0 || (cutOffPositions.Count > 0 && cutOff == cutOffPositions[cutOffPositions.Count - 1]))
+                        cutOff = i + 1;
+                    cutOffPositions.Add(cutOff);
+                    segmentLength = 1 + i - cutOff;
+                }
+            }
+        }
+
+        public static bool IsCJKLetter(char c)
+        {
+            int code = Convert.ToInt32(c);
+            return
+            (code >= 0x3300 && code <= 0x33FF) ||
+            (code >= 0xFE30 && code <= 0xFE4F) ||
+            (code >= 0xF900 && code <= 0xFAFF) ||
+            (code >= 0x2E80 && code <= 0x2EFF) ||
+            (code >= 0x31C0 && code <= 0x31EF) ||
+            (code >= 0x4E00 && code <= 0x9FFF) ||
+            (code >= 0x3400 && code <= 0x4DBF) ||
+            (code >= 0x3200 && code <= 0x32FF) ||
+            (code >= 0x2460 && code <= 0x24FF) ||
+            (code >= 0x3040 && code <= 0x309F) ||
+            (code >= 0x2F00 && code <= 0x2FDF) ||
+            (code >= 0x31A0 && code <= 0x31BF) ||
+            (code >= 0x4DC0 && code <= 0x4DFF) ||
+            (code >= 0x3100 && code <= 0x312F) ||
+            (code >= 0x30A0 && code <= 0x30FF) ||
+            (code >= 0x31F0 && code <= 0x31FF) ||
+            (code >= 0x2FF0 && code <= 0x2FFF) ||
+            (code >= 0x1100 && code <= 0x11FF) ||
+            (code >= 0xA960 && code <= 0xA97F) ||
+            (code >= 0xD7B0 && code <= 0xD7FF) ||
+            (code >= 0x3130 && code <= 0x318F) ||
+            (code >= 0xAC00 && code <= 0xD7AF);
+
         }
 
         protected override void OnClientSizeChanged(EventArgs e)
@@ -2990,6 +3079,7 @@ namespace FastColoredTextBoxNS
                 Invalidate();
             }
             OnVisibleRangeChanged();
+            UpdateScrollbars();
         }
 
         /// <summary>
@@ -3036,7 +3126,6 @@ namespace FastColoredTextBoxNS
                 OnVisibleRangeChanged();
         }
 
-
         /// <summary>
         /// Updates scrollbar position after Value changed
         /// </summary>
@@ -3047,7 +3136,17 @@ namespace FastColoredTextBoxNS
                 //some magic for update scrolls
                 base.AutoScrollMinSize -= new Size(1, 0);
                 base.AutoScrollMinSize += new Size(1, 0);
+                
             }
+
+            if(IsHandleCreated)
+                BeginInvoke((MethodInvoker)OnScrollbarsUpdated);
+        }
+
+        protected virtual void OnScrollbarsUpdated()
+        {
+            if (ScrollbarsUpdated != null)
+                ScrollbarsUpdated(this, EventArgs.Empty);
         }
 
         /// <summary>
@@ -4906,7 +5005,7 @@ namespace FastColoredTextBoxNS
                 ((HandledMouseEventArgs)e).Handled = true;
             }
             else
-            if(VerticalScroll.Visible)
+            if (VerticalScroll.Visible || !ShowScrollBars)
             {
                 //base.OnMouseWheel(e);
 
@@ -5713,6 +5812,7 @@ namespace FastColoredTextBoxNS
                 }
 
             OnVisibleRangeChanged();
+            UpdateScrollbars();
         }
 
         /// <summary>
@@ -5726,6 +5826,7 @@ namespace FastColoredTextBoxNS
 
             OnVisibleRangeChanged();
             Invalidate();
+            UpdateScrollbars();
         }
 
         /// <summary>
@@ -6297,16 +6398,12 @@ namespace FastColoredTextBoxNS
             if (marker is CollapseFoldingMarker)
             {
                 CollapseFoldingBlock((marker as CollapseFoldingMarker).iLine);
-                OnVisibleRangeChanged();
-                Invalidate();
                 return;
             }
 
             if (marker is ExpandFoldingMarker)
             {
                 ExpandFoldedBlock((marker as ExpandFoldingMarker).iLine);
-                OnVisibleRangeChanged();
-                Invalidate();
                 return;
             }
 
@@ -6688,6 +6785,7 @@ window.status = ""#print"";
             lines.SaveToFile(fileName, enc);
             IsChanged = false;
             OnVisibleRangeChanged();
+            UpdateScrollbars();
         }
 
         /// <summary>
@@ -7137,6 +7235,7 @@ window.status = ""#print"";
             if (!middleClickScrollingActivated)
             {
                 if ((!HorizontalScroll.Visible) && (!VerticalScroll.Visible))
+                if (ShowScrollBars)
                     return;
                 middleClickScrollingActivated = true;
                 middleClickScrollingOriginPoint = e.Location;
@@ -7206,8 +7305,8 @@ window.status = ""#print"";
             int distanceX = this.middleClickScrollingOriginPoint.X - currentMouseLocation.X;
             int distanceY = this.middleClickScrollingOriginPoint.Y - currentMouseLocation.Y;
 
-            if (!VerticalScroll.Visible) distanceY = 0;
-            if (!HorizontalScroll.Visible) distanceX = 0;
+            if (!VerticalScroll.Visible && ShowScrollBars) distanceY = 0;
+            if (!HorizontalScroll.Visible && ShowScrollBars) distanceX = 0;
 
             double angleInDegree = 180 - Math.Atan2(distanceY, distanceX) * 180 / Math.PI;
             double distance = Math.Sqrt(Math.Pow(distanceX, 2) + Math.Pow(distanceY, 2));
@@ -7282,8 +7381,8 @@ window.status = ""#print"";
         private void DrawMiddleClickScrolling(Graphics gr)
         {
             // If mouse scrolling mode activated draw the scrolling cursor image
-            bool ableToScrollVertically = this.VerticalScroll.Visible;
-            bool ableToScrollHorizontally = this.HorizontalScroll.Visible;
+            bool ableToScrollVertically = this.VerticalScroll.Visible || !ShowScrollBars;
+            bool ableToScrollHorizontally = this.HorizontalScroll.Visible || !ShowScrollBars;
 
             // Calculate inverse color
             Color inverseColor = Color.FromArgb(100, (byte)~this.BackColor.R, (byte)~this.BackColor.G, (byte)~this.BackColor.B);
@@ -7431,6 +7530,20 @@ window.status = ""#print"";
         public bool Cancel { get; set; }
     }
 
+    public class WordWrapNeededEventArgs : EventArgs
+    {
+        public List<int> CutOffPositions { get; private set;}
+        public bool ImeAllowed { get; private set;}
+        public Line Line { get; private set; }
+
+        public WordWrapNeededEventArgs(List<int> cutOffPositions, bool imeAllowed, Line line)
+        {
+            this.CutOffPositions = cutOffPositions;
+            this.ImeAllowed = imeAllowed;
+            this.Line = line;
+        }
+    }
+
     public enum WordWrapMode
     {
         /// <summary>
@@ -7451,7 +7564,12 @@ window.status = ""#print"";
         /// <summary>
         /// Char wrapping by preferred line width (PreferredLineWidth)
         /// </summary>
-        CharWrapPreferredWidth
+        CharWrapPreferredWidth,
+
+        /// <summary>
+        /// Custom wrap (by event WordWrapNeeded)
+        /// </summary>
+        Custom
     }
 
     public class PrintDialogSettings

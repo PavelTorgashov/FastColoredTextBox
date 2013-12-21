@@ -197,5 +197,15 @@ namespace Tester
         {
             new DiffMergeSample().Show();
         }
+
+        private void button36_Click(object sender, EventArgs e)
+        {
+            new CustomScrollBarsSample().Show();
+        }
+
+        private void button37_Click(object sender, EventArgs e)
+        {
+            new CustomWordWrapSample().Show();
+        }
     }
 }

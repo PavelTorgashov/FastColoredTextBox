@@ -89,6 +89,18 @@
     <Compile Include="AutocompleteSample4.Designer.cs">
       <DependentUpon>AutocompleteSample4.cs</DependentUpon>
     </Compile>
+    <Compile Include="CustomWordWrapSample.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CustomWordWrapSample.Designer.cs">
+      <DependentUpon>CustomWordWrapSample.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CustomScrollBarsSample.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CustomScrollBarsSample.Designer.cs">
+      <DependentUpon>CustomScrollBarsSample.cs</DependentUpon>
+    </Compile>
     <Compile Include="DiffMergeSample.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -298,6 +310,14 @@
     </EmbeddedResource>
     <EmbeddedResource Include="AutocompleteSample4.resx">
       <DependentUpon>AutocompleteSample4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CustomWordWrapSample.resx">
+      <DependentUpon>CustomWordWrapSample.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CustomScrollBarsSample.resx">
+      <DependentUpon>CustomScrollBarsSample.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="DiffMergeSample.resx">
       <DependentUpon>DiffMergeSample.cs</DependentUpon>

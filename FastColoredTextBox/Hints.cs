@@ -102,7 +102,14 @@ namespace FastColoredTextBoxNS
             items.Clear();
             if (tb.Controls.Count != 0)
             {
-                tb.Controls.Clear();
+                var toDelete = new List<Control>();
+                foreach (Control item in tb.Controls)
+                    if (item is UnfocusablePanel)
+                        toDelete.Add(item);
+
+                foreach (var item in toDelete)
+                    tb.Controls.Remove(item);
+
                 for (int i = 0; i < tb.LineInfos.Count; i++)
                 {
                     var li = tb.LineInfos[i];

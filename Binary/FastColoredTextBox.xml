@@ -1169,6 +1169,11 @@
             Deletes current line(s)
             </summary>
         </member>
+        <member name="M:FastColoredTextBoxNS.FastColoredTextBox.CalcCutOffs(System.Collections.Generic.List{System.Int32},System.Int32,System.Boolean,System.Boolean,FastColoredTextBoxNS.Line)">
+            <summary>
+            Calculates wordwrap cutoffs
+            </summary>
+        </member>
         <member name="M:FastColoredTextBoxNS.FastColoredTextBox.DoVisibleRectangle(System.Drawing.Rectangle)">
             <summary>
             Scroll control for display defined rectangle
@@ -2252,6 +2257,11 @@
             Occurs when user pressed key, that specified as CustomAction
             </summary>
         </member>
+        <member name="E:FastColoredTextBoxNS.FastColoredTextBox.ScrollbarsUpdated">
+            <summary>
+            Occurs when scroolbars are updated
+            </summary>
+        </member>
         <member name="P:FastColoredTextBoxNS.FastColoredTextBox.Zoom">
             <summary>
             Zooming (in percentages)
@@ -2320,6 +2330,11 @@
         <member name="F:FastColoredTextBoxNS.WordWrapMode.CharWrapPreferredWidth">
             <summary>
             Char wrapping by preferred line width (PreferredLineWidth)
+            </summary>
+        </member>
+        <member name="F:FastColoredTextBoxNS.WordWrapMode.Custom">
+            <summary>
+            Custom wrap (by event WordWrapNeeded)
             </summary>
         </member>
         <member name="P:FastColoredTextBoxNS.PrintDialogSettings.Title">
@@ -2552,11 +2567,6 @@
         <member name="M:FastColoredTextBoxNS.LineInfo.GetWordWrapStringIndex(System.Int32)">
             <summary>
             Gets index of wordwrap string for given char position
-            </summary>
-        </member>
-        <member name="M:FastColoredTextBoxNS.LineInfo.CalcCutOffs(System.Int32,System.Boolean,System.Boolean,FastColoredTextBoxNS.Line)">
-            <summary>
-            Calculates wordwrap cutoffs
             </summary>
         </member>
         <member name="P:FastColoredTextBoxNS.LineInfo.CutOffPositions">
