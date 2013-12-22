@@ -3136,8 +3136,10 @@ namespace FastColoredTextBoxNS
                 //some magic for update scrolls
                 base.AutoScrollMinSize -= new Size(1, 0);
                 base.AutoScrollMinSize += new Size(1, 0);
-                
+
             }
+            else
+                AutoScrollMinSize = AutoScrollMinSize;
 
             if(IsHandleCreated)
                 BeginInvoke((MethodInvoker)OnScrollbarsUpdated);
@@ -5121,7 +5123,7 @@ namespace FastColoredTextBoxNS
 
             //restore first displayed line
             if (iLine < LinesCount)
-                VerticalScroll.Value = LineInfos[iLine].startY;
+                VerticalScroll.Value = Math.Min(VerticalScroll.Maximum, LineInfos[iLine].startY);
             UpdateScrollbars();
             //
             Invalidate();
