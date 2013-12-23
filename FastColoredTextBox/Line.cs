@@ -200,6 +200,8 @@ namespace FastColoredTextBoxNS
         //Y coordinate of line on screen
         internal int startY;// = -1;
         internal int bottomPadding;
+        //indent of secondary wordwrap strings (in chars)
+        internal int wordWrapIndent;
         /// <summary>
         /// Visible state
         /// </summary>
@@ -211,6 +213,7 @@ namespace FastColoredTextBoxNS
             VisibleState = VisibleState.Visible;
             this.startY = startY;
             bottomPadding = 0;
+            wordWrapIndent = 0;
         }
         /// <summary>
         /// Positions for wordwrap cutoffs

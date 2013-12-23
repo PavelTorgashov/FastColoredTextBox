@@ -205,6 +205,7 @@ namespace FastColoredTextBoxNS
             macrosManager = new MacrosManager(this);
             HotkeysMapping = new HotkeysMapping();
             HotkeysMapping.InitDefault();
+            WordWrapAutoIndent = true;
             //
             base.AutoScroll = true;
             timer.Tick += timer_Tick;
@@ -213,9 +214,23 @@ namespace FastColoredTextBoxNS
             middleClickScrollingTimer.Tick += middleClickScrollingTimer_Tick;
         }
 
+        /// <summary>
+        /// Automatically shifts secondary wordwrap lines on the shift amount of the first line
+        /// </summary>
+        [DefaultValue(true)]
+        [Description("Automatically shifts secondary wordwrap lines on the shift amount of the first line.")]
+        public bool WordWrapAutoIndent { get; set; }
+
+        /// <summary>
+        /// Indent of secondary wordwrap lines (in chars)
+        /// </summary>
+        [DefaultValue(0)]
+        [Description("Indent of secondary wordwrap lines (in chars).")]
+        public int WordWrapIndent { get; set; }
+
         MacrosManager macrosManager;
         /// <summary>
-        /// MacrosManager records, stores and executes the macroses.
+        /// MacrosManager records, stores and executes the macroses
         /// </summary>
         [Browsable(false)]
         public MacrosManager MacrosManager { get { return macrosManager; } }
@@ -1896,6 +1911,13 @@ namespace FastColoredTextBoxNS
         [Description("Occurs when scroolbars are updated.")]
         public event EventHandler ScrollbarsUpdated;
 
+        /// <summary>
+        /// Occurs when custom wordwrap is needed
+        /// </summary>
+        [Browsable(true)]
+        [Description("Occurs when custom wordwrap is needed.")]
+        public event EventHandler<WordWrapNeededEventArgs> WordWrapNeeded;
+
 
         /// <summary>
         /// Returns list of styles of given place
@@ -2984,26 +3006,31 @@ namespace FastColoredTextBoxNS
                     else
                     {
                         LineInfo li = LineInfos[iLine];
+
+                        li.wordWrapIndent = WordWrapAutoIndent ? lines[iLine].StartSpacesCount + WordWrapIndent : WordWrapIndent;
+
                         if (WordWrapMode == WordWrapMode.Custom)
                         {
                             if (WordWrapNeeded != null)
                                 WordWrapNeeded(this, new WordWrapNeededEventArgs(li.CutOffPositions, ImeAllowed, lines[iLine]));
                         }
                         else
-                            CalcCutOffs(li.CutOffPositions, maxCharsPerLine, ImeAllowed, charWrap, lines[iLine]);
+                            CalcCutOffs(li.CutOffPositions, maxCharsPerLine, maxCharsPerLine - li.wordWrapIndent, ImeAllowed, charWrap, lines[iLine]);
+
                         LineInfos[iLine] = li;
                     }
                 }
             needRecalc = true;
         }
 
-        public event EventHandler<WordWrapNeededEventArgs> WordWrapNeeded;
-
         /// <summary>
         /// Calculates wordwrap cutoffs
         /// </summary>
-        public static void CalcCutOffs(List<int> cutOffPositions, int maxCharsPerLine, bool allowIME, bool charWrap, Line line)
+        public static void CalcCutOffs(List<int> cutOffPositions, int maxCharsPerLine, int maxCharsPerSecondaryLine, bool allowIME, bool charWrap, Line line)
         {
+            if (maxCharsPerSecondaryLine < 1) maxCharsPerSecondaryLine = 1;
+            if (maxCharsPerLine < 1) maxCharsPerLine = 1;
+
             int segmentLength = 0;
             int cutOff = 0;
             cutOffPositions.Clear();
@@ -3036,6 +3063,7 @@ namespace FastColoredTextBoxNS
                         cutOff = i + 1;
                     cutOffPositions.Add(cutOff);
                     segmentLength = 1 + i - cutOff;
+                    maxCharsPerLine = maxCharsPerSecondaryLine;
                 }
             }
         }
@@ -4413,8 +4441,10 @@ namespace FastColoredTextBoxNS
                 for (int iWordWrapLine = 0; iWordWrapLine < lineInfo.WordWrapStringsCount; iWordWrapLine++)
                 {
                     y = lineInfo.startY + iWordWrapLine * CharHeight - startY;
+                    //indent 
+                    var indent = iWordWrapLine == 0 ? 0 : lineInfo.wordWrapIndent * CharWidth;
                     //draw chars
-                    DrawLineChars(gr, firstChar, lastChar, iLine, iWordWrapLine, -startX, y);
+                    DrawLineChars(gr, firstChar, lastChar, iLine, iWordWrapLine, -startX + indent, y);
                 }
             }
         }
@@ -4556,8 +4586,10 @@ namespace FastColoredTextBoxNS
                 for (int iWordWrapLine = 0; iWordWrapLine < lineInfo.WordWrapStringsCount; iWordWrapLine++)
                 {
                     y = lineInfo.startY + iWordWrapLine*CharHeight - VerticalScroll.Value;
+                    //indent
+                    var indent = iWordWrapLine == 0 ? 0 : lineInfo.wordWrapIndent * CharWidth;
                     //draw chars
-                    DrawLineChars(e.Graphics, firstChar, lastChar, iLine, iWordWrapLine, x, y);
+                    DrawLineChars(e.Graphics, firstChar, lastChar, iLine, iWordWrapLine, x + indent, y);
                 }
             }
 
@@ -5321,6 +5353,9 @@ namespace FastColoredTextBoxNS
             int start = LineInfos[iLine].GetWordWrapStringStartPosition(iWordWrapLine);
             int finish = LineInfos[iLine].GetWordWrapStringFinishPosition(iWordWrapLine, lines[iLine]);
             var x = (int) Math.Round((float) point.X/CharWidth);
+            if (iWordWrapLine > 0)
+                x -= LineInfos[iLine].wordWrapIndent;
+
             x = x < 0 ? start : start + x;
             if (x > finish)
                 x = finish + 1;
@@ -5657,6 +5692,8 @@ namespace FastColoredTextBoxNS
             int iWordWrapIndex = LineInfos[place.iLine].GetWordWrapStringIndex(place.iChar);
             y += iWordWrapIndex*CharHeight;
             int x = (place.iChar - LineInfos[place.iLine].GetWordWrapStringStartPosition(iWordWrapIndex))*CharWidth;
+            if(iWordWrapIndex > 0 )
+                x += LineInfos[place.iLine].wordWrapIndent * CharWidth;
             //
             y = y - VerticalScroll.Value;
             x = LeftIndent + Paddings.Left + x - HorizontalScroll.Value;

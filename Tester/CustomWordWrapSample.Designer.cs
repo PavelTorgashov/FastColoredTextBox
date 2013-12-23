@@ -41,7 +41,7 @@
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label1.Location = new System.Drawing.Point(0, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(467, 42);
+            this.label1.Size = new System.Drawing.Size(468, 42);
             this.label1.TabIndex = 2;
             this.label1.Text = "Here we make custom wordwrap.\r\nAny fragment starts with &, &&, |, || will be draw" +
     "n from new line.";
@@ -50,7 +50,7 @@
             // fctb
             // 
             this.fctb.AutoIndent = false;
-            this.fctb.AutoScrollMinSize = new System.Drawing.Size(1243, 120);
+            this.fctb.AutoScrollMinSize = new System.Drawing.Size(1271, 300);
             this.fctb.BackBrush = null;
             this.fctb.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.fctb.CharHeight = 15;
@@ -60,13 +60,16 @@
             this.fctb.Dock = System.Windows.Forms.DockStyle.Fill;
             this.fctb.Font = new System.Drawing.Font("Consolas", 9.75F);
             this.fctb.IsReplaceMode = false;
+            this.fctb.Language = FastColoredTextBoxNS.Language.CSharp;
+            this.fctb.LeftBracket = '(';
             this.fctb.Location = new System.Drawing.Point(0, 42);
             this.fctb.Name = "fctb";
             this.fctb.Paddings = new System.Windows.Forms.Padding(0);
+            this.fctb.RightBracket = ')';
             this.fctb.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.fctb.ServiceLinesColor = System.Drawing.Color.Gray;
             this.fctb.ShowFoldingLines = true;
-            this.fctb.Size = new System.Drawing.Size(467, 361);
+            this.fctb.Size = new System.Drawing.Size(468, 358);
             this.fctb.TabIndex = 3;
             this.fctb.Text = resources.GetString("fctb.Text");
             this.fctb.WordWrap = true;
@@ -78,7 +81,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(467, 403);
+            this.ClientSize = new System.Drawing.Size(468, 400);
             this.Controls.Add(this.fctb);
             this.Controls.Add(this.label1);
             this.Name = "CustomWordWrapSample";

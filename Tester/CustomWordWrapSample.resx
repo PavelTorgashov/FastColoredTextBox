@@ -118,13 +118,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="fctb.Text" xml:space="preserve">
-    <value>if (lineInfo.VisibleState == VisibleState.StartOfHiddenBlock)
-      visibleMarkers.Add(new ExpandFoldingMarker(iLine, new Rectangle(LeftIndentLine - 4, y + CharHeight/2 - 3, 8, 8)));
+    <value>    if (lineInfo.VisibleState == VisibleState.StartOfHiddenBlock)
+          visibleMarkers.Add(new ExpandFoldingMarker(iLine, new Rectangle(LeftIndentLine - 4, y + CharHeight/2 - 3, 8, 8)));
 
-if (!string.IsNullOrEmpty(line.FoldingStartMarker) &amp;&amp; lineInfo.VisibleState == VisibleState.Visible &amp;&amp; string.IsNullOrEmpty(line.FoldingEndMarker))
-      visibleMarkers.Add(new CollapseFoldingMarker(iLine, new Rectangle(LeftIndentLine - 4, y + CharHeight/2 - 3, 8, 8)));
+    if (!string.IsNullOrEmpty(line.FoldingStartMarker) &amp;&amp; lineInfo.VisibleState == VisibleState.Visible &amp;&amp; string.IsNullOrEmpty(line.FoldingEndMarker))
+          visibleMarkers.Add(new CollapseFoldingMarker(iLine, new Rectangle(LeftIndentLine - 4, y + CharHeight/2 - 3, 8, 8)));
 
-if (lineInfo.VisibleState == VisibleState.Visible &amp;&amp; !string.IsNullOrEmpty(line.FoldingEndMarker) &amp;&amp; string.IsNullOrEmpty(line.FoldingStartMarker))
-      e.Graphics.DrawLine(servicePen, LeftIndentLine, y + CharHeight*lineInfo.WordWrapStringsCount - 1, LeftIndentLine + 4, y + CharHeight*lineInfo.WordWrapStringsCount - 1);</value>
+    if (lineInfo.VisibleState == VisibleState.Visible &amp;&amp; !string.IsNullOrEmpty(line.FoldingEndMarker) &amp;&amp; string.IsNullOrEmpty(line.FoldingStartMarker))
+          e.Graphics.DrawLine(servicePen, LeftIndentLine, y + CharHeight*lineInfo.WordWrapStringsCount - 1, LeftIndentLine + 4, y + CharHeight*lineInfo.WordWrapStringsCount - 1);</value>
   </data>
 </root>

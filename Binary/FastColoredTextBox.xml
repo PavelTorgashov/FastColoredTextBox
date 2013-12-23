@@ -1169,7 +1169,7 @@
             Deletes current line(s)
             </summary>
         </member>
-        <member name="M:FastColoredTextBoxNS.FastColoredTextBox.CalcCutOffs(System.Collections.Generic.List{System.Int32},System.Int32,System.Boolean,System.Boolean,FastColoredTextBoxNS.Line)">
+        <member name="M:FastColoredTextBoxNS.FastColoredTextBox.CalcCutOffs(System.Collections.Generic.List{System.Int32},System.Int32,System.Int32,System.Boolean,System.Boolean,FastColoredTextBoxNS.Line)">
             <summary>
             Calculates wordwrap cutoffs
             </summary>
@@ -1613,9 +1613,19 @@
             Restore scrolls
             </summary>
         </member>
+        <member name="P:FastColoredTextBoxNS.FastColoredTextBox.WordWrapAutoIndent">
+            <summary>
+            Automatically shifts secondary wordwrap lines on the shift amount of the first line
+            </summary>
+        </member>
+        <member name="P:FastColoredTextBoxNS.FastColoredTextBox.WordWrapIndent">
+            <summary>
+            Indent of secondary wordwrap lines (in chars)
+            </summary>
+        </member>
         <member name="P:FastColoredTextBoxNS.FastColoredTextBox.MacrosManager">
             <summary>
-            MacrosManager records, stores and executes the macroses.
+            MacrosManager records, stores and executes the macroses
             </summary>
         </member>
         <member name="P:FastColoredTextBoxNS.FastColoredTextBox.AllowDrop">
@@ -2260,6 +2270,11 @@
         <member name="E:FastColoredTextBoxNS.FastColoredTextBox.ScrollbarsUpdated">
             <summary>
             Occurs when scroolbars are updated
+            </summary>
+        </member>
+        <member name="E:FastColoredTextBoxNS.FastColoredTextBox.WordWrapNeeded">
+            <summary>
+            Occurs when custom wordwrap is needed
             </summary>
         </member>
         <member name="P:FastColoredTextBoxNS.FastColoredTextBox.Zoom">
