@@ -4951,11 +4951,21 @@ namespace FastColoredTextBoxNS
                 mouseIsDrag = true;
                 mouseIsDragDrop = false;
                 draggedRange = null;
-                isLineSelect = e.Location.X < LeftIndentLine;
+                isLineSelect = (e.Location.X < LeftIndentLine);
 
                 if (!isLineSelect)
                 {
                     var p = PointToPlace(e.Location);
+
+                    if (e.Clicks == 2)
+                    {
+                        mouseIsDrag = false;
+                        mouseIsDragDrop = false;
+                        draggedRange = null;
+
+                        SelectWord(p);
+                        return;
+                    }
 
                     if (Selection.IsEmpty || !Selection.Contains(p) || this[p.iLine].Count <= p.iChar || ReadOnly)
                         OnMouseClickText(e);
@@ -5269,14 +5279,13 @@ namespace FastColoredTextBoxNS
         {
             base.OnMouseDoubleClick(e);
 
-            VisualMarker m = FindVisualMarkerForPoint(e.Location);
+            var m = FindVisualMarkerForPoint(e.Location);
             if (m != null)
-            {
                 OnMarkerDoubleClick(m);
-                return;
-            }
+        }
 
-            Place p = PointToPlace(e.Location);
+        private void SelectWord(Place p)
+        {
             int fromX = p.iChar;
             int toX = p.iChar;
 
@@ -5298,10 +5307,7 @@ namespace FastColoredTextBoxNS
                     break;
             }
 
-            Selection.Start = new Place(toX, p.iLine);
-            Selection.End = new Place(fromX, p.iLine);
-
-            Invalidate();
+            Selection = new Range(this, toX, p.iLine, fromX, p.iLine);
         }
 
         private int YtoLineIndex(int y)
