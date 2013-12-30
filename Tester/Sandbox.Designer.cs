@@ -37,7 +37,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(22, 8);
+            this.button1.Location = new System.Drawing.Point(12, 8);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 1;
@@ -50,22 +50,23 @@
             this.fastColoredTextBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.fastColoredTextBox1.AutoScrollMinSize = new System.Drawing.Size(0, 630);
+            this.fastColoredTextBox1.AutoScrollMinSize = new System.Drawing.Size(0, 322);
             this.fastColoredTextBox1.BackBrush = null;
             this.fastColoredTextBox1.CharHeight = 14;
             this.fastColoredTextBox1.CharWidth = 8;
             this.fastColoredTextBox1.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.fastColoredTextBox1.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.fastColoredTextBox1.IsReplaceMode = false;
-            this.fastColoredTextBox1.Location = new System.Drawing.Point(12, 71);
+            this.fastColoredTextBox1.Location = new System.Drawing.Point(12, 37);
             this.fastColoredTextBox1.Name = "fastColoredTextBox1";
             this.fastColoredTextBox1.Paddings = new System.Windows.Forms.Padding(0);
             this.fastColoredTextBox1.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
-            this.fastColoredTextBox1.Size = new System.Drawing.Size(111, 217);
+            this.fastColoredTextBox1.Size = new System.Drawing.Size(532, 217);
             this.fastColoredTextBox1.TabIndex = 0;
             this.fastColoredTextBox1.Text = resources.GetString("fastColoredTextBox1.Text");
             this.fastColoredTextBox1.WordWrap = true;
             this.fastColoredTextBox1.Zoom = 100;
+            this.fastColoredTextBox1.TextChanged += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.fastColoredTextBox1_TextChanged);
             this.fastColoredTextBox1.Load += new System.EventHandler(this.fastColoredTextBox1_Load);
             // 
             // Sandbox

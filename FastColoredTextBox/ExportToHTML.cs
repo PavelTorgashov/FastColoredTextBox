@@ -89,7 +89,7 @@ namespace FastColoredTextBoxNS
                 {
                     for (int i = currentLine; i < p.iLine; i++)
                     {
-                        tempSB.AppendLine(UseBr ? "<br>" : "");
+                        tempSB.Append(UseBr ? "<br>" : "");
                         if (IncludeLineNumbers)
                             tempSB.AppendFormat("<span class=lineNumber>{0}</span>  ", i + 2);
                     }
@@ -122,16 +122,16 @@ namespace FastColoredTextBoxNS
             Flush(sb, tempSB, currentStyleId);
 
             if (UseOriginalFont)
-                sb.AppendLine("</font>");
+                sb.Append("</font>");
 
             //build styles
             if (UseStyleTag)
             {
                 tempSB.Length = 0;
-                tempSB.AppendLine("<style type=\"text/css\">");
+                tempSB.Append("<style type=\"text/css\">");
                 foreach (var styleId in styles.Keys)
                     tempSB.AppendFormat(".fctb{0}{{ {1} }}\r\n", GetStyleName(styleId), GetCss(styleId));
-                tempSB.AppendLine("</style>");
+                tempSB.Append("</style>");
 
                 sb.Insert(0, tempSB.ToString());
             }

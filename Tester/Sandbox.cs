@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -21,22 +22,16 @@ namespace Tester
 
         private void button1_Click(object sender, EventArgs e)
         {
-            fastColoredTextBox1.Text = @"1234567890
-1234567890
-1234567890
-1234567890
+            var sett = new PrintDialogSettings();
+            fastColoredTextBox1.Print(sett);
+        }
 
-1234567890
-1234567890
+        private Style s1 = new MarkerStyle(Brushes.Beige);
 
-1234567890
-1234567890
-
-1234567890
-1234567890
-
-";
-            fastColoredTextBox1.WordWrap = true;
+        private void fastColoredTextBox1_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            e.ChangedRange.ClearStyle(StyleIndex.All);
+            e.ChangedRange.SetStyle(s1, @"M\d+");
         }
     }
 }

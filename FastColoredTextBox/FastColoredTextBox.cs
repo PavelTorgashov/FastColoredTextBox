@@ -6621,7 +6621,7 @@ namespace FastColoredTextBoxNS
             //generate HTML
             string HTML = exporter.GetHtml(range);
             HTML = "<META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html; charset=UTF-8\"><head><title>" +
-                   PrepareHtmlText(settings.Title) + "</title></head>" + HTML + SelectHTMLRangeScript();
+                   PrepareHtmlText(settings.Title) + "</title></head>" + HTML +"<br>"+ SelectHTMLRangeScript();
             string tempFile = Path.GetTempPath() + "fctb.html";
             File.WriteAllText(tempFile, HTML);
 
