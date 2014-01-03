@@ -179,9 +179,10 @@ namespace FastColoredTextBoxNS
             {
                 result = textStyle.GetCSS();
             }
-            //add non TextStyle css
+            //add no TextStyle css
             foreach(var style in styles)
-            if (style != textStyle)
+//            if (style != textStyle)
+            if(!(style is TextStyle))
                 result += style.GetCSS();
 
             return result;
