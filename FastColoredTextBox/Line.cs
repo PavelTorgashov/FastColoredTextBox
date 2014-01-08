@@ -193,12 +193,11 @@ namespace FastColoredTextBoxNS
             chars.AddRange(collection);
         }
     }
-
     public struct LineInfo
     {
         List<int> cutOffPositions;
         //Y coordinate of line on screen
-        internal int startY;// = -1;
+        internal int startY;
         internal int bottomPadding;
         //indent of secondary wordwrap strings (in chars)
         internal int wordWrapIndent;

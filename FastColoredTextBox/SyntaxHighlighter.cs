@@ -339,6 +339,11 @@ namespace FastColoredTextBoxNS
                     desc.leftBracket2 = brackets.Attributes["left2"].Value[0];
                     desc.rightBracket2 = brackets.Attributes["right2"].Value[0];
                 }
+
+                if (brackets.Attributes["strategy"] == null || brackets.Attributes["strategy"].Value == "")
+                    desc.bracketsHighlightStrategy = BracketsHighlightStrategy.Strategy2;
+                else
+                    desc.bracketsHighlightStrategy = (BracketsHighlightStrategy)Enum.Parse(typeof(BracketsHighlightStrategy), brackets.Attributes["strategy"].Value);
             }
 
             var styleByName = new Dictionary<string, Style>();
@@ -585,8 +590,9 @@ namespace FastColoredTextBoxNS
             range.tb.CommentPrefix = "//";
             range.tb.LeftBracket = '(';
             range.tb.RightBracket = ')';
-            range.tb.LeftBracket2 = '\x0';
-            range.tb.RightBracket2 = '\x0';
+            range.tb.LeftBracket2 = '{';
+            range.tb.RightBracket2 = '}';
+            range.tb.BracketsHighlightStrategy = BracketsHighlightStrategy.Strategy2;
             //clear style of changed range
             range.ClearStyle(StringStyle, CommentStyle, NumberStyle, AttributeStyle, ClassNameStyle, KeywordStyle);
             //
@@ -865,8 +871,9 @@ namespace FastColoredTextBoxNS
             range.tb.CommentPrefix = "#";
             range.tb.LeftBracket = '(';
             range.tb.RightBracket = ')';
-            range.tb.LeftBracket2 = '\x0';
-            range.tb.RightBracket2 = '\x0';
+            range.tb.LeftBracket2 = '{';
+            range.tb.RightBracket2 = '}';
+            range.tb.BracketsHighlightStrategy = BracketsHighlightStrategy.Strategy2;
             //clear style of changed range
             range.ClearStyle(StringStyle, CommentStyle, NumberStyle, VariableStyle, KeywordStyle, KeywordStyle2,
                              KeywordStyle3);
@@ -919,8 +926,9 @@ namespace FastColoredTextBoxNS
             range.tb.CommentPrefix = "//";
             range.tb.LeftBracket = '(';
             range.tb.RightBracket = ')';
-            range.tb.LeftBracket2 = '\x0';
-            range.tb.RightBracket2 = '\x0';
+            range.tb.LeftBracket2 = '{';
+            range.tb.RightBracket2 = '}';
+            range.tb.BracketsHighlightStrategy = BracketsHighlightStrategy.Strategy2;
             //clear style of changed range
             range.ClearStyle(StringStyle, CommentStyle, NumberStyle, KeywordStyle);
             //

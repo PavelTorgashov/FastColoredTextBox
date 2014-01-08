@@ -1375,6 +1375,11 @@
             Fires TextChanged event
             </summary>
         </member>
+        <member name="M:FastColoredTextBoxNS.FastColoredTextBox.ClearFoldingState(FastColoredTextBoxNS.Range)">
+            <summary>
+            Clears folding state for range of text
+            </summary>
+        </member>
         <member name="M:FastColoredTextBoxNS.FastColoredTextBox.OnSelectionChanged">
             <summary>
             Fires SelectionChanged event
@@ -1533,6 +1538,11 @@
             All changes of text between BeginAutoUndo() and EndAutoUndo() will be canceled in one operation Undo.
             </summary>
         </member>
+        <member name="M:FastColoredTextBoxNS.FastColoredTextBox.HighlightBrackets(System.Char,System.Char,FastColoredTextBoxNS.Range@,FastColoredTextBoxNS.Range@)">
+            <summary>
+            Highlights brackets around caret
+            </summary>
+        </member>
         <member name="M:FastColoredTextBoxNS.FastColoredTextBox.Print(FastColoredTextBoxNS.Range,FastColoredTextBoxNS.PrintDialogSettings)">
             <summary>
             Prints range of text
@@ -1611,6 +1621,11 @@
         <member name="M:FastColoredTextBoxNS.FastColoredTextBox.RestoreScrollsAfterMiddleClickScrollingMode">
             <summary>
             Restore scrolls
+            </summary>
+        </member>
+        <member name="P:FastColoredTextBoxNS.FastColoredTextBox.BracketsHighlightStrategy">
+            <summary>
+            Strategy of search of brackets to highlighting
             </summary>
         </member>
         <member name="P:FastColoredTextBoxNS.FastColoredTextBox.WordWrapAutoIndent">
@@ -2414,6 +2429,11 @@
         <member name="T:FastColoredTextBoxNS.FindEndOfFoldingBlockStrategy">
             <summary>
             Strategy of search of end of folding block
+            </summary>
+        </member>
+        <member name="T:FastColoredTextBoxNS.BracketsHighlightStrategy">
+            <summary>
+            Strategy of search of brackets to highlighting
             </summary>
         </member>
         <member name="T:FastColoredTextBoxNS.ToolTipNeededEventArgs">

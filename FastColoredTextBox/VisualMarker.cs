@@ -25,7 +25,7 @@ namespace FastColoredTextBoxNS
         }
     }
 
-    class CollapseFoldingMarker: VisualMarker
+    public class CollapseFoldingMarker: VisualMarker
     {
         public readonly int iLine;
 
@@ -44,7 +44,7 @@ namespace FastColoredTextBoxNS
         }
     }
 
-    class ExpandFoldingMarker : VisualMarker
+    public class ExpandFoldingMarker : VisualMarker
     {
         public readonly int iLine;
 

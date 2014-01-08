@@ -57,7 +57,7 @@ namespace Tester
                 tb.ContextMenuStrip = cmMain;
                 tb.Dock = DockStyle.Fill;
                 tb.BorderStyle = BorderStyle.Fixed3D;
-                tb.VirtualSpace = true;
+                //tb.VirtualSpace = true;
                 tb.LeftPadding = 17;
                 tb.Language = Language.CSharp;
                 tb.AddStyle(new MarkerStyle(new SolidBrush(Color.FromArgb(50, Color.Gray))));//same words style
@@ -72,7 +72,7 @@ namespace Tester
                 tsFiles.SelectedItem = tab;
                 tb.Focus();
                 tb.DelayedTextChangedInterval = 1000;
-                tb.DelayedEventsInterval = 1000;
+                tb.DelayedEventsInterval = 500;
                 tb.TextChangedDelayed += new EventHandler<TextChangedEventArgs>(tb_TextChangedDelayed);
                 tb.SelectionChangedDelayed += new EventHandler(tb_SelectionChangedDelayed);
                 tb.KeyDown += new KeyEventHandler(tb_KeyDown);
