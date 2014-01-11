@@ -1452,6 +1452,11 @@
             </summary>
             <param name="iLine">Start line</param>
         </member>
+        <member name="M:FastColoredTextBoxNS.FastColoredTextBox.AdjustFolding">
+            <summary>
+            Collapse folding blocks using FoldedBlocks dictionary.
+            </summary>
+        </member>
         <member name="M:FastColoredTextBoxNS.FastColoredTextBox.ExpandBlock(System.Int32,System.Int32)">
             <summary>
             Expand collapsed block
@@ -1622,6 +1627,13 @@
             <summary>
             Restore scrolls
             </summary>
+        </member>
+        <member name="P:FastColoredTextBoxNS.FastColoredTextBox.FoldedBlocks">
+            <summary>
+            Contains UniqueId of start lines of folded blocks
+            </summary>
+            <remarks>This dictionary remembers folding state of blocks.
+            It is needed to restore child folding after user collapsed/expanded top-level folding block.</remarks>
         </member>
         <member name="P:FastColoredTextBoxNS.FastColoredTextBox.BracketsHighlightStrategy">
             <summary>

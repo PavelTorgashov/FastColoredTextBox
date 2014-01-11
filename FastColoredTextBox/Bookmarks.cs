@@ -64,15 +64,18 @@ namespace FastColoredTextBoxNS
             for(int i=0; i<Count; i++)
             if (items[i].LineIndex >= e.Index)
             {
-                if (items[i].LineIndex < e.Index + e.Count)
-                {
-                    items.RemoveAt(i);
-                    i--;
-                }
-                else
+                if (items[i].LineIndex >= e.Index + e.Count)
                 {
                     items[i].LineIndex = items[i].LineIndex - e.Count;
+                    continue;
                 }
+                if (items[i].LineIndex == e.Index + e.Count - 1)
+                {
+                    items[i].LineIndex = items[i].LineIndex - e.Count;
+                    continue;
+                }
+                items.RemoveAt(i);
+                i--;
             }
         }
 
@@ -82,6 +85,11 @@ namespace FastColoredTextBoxNS
                 if (items[i].LineIndex >= e.Index)
                 {
                     items[i].LineIndex = items[i].LineIndex + e.Count;
+                }else
+                if (items[i].LineIndex == e.Index - 1 && e.Count == 1)
+                {
+                    if(tb[e.Index - 1].StartSpacesCount == tb[e.Index - 1].Count)
+                        items[i].LineIndex = items[i].LineIndex + e.Count;
                 }
         }
     

@@ -124,7 +124,6 @@ namespace FastColoredTextBoxNS
         private int reservedCountOfLineNumberChars = 1;
         private int zoom = 100;
         private Size localAutoScrollMinSize;
-        private Dictionary<int, int> foldedBlocks = new Dictionary<int,int>();
  
         /// <summary>
         /// Constructor
@@ -207,6 +206,7 @@ namespace FastColoredTextBoxNS
             HotkeysMapping = new HotkeysMapping();
             HotkeysMapping.InitDefault();
             WordWrapAutoIndent = true;
+            FoldedBlocks = new Dictionary<int, int>();
             //
             base.AutoScroll = true;
             timer.Tick += timer_Tick;
@@ -214,6 +214,14 @@ namespace FastColoredTextBoxNS
             timer3.Tick += timer3_Tick;
             middleClickScrollingTimer.Tick += middleClickScrollingTimer_Tick;
         }
+
+        /// <summary>
+        /// Contains UniqueId of start lines of folded blocks
+        /// </summary>
+        /// <remarks>This dictionary remembers folding state of blocks.
+        /// It is needed to restore child folding after user collapsed/expanded top-level folding block.</remarks>
+        [Browsable(false)]
+        public Dictionary<int, int> FoldedBlocks { get; private set; }
 
         /// <summary>
         /// Strategy of search of brackets to highlighting
@@ -5552,7 +5560,7 @@ namespace FastColoredTextBoxNS
         {
             for (int iLine = range.Start.iLine; iLine <= range.End.iLine; iLine++)
                 if (iLine >= 0 && iLine < lines.Count)
-                    foldedBlocks.Remove(this[iLine].UniqueId);
+                    FoldedBlocks.Remove(this[iLine].UniqueId);
         }
 
 
@@ -5813,16 +5821,19 @@ namespace FastColoredTextBoxNS
 
             ExpandBlock(iLine, end);
 
-            foldedBlocks.Remove(this[iLine].UniqueId);//remove folded state for this line
+            FoldedBlocks.Remove(this[iLine].UniqueId);//remove folded state for this line
             AdjustFolding();
         }
 
-        protected virtual void AdjustFolding()
+        /// <summary>
+        /// Collapse folding blocks using FoldedBlocks dictionary.
+        /// </summary>
+        public virtual void AdjustFolding()
         {
             //collapse folded blocks
             for (int iLine = 0; iLine < LinesCount; iLine++)
                 if (LineInfos[iLine].VisibleState == VisibleState.Visible)
-                    if (foldedBlocks.ContainsKey(this[iLine].UniqueId))
+                    if (FoldedBlocks.ContainsKey(this[iLine].UniqueId))
                         CollapseFoldingBlock(iLine);
         }
 
@@ -5902,7 +5913,7 @@ namespace FastColoredTextBoxNS
             for (int i = 0; i < LinesCount; i++)
                 SetVisibleState(i, VisibleState.Visible);
 
-            foldedBlocks.Clear();
+            FoldedBlocks.Clear();
 
             OnVisibleRangeChanged();
             Invalidate();
@@ -5926,7 +5937,7 @@ namespace FastColoredTextBoxNS
             {
                 CollapseBlock(iLine, i);
                 var id = this[iLine].UniqueId;
-                foldedBlocks[id] = id; //add folded state for line
+                FoldedBlocks[id] = id; //add folded state for line
             }
         }
 

@@ -155,9 +155,10 @@ namespace FastColoredTextBoxNS
             tb.ExpandBlock(i + 1);
             int pos = ts[i].Count;
             //
+            /*
             if(ts[i].Count == 0)
                 ts.RemoveLine(i);
-            else
+            else*/
             if (ts[i + 1].Count == 0)
                 ts.RemoveLine(i + 1);
             else
