@@ -3366,47 +3366,6 @@ namespace FastColoredTextBoxNS
             }
             else
             {
-                //space
-                if (a.KeyCode == Keys.Space && (a.Modifiers == Keys.None || a.Modifiers == Keys.Shift))
-                {
-                    if (OnKeyPressing(' ')) //KeyPress event processed key
-                        return false;
-
-                    if (Selection.ReadOnly) return false;
-
-                    if (!Selection.IsEmpty)
-                        ClearSelected();
-
-                    //replace mode? select forward char
-                    if (IsReplaceMode)
-                    {
-                        Selection.GoRight(true);
-                        Selection.Inverse();
-                        if (Selection.ReadOnly) return false;
-                    }
-
-                    InsertChar(' ');
-                    OnKeyPressed(' ');
-                    return false;
-                }
-
-                //backspace
-                if (a.KeyCode == Keys.Back && (a.Modifiers == Keys.None || a.Modifiers == Keys.Shift))
-                {
-                    if (OnKeyPressing('\b')) //KeyPress event processed key
-                        return false;
-
-                    if (Selection.ReadOnly) return false;
-
-                    if (!Selection.IsEmpty)
-                        ClearSelected();
-                    else
-                        if (!Selection.IsReadOnlyLeftChar()) //is not left char readonly?
-                            InsertChar('\b');
-
-                    OnKeyPressed('\b');
-                    return false;
-                }
 
                 //
                 if (a.KeyCode == Keys.Alt)
@@ -4108,11 +4067,44 @@ namespace FastColoredTextBoxNS
             if (macrosManager != null)
                 macrosManager.ProcessKey(c, modifiers);
 
-            if (c == ' ')
-                return true;
+            //space
+            if (c == ' ' && (modifiers == Keys.None || modifiers == Keys.Shift))
+            {
+                if (OnKeyPressing(c))
+                    return false;
 
-            if (c == '\b' && (modifiers & Keys.Alt) != 0)
+                if (Selection.ReadOnly) return false;
+
+                if (!Selection.IsEmpty)
+                    ClearSelected();
+
+                //replace mode? select forward char
+                if (IsReplaceMode)
+                {
+                    Selection.GoRight(true);
+                    Selection.Inverse();
+                    if (Selection.ReadOnly) return false;
+                }
+
+                InsertChar(' ');
+                OnKeyPressed(' ');
                 return true;
+            }
+
+            //backspace
+            if (c == '\b' && (modifiers == Keys.None || modifiers == Keys.Shift || (modifiers & Keys.Alt) != 0))
+            {
+                if (Selection.ReadOnly) return false;
+
+                if (!Selection.IsEmpty)
+                    ClearSelected();
+                else
+                    if (!Selection.IsReadOnlyLeftChar()) //is not left char readonly?
+                        InsertChar('\b');
+
+                OnKeyPressed('\b');
+                return true;
+            }
 
             if (char.IsControl(c) && c != '\r' && c != '\t')
                 return false;
