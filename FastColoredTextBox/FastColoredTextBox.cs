@@ -3385,7 +3385,7 @@ namespace FastColoredTextBoxNS
                         if (Selection.ReadOnly) return false;
                     }
 
-                    InsertChar(' ');
+                    //InsertChar(' ');
                     OnKeyPressed(' ');
                     return false;
                 }
@@ -4108,8 +4108,8 @@ namespace FastColoredTextBoxNS
             if (macrosManager != null)
                 macrosManager.ProcessKey(c, modifiers);
 
-            if (c == ' ')
-                return true;
+            //if (c == ' ')
+            //    return true;
 
             if (c == '\b' && (modifiers & Keys.Alt) != 0)
                 return true;
