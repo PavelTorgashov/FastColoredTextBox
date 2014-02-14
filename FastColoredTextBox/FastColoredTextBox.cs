@@ -3267,17 +3267,14 @@ namespace FastColoredTextBoxNS
                 ExpandBlock(range.Start.iLine);
 
             Recalc();
+            int h = (1 + range.End.iLine - range.Start.iLine)*CharHeight;
+            Point p = PlaceToPoint(new Place(0, range.Start.iLine));
             if (tryToCentre)
             {
-                int h = (1 + range.End.iLine - range.Start.iLine)*CharHeight;
-                Point p = PlaceToPoint(new Place(0, range.Start.iLine));
-                if (tryToCentre)
-                {
-                    p.Offset(0, -ClientSize.Height/2);
-                    h = ClientSize.Height;
-                }
-                DoVisibleRectangle(new Rectangle(p, new Size(2*CharWidth, h)));
+                p.Offset(0, -ClientSize.Height/2);
+                h = ClientSize.Height;
             }
+            DoVisibleRectangle(new Rectangle(p, new Size(2*CharWidth, h)));
 
             Invalidate();
         }

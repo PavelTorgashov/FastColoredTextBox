@@ -27,7 +27,7 @@ namespace FastColoredTextBoxNS
             FindNext(tbFind.Text);
         }
 
-        public void FindNext(string pattern)
+        public virtual void FindNext(string pattern)
         {
             try
             {

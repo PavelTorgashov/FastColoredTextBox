@@ -154,6 +154,7 @@ namespace FastColoredTextBoxNS
                 desc = ParseXmlDescription(doc);
                 descByXMLfileNames[XMLdescriptionFile] = desc;
             }
+            
             HighlightSyntax(desc, range);
         }
 
