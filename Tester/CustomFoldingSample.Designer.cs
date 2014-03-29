@@ -48,10 +48,12 @@
             // 
             // fctb
             // 
-            this.fctb.AllowDrop = true;
+            this.fctb.AutoIndentExistingLines = false;
             this.fctb.AutoScrollMinSize = new System.Drawing.Size(501, 315);
             this.fctb.BackBrush = null;
             this.fctb.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.fctb.CharHeight = 15;
+            this.fctb.CharWidth = 7;
             this.fctb.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.fctb.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.fctb.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -66,6 +68,7 @@
             this.fctb.Size = new System.Drawing.Size(467, 358);
             this.fctb.TabIndex = 3;
             this.fctb.Text = resources.GetString("fctb.Text");
+            this.fctb.Zoom = 100;
             this.fctb.TextChangedDelayed += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.fctb_TextChangedDelayed);
             this.fctb.AutoIndentNeeded += new System.EventHandler<FastColoredTextBoxNS.AutoIndentEventArgs>(this.fctb_AutoIndentNeeded);
             // 

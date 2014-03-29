@@ -1563,6 +1563,16 @@
             Prints all text, without any dialog windows
             </summary>
         </member>
+        <member name="M:FastColoredTextBoxNS.FastColoredTextBox.OpenFile(System.String,System.Text.Encoding)">
+            <summary>
+            Open text file
+            </summary>
+        </member>
+        <member name="M:FastColoredTextBoxNS.FastColoredTextBox.OpenFile(System.String)">
+            <summary>
+            Open text file (with automatic encoding detector)
+            </summary>
+        </member>
         <member name="M:FastColoredTextBoxNS.FastColoredTextBox.OpenBindingFile(System.String,System.Text.Encoding)">
             <summary>
             Open file binding mode
@@ -1626,6 +1636,11 @@
         <member name="M:FastColoredTextBoxNS.FastColoredTextBox.RestoreScrollsAfterMiddleClickScrollingMode">
             <summary>
             Restore scrolls
+            </summary>
+        </member>
+        <member name="P:FastColoredTextBoxNS.FastColoredTextBox.AutoCompleteBrackets">
+            <summary>
+            AutoComplete brackets
             </summary>
         </member>
         <member name="P:FastColoredTextBoxNS.FastColoredTextBox.FoldedBlocks">

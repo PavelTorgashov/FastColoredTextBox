@@ -37,18 +37,15 @@ namespace FastColoredTextBoxNS
 
         public List<Range> FindAll(string pattern)
         {
-            RegexOptions opt = cbMatchCase.Checked ? RegexOptions.None : RegexOptions.IgnoreCase;
+            var opt = cbMatchCase.Checked ? RegexOptions.None : RegexOptions.IgnoreCase;
             if (!cbRegex.Checked)
                 pattern = Regex.Escape(pattern);
             if (cbWholeWord.Checked)
                 pattern = "\\b" + pattern + "\\b";
             //
-            Range range = tb.Selection.Clone();
-            range.Normalize();
-            range.Start = range.End;
-            range.End = new Place(tb.GetLineLength(tb.LinesCount - 1), tb.LinesCount - 1);
+            var range = tb.Selection.IsEmpty? tb.Range.Clone() : tb.Selection.Clone();
             //
-            List<Range> list = new List<Range>();
+            var list = new List<Range>();
             foreach (var r in range.GetRangesByLines(pattern, opt))
                 list.Add(r);
 
@@ -142,7 +139,7 @@ namespace FastColoredTextBoxNS
             try
             {
                 tb.Selection.BeginUpdate();
-                tb.Selection.Start = new Place(0, 0);
+
                 //search
                 var ranges = FindAll(tbFind.Text);
                 //check readonly

@@ -232,8 +232,12 @@ namespace FastColoredTextBoxNS
             {
                 tb.Selection.BeginUpdate();
                 char cc = '\x0';
+                
                 if (ts.Count == 0)
+                {
                     InsertCharCommand.InsertLine(ts);
+                    tb.Selection.Start = Place.Empty;
+                }
                 tb.ExpandBlock(tb.Selection.Start.iLine);
                 foreach (char c in insertedText)
                     InsertCharCommand.InsertChar(c, ref cc, ts);

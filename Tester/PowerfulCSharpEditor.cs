@@ -48,6 +48,8 @@ namespace Tester
             CreateTab(null);
         }
 
+        private Style sameWordsStyle = new MarkerStyle(new SolidBrush(Color.FromArgb(50, Color.Gray)));
+
         private void CreateTab(string fileName)
         {
             try
@@ -60,14 +62,12 @@ namespace Tester
                 //tb.VirtualSpace = true;
                 tb.LeftPadding = 17;
                 tb.Language = Language.CSharp;
-                tb.AddStyle(new MarkerStyle(new SolidBrush(Color.FromArgb(50, Color.Gray))));//same words style
+                tb.AddStyle(sameWordsStyle);//same words style
                 var tab = new FATabStripItem(fileName!=null?Path.GetFileName(fileName):"[new]", tb);
                 tab.Tag = fileName;
                 if (fileName != null)
-                    tb.Text = File.ReadAllText(fileName);
-                tb.ClearUndo();
+                    tb.OpenFile(fileName);
                 tb.Tag = new TbInfo();
-                tb.IsChanged = false;
                 tsFiles.AddTab(tab);
                 tsFiles.SelectedItem = tab;
                 tb.Focus();
@@ -182,7 +182,7 @@ namespace Tester
             }
 
             //highlight same words
-            tb.VisibleRange.ClearStyle(tb.Styles[0]);
+            tb.VisibleRange.ClearStyle(sameWordsStyle);
             if (!tb.Selection.IsEmpty)
                 return;//user selected diapason
             //get fragment around caret
@@ -195,7 +195,7 @@ namespace Tester
 
             if (ranges.Length > 1)
                 foreach (var r in ranges)
-                    r.SetStyle(tb.Styles[0]);
+                    r.SetStyle(sameWordsStyle);
         }
 
         void tb_TextChangedDelayed(object sender, TextChangedEventArgs e)

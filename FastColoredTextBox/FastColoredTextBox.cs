@@ -207,6 +207,7 @@ namespace FastColoredTextBoxNS
             HotkeysMapping.InitDefault();
             WordWrapAutoIndent = true;
             FoldedBlocks = new Dictionary<int, int>();
+            AutoCompleteBrackets = true;
             //
             base.AutoScroll = true;
             timer.Tick += timer_Tick;
@@ -214,6 +215,21 @@ namespace FastColoredTextBoxNS
             timer3.Tick += timer3_Tick;
             middleClickScrollingTimer.Tick += middleClickScrollingTimer_Tick;
         }
+
+        private char[] autoCompleteBracketsList = { '(', ')', '{', '}', '[', ']', '"', '"', '\'', '\'' };
+
+        public char[] AutoCompleteBracketsList
+        {
+            get { return autoCompleteBracketsList; }
+            set { autoCompleteBracketsList = value; }
+        }
+
+        /// <summary>
+        /// AutoComplete brackets
+        /// </summary>
+        [DefaultValue(true)]
+        [Description("AutoComplete brackets.")]
+        public bool AutoCompleteBrackets { get; set; }
 
         /// <summary>
         /// Contains UniqueId of start lines of folded blocks
@@ -2610,6 +2626,7 @@ namespace FastColoredTextBoxNS
                     lines.Manager.ExecuteCommand(new ClearSelectedCommand(TextSource));
 
                 //insert virtual spaces
+                if(this.TextSource.Count > 0)
                 if (Selection.IsEmpty && Selection.Start.iChar > GetLineLength(Selection.Start.iLine) && VirtualSpace)
                     InsertVirtualSpaces();
 
@@ -4151,7 +4168,11 @@ namespace FastColoredTextBoxNS
                 }
                 //insert char
                 if (!Selection.ReadOnly)
-                    InsertChar(c);
+                {
+                    if (!DoAutocompleteBrackets(c))
+                        InsertChar(c);
+                }
+
                 //do autoindent
                 if (c == '\n' || AutoIndentExistingLines)
                     DoAutoIndentIfNeed();
@@ -4161,6 +4182,57 @@ namespace FastColoredTextBoxNS
             Invalidate();
 
             OnKeyPressed(sourceC);
+
+            return true;
+        }
+
+        private bool DoAutocompleteBrackets(char c)
+        {
+            if (AutoCompleteBrackets)
+            {
+                if (!Selection.ColumnSelectionMode)
+                    for (int i = 1; i < autoCompleteBracketsList.Length; i += 2)
+                        if (c == autoCompleteBracketsList[i] && c == Selection.CharAfterStart)
+                        {
+                            Selection.GoRight();
+                            return true;
+                        }
+
+                for (int i = 0; i < autoCompleteBracketsList.Length; i += 2)
+                    if (c == autoCompleteBracketsList[i])
+                    {
+                        InsertBrackets(autoCompleteBracketsList[i], autoCompleteBracketsList[i + 1]);
+                        return true;
+                    }
+            }
+            return false;
+        }
+
+        private bool InsertBrackets(char left, char right)
+        {
+            if (Selection.ColumnSelectionMode)
+            {
+                var range = Selection.Clone();
+                range.Normalize();
+                Selection.BeginUpdate();
+                BeginAutoUndo();
+                Selection = new Range(this, range.Start.iChar, range.Start.iLine, range.Start.iChar, range.End.iLine) { ColumnSelectionMode = true };
+                InsertChar(left);
+                Selection = new Range(this, range.End.iChar + 1, range.Start.iLine, range.End.iChar + 1, range.End.iLine) { ColumnSelectionMode = true };
+                InsertChar(right);
+                if (range.IsEmpty)
+                    Selection = new Range(this, range.End.iChar + 1, range.Start.iLine, range.End.iChar + 1, range.End.iLine) { ColumnSelectionMode = true };
+                EndAutoUndo();
+                Selection.EndUpdate();
+            }
+            else
+                if (Selection.IsEmpty)
+                {
+                    InsertText(left + "" + right);
+                    Selection.GoLeft();
+                }
+                else
+                    InsertText(left + SelectedText + right);
 
             return true;
         }
@@ -4879,7 +4951,7 @@ namespace FastColoredTextBoxNS
                 textRange = Selection.GetIntersectionWith(textRange);
                 if (textRange != null && SelectionStyle != null)
                 {
-                    SelectionStyle.Draw(gr, new Point(startX + (textRange.Start.iChar - from)*CharWidth, y),
+                    SelectionStyle.Draw(gr, new Point(startX + (textRange.Start.iChar - from)*CharWidth, 1 + y),
                                         textRange);
                 }
             }
@@ -6897,6 +6969,53 @@ window.status = ""#print"";
             if (count > 0)
                 if (LineRemoved != null)
                     LineRemoved(this, new LineRemovedEventArgs(index, count, removedLineIds));
+        }
+
+        /// <summary>
+        /// Open text file
+        /// </summary>
+        public void OpenFile(string fileName, Encoding enc)
+        {
+            var ts = CreateTextSource();
+            try
+            {
+                InitTextSource(ts);
+                Text = File.ReadAllText(fileName, enc);
+                ClearUndo();
+                IsChanged = false;
+                OnVisibleRangeChanged();
+            }
+            catch
+            {
+                InitTextSource(CreateTextSource());
+                lines.InsertLine(0, TextSource.CreateLine());
+                IsChanged = false;
+                throw;
+            }
+            Selection.Start = Place.Empty;
+            DoSelectionVisible();
+        }
+
+        /// <summary>
+        /// Open text file (with automatic encoding detector)
+        /// </summary>
+        public void OpenFile(string fileName)
+        {
+            try
+            {
+                var enc = EncodingDetector.DetectTextFileEncoding(fileName);
+                if (enc != null)
+                    OpenFile(fileName, enc);
+                else
+                    OpenFile(fileName, Encoding.Default);
+            }
+            catch
+            {
+                InitTextSource(CreateTextSource());
+                lines.InsertLine(0, TextSource.CreateLine());
+                IsChanged = false;
+                throw;
+            }
         }
 
         /// <summary>

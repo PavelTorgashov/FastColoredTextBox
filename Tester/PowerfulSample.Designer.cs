@@ -417,6 +417,17 @@ namespace Tester
             // 
             // fctb
             // 
+            this.fctb.AutoCompleteBracketsList = new char[] {
+        '(',
+        ')',
+        '{',
+        '}',
+        '[',
+        ']',
+        '\"',
+        '\"',
+        '\'',
+        '\''};
             this.fctb.AutoIndentExistingLines = false;
             this.fctb.AutoScrollMinSize = new System.Drawing.Size(284, 285);
             this.fctb.BackBrush = null;
