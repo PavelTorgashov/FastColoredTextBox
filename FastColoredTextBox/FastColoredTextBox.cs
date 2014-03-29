@@ -6,9 +6,9 @@
 //
 //  License: GNU Lesser General Public License (LGPLv3)
 //
-//  Email: pavel_torgashov@mail.ru.
+//  Email: pavel_torgashov@ukr.net.
 //
-//  Copyright (C) Pavel Torgashov, 2011-2013. 
+//  Copyright (C) Pavel Torgashov, 2011-2014. 
 
 //#define debug
 

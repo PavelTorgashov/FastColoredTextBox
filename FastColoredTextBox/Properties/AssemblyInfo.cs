@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Pavel Torgashov")]
 [assembly: AssemblyProduct("FastColoredTextBox")]
-[assembly: AssemblyCopyright("© Pavel Torgashov, 2011-2014, pavel_torgashov@mail.ru.")]
+[assembly: AssemblyCopyright("© Pavel Torgashov, 2011-2014, pavel_torgashov@ukr.net.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
