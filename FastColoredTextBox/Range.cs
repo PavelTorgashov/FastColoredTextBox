@@ -839,10 +839,22 @@ namespace FastColoredTextBoxNS
         /// <returns>Enumeration of ranges</returns>
         public IEnumerable<Range> GetRangesByLines(string regexPattern, RegexOptions options)
         {
+            var regex = new Regex(regexPattern, options);
+            foreach (var r in GetRangesByLines(regex)) 
+                yield return r;
+        }
+
+        /// <summary>
+        /// Finds ranges for given regex.
+        /// Search is separately in each line.
+        /// This method requires less memory than GetRanges().
+        /// </summary>
+        /// <param name="regex">Regex</param>
+        /// <returns>Enumeration of ranges</returns>
+        public IEnumerable<Range> GetRangesByLines(Regex regex)
+        {
             Normalize();
-            //create regex
-            Regex regex = new Regex(regexPattern, options);
-            //
+
             var fts = tb.TextSource as FileTextSource; //<----!!!! ugly
 
             //enumaerate lines

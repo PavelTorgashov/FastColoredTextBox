@@ -733,6 +733,15 @@
             <param name="regexPattern">Regex pattern</param>
             <returns>Enumeration of ranges</returns>
         </member>
+        <member name="M:FastColoredTextBoxNS.Range.GetRangesByLines(System.Text.RegularExpressions.Regex)">
+            <summary>
+            Finds ranges for given regex.
+            Search is separately in each line.
+            This method requires less memory than GetRanges().
+            </summary>
+            <param name="regex">Regex</param>
+            <returns>Enumeration of ranges</returns>
+        </member>
         <member name="M:FastColoredTextBoxNS.Range.GetRangesByLinesReversed(System.String,System.Text.RegularExpressions.RegexOptions)">
             <summary>
             Finds ranges for given regex pattern.
