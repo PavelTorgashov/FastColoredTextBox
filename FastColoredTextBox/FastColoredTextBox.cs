@@ -3380,6 +3380,7 @@ namespace FastColoredTextBoxNS
             }
             else
             {
+                /*  !!!!
                 //space
                 if (a.KeyCode == Keys.Space && (a.Modifiers == Keys.None || a.Modifiers == Keys.Shift))
                 {
@@ -3420,7 +3421,7 @@ namespace FastColoredTextBoxNS
 
                     OnKeyPressed('\b');
                     return false;
-                }
+                }*/
 
                 //
                 if (a.KeyCode == Keys.Alt)
@@ -4121,12 +4122,35 @@ namespace FastColoredTextBoxNS
 
             if (macrosManager != null)
                 macrosManager.ProcessKey(c, modifiers);
-
+            /*  !!!!
             if (c == ' ')
-                return true;
+                return true;*/
 
-            if (c == '\b' && (modifiers & Keys.Alt) != 0)
+            //backspace
+            if (c == '\b' && (modifiers == Keys.None || modifiers == Keys.Shift || (modifiers & Keys.Alt) != 0))
+            {
+                if (ReadOnly || !Enabled)
+                    return false;
+
+                if (OnKeyPressing(c))
+                    return true;
+
+                if (Selection.ReadOnly)
+                    return false;
+
+                if (!Selection.IsEmpty)
+                    ClearSelected();
+                else
+                    if (!Selection.IsReadOnlyLeftChar()) //is not left char readonly?
+                        InsertChar('\b');
+
+                OnKeyPressed('\b');
                 return true;
+            }
+ 
+            /* !!!!
+            if (c == '\b' && (modifiers & Keys.Alt) != 0)
+                return true;*/
 
             if (char.IsControl(c) && c != '\r' && c != '\t')
                 return false;
