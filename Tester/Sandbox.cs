@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 using FastColoredTextBoxNS;
 
@@ -10,84 +12,101 @@ namespace Tester
         {
             InitializeComponent();
 
-            var fctb = new MyFCTB() { Parent = this, Language = Language.Custom, Dock = DockStyle.Fill };
-            fctb.VisibleRangeChanged += new EventHandler(fctb_VisibleChanged);
-
-            OpenFileDialog ofd = new OpenFileDialog(){Filter = "Text|*.txt;*.cs"};
-            if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                fctb.OpenFile(ofd.FileName);
+            fastColoredTextBox1.TextSource = new TextSourceWithFilter(fastColoredTextBox1);
         }
 
-        private void fctb_VisibleChanged(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
         {
-            var fctb = sender as FastColoredTextBox;
-            //if you use built-in highlighter:
-            fctb.SyntaxHighlighter.InitStyleSchema(Language.CSharp);
-            fctb.SyntaxHighlighter.HighlightSyntax(Language.CSharp, fctb.VisibleRange);
-            //if you use custom highlighting:
-            //Highlight(fctrb.VisibleRange)
+            var filter = new Predicate<string>((s) => s.Contains(textBox1.Text));
+            (fastColoredTextBox1.TextSource as TextSourceWithFilter).Filter(filter);
         }
     }
 
-    public class MyFCTB: FastColoredTextBox
+    public class TextSourceWithFilter : TextSource
     {
-        public char[] autoCompleteBracketsList = {'(', ')', '{', '}', '[', ']', '"', '"', '\'', '\''};
+        //indices of filtered lines
+        private List<int> filteredLines = new List<int>();
 
-        public char[] AutoCompleteBracketsList 
+        public TextSourceWithFilter(FastColoredTextBox currentTB) : base(currentTB)
         {
-            get { return autoCompleteBracketsList; }
-            set { autoCompleteBracketsList = value; }
+            InsertLine(0, CreateLine());
         }
 
-        public bool AutoCompleteBrackets { get; set; }
-
-        public override bool ProcessKey(char c, Keys modifiers)
+        public void Filter(Predicate<string> filter)
         {
-            if (AutoCompleteBrackets)
-            {
-                if (!Selection.ColumnSelectionMode)
-                    for (int i = 1; i < autoCompleteBracketsList.Length; i += 2)
-                        if (c == autoCompleteBracketsList[i] && c == Selection.CharAfterStart)
-                        {
-                            Selection.GoRight();
-                            return true;
-                        }
+            filteredLines.Clear();
 
-                for (int i = 0; i < autoCompleteBracketsList.Length; i += 2)
-                    if (c == autoCompleteBracketsList[i])
-                        return InsertBrackets(autoCompleteBracketsList[i], autoCompleteBracketsList[i + 1]);
+            for(int i = 0 ;i<base.lines.Count;i++)
+                if (filter(base.lines[i].Text))
+                    filteredLines.Add(i);
+
+            OnTextChanged(0, filteredLines.Count - 1);
+        }
+
+        public override Line this[int i]
+        {
+            get
+            {
+                if (i >= filteredLines.Count)
+                    return null;
+                return base.lines[filteredLines[i]];
             }
-
-            return base.ProcessKey(c, modifiers);
+            set { throw new NotSupportedException(); }
         }
 
-        private bool InsertBrackets(char left, char right)
+        public void ClearFilter()
         {
-            if(Selection.ColumnSelectionMode)
+            Filter(null);
+        }
+
+        public override void InsertLine(int index, Line line)
+        {
+            if(index  >= filteredLines.Count)
             {
-                var range = Selection.Clone();
-                range.Normalize();
-                Selection.BeginUpdate();
-                BeginAutoUndo();
-                Selection = new Range(this, range.Start.iChar, range.Start.iLine, range.Start.iChar, range.End.iLine) {ColumnSelectionMode = true};
-                base.ProcessKey(left, Keys.None);
-                Selection = new Range(this, range.End.iChar + 1, range.Start.iLine, range.End.iChar + 1, range.End.iLine) { ColumnSelectionMode = true };
-                base.ProcessKey(right, Keys.None);
-                if(range.IsEmpty)
-                    Selection = new Range(this, range.End.iChar + 1, range.Start.iLine, range.End.iChar + 1, range.End.iLine) { ColumnSelectionMode = true };
-                EndAutoUndo();
-                Selection.EndUpdate();
+                filteredLines.Add(base.lines.Count);
+                base.InsertLine(base.lines.Count, line);
             }else
-            if (Selection.IsEmpty)
             {
-                InsertText(left  + "" + right);
-                Selection.GoLeft();
-            }
-            else
-                InsertText(left + SelectedText + right);
+                var sourceIndex = filteredLines[index];
+                filteredLines.Insert(index, sourceIndex);
+                for (int i = index + 1; i < filteredLines.Count; i++)
+                    filteredLines[i]++;
 
-            return true;
+                base.InsertLine(sourceIndex, line);
+            }
+        }
+
+        public override void RemoveLine(int index, int count)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                var sourceIndex = filteredLines[index];
+                filteredLines.RemoveAt(index);
+                RemoveSourceLine(sourceIndex - i);
+            }
+
+            for (int i = index; i < filteredLines.Count; i++)
+                filteredLines[i] -= count;
+        }
+
+        void RemoveSourceLine(int index)
+        {
+            var removedLineIds = new List<int>();
+            //
+            if (IsNeedBuildRemovedLineIds)
+                removedLineIds.Add(base.lines[index].UniqueId);
+            //
+            lines.RemoveRange(index, 1);
+
+            OnLineRemoved(index, 1, removedLineIds);
+        }
+
+        public override int Count
+        {
+            get
+            {
+                return filteredLines.Count;
+            }
         }
     }
-
 }

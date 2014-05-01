@@ -1842,6 +1842,11 @@
             Color of caret
             </summary>
         </member>
+        <member name="P:FastColoredTextBoxNS.FastColoredTextBox.WideCaret">
+            <summary>
+            Wide caret
+            </summary>
+        </member>
         <member name="P:FastColoredTextBoxNS.FastColoredTextBox.ServiceLinesColor">
             <summary>
             Color of service lines (folding lines, borders of blocks etc.)

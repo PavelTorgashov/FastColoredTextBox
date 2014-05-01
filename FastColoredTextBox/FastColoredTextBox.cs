@@ -187,6 +187,7 @@ namespace FastColoredTextBoxNS
             AcceptsReturn = true;
             caretVisible = true;
             CaretColor = Color.Black;
+            WideCaret = false;
             Paddings = new Padding(0, 0, 0, 0);
             PaddingBackColor = Color.Transparent;
             DisabledColor = Color.FromArgb(100, 180, 180, 180);
@@ -648,6 +649,13 @@ namespace FastColoredTextBoxNS
         [DefaultValue(typeof (Color), "Black")]
         [Description("Color of caret.")]
         public Color CaretColor { get; set; }
+
+        /// <summary>
+        /// Wide caret
+        /// </summary>
+        [DefaultValue(false)]
+        [Description("Wide caret.")]
+        public bool WideCaret { get; set; }
 
         /// <summary>
         /// Color of service lines (folding lines, borders of blocks etc.)
@@ -2918,7 +2926,7 @@ namespace FastColoredTextBoxNS
             //adjust AutoScrollMinSize
             int minWidth;
             CalcMinAutosizeWidth(out minWidth, ref maxLineLength);
-
+            
             AutoScrollMinSize = new Size(minWidth, TextHeight + Paddings.Top + Paddings.Bottom);
             UpdateScrollbars();
 #if debug
@@ -3207,7 +3215,7 @@ namespace FastColoredTextBoxNS
         }
 
         protected virtual void OnScrollbarsUpdated()
-        {
+        {           
             if (ScrollbarsUpdated != null)
                 ScrollbarsUpdated(this, EventArgs.Empty);
         }
@@ -4759,12 +4767,16 @@ namespace FastColoredTextBoxNS
 
             if ((Focused || IsDragDrop) && car.X >= LeftIndent && CaretVisible)
             {
-                int carWidth = IsReplaceMode ? CharWidth : 1;
+                int carWidth = (IsReplaceMode || WideCaret) ? CharWidth : 1;
                 CreateCaret(Handle, 0, carWidth, CharHeight + 1);
                 SetCaretPos(car.X, car.Y);
                 ShowCaret(Handle);
-                using (var pen = new Pen(CaretColor))
-                    e.Graphics.DrawLine(pen, car.X, car.Y, car.X, car.Y + CharHeight);
+                if(WideCaret)
+                    using (var brush = new SolidBrush(CaretColor))
+                        e.Graphics.FillRectangle(brush, car.X, car.Y, carWidth, CharHeight + 1);
+                else
+                    using (var pen = new Pen(CaretColor))
+                        e.Graphics.DrawLine(pen, car.X, car.Y, car.X, car.Y + CharHeight);
             }
             else
                 HideCaret(Handle);
