@@ -1342,7 +1342,7 @@ namespace FastColoredTextBoxNS
 
             set
             {
-                if (value == Text)
+                if (value == Text && value != "")
                     return;
 
                 SetAsCurrentTB();
@@ -2876,6 +2876,7 @@ namespace FastColoredTextBoxNS
         public void ClearCurrentLine()
         {
             Selection.Expand();
+
             lines.Manager.ExecuteCommand(new ClearSelectedCommand(TextSource));
             if (Selection.Start.iLine == 0)
                 if (!Selection.GoRightThroughFolded()) return;
@@ -4771,9 +4772,11 @@ namespace FastColoredTextBoxNS
                 CreateCaret(Handle, 0, carWidth, CharHeight + 1);
                 SetCaretPos(car.X, car.Y);
                 ShowCaret(Handle);
-                if(WideCaret)
+                if (WideCaret)
+                {
                     using (var brush = new SolidBrush(CaretColor))
                         e.Graphics.FillRectangle(brush, car.X, car.Y, carWidth, CharHeight + 1);
+                }
                 else
                     using (var pen = new Pen(CaretColor))
                         e.Graphics.DrawLine(pen, car.X, car.Y, car.X, car.Y + CharHeight);

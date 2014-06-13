@@ -70,6 +70,7 @@ namespace Tester
             this.sQLToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.pHPToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.jSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.luaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.miExport = new System.Windows.Forms.ToolStripMenuItem();
             this.hTMLToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.rTFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -322,7 +323,8 @@ namespace Tester
             this.hTMLToolStripMenuItem,
             this.sQLToolStripMenuItem,
             this.pHPToolStripMenuItem,
-            this.jSToolStripMenuItem});
+            this.jSToolStripMenuItem,
+            this.luaToolStripMenuItem});
             this.miLanguage.Name = "miLanguage";
             this.miLanguage.Size = new System.Drawing.Size(71, 20);
             this.miLanguage.Text = "Language";
@@ -376,6 +378,13 @@ namespace Tester
             this.jSToolStripMenuItem.Size = new System.Drawing.Size(224, 22);
             this.jSToolStripMenuItem.Text = "JS";
             this.jSToolStripMenuItem.Click += new System.EventHandler(this.miCSharp_Click);
+            // 
+            // luaToolStripMenuItem
+            // 
+            this.luaToolStripMenuItem.Name = "luaToolStripMenuItem";
+            this.luaToolStripMenuItem.Size = new System.Drawing.Size(224, 22);
+            this.luaToolStripMenuItem.Text = "Lua";
+            this.luaToolStripMenuItem.Click += new System.EventHandler(this.miCSharp_Click);
             // 
             // miExport
             // 
@@ -523,6 +532,7 @@ namespace Tester
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem10;
         private System.Windows.Forms.ToolStripMenuItem commentSelectedLinesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem uncommentSelectedLinesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem luaToolStripMenuItem;
     }
 }
 

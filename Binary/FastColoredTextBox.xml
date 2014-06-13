@@ -67,6 +67,12 @@
             </summary>
             <param name="range"></param>
         </member>
+        <member name="M:FastColoredTextBoxNS.SyntaxHighlighter.LuaSyntaxHighlight(FastColoredTextBoxNS.Range)">
+            <summary>
+            Highlights Lua code
+            </summary>
+            <param name="range"></param>
+        </member>
         <member name="P:FastColoredTextBoxNS.SyntaxHighlighter.StringStyle">
             <summary>
             String style

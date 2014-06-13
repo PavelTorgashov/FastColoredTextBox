@@ -73,7 +73,7 @@
             this.fastColoredTextBox1.AutoScrollMinSize = new System.Drawing.Size(179, 14);
             this.fastColoredTextBox1.BackBrush = null;
             this.fastColoredTextBox1.BackColor = System.Drawing.Color.Honeydew;
-            this.fastColoredTextBox1.CaretColor = System.Drawing.Color.Lime;
+            this.fastColoredTextBox1.CaretColor = System.Drawing.Color.FromArgb(((int)(((byte)(125)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.fastColoredTextBox1.CharHeight = 14;
             this.fastColoredTextBox1.CharWidth = 8;
             this.fastColoredTextBox1.Cursor = System.Windows.Forms.Cursors.IBeam;
@@ -86,6 +86,7 @@
             this.fastColoredTextBox1.Size = new System.Drawing.Size(243, 198);
             this.fastColoredTextBox1.TabIndex = 2;
             this.fastColoredTextBox1.Text = "fastColoredTextBox1";
+            this.fastColoredTextBox1.WideCaret = true;
             this.fastColoredTextBox1.Zoom = 100;
             // 
             // Sandbox

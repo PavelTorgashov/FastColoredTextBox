@@ -126,6 +126,7 @@ namespace Tester
                 case "SQL": fctb.Language = Language.SQL; break;
                 case "PHP": fctb.Language = Language.PHP; break;
                 case "JS": fctb.Language = Language.JS; break;
+                case "Lua": fctb.Language = Language.Lua; break;
             }
             fctb.OnSyntaxHighlight(new TextChangedEventArgs(fctb.Range));
             miChangeColors.Enabled = lang != "CSharp (custom highlighter)";
@@ -393,12 +394,12 @@ namespace Tester
 
         private void commentSelectedLinesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            fctb.InsertLinePrefix(@"//");
+            fctb.InsertLinePrefix(fctb.CommentPrefix);
         }
 
         private void uncommentSelectedLinesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            fctb.RemoveLinePrefix(@"//");
+            fctb.RemoveLinePrefix(fctb.CommentPrefix);
         }
     }
 }

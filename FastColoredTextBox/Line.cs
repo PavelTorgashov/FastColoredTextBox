@@ -193,6 +193,7 @@ namespace FastColoredTextBoxNS
             chars.AddRange(collection);
         }
     }
+
     public struct LineInfo
     {
         List<int> cutOffPositions;

@@ -9,11 +9,13 @@ namespace FastColoredTextBoxNS
         LimitedStack<UndoableCommand> history;
         Stack<UndoableCommand> redoStack = new Stack<UndoableCommand>();
         public TextSource TextSource{ get; private set; }
+        public bool UndoRedoStackIsEnabled { get; set; }
 
         public CommandManager(TextSource ts)
         {
             history = new LimitedStack<UndoableCommand>(maxHistoryLength);
             TextSource = ts;
+            UndoRedoStackIsEnabled = true;
         }
 
         public void ExecuteCommand(Command cmd)
@@ -45,6 +47,9 @@ namespace FastColoredTextBoxNS
                 if (cmd is UndoableCommand)
                     history.Pop();
             }
+            //
+            if (!UndoRedoStackIsEnabled)
+                ClearHistory();
             //
             redoStack.Clear();
             //
