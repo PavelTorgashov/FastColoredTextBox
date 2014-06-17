@@ -4778,7 +4778,7 @@ namespace FastColoredTextBoxNS
                     using (var pen = new Pen(CaretColor))
                         e.Graphics.DrawLine(pen, car.X, car.Y, car.X, car.Y + CharHeight);
 
-                var caretRect = new Rectangle(car.X, car.Y, carWidth, charHeight + 1);
+                var caretRect = new Rectangle(HorizontalScroll.Value + car.X, VerticalScroll.Value + car.Y, carWidth, charHeight + 1);
 
                 if (prevCaretRect != caretRect)
                 {
