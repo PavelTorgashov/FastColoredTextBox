@@ -21,6 +21,7 @@ namespace FastColoredTextBoxNS
         public readonly Style MagentaStyle = new TextStyle(Brushes.Magenta, null, FontStyle.Regular);
         public readonly Style MaroonStyle = new TextStyle(Brushes.Maroon, null, FontStyle.Regular);
         public readonly Style RedStyle = new TextStyle(Brushes.Red, null, FontStyle.Regular);
+        public readonly Style BlackStyle = new TextStyle(Brushes.Black, null, FontStyle.Regular);
         //
         protected readonly Dictionary<string, SyntaxDescriptor> descByXMLfileNames =
             new Dictionary<string, SyntaxDescriptor>();
@@ -48,6 +49,20 @@ namespace FastColoredTextBoxNS
 
         protected Regex HTMLTagNameRegex;
         protected Regex HTMLTagRegex;
+
+        protected Regex XMLAttrRegex,
+                      XMLAttrValRegex,
+                      XMLCommentRegex1,
+                      XMLCommentRegex2;
+
+        protected Regex XMLEndTagRegex;
+
+        protected Regex XMLEntityRegex,
+                      XMLTagContentRegex;
+
+        protected Regex XMLTagNameRegex;
+        protected Regex XMLTagRegex;
+        protected Regex XMLCDataRegex;
 
         protected Regex JScriptCommentRegex1,
                       JScriptCommentRegex2,
@@ -132,6 +147,9 @@ namespace FastColoredTextBoxNS
                 case Language.HTML:
                     HTMLSyntaxHighlight(range);
                     break;
+                case Language.XML:
+                    XMLSyntaxHighlight(range);
+                    break;
                 case Language.SQL:
                     SQLSyntaxHighlight(range);
                     break;
@@ -166,7 +184,7 @@ namespace FastColoredTextBoxNS
                 desc = ParseXmlDescription(doc);
                 descByXMLfileNames[XMLdescriptionFile] = desc;
             }
-            
+
             HighlightSyntax(desc, range);
         }
 
@@ -184,6 +202,9 @@ namespace FastColoredTextBoxNS
                     break;
                 case Language.HTML:
                     HTMLAutoIndentNeeded(sender, args);
+                    break;
+                case Language.XML:
+                    XMLAutoIndentNeeded(sender, args);
                     break;
                 case Language.SQL:
                     SQLAutoIndentNeeded(sender, args);
@@ -239,6 +260,12 @@ namespace FastColoredTextBoxNS
         }
 
         protected void HTMLAutoIndentNeeded(object sender, AutoIndentEventArgs args)
+        {
+            var tb = sender as FastColoredTextBox;
+            tb.CalcAutoIndentShiftByCodeFolding(sender, args);
+        }
+
+        protected void XMLAutoIndentNeeded(object sender, AutoIndentEventArgs args)
         {
             var tb = sender as FastColoredTextBox;
             tb.CalcAutoIndentShiftByCodeFolding(sender, args);
@@ -314,7 +341,7 @@ namespace FastColoredTextBoxNS
             //some statements: case, default
             if (Regex.IsMatch(args.LineText, @"^\s*(case|default)\b.*:\s*($|//)"))
             {
-                args.Shift = -args.TabLength/2;
+                args.Shift = -args.TabLength / 2;
                 return;
             }
             //is unclosed operator in previous line ?
@@ -387,7 +414,7 @@ namespace FastColoredTextBoxNS
             //options
             XmlAttribute optionsA = foldingNode.Attributes["options"];
             if (optionsA != null)
-                folding.options = (RegexOptions) Enum.Parse(typeof (RegexOptions), optionsA.Value);
+                folding.options = (RegexOptions)Enum.Parse(typeof(RegexOptions), optionsA.Value);
 
             return folding;
         }
@@ -407,7 +434,7 @@ namespace FastColoredTextBoxNS
             rule.style = styles[styleA.Value];
             //options
             if (optionsA != null)
-                rule.options = (RegexOptions) Enum.Parse(typeof (RegexOptions), optionsA.Value);
+                rule.options = (RegexOptions)Enum.Parse(typeof(RegexOptions), optionsA.Value);
 
             return rule;
         }
@@ -429,7 +456,7 @@ namespace FastColoredTextBoxNS
             //fontStyle
             FontStyle fontStyle = FontStyle.Regular;
             if (fontStyleA != null)
-                fontStyle = (FontStyle) Enum.Parse(typeof (FontStyle), fontStyleA.Value);
+                fontStyle = (FontStyle)Enum.Parse(typeof(FontStyle), fontStyleA.Value);
 
             return new TextStyle(foreBrush, backBrush, fontStyle);
         }
@@ -485,7 +512,7 @@ namespace FastColoredTextBoxNS
 
         protected char[] RememberBrackets(FastColoredTextBox tb)
         {
-            return new[] {tb.LeftBracket, tb.RightBracket, tb.LeftBracket2, tb.RightBracket2};
+            return new[] { tb.LeftBracket, tb.RightBracket, tb.LeftBracket2, tb.RightBracket2 };
         }
 
         protected void InitCShaprRegex()
@@ -568,6 +595,15 @@ namespace FastColoredTextBoxNS
                     AttributeStyle = RedStyle;
                     AttributeValueStyle = BlueStyle;
                     HtmlEntityStyle = RedStyle;
+                    break;
+                case Language.XML:
+                    CommentStyle = GreenStyle;
+                    XmlTagBracketStyle = BlueStyle;
+                    XmlTagNameStyle = MaroonStyle;
+                    XmlAttributeStyle = RedStyle;
+                    XmlAttributeValueStyle = BlueStyle;
+                    XmlEntityStyle = RedStyle;
+                    XmlCDataStyle = BlackStyle;
                     break;
                 case Language.JS:
                     StringStyle = BrownStyle;
@@ -718,7 +754,7 @@ namespace FastColoredTextBoxNS
             range.SetFoldingMarkers(@"^\s*(?<range>While)[ \t]+\S+", @"^\s*(?<range>End While)\b",
                                     RegexOptions.Multiline | RegexOptions.IgnoreCase);
             range.SetFoldingMarkers(@"\b(Sub|Function)[ \t]+[^\s']+", @"\bEnd (Sub|Function)\b", RegexOptions.IgnoreCase);
-                //this declared separately because Sub and Function can be unclosed
+            //this declared separately because Sub and Function can be unclosed
             range.SetFoldingMarkers(@"(\r|\n|^)[ \t]*(?<range>Get|Set)[ \t]*(\r|\n|$)", @"\bEnd (Get|Set)\b",
                                     RegexOptions.IgnoreCase);
             range.SetFoldingMarkers(@"^\s*(?<range>For|For\s+Each)\b", @"^\s*(?<range>Next)\b",
@@ -793,6 +829,82 @@ namespace FastColoredTextBoxNS
             range.SetFoldingMarkers("<tr", "</tr>", RegexOptions.IgnoreCase);
         }
 
+        protected void InitXMLRegex()
+        {
+            XMLCommentRegex1 = new Regex(@"(<!--.*?-->)|(<!--.*)", RegexOptions.Singleline | RegexCompiledOption);
+            XMLCommentRegex2 = new Regex(@"(<!--.*?-->)|(.*-->)",
+                                          RegexOptions.Singleline | RegexOptions.RightToLeft | RegexCompiledOption);
+            XMLTagRegex = new Regex(@"<\?|<|/>|</|>|\?>", RegexCompiledOption);
+            XMLTagNameRegex = new Regex(@"<[?](?<range1>[x][m][l]{1})|<(?<range>[!\w:]+)", RegexCompiledOption);
+            XMLEndTagRegex = new Regex(@"</(?<range>[\w:]+)>", RegexCompiledOption);
+            XMLTagContentRegex = new Regex(@"<[^>]+>", RegexCompiledOption);
+            XMLAttrRegex =
+                new Regex(
+                    @"(?<range>[\w\d\-\:]+)[ ]*=[ ]*'[^']*'|(?<range>[\w\d\-\:]+)[ ]*=[ ]*""[^""]*""|(?<range>[\w\d\-\:]+)[ ]*=[ ]*[\w\d\-\:]+",
+                    RegexCompiledOption);
+            XMLAttrValRegex =
+                new Regex(
+                    @"[\w\d\-]+?=(?<range>'[^']*')|[\w\d\-]+[ ]*=[ ]*(?<range>""[^""]*"")|[\w\d\-]+[ ]*=[ ]*(?<range>[\w\d\-]+)",
+                    RegexCompiledOption);
+            XMLEntityRegex = new Regex(@"\&(amp|gt|lt|nbsp|quot|apos|copy|reg|#[0-9]{1,8}|#x[0-9a-f]{1,8});",
+                                        RegexCompiledOption | RegexOptions.IgnoreCase);
+            XMLCDataRegex = new Regex(@"<!\s*\[CDATA\s*\[(?<text>(?>[^]]+|](?!]>))*)]]>", RegexCompiledOption | RegexOptions.IgnoreCase); // http://stackoverflow.com/questions/21681861/i-need-a-regex-that-matches-cdata-elements-in-html
+        }
+
+        /// <summary>
+        /// Highlights XML code
+        /// </summary>
+        /// <param name="range"></param>
+        public virtual void XMLSyntaxHighlight(Range range)
+        {
+            range.tb.CommentPrefix = null;
+            range.tb.LeftBracket = '<';
+            range.tb.RightBracket = '>';
+            range.tb.LeftBracket2 = '(';
+            range.tb.RightBracket2 = ')';
+
+            //clear style of changed range
+            range.ClearStyle(CommentStyle, XmlTagBracketStyle, XmlTagNameStyle, XmlAttributeStyle, XmlAttributeValueStyle,
+                             XmlEntityStyle, XmlCDataStyle);
+
+            //
+            if (XMLTagRegex == null)
+            {
+                InitXMLRegex();
+            }
+
+            //xml CData
+            range.SetStyle(XmlCDataStyle, XMLCDataRegex);
+
+            //comment highlighting
+            range.SetStyle(CommentStyle, XMLCommentRegex1);
+            range.SetStyle(CommentStyle, XMLCommentRegex2);
+
+            //tag brackets highlighting
+            range.SetStyle(XmlTagBracketStyle, XMLTagRegex);
+
+            //tag name
+            range.SetStyle(XmlTagNameStyle, XMLTagNameRegex);
+
+            //end of tag
+            range.SetStyle(XmlTagNameStyle, XMLEndTagRegex);
+
+            //attributes
+            range.SetStyle(XmlAttributeStyle, XMLAttrRegex);
+
+            //attribute values
+            range.SetStyle(XmlAttributeValueStyle, XMLAttrValRegex);
+
+            //xml entity
+            range.SetStyle(XmlEntityStyle, XMLEntityRegex);
+
+            //clear folding markers
+            range.ClearFoldingMarkers();
+
+            //set folding markers
+            //
+        }
+
         protected void InitSQLRegex()
         {
             SQLStringRegex = new Regex(@"""""|''|"".*?[^\\]""|'.*?[^\\]'", RegexCompiledOption);
@@ -851,7 +963,7 @@ namespace FastColoredTextBoxNS
             range.ClearFoldingMarkers();
             //set folding markers
             range.SetFoldingMarkers(@"\bBEGIN\b", @"\bEND\b", RegexOptions.IgnoreCase);
-                //allow to collapse BEGIN..END blocks
+            //allow to collapse BEGIN..END blocks
             range.SetFoldingMarkers(@"/\*", @"\*/"); //allow to collapse comment block
         }
 
@@ -1106,6 +1218,36 @@ namespace FastColoredTextBoxNS
         public Style HtmlEntityStyle { get; set; }
 
         /// <summary>
+        /// XML attribute style
+        /// </summary>
+        public Style XmlAttributeStyle { get; set; }
+
+        /// <summary>
+        /// XML attribute value style
+        /// </summary>
+        public Style XmlAttributeValueStyle { get; set; }
+
+        /// <summary>
+        /// XML tag brackets style
+        /// </summary>
+        public Style XmlTagBracketStyle { get; set; }
+
+        /// <summary>
+        /// XML tag name style
+        /// </summary>
+        public Style XmlTagNameStyle { get; set; }
+
+        /// <summary>
+        /// XML Entity style
+        /// </summary>
+        public Style XmlEntityStyle { get; set; }
+
+        /// <summary>
+        /// XML CData style
+        /// </summary>
+        public Style XmlCDataStyle { get; set; }
+
+        /// <summary>
         /// Variable style
         /// </summary>
         public Style VariableStyle { get; set; }
@@ -1147,6 +1289,7 @@ namespace FastColoredTextBoxNS
         CSharp,
         VB,
         HTML,
+        XML,
         SQL,
         PHP,
         JS,
