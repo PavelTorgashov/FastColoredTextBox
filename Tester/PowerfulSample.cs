@@ -50,6 +50,18 @@ namespace Tester
                 default:
                     break;//for highlighting of other languages, we using built-in FastColoredTextBox highlighter
             }
+
+            if (fctb.Text.Trim().StartsWith("<?xml"))
+            {
+                fctb.Language = Language.XML;
+
+                fctb.ClearStylesBuffer();
+                fctb.Range.ClearStyle(StyleIndex.All);
+                InitStylesPriority();
+                fctb.AutoIndentNeeded -= fctb_AutoIndentNeeded;
+
+                fctb.OnSyntaxHighlight(new TextChangedEventArgs(fctb.Range));
+            }
         }   
 
         private void CSharpSyntaxHighlight(TextChangedEventArgs e)
@@ -123,6 +135,7 @@ namespace Tester
                 case "CSharp (built-in highlighter)": fctb.Language = Language.CSharp; break;
                 case "VB": fctb.Language = Language.VB; break;
                 case "HTML": fctb.Language = Language.HTML; break;
+                case "XML": fctb.Language = Language.XML; break;
                 case "SQL": fctb.Language = Language.SQL; break;
                 case "PHP": fctb.Language = Language.PHP; break;
                 case "JS": fctb.Language = Language.JS; break;
