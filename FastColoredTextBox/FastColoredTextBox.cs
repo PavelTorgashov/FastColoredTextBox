@@ -61,7 +61,7 @@ namespace FastColoredTextBoxNS
         private readonly Timer timer3 = new Timer();
         private readonly List<VisualMarker> visibleMarkers = new List<VisualMarker>();
         public int TextHeight;
-        internal bool allowInsertRemoveLines = true;
+        public bool AllowInsertRemoveLines = true;
         private Brush backBrush;
         private BaseBookmarks bookmarks;
         private bool caretVisible;
@@ -208,7 +208,7 @@ namespace FastColoredTextBoxNS
             HotkeysMapping.InitDefault();
             WordWrapAutoIndent = true;
             FoldedBlocks = new Dictionary<int, int>();
-            AutoCompleteBrackets = true;
+            AutoCompleteBrackets = false;
             //
             base.AutoScroll = true;
             timer.Tick += timer_Tick;
@@ -228,7 +228,7 @@ namespace FastColoredTextBoxNS
         /// <summary>
         /// AutoComplete brackets
         /// </summary>
-        [DefaultValue(true)]
+        [DefaultValue(false)]
         [Description("AutoComplete brackets.")]
         public bool AutoCompleteBrackets { get; set; }
 
@@ -1983,7 +1983,7 @@ namespace FastColoredTextBoxNS
             return result;
         }
 
-        private TextSource CreateTextSource()
+        protected virtual TextSource CreateTextSource()
         {
             return new TextSource(this);
         }
@@ -1993,7 +1993,7 @@ namespace FastColoredTextBoxNS
             TextSource.CurrentTB = this;
         }
 
-        private void InitTextSource(TextSource ts)
+        protected void InitTextSource(TextSource ts)
         {
             if (lines != null)
             {
@@ -2386,15 +2386,8 @@ namespace FastColoredTextBoxNS
                 Selection.Expand();
             if (!Selection.IsEmpty)
             {
-                var exp = new ExportToHTML();
-                exp.UseBr = false;
-                exp.UseNbsp = false;
-                exp.UseStyleTag = true;
-                string html = "<pre>" + exp.GetHtml(Selection.Clone()) + "</pre>";
                 var data = new DataObject();
-                data.SetData(DataFormats.UnicodeText, true, Selection.Text);
-                data.SetData(DataFormats.Html, PrepareHtmlForClipboard(html));
-                data.SetData(DataFormats.Rtf, new ExportToRTF().GetRtf(Selection.Clone()));
+                OnCreateClipboardData(data);
                 //
                 var thread = new Thread(() => SetClipboard(data));
                 thread.SetApartmentState(ApartmentState.STA);
@@ -2403,13 +2396,26 @@ namespace FastColoredTextBoxNS
             }
         }
 
+        protected virtual void OnCreateClipboardData(DataObject data)
+        {
+            var exp = new ExportToHTML();
+            exp.UseBr = false;
+            exp.UseNbsp = false;
+            exp.UseStyleTag = true;
+            string html = "<pre>" + exp.GetHtml(Selection.Clone()) + "</pre>";
+
+            data.SetData(DataFormats.UnicodeText, true, Selection.Text);
+            data.SetData(DataFormats.Html, PrepareHtmlForClipboard(html));
+            data.SetData(DataFormats.Rtf, new ExportToRTF().GetRtf(Selection.Clone()));
+        }
+
         [DllImport("user32.dll")]
         static extern IntPtr GetOpenClipboardWindow();
 
         [DllImport("user32.dll")]
         static extern IntPtr CloseClipboard();
 
-        void SetClipboard(DataObject data)
+        protected void SetClipboard(DataObject data)
         {
                 try
                 {
@@ -2654,27 +2660,29 @@ namespace FastColoredTextBoxNS
         /// Insert text into current selection position (with predefined style)
         /// </summary>
         /// <param name="text"></param>
-        public virtual void InsertText(string text, Style style)
+        public virtual Range InsertText(string text, Style style)
         {
-            InsertText(text, style, true);
+            return InsertText(text, style, true);
         }
 
         /// <summary>
         /// Insert text into current selection position (with predefined style)
         /// </summary>
-        public virtual void InsertText(string text, Style style, bool jumpToCaret)
+        public virtual Range InsertText(string text, Style style, bool jumpToCaret)
         {
             if (text == null)
-                return;
+                return null;
 
             //remember last caret position
-            Place last = Selection.Start;
+            Place last = Selection.Start > Selection.End ? Selection.End : Selection.Start;
             //insert text
             InsertText(text, jumpToCaret);
             //get range
-            var range = new Range(this, last, Selection.Start);
+            var range = new Range(this, last, Selection.Start){ColumnSelectionMode = Selection.ColumnSelectionMode};
             //set style for range
             range.SetStyle(style);
+
+            return range;
         }
 
         /// <summary>
@@ -2819,7 +2827,7 @@ namespace FastColoredTextBoxNS
             OnScroll(se, true);
         }
 
-        private void InsertChar(char c)
+        protected virtual void InsertChar(char c)
         {
             lines.Manager.BeginAutoUndoCommands();
             try
@@ -2861,7 +2869,7 @@ namespace FastColoredTextBoxNS
         /// <summary>
         /// Deletes selected chars
         /// </summary>
-        public void ClearSelected()
+        public virtual void ClearSelected()
         {
             if (!Selection.IsEmpty)
             {
@@ -4046,7 +4054,7 @@ namespace FastColoredTextBoxNS
         /// <summary>
         /// Insert/remove comment prefix into selected lines
         /// </summary>
-        public void CommentSelected(string commentPrefix)
+        public virtual void CommentSelected(string commentPrefix)
         {
             if (string.IsNullOrEmpty(commentPrefix))
                 return;
@@ -4057,22 +4065,6 @@ namespace FastColoredTextBoxNS
             else
                 InsertLinePrefix(commentPrefix);
         }
-
-        /*
-        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
-        {
-            if (keyData == Keys.Enter)
-            {
-                bool proc = ProcessKeyPress('\r');
-                if (proc)
-                {
-                    base.OnKeyDown(new KeyEventArgs(Keys.Enter));
-                    return true;
-                }
-            }
-            
-            return base.ProcessCmdKey(ref msg, keyData);
-        }*/
 
         public void OnKeyPressing(KeyPressEventArgs args)
         {
@@ -5162,7 +5154,7 @@ namespace FastColoredTextBoxNS
             return;
         }
 
-        private void CheckAndChangeSelectionType()
+        protected virtual void CheckAndChangeSelectionType()
         {
             //change selection type to ColumnSelectionMode
             if ((ModifierKeys & Keys.Alt) != 0 && !WordWrap)
@@ -5316,7 +5308,7 @@ namespace FastColoredTextBoxNS
             CancelToolTip();
         }
 
-        Range draggedRange;
+        protected Range draggedRange;
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
@@ -7356,7 +7348,7 @@ window.status = ""#print"";
             draggedRange = null;
         }
 
-        private void DoDragDrop(Place place, string text)
+        protected virtual void DoDragDrop(Place place, string text)
         {
             Range insertRange = new Range(this, place, place);
 

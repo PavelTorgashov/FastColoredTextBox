@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using FastColoredTextBoxNS;
+using System.Linq;
 
 namespace Tester
 {
@@ -12,101 +13,229 @@ namespace Tester
         {
             InitializeComponent();
 
-            fastColoredTextBox1.TextSource = new TextSourceWithFilter(fastColoredTextBox1);
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            var filter = new Predicate<string>((s) => s.Contains(textBox1.Text));
-            (fastColoredTextBox1.TextSource as TextSourceWithFilter).Filter(filter);
+            new MultiSelectFCTB(){Parent = this, Dock = DockStyle.Fill};
         }
     }
 
-    public class TextSourceWithFilter : TextSource
+    public class MultiSelectFCTB : FastColoredTextBox
     {
-        //indices of filtered lines
-        private List<int> filteredLines = new List<int>();
+        /// <summary>
+        /// Additional carets (coordinates are given relative to main caret)
+        /// </summary>
+        public readonly List<Place> AddCarets = new List<Place>();
 
-        public TextSourceWithFilter(FastColoredTextBox currentTB) : base(currentTB)
+        protected override void OnMouseDown(MouseEventArgs e)
         {
-            InsertLine(0, CreateLine());
-        }
-
-        public void Filter(Predicate<string> filter)
-        {
-            filteredLines.Clear();
-
-            for(int i = 0 ;i<base.lines.Count;i++)
-                if (filter(base.lines[i].Text))
-                    filteredLines.Add(i);
-
-            OnTextChanged(0, filteredLines.Count - 1);
-        }
-
-        public override Line this[int i]
-        {
-            get
+            if (ModifierKeys != Keys.Alt)
             {
-                if (i >= filteredLines.Count)
-                    return null;
-                return base.lines[filteredLines[i]];
+                AddCarets.Clear();//clear list of additional carets
+                base.OnMouseDown(e);
             }
-            set { throw new NotSupportedException(); }
-        }
-
-        public void ClearFilter()
-        {
-            Filter(null);
-        }
-
-        public override void InsertLine(int index, Line line)
-        {
-            if(index  >= filteredLines.Count)
+            else
             {
-                filteredLines.Add(base.lines.Count);
-                base.InsertLine(base.lines.Count, line);
-            }else
-            {
-                var sourceIndex = filteredLines[index];
-                filteredLines.Insert(index, sourceIndex);
-                for (int i = index + 1; i < filteredLines.Count; i++)
-                    filteredLines[i]++;
-
-                base.InsertLine(sourceIndex, line);
+                //add new caret
+                var p = PointToPlace(e.Location);
+                //calc relative place
+                var relativePlace = new Place(p.iChar - Selection.Start.iChar, p.iLine - Selection.Start.iLine);
+                AddCarets.Add(relativePlace);
+                //redraw
+                Invalidate();
             }
         }
 
-        public override void RemoveLine(int index, int count)
+        protected override void CheckAndChangeSelectionType()
         {
-            for (int i = 0; i < count; i++)
-            {
-                var sourceIndex = filteredLines[index];
-                filteredLines.RemoveAt(index);
-                RemoveSourceLine(sourceIndex - i);
-            }
-
-            for (int i = index; i < filteredLines.Count; i++)
-                filteredLines[i] -= count;
+            //disable column selection mode
+            Selection.ColumnSelectionMode = false;
         }
 
-        void RemoveSourceLine(int index)
+        protected override void OnPaint(PaintEventArgs e)
         {
-            var removedLineIds = new List<int>();
-            //
-            if (IsNeedBuildRemovedLineIds)
-                removedLineIds.Add(base.lines[index].UniqueId);
-            //
-            lines.RemoveRange(index, 1);
+            //draw FCTB
+            base.OnPaint(e);
 
-            OnLineRemoved(index, 1, removedLineIds);
+            //draw additional carets
+            foreach(var caret in AddCarets)
+            {
+                var range = GetAddCaretRange(caret);
+                if(!range.IsEmpty)
+                    SelectionStyle.Draw(e.Graphics, PlaceToPoint(range.Start), range);
+                else
+                    e.Graphics.FillRectangle(Brushes.Blue, new Rectangle(PlaceToPoint(range.Start), new Size(1, CharHeight)));
+            }
         }
 
-        public override int Count
+        /// <summary>
+        /// Returns Range for additional caret
+        /// </summary>
+        public Range GetAddCaretRange(Place addCaret)
         {
-            get
+            var range = new Range(this, Selection.Start + addCaret, Selection.End + addCaret);
+            return Range.GetIntersectionWith(range);
+        }
+
+        /// <summary>
+        /// Here we assign own CommandManager
+        /// </summary>
+        protected override TextSource CreateTextSource()
+        {
+            var ts = base.CreateTextSource();
+            //assign custom command manager
+            ts.Manager = new MultiSelectCommandManager(ts);
+            return ts;
+        }
+    }
+
+    /// <summary>
+    /// Custom CommandManager.
+    /// This class creates wrapper for commands when additional carets are presented.
+    /// </summary>
+    public class MultiSelectCommandManager: CommandManager
+    {
+        public MultiSelectCommandManager(TextSource ts):base(ts)
+        {
+        }
+
+        public override void ExecuteCommand(Command cmd)
+        {
+            if (disabledCommands > 0)
+                return;
+
+            var fctb = TextSource.CurrentTB as MultiSelectFCTB;
+            if(fctb.AddCarets.Count != 0)
             {
-                return filteredLines.Count;
+                //multirange ?
+                if (cmd.ts.CurrentTB.Selection.ColumnSelectionMode)
+                    return;//we do not suppport column selection mode with multiselect mode
+
+                //make wrapper
+                if (cmd is UndoableCommand)
+                    cmd = new MultiSelectionCommand((UndoableCommand)cmd);
             }
+
+            base.ExecuteCommand(cmd);
+        }
+    }
+
+    /// <summary>
+    /// Wrapper for commands when MultiSelection mode enabled.
+    /// This class is very like to MultiRangeCommand, but it is intended for MultiSelection mode.
+    /// </summary>
+    public class MultiSelectionCommand : UndoableCommand
+    {
+        private UndoableCommand cmd;
+        private List<Range> ranges = new List<Range>();
+        private List<UndoableCommand> commandsByRanges = new List<UndoableCommand>();
+
+        public MultiSelectionCommand(UndoableCommand command)
+            : base(command.ts)
+        {
+            this.cmd = command;
+            var fctb = ts.CurrentTB as MultiSelectFCTB;
+            //remember ranges for all carets
+            foreach (var caret in fctb.AddCarets)
+                ranges.Add(fctb.GetAddCaretRange(caret));
+
+            ranges.Add(ts.CurrentTB.Selection.Clone());
+        }
+
+        public override void Execute()
+        {
+            commandsByRanges.Clear();
+            var iChar = -1;
+            ts.CurrentTB.Selection.ColumnSelectionMode = false;
+            ts.CurrentTB.Selection.BeginUpdate();
+            ts.CurrentTB.BeginUpdate();
+            ts.CurrentTB.AllowInsertRemoveLines = false;
+            try
+            {
+                if (cmd is InsertTextCommand)
+                    ExecuteInsertTextCommand(ref iChar, (cmd as InsertTextCommand).InsertedText);
+                else
+                if (cmd is InsertCharCommand && (cmd as InsertCharCommand).c != '\x0' && (cmd as InsertCharCommand).c != '\b')//if not DEL or BACKSPACE
+                    ExecuteInsertTextCommand(ref iChar, (cmd as InsertCharCommand).c.ToString());
+                else
+                    ExecuteCommand(ref iChar);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+            }
+            finally
+            {
+                ts.CurrentTB.AllowInsertRemoveLines = true;
+                ts.CurrentTB.EndUpdate();
+                ts.CurrentTB.Selection.EndUpdate();
+            }
+        }
+
+        public Range MainRange
+        {
+            get { return ranges[ranges.Count - 1]; }
+        }
+
+        private void ExecuteInsertTextCommand(ref int iChar, string text)
+        {
+            var lines = text.Split('\n');
+            foreach (var r in ranges)
+            {
+                var line = ts.CurrentTB[r.Start.iLine];
+                var lineIsEmpty = r.End < r.Start && line.StartSpacesCount == line.Count;
+                if (!lineIsEmpty)
+                {
+                    var insertedText = lines[0];
+                    if (r.End < r.Start && insertedText != "")
+                    {
+                        //add forwarding spaces
+                        insertedText = new string(' ', r.Start.iChar - r.End.iChar) + insertedText;
+                        r.Start = r.End;
+                    }
+                    ts.CurrentTB.Selection = r;
+                    var c = new InsertTextCommand(ts, insertedText);
+                    c.Execute();
+                    if (ts.CurrentTB.Selection.End.iChar > iChar)
+                        iChar = ts.CurrentTB.Selection.End.iChar;
+                    commandsByRanges.Add(c);
+                }
+            }
+        }
+
+        private void ExecuteCommand(ref int iChar)
+        {
+            foreach (var r in ranges)
+            {
+                ts.CurrentTB.Selection = r;
+                var c = cmd.Clone();
+                c.Execute();
+                if (ts.CurrentTB.Selection.End.iChar > iChar)
+                    iChar = ts.CurrentTB.Selection.End.iChar;
+                commandsByRanges.Add(c);
+            }
+        }
+
+        public override void Undo()
+        {
+            ts.CurrentTB.BeginUpdate();
+            ts.CurrentTB.Selection.BeginUpdate();
+            try
+            {
+                for (int i = commandsByRanges.Count - 1; i >= 0; i--)
+                    commandsByRanges[i].Undo();
+            }
+            finally
+            {
+                ts.CurrentTB.Selection.EndUpdate();
+                ts.CurrentTB.EndUpdate();
+            }
+            ts.CurrentTB.Selection = MainRange.Clone();
+            foreach(var r in ranges)
+                ts.CurrentTB.OnTextChanged(r);
+            ts.CurrentTB.OnSelectionChanged();
+            ts.CurrentTB.Selection.ColumnSelectionMode = false;
+        }
+
+        public override UndoableCommand Clone()
+        {
+            throw new NotImplementedException();
         }
     }
 }

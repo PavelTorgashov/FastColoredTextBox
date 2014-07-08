@@ -16,7 +16,7 @@ namespace FastColoredTextBoxNS
         readonly protected List<Line> lines = new List<Line>();
         protected LinesAccessor linesAccessor;
         int lastLineUniqueId;
-        public CommandManager Manager { get; protected set; }
+        public CommandManager Manager { get; set; }
         FastColoredTextBox currentTB;
         /// <summary>
         /// Styles

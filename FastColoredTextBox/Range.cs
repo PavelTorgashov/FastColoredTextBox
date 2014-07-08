@@ -1457,6 +1457,44 @@ namespace FastColoredTextBoxNS
             return r.ReadOnly;
         }
 
+        public IEnumerable<Place> GetPlacesCyclic(Place startPlace, bool backward = false)
+        {
+            if (backward)
+            {
+                var r = new Range(this.tb, startPlace, startPlace);
+                while (r.GoLeft() && r.start >= Start)
+                {
+                    if (r.Start.iChar < tb[r.Start.iLine].Count)
+                        yield return r.Start;
+                }
+
+                r = new Range(this.tb, End, End);
+                while (r.GoLeft() && r.start >= startPlace)
+                {
+                    if (r.Start.iChar < tb[r.Start.iLine].Count)
+                        yield return r.Start;
+                }
+            }
+            else
+            {
+                var r = new Range(this.tb, startPlace, startPlace);
+                if (startPlace < End)
+                    do
+                    {
+                        if (r.Start.iChar < tb[r.Start.iLine].Count)
+                            yield return r.Start;
+                    } while (r.GoRight());
+
+                r = new Range(this.tb, Start, Start);
+                if (r.Start < startPlace)
+                    do
+                    {
+                        if (r.Start.iChar < tb[r.Start.iLine].Count)
+                            yield return r.Start;
+                    } while (r.GoRight() && r.Start < startPlace);
+            }
+        }
+
         #region ColumnSelectionMode
 
         private Range GetIntersectionWith_ColumnSelectionMode(Range range)

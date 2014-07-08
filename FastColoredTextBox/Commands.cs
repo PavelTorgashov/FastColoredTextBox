@@ -9,7 +9,7 @@ namespace FastColoredTextBoxNS
     /// <remarks>This operation includes also insertion of new line and removing char by backspace</remarks>
     public class InsertCharCommand : UndoableCommand
     {
-        internal char c;
+        public char c;
         char deletedChar = '\x0';
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace FastColoredTextBoxNS
             switch (c)
             {
                 case '\n':
-                    if (!ts.CurrentTB.allowInsertRemoveLines)
+                    if (!ts.CurrentTB.AllowInsertRemoveLines)
                         throw new ArgumentOutOfRangeException("Cant insert this char in ColumnRange mode");
                     if (ts.Count == 0)
                         InsertLine(ts);
@@ -95,7 +95,7 @@ namespace FastColoredTextBoxNS
                         return;
                     if (tb.Selection.Start.iChar == 0)
                     {
-                        if (!ts.CurrentTB.allowInsertRemoveLines)
+                        if (!ts.CurrentTB.AllowInsertRemoveLines)
                             throw new ArgumentOutOfRangeException("Cant insert this char in ColumnRange mode");
                         if (tb.LineInfos[tb.Selection.Start.iLine - 1].VisibleState != VisibleState.Visible)
                             tb.ExpandBlock(tb.Selection.Start.iLine - 1);
@@ -191,7 +191,7 @@ namespace FastColoredTextBoxNS
     /// </summary>
     public class InsertTextCommand : UndoableCommand
     {
-        internal string insertedText;
+        public string InsertedText;
 
         /// <summary>
         /// Constructor
@@ -200,7 +200,7 @@ namespace FastColoredTextBoxNS
         /// <param name="insertedText">Text for inserting</param>
         public InsertTextCommand(TextSource ts, string insertedText): base(ts)
         {
-            this.insertedText = insertedText;
+            this.InsertedText = insertedText;
         }
 
         /// <summary>
@@ -220,8 +220,8 @@ namespace FastColoredTextBoxNS
         /// </summary>
         public override void Execute()
         {
-            ts.OnTextChanging(ref insertedText);
-            InsertText(insertedText, ts);
+            ts.OnTextChanging(ref InsertedText);
+            InsertText(InsertedText, ts);
             base.Execute();
         }
 
@@ -250,7 +250,7 @@ namespace FastColoredTextBoxNS
 
         public override UndoableCommand Clone()
         {
-            return new InsertTextCommand(ts, insertedText);
+            return new InsertTextCommand(ts, InsertedText);
         }
     }
 
@@ -663,11 +663,11 @@ namespace FastColoredTextBoxNS
             ts.CurrentTB.Selection.ColumnSelectionMode = false;
             ts.CurrentTB.Selection.BeginUpdate();
             ts.CurrentTB.BeginUpdate();
-            ts.CurrentTB.allowInsertRemoveLines = false;
+            ts.CurrentTB.AllowInsertRemoveLines = false;
             try
             {
                 if (cmd is InsertTextCommand)
-                    ExecuteInsertTextCommand(ref iChar, (cmd as InsertTextCommand).insertedText);
+                    ExecuteInsertTextCommand(ref iChar, (cmd as InsertTextCommand).InsertedText);
                 else
                 if (cmd is InsertCharCommand && (cmd as InsertCharCommand).c != '\x0' && (cmd as InsertCharCommand).c != '\b')//if not DEL or BACKSPACE
                     ExecuteInsertTextCommand(ref iChar, (cmd as InsertCharCommand).c.ToString());
@@ -679,7 +679,7 @@ namespace FastColoredTextBoxNS
             }
             finally
             {
-                ts.CurrentTB.allowInsertRemoveLines = true;
+                ts.CurrentTB.AllowInsertRemoveLines = true;
                 ts.CurrentTB.EndUpdate();
 
                 ts.CurrentTB.Selection = range;

@@ -81,6 +81,11 @@ namespace FastColoredTextBoxNS
             return false;
         }
 
+        public static Place operator +(Place p1, Place p2)
+        {
+            return new Place(p1.iChar + p2.iChar, p1.iLine + p2.iLine);
+        }
+
         public static Place Empty
         {
             get { return new Place(); }

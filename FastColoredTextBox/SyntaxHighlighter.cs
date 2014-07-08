@@ -994,7 +994,7 @@ namespace FastColoredTextBoxNS
         /// <param name="range"></param>
         public virtual void PHPSyntaxHighlight(Range range)
         {
-            range.tb.CommentPrefix = "#";
+            range.tb.CommentPrefix = "//";
             range.tb.LeftBracket = '(';
             range.tb.RightBracket = ')';
             range.tb.LeftBracket2 = '{';

@@ -49,6 +49,12 @@
             </summary>
             <param name="range"></param>
         </member>
+        <member name="M:FastColoredTextBoxNS.SyntaxHighlighter.XMLSyntaxHighlight(FastColoredTextBoxNS.Range)">
+            <summary>
+            Highlights XML code
+            </summary>
+            <param name="range"></param>
+        </member>
         <member name="M:FastColoredTextBoxNS.SyntaxHighlighter.SQLSyntaxHighlight(FastColoredTextBoxNS.Range)">
             <summary>
             Highlights SQL code
@@ -126,6 +132,36 @@
         <member name="P:FastColoredTextBoxNS.SyntaxHighlighter.HtmlEntityStyle">
             <summary>
             HTML Entity style
+            </summary>
+        </member>
+        <member name="P:FastColoredTextBoxNS.SyntaxHighlighter.XmlAttributeStyle">
+            <summary>
+            XML attribute style
+            </summary>
+        </member>
+        <member name="P:FastColoredTextBoxNS.SyntaxHighlighter.XmlAttributeValueStyle">
+            <summary>
+            XML attribute value style
+            </summary>
+        </member>
+        <member name="P:FastColoredTextBoxNS.SyntaxHighlighter.XmlTagBracketStyle">
+            <summary>
+            XML tag brackets style
+            </summary>
+        </member>
+        <member name="P:FastColoredTextBoxNS.SyntaxHighlighter.XmlTagNameStyle">
+            <summary>
+            XML tag name style
+            </summary>
+        </member>
+        <member name="P:FastColoredTextBoxNS.SyntaxHighlighter.XmlEntityStyle">
+            <summary>
+            XML Entity style
+            </summary>
+        </member>
+        <member name="P:FastColoredTextBoxNS.SyntaxHighlighter.XmlCDataStyle">
+            <summary>
+            XML CData style
             </summary>
         </member>
         <member name="P:FastColoredTextBoxNS.SyntaxHighlighter.VariableStyle">

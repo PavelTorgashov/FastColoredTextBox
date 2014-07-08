@@ -18,7 +18,7 @@ namespace FastColoredTextBoxNS
             UndoRedoStackIsEnabled = true;
         }
 
-        public void ExecuteCommand(Command cmd)
+        public virtual void ExecuteCommand(Command cmd)
         {
             if (disabledCommands > 0)
                 return;
@@ -85,7 +85,7 @@ namespace FastColoredTextBoxNS
             TextSource.CurrentTB.OnUndoRedoStateChanged();
         }
 
-        int disabledCommands = 0;
+        protected int disabledCommands = 0;
 
         private void EndDisableCommands()
         {
@@ -166,7 +166,7 @@ namespace FastColoredTextBoxNS
 
     public abstract class Command
     {
-        internal TextSource ts;
+        public TextSource ts;
         public abstract void Execute();
     }
 
