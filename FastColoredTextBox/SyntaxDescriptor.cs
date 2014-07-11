@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System;
+using FastColoredTextBoxNS.Language2;
 
 namespace FastColoredTextBoxNS
 {
@@ -35,7 +36,7 @@ namespace FastColoredTextBoxNS
             {
                 if (regex == null)
                 {
-                    regex = new Regex(pattern, SyntaxHighlighter.RegexCompiledOption | options);
+                    regex = new Regex(pattern, Parsing.RegexCompiledOption | options);
                 }
                 return regex;
             }

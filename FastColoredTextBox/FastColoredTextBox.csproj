@@ -66,6 +66,16 @@
     <Compile Include="HotkeysEditorForm.Designer.cs">
       <DependentUpon>HotkeysEditorForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Language\CSharp.cs" />
+    <Compile Include="Language\CustomLanguage.cs" />
+    <Compile Include="Language\Html.cs" />
+    <Compile Include="Language\ILanguage.cs" />
+    <Compile Include="Language\JScript.cs" />
+    <Compile Include="Language\Lua.cs" />
+    <Compile Include="Language\Php.cs" />
+    <Compile Include="Language\Sql.cs" />
+    <Compile Include="Language\VisualBasic.cs" />
+    <Compile Include="Language\Xml.cs" />
     <Compile Include="LinesAccessor.cs" />
     <Compile Include="MacrosManager.cs" />
     <Compile Include="PlatformType.cs" />
@@ -77,7 +87,6 @@
       <DependentUpon>Ruler.cs</DependentUpon>
     </Compile>
     <Compile Include="SyntaxDescriptor.cs" />
-    <Compile Include="SyntaxHighlighter.cs" />
     <Compile Include="ReplaceForm.cs">
       <SubType>Form</SubType>
     </Compile>

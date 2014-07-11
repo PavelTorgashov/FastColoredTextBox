@@ -35,6 +35,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
+using FastColoredTextBoxNS.Language2;
 using Microsoft.Win32;
 using Timer = System.Windows.Forms.Timer;
 
@@ -81,7 +82,7 @@ namespace FastColoredTextBoxNS
         private bool isChanged;
         private bool isLineSelect;
         private bool isReplaceMode;
-        private Language language;
+        private ILanguage language;
         private Keys lastModifiers;
         private Point lastMouseCoord;
         private DateTime lastNavigatedDateTime;
@@ -172,8 +173,7 @@ namespace FastColoredTextBoxNS
             RightBracket = '\x0';
             LeftBracket2 = '\x0';
             RightBracket2 = '\x0';
-            SyntaxHighlighter = new SyntaxHighlighter();
-            language = Language.Custom;
+            language = new CustomLanguage();
             PreferredLineWidth = 0;
             needRecalc = true;
             lastNavigatedDateTime = DateTime.Now;
@@ -955,26 +955,17 @@ namespace FastColoredTextBoxNS
         /// Language for highlighting by built-in highlighter.
         /// </summary>
         [Browsable(true)]
-        [DefaultValue(typeof (Language), "Custom")]
+        [DefaultValue(typeof (ILanguage), "Custom")]
         [Description("Language for highlighting by built-in highlighter.")]
-        public Language Language
+        public ILanguage Language
         {
             get { return language; }
             set
             {
                 language = value;
-                if (SyntaxHighlighter != null)
-                    SyntaxHighlighter.InitStyleSchema(language);
                 Invalidate();
             }
         }
-
-        /// <summary>
-        /// Syntax Highlighter
-        /// </summary>
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public SyntaxHighlighter SyntaxHighlighter { get; set; }
 
         /// <summary>
         /// XML file with description of syntax highlighting.
@@ -4349,11 +4340,7 @@ namespace FastColoredTextBoxNS
 
 
             EventHandler<AutoIndentEventArgs> calculator = AutoIndentNeeded;
-            if (calculator == null)
-                if (Language != Language.Custom && SyntaxHighlighter != null)
-                    calculator = SyntaxHighlighter.AutoIndentNeeded;
-                else
-                    calculator = CalcAutoIndentShiftByCodeFolding;
+	        if (calculator == null) calculator = language.AutoIndentNeeded;
 
             int needSpaces = 0;
 
@@ -6798,12 +6785,9 @@ namespace FastColoredTextBoxNS
                     break;
             }
 
-            if (SyntaxHighlighter != null)
+            if (language != null)
             {
-                if (Language == Language.Custom && !string.IsNullOrEmpty(DescriptionFile))
-                    SyntaxHighlighter.HighlightSyntax(DescriptionFile, range);
-                else
-                    SyntaxHighlighter.HighlightSyntax(Language, range);
+                    language.SyntaxHighlight(range);
             }
 
 #if debug
