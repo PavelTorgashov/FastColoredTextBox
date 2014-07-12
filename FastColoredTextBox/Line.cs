@@ -37,7 +37,7 @@ namespace FastColoredTextBoxNS
         public int AutoIndentSpacesNeededCount
         {
             get;
-            internal set;
+            set;
         }
 
         internal Line(int uid)

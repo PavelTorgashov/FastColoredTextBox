@@ -330,6 +330,16 @@ namespace FastColoredTextBoxNS
             }
         }
 
+        public int FromLine
+        {
+            get { return Math.Min(Start.iLine, End.iLine); }
+        }
+
+        public int ToLine
+        {
+            get { return Math.Max(Start.iLine, End.iLine); }
+        }
+
         /// <summary>
         /// Move range right
         /// </summary>

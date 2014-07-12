@@ -98,8 +98,8 @@ namespace FastColoredTextBoxNS
         private bool mouseIsDrag;
         private bool mouseIsDragDrop;
         private bool multiline;
-        private bool needRecalc;
-        private bool needRecalcWordWrap;
+        protected bool needRecalc;
+        protected bool needRecalcWordWrap;
         private Point needRecalcWordWrapInterval;
         private bool needRecalcFoldingLines;
         private bool needRiseSelectionChangedDelayed;
@@ -209,6 +209,8 @@ namespace FastColoredTextBoxNS
             WordWrapAutoIndent = true;
             FoldedBlocks = new Dictionary<int, int>();
             AutoCompleteBrackets = false;
+            AutoIndentCharsPatterns = @"^\s*[\w\.]+\s*(?<range>=)\s*(?<range>[^;]+);";
+            AutoIndentChars = true;
             //
             base.AutoScroll = true;
             timer.Tick += timer_Tick;
@@ -779,7 +781,7 @@ namespace FastColoredTextBoxNS
         /// </summary>
         [Description("Here you can change hotkeys for FastColoredTextBox.")]
         [Editor(typeof(HotkeysEditor), typeof(UITypeEditor))]
-        [DefaultValue("Tab=IndentIncrease, Escape=ClearHints, PgUp=GoPageUp, PgDn=GoPageDown, End=GoEnd, Home=GoHome, Left=GoLeft, Up=GoUp, Right=GoRight, Down=GoDown, Ins=ReplaceMode, Del=DeleteCharRight, F3=FindNext, Shift+Tab=IndentDecrease, Shift+PgUp=GoPageUpWithSelection, Shift+PgDn=GoPageDownWithSelection, Shift+End=GoEndWithSelection, Shift+Home=GoHomeWithSelection, Shift+Left=GoLeftWithSelection, Shift+Up=GoUpWithSelection, Shift+Right=GoRightWithSelection, Shift+Down=GoDownWithSelection, Shift+Ins=Paste, Shift+Del=Cut, Ctrl+Back=ClearWordLeft, Ctrl+Space=AutocompleteMenu, Ctrl+End=GoLastLine, Ctrl+Home=GoFirstLine, Ctrl+Left=GoWordLeft, Ctrl+Up=ScrollUp, Ctrl+Right=GoWordRight, Ctrl+Down=ScrollDown, Ctrl+Ins=Copy, Ctrl+Del=ClearWordRight, Ctrl+0=ZoomNormal, Ctrl+A=SelectAll, Ctrl+B=BookmarkLine, Ctrl+C=Copy, Ctrl+E=MacroExecute, Ctrl+F=FindDialog, Ctrl+G=GoToDialog, Ctrl+H=ReplaceDialog, Ctrl+M=MacroRecord, Ctrl+N=GoNextBookmark, Ctrl+R=Redo, Ctrl+U=UpperCase, Ctrl+V=Paste, Ctrl+X=Cut, Ctrl+Z=Undo, Ctrl+Add=ZoomIn, Ctrl+Subtract=ZoomOut, Ctrl+OemMinus=NavigateBackward, Ctrl+Shift+End=GoLastLineWithSelection, Ctrl+Shift+Home=GoFirstLineWithSelection, Ctrl+Shift+Left=GoWordLeftWithSelection, Ctrl+Shift+Right=GoWordRightWithSelection, Ctrl+Shift+B=UnbookmarkLine, Ctrl+Shift+C=CommentSelected, Ctrl+Shift+N=GoPrevBookmark, Ctrl+Shift+U=LowerCase, Ctrl+Shift+OemMinus=NavigateForward, Alt+Back=Undo, Alt+Up=MoveSelectedLinesUp, Alt+Down=MoveSelectedLinesDown, Alt+F=FindChar, Alt+Shift+Left=GoLeft_ColumnSelectionMode, Alt+Shift+Up=GoUp_ColumnSelectionMode, Alt+Shift+Right=GoRight_ColumnSelectionMode, Alt+Shift+Down=GoDown_ColumnSelectionMode")]
+        [DefaultValue("Tab=IndentIncrease, Escape=ClearHints, PgUp=GoPageUp, PgDn=GoPageDown, End=GoEnd, Home=GoHome, Left=GoLeft, Up=GoUp, Right=GoRight, Down=GoDown, Ins=ReplaceMode, Del=DeleteCharRight, F3=FindNext, Shift+Tab=IndentDecrease, Shift+PgUp=GoPageUpWithSelection, Shift+PgDn=GoPageDownWithSelection, Shift+End=GoEndWithSelection, Shift+Home=GoHomeWithSelection, Shift+Left=GoLeftWithSelection, Shift+Up=GoUpWithSelection, Shift+Right=GoRightWithSelection, Shift+Down=GoDownWithSelection, Shift+Ins=Paste, Shift+Del=Cut, Ctrl+Back=ClearWordLeft, Ctrl+Space=AutocompleteMenu, Ctrl+End=GoLastLine, Ctrl+Home=GoFirstLine, Ctrl+Left=GoWordLeft, Ctrl+Up=ScrollUp, Ctrl+Right=GoWordRight, Ctrl+Down=ScrollDown, Ctrl+Ins=Copy, Ctrl+Del=ClearWordRight, Ctrl+0=ZoomNormal, Ctrl+A=SelectAll, Ctrl+B=BookmarkLine, Ctrl+C=Copy, Ctrl+E=MacroExecute, Ctrl+F=FindDialog, Ctrl+G=GoToDialog, Ctrl+H=ReplaceDialog, Ctrl+I=AutoIndentChars, Ctrl+M=MacroRecord, Ctrl+N=GoNextBookmark, Ctrl+R=Redo, Ctrl+U=UpperCase, Ctrl+V=Paste, Ctrl+X=Cut, Ctrl+Z=Undo, Ctrl+Add=ZoomIn, Ctrl+Subtract=ZoomOut, Ctrl+OemMinus=NavigateBackward, Ctrl+Shift+End=GoLastLineWithSelection, Ctrl+Shift+Home=GoFirstLineWithSelection, Ctrl+Shift+Left=GoWordLeftWithSelection, Ctrl+Shift+Right=GoWordRightWithSelection, Ctrl+Shift+B=UnbookmarkLine, Ctrl+Shift+C=CommentSelected, Ctrl+Shift+N=GoPrevBookmark, Ctrl+Shift+U=LowerCase, Ctrl+Shift+OemMinus=NavigateForward, Alt+Back=Undo, Alt+Up=MoveSelectedLinesUp, Alt+Down=MoveSelectedLinesDown, Alt+F=FindChar, Alt+Shift+Left=GoLeft_ColumnSelectionMode, Alt+Shift+Up=GoUp_ColumnSelectionMode, Alt+Shift+Right=GoRight_ColumnSelectionMode, Alt+Shift+Down=GoDown_ColumnSelectionMode")]
         public string Hotkeys { 
             get { return HotkeysMapping.ToString(); }
             set { HotkeysMapping = HotkeysMapping.Parse(value); }
@@ -3377,7 +3379,7 @@ namespace FastColoredTextBoxNS
         /// </summary>
         public virtual bool ProcessKey(Keys keyData)
         {
-           KeyEventArgs a = new KeyEventArgs(keyData);
+            KeyEventArgs a = new KeyEventArgs(keyData);
 
             if(a.KeyCode == Keys.Tab && !AcceptsTab)
                  return false;
@@ -3397,49 +3399,6 @@ namespace FastColoredTextBoxNS
             }
             else
             {
-                /*  !!!!
-                //space
-                if (a.KeyCode == Keys.Space && (a.Modifiers == Keys.None || a.Modifiers == Keys.Shift))
-                {
-                    if (OnKeyPressing(' ')) //KeyPress event processed key
-                        return false;
-
-                    if (Selection.ReadOnly) return false;
-
-                    if (!Selection.IsEmpty)
-                        ClearSelected();
-
-                    //replace mode? select forward char
-                    if (IsReplaceMode)
-                    {
-                        Selection.GoRight(true);
-                        Selection.Inverse();
-                        if (Selection.ReadOnly) return false;
-                    }
-
-                    InsertChar(' ');
-                    OnKeyPressed(' ');
-                    return false;
-                }
-
-                //backspace
-                if (a.KeyCode == Keys.Back && (a.Modifiers == Keys.None || a.Modifiers == Keys.Shift))
-                {
-                    if (OnKeyPressing('\b')) //KeyPress event processed key
-                        return false;
-
-                    if (Selection.ReadOnly) return false;
-
-                    if (!Selection.IsEmpty)
-                        ClearSelected();
-                    else
-                        if (!Selection.IsReadOnlyLeftChar()) //is not left char readonly?
-                            InsertChar('\b');
-
-                    OnKeyPressed('\b');
-                    return false;
-                }*/
-
                 //
                 if (a.KeyCode == Keys.Alt)
                     return true;
@@ -3557,6 +3516,11 @@ namespace FastColoredTextBoxNS
                         IncreaseIndent();
                     break;
 
+                case FCTBAction.AutoIndentChars:
+                    if (!Selection.ReadOnly)
+                        DoAutoIndentChars(Selection.Start.iLine);
+                    break;
+
                 case FCTBAction.NavigateBackward:
                     NavigateBackward();
                     break;
@@ -3626,6 +3590,10 @@ namespace FastColoredTextBoxNS
                                             RemoveSpacesAfterCaret();
                                 }
                         }
+
+                        if (AutoIndentChars)
+                            DoAutoIndentChars(Selection.Start.iLine);
+
                         OnKeyPressed((char) 0xff);
                     }
                     break;
@@ -4145,6 +4113,9 @@ namespace FastColoredTextBoxNS
                     if (!Selection.IsReadOnlyLeftChar()) //is not left char readonly?
                         InsertChar('\b');
 
+                if (AutoIndentChars)
+                    DoAutoIndentChars(Selection.Start.iLine);
+
                 OnKeyPressed('\b');
                 return true;
             }
@@ -4201,6 +4172,9 @@ namespace FastColoredTextBoxNS
                 //do autoindent
                 if (c == '\n' || AutoIndentExistingLines)
                     DoAutoIndentIfNeed();
+
+                if (AutoIndentChars)
+                    DoAutoIndentChars(Selection.Start.iLine);
             }
 
             DoCaretVisible();
@@ -4210,6 +4184,178 @@ namespace FastColoredTextBoxNS
 
             return true;
         }
+
+        #region AutoIndentChars
+
+        /// <summary>
+        /// Enables AutoIndentChars mode
+        /// </summary>
+        [Description("Enables AutoIndentChars mode")]
+        [DefaultValue(true)]
+        public bool AutoIndentChars { get; set; }
+
+        /// <summary>
+        /// Regex patterns for AutoIndentChars (one regex per line)
+        /// </summary>
+        [Description("Regex patterns for AutoIndentChars (one regex per line)")] 
+        [Editor( "System.ComponentModel.Design.MultilineStringEditor, System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" , typeof(UITypeEditor))]
+        [DefaultValue(@"^\s*[\w\.]+\s*(?<range>=)\s*(?<range>[^;]+);")]
+        public string AutoIndentCharsPatterns { get; set; }
+
+        /// <summary>
+        /// Do AutoIndentChars
+        /// </summary>
+        public void DoAutoIndentChars(int iLine)
+        {
+            var patterns = AutoIndentCharsPatterns.Split(new char[] {'\r', '\n'}, StringSplitOptions.RemoveEmptyEntries);
+
+            foreach (var pattern in patterns)
+            {
+                var m = Regex.Match(this[iLine].Text, pattern);
+                if (m.Success)
+                {
+                    DoAutoIndentChars(iLine, new Regex(pattern));
+                    break;
+                }
+            }
+        }
+
+        protected void DoAutoIndentChars(int iLine, Regex regex)
+        {
+            var oldSel = Selection.Clone();
+
+            var captures = new SortedDictionary<int, CaptureCollection>();
+            var texts = new SortedDictionary<int, string>();
+            var maxCapturesCount = 0;
+
+            var spaces = this[iLine].StartSpacesCount;
+
+            for(var i = iLine; i >= 0; i--)
+            {
+                if (spaces != this[i].StartSpacesCount)
+                    break;
+
+                var text = this[i].Text;
+                var m = regex.Match(text);
+                if (m.Success)
+                {
+                    captures[i] = m.Groups["range"].Captures;
+                    texts[i] = text;
+
+                    if (captures[i].Count > maxCapturesCount)
+                        maxCapturesCount = captures[i].Count;
+                }
+                else
+                    break;
+            }
+
+            for (var i = iLine + 1; i < LinesCount; i++)
+            {
+                if (spaces != this[i].StartSpacesCount)
+                    break;
+
+                var text = this[i].Text;
+                var m = regex.Match(text);
+                if (m.Success)
+                {
+                    captures[i] = m.Groups["range"].Captures;
+                    texts[i] = text;
+
+                    if (captures[i].Count > maxCapturesCount)
+                        maxCapturesCount = captures[i].Count;
+
+                }
+                else
+                    break;
+            }
+
+            var changed = new Dictionary<int, bool>();
+            var was = false;
+
+            for (int iCapture = maxCapturesCount - 1; iCapture >= 0; iCapture--)
+            {
+                //find max dist
+                var maxDist = 0;
+                foreach(var i in captures.Keys)
+                {
+                    var caps = captures[i];
+                    if (caps.Count <= iCapture)
+                        continue;
+                    var dist = 0;
+                    var cap = caps[iCapture];
+
+                    var index = cap.Index;
+
+                    var text = texts[i];
+                    while (index > 0 && text[index - 1] == ' ') index--;
+
+                    if (iCapture == 0)
+                        dist = index;
+                    else
+                        dist = index - caps[iCapture - 1].Index - 1;
+
+                    if (dist > maxDist)
+                        maxDist = dist;
+                }
+
+                //insert whitespaces
+                foreach(var i in new List<int>(texts.Keys))
+                {
+                    if (captures[i].Count <= iCapture)
+                        continue;
+
+                    var dist = 0;
+                    var cap = captures[i][iCapture];
+
+                    if (iCapture == 0)
+                        dist = cap.Index;
+                    else
+                        dist = cap.Index - captures[i][iCapture - 1].Index - 1;
+
+                    var addSpaces = maxDist - dist + 1;//+1 because min space count is 1
+
+                    if (addSpaces == 0)
+                        continue;
+
+                    if (oldSel.Start.iLine == i && oldSel.Start.iChar > cap.Index)
+                        oldSel.Start = new Place(oldSel.Start.iChar + addSpaces, i);
+
+                    if (addSpaces > 0)
+                        texts[i] = texts[i].Insert(cap.Index, new string(' ', addSpaces));
+                    else
+                        texts[i] = texts[i].Remove(cap.Index + addSpaces, -addSpaces);
+                    
+                    changed[i] = true;
+                    was = true;
+                }
+            }
+
+            //insert text
+            if (was)
+            {
+                Selection.BeginUpdate();
+                BeginAutoUndo();
+                BeginUpdate();
+
+                TextSource.Manager.ExecuteCommand(new SelectCommand(TextSource));
+
+                foreach (var i in texts.Keys)
+                if (changed.ContainsKey(i))
+                {
+                    Selection = new Range(this, 0, i, this[i].Count, i);
+                    if(!Selection.ReadOnly)
+                        InsertText(texts[i]);
+                }
+
+                Selection = oldSel;
+
+                EndUpdate();
+                EndAutoUndo();
+                Selection.EndUpdate();
+            }
+        }
+
+        #endregion
 
         private bool DoAutocompleteBrackets(char c)
         {
@@ -4283,7 +4429,7 @@ namespace FastColoredTextBoxNS
             }
         }
 
-        private void DoAutoIndentIfNeed()
+        public virtual void DoAutoIndentIfNeed()
         {
             if (Selection.ColumnSelectionMode)
                 return;
@@ -4405,7 +4551,7 @@ namespace FastColoredTextBoxNS
         }
 
 
-        private int GetMinStartSpacesCount(int fromLine, int toLine)
+        protected int GetMinStartSpacesCount(int fromLine, int toLine)
         {
             if (fromLine > toLine)
                 return 0;
@@ -4415,6 +4561,22 @@ namespace FastColoredTextBoxNS
             {
                 int count = lines[i].StartSpacesCount;
                 if (count < result)
+                    result = count;
+            }
+
+            return result;
+        }
+
+        protected int GetMaxStartSpacesCount(int fromLine, int toLine)
+        {
+            if (fromLine > toLine)
+                return 0;
+
+            int result = 0;
+            for (int i = fromLine; i <= toLine; i++)
+            {
+                int count = lines[i].StartSpacesCount;
+                if (count > result)
                     result = count;
             }
 
@@ -6251,7 +6413,7 @@ namespace FastColoredTextBoxNS
         /// <summary>
         /// Insert TAB into front of seletcted lines.
         /// </summary>
-        public void IncreaseIndent()
+        public virtual void IncreaseIndent()
         {
             if (Selection.Start == Selection.End)
             {
@@ -6327,7 +6489,7 @@ namespace FastColoredTextBoxNS
         /// <summary>
         /// Remove TAB from front of seletcted lines.
         /// </summary>
-        public void DecreaseIndent()
+        public virtual void DecreaseIndent()
         {
             if (Selection.Start.iLine == Selection.End.iLine)
             {
@@ -6407,28 +6569,10 @@ namespace FastColoredTextBoxNS
             Invalidate();
         }
 
-        /*
-        private void DecreaseIndentOfSingleLine()
-        {
-            var old = Selection.Clone();
-            var r = new Range(this, 0, Selection.Start.iLine, Selection.FromX, Selection.Start.iLine);
-            foreach (var range in r.GetRanges("\\s{1,"+TabLength+"}", RegexOptions.RightToLeft))
-            {
-                lines.Manager.BeginAutoUndoCommands();
-                lines.Manager.ExecuteCommand(new SelectCommand(TextSource));
-                Selection = range;
-                ClearSelected();
-                lines.Manager.EndAutoUndoCommands();
-                var rangeLength = range.End.iChar - range.Start.iChar;
-                Selection = new Range(this, old.Start.iChar - rangeLength, old.Start.iLine, old.End.iChar - rangeLength, old.End.iLine);
-                break;
-            }
-        }*/
-
         /// <summary>
         /// Remove TAB in front of the caret ot the selected line.
         /// </summary>
-        private void DecreaseIndentOfSingleLine()
+        protected virtual void DecreaseIndentOfSingleLine()
         {
             if (this.Selection.Start.iLine != this.Selection.End.iLine)
                 return;
@@ -6488,7 +6632,7 @@ namespace FastColoredTextBoxNS
         /// <summary>
         /// Insert autoindents into selected lines
         /// </summary>
-        public void DoAutoIndent()
+        public virtual void DoAutoIndent()
         {
             if (Selection.ColumnSelectionMode)
                 return;
@@ -6514,7 +6658,7 @@ namespace FastColoredTextBoxNS
         /// <summary>
         /// Insert prefix into front of seletcted lines
         /// </summary>
-        public void InsertLinePrefix(string prefix)
+        public virtual void InsertLinePrefix(string prefix)
         {
             Range old = Selection.Clone();
             int from = Math.Min(Selection.Start.iLine, Selection.End.iLine);
@@ -6542,7 +6686,7 @@ namespace FastColoredTextBoxNS
         /// Remove prefix from front of selected lines
         /// This method ignores forward spaces of the line
         /// </summary>
-        public void RemoveLinePrefix(string prefix)
+        public virtual void RemoveLinePrefix(string prefix)
         {
             Range old = Selection.Clone();
             int from = Math.Min(Selection.Start.iLine, Selection.End.iLine);

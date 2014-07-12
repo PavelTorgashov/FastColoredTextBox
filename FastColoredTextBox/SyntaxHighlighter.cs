@@ -652,6 +652,12 @@ namespace FastColoredTextBoxNS
             range.tb.LeftBracket2 = '{';
             range.tb.RightBracket2 = '}';
             range.tb.BracketsHighlightStrategy = BracketsHighlightStrategy.Strategy2;
+
+            range.tb.AutoIndentCharsPatterns
+                = @"
+^\s*[\w\.]+(\s\w+)?\s*(?<range>=)\s*(?<range>[^;]+);
+^\s*(case|default)\s*[^:]*(?<range>:)\s*(?<range>[^;]+);
+";
             //clear style of changed range
             range.ClearStyle(StringStyle, CommentStyle, NumberStyle, AttributeStyle, ClassNameStyle, KeywordStyle);
             //
@@ -671,7 +677,6 @@ namespace FastColoredTextBoxNS
             range.SetStyle(ClassNameStyle, CSharpClassNameRegex);
             //keyword highlighting
             range.SetStyle(KeywordStyle, CSharpKeywordRegex);
-
 
             //find document comments
             foreach (Range r in range.GetRanges(@"^\s*///.*$", RegexOptions.Multiline))
@@ -729,6 +734,11 @@ namespace FastColoredTextBoxNS
             range.tb.RightBracket = ')';
             range.tb.LeftBracket2 = '\x0';
             range.tb.RightBracket2 = '\x0';
+
+            range.tb.AutoIndentCharsPatterns
+                = @"
+^\s*[\w\.\(\)]+\s*(?<range>=)\s*(?<range>.+)
+";
             //clear style of changed range
             range.ClearStyle(StringStyle, CommentStyle, NumberStyle, ClassNameStyle, KeywordStyle);
             //
@@ -795,6 +805,7 @@ namespace FastColoredTextBoxNS
             range.tb.RightBracket = '>';
             range.tb.LeftBracket2 = '(';
             range.tb.RightBracket2 = ')';
+            range.tb.AutoIndentCharsPatterns = @"";
             //clear style of changed range
             range.ClearStyle(CommentStyle, TagBracketStyle, TagNameStyle, AttributeStyle, AttributeValueStyle,
                              HtmlEntityStyle);
@@ -862,7 +873,7 @@ namespace FastColoredTextBoxNS
             range.tb.RightBracket = '>';
             range.tb.LeftBracket2 = '(';
             range.tb.RightBracket2 = ')';
-
+            range.tb.AutoIndentCharsPatterns = @"";
             //clear style of changed range
             range.ClearStyle(CommentStyle, XmlTagBracketStyle, XmlTagNameStyle, XmlAttributeStyle, XmlAttributeValueStyle,
                              XmlEntityStyle, XmlCDataStyle);
@@ -934,6 +945,8 @@ namespace FastColoredTextBoxNS
             range.tb.RightBracket = ')';
             range.tb.LeftBracket2 = '\x0';
             range.tb.RightBracket2 = '\x0';
+
+            range.tb.AutoIndentCharsPatterns = @"";
             //clear style of changed range
             range.ClearStyle(CommentStyle, StringStyle, NumberStyle, VariableStyle, StatementsStyle, KeywordStyle,
                              FunctionsStyle, TypesStyle);
@@ -1003,6 +1016,12 @@ namespace FastColoredTextBoxNS
             //clear style of changed range
             range.ClearStyle(StringStyle, CommentStyle, NumberStyle, VariableStyle, KeywordStyle, KeywordStyle2,
                              KeywordStyle3);
+
+            range.tb.AutoIndentCharsPatterns
+                = @"
+^\s*\$[\w\.\[\]\'\""]+\s*(?<range>=)\s*(?<range>[^;]+);
+";
+
             //
             if (PHPStringRegex == null)
                 InitPHPRegex();
@@ -1055,6 +1074,12 @@ namespace FastColoredTextBoxNS
             range.tb.LeftBracket2 = '{';
             range.tb.RightBracket2 = '}';
             range.tb.BracketsHighlightStrategy = BracketsHighlightStrategy.Strategy2;
+
+            range.tb.AutoIndentCharsPatterns
+                = @"
+^\s*[\w\.]+(\s\w+)?\s*(?<range>=)\s*(?<range>[^;]+);
+";
+
             //clear style of changed range
             range.ClearStyle(StringStyle, CommentStyle, NumberStyle, KeywordStyle);
             //
@@ -1109,6 +1134,12 @@ namespace FastColoredTextBoxNS
             range.tb.LeftBracket2 = '{';
             range.tb.RightBracket2 = '}';
             range.tb.BracketsHighlightStrategy = BracketsHighlightStrategy.Strategy2;
+
+            range.tb.AutoIndentCharsPatterns
+                = @"
+^\s*[\w\.]+(\s\w+)?\s*(?<range>=)\s*(?<range>.+)
+";
+
             //clear style of changed range
             range.ClearStyle(StringStyle, CommentStyle, NumberStyle, KeywordStyle, FunctionsStyle);
             //

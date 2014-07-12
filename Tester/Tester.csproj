@@ -89,6 +89,12 @@
     <Compile Include="AutocompleteSample4.Designer.cs">
       <DependentUpon>AutocompleteSample4.cs</DependentUpon>
     </Compile>
+    <Compile Include="AutoIndentCharsSample.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AutoIndentCharsSample.Designer.cs">
+      <DependentUpon>AutoIndentCharsSample.cs</DependentUpon>
+    </Compile>
     <Compile Include="CustomWordWrapSample.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -310,6 +316,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="AutocompleteSample4.resx">
       <DependentUpon>AutocompleteSample4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AutoIndentCharsSample.resx">
+      <DependentUpon>AutoIndentCharsSample.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CustomWordWrapSample.resx">
       <DependentUpon>CustomWordWrapSample.cs</DependentUpon>

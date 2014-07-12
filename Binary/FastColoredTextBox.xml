@@ -1323,6 +1323,11 @@
             Process "real" keys (no control)
             </summary>
         </member>
+        <member name="M:FastColoredTextBoxNS.FastColoredTextBox.DoAutoIndentChars(System.Int32)">
+            <summary>
+            Do AutoIndentChars
+            </summary>
+        </member>
         <member name="M:FastColoredTextBoxNS.FastColoredTextBox.FindChar(System.Char)">
             <summary>
             Finds given char after current caret position, moves the caret to found pos.
@@ -2373,6 +2378,16 @@
         <member name="E:FastColoredTextBoxNS.FastColoredTextBox.WordWrapNeeded">
             <summary>
             Occurs when custom wordwrap is needed
+            </summary>
+        </member>
+        <member name="P:FastColoredTextBoxNS.FastColoredTextBox.AutoIndentChars">
+            <summary>
+            Enables AutoIndentChars mode
+            </summary>
+        </member>
+        <member name="P:FastColoredTextBoxNS.FastColoredTextBox.AutoIndentCharsPatterns">
+            <summary>
+            Regex patterns for AutoIndentChars (one regex per line)
             </summary>
         </member>
         <member name="P:FastColoredTextBoxNS.FastColoredTextBox.Zoom">

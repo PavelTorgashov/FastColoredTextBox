@@ -207,5 +207,10 @@ namespace Tester
         {
             new CustomWordWrapSample().Show();
         }
+
+        private void button38_Click(object sender, EventArgs e)
+        {
+            new AutoIndentCharsSample().Show();
+        }
     }
 }
