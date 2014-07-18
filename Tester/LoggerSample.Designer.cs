@@ -33,6 +33,7 @@
             this.btGotToEnd = new System.Windows.Forms.Button();
             this.tm = new System.Windows.Forms.Timer(this.components);
             this.fctb = new FastColoredTextBoxNS.FastColoredTextBox();
+            ((System.ComponentModel.ISupportInitialize)(this.fctb)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -64,12 +65,26 @@
             // 
             // fctb
             // 
+            this.fctb.AutoCompleteBracketsList = new char[] {
+        '(',
+        ')',
+        '{',
+        '}',
+        '[',
+        ']',
+        '\"',
+        '\"',
+        '\'',
+        '\''};
             this.fctb.AutoScrollMinSize = new System.Drawing.Size(25, 15);
             this.fctb.BackBrush = null;
+            this.fctb.CharHeight = 15;
+            this.fctb.CharWidth = 7;
             this.fctb.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.fctb.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.fctb.Dock = System.Windows.Forms.DockStyle.Fill;
             this.fctb.Font = new System.Drawing.Font("Consolas", 9.75F);
+            this.fctb.IsReplaceMode = false;
             this.fctb.Location = new System.Drawing.Point(0, 40);
             this.fctb.Name = "fctb";
             this.fctb.Paddings = new System.Windows.Forms.Padding(0);
@@ -77,6 +92,7 @@
             this.fctb.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.fctb.Size = new System.Drawing.Size(355, 249);
             this.fctb.TabIndex = 5;
+            this.fctb.Zoom = 100;
             // 
             // LoggerSample
             // 
@@ -88,6 +104,7 @@
             this.Controls.Add(this.btGotToEnd);
             this.Name = "LoggerSample";
             this.Text = "LoggerSample";
+            ((System.ComponentModel.ISupportInitialize)(this.fctb)).EndInit();
             this.ResumeLayout(false);
 
         }

@@ -239,8 +239,15 @@ namespace FastColoredTextBoxNS
                     tb.Selection.Start = Place.Empty;
                 }
                 tb.ExpandBlock(tb.Selection.Start.iLine);
-                foreach (char c in insertedText)
-                    InsertCharCommand.InsertChar(c, ref cc, ts);
+                var len = insertedText.Length;
+                for (int i = 0; i < len; i++)
+                {
+                    var c = insertedText[i];
+                    if(c == '\r' && (i >= len - 1 || insertedText[i + 1] != '\n'))
+                        InsertCharCommand.InsertChar('\n', ref cc, ts);
+                    else
+                        InsertCharCommand.InsertChar(c, ref cc, ts);
+                }
                 ts.NeedRecalc(new TextSource.TextChangedEventArgs(0, 1));
             }
             finally {

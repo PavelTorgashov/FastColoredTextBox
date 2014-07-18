@@ -42,6 +42,7 @@ namespace Tester
             //remember user selection
             var userSelection = fctb.Selection.Clone();
             //add text with predefined style
+            fctb.TextSource.CurrentTB = fctb;
             fctb.AppendText(text, style);
             //restore user selection
             if (!userSelection.IsEmpty || userSelection.Start.iLine < fctb.LinesCount - 2)
@@ -59,6 +60,11 @@ namespace Tester
         private void btGotToEnd_Click(object sender, EventArgs e)
         {
             fctb.GoEnd();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            tm_Tick(null, EventArgs.Empty);
         }
     }
 }

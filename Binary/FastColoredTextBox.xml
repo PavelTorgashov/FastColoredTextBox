@@ -1604,6 +1604,11 @@
             Highlights brackets around caret
             </summary>
         </member>
+        <member name="M:FastColoredTextBoxNS.FastColoredTextBox.SelectNext(System.String,System.Boolean,System.Text.RegularExpressions.RegexOptions)">
+            <summary>
+            Selectes next fragment for given regex.
+            </summary>
+        </member>
         <member name="M:FastColoredTextBoxNS.FastColoredTextBox.Print(FastColoredTextBoxNS.Range,FastColoredTextBoxNS.PrintDialogSettings)">
             <summary>
             Prints range of text
