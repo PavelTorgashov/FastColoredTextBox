@@ -19,13 +19,15 @@ namespace Tester
             var fctb = new FastColoredTextBox(){Dock = DockStyle.Fill, Parent = this};
             fctb.TextChangedDelayed += new EventHandler<TextChangedEventArgs>(fctb_TextChangedDelayed);
             fctb.Text = "[TestApp] This is line one";
+            fctb.SelectionStyle.InvertForeColor = true;
         }
 
         void fctb_TextChangedDelayed(object sender, TextChangedEventArgs e)
         {
             e.ChangedRange.ClearStyle(StyleIndex.All);
+            /*
             e.ChangedRange.SetStyle(style2, @"\[\w+\]");
-            e.ChangedRange.SetStyle(style1, @".*");
+            e.ChangedRange.SetStyle(style1, @".*");*/
         }
     }
 }

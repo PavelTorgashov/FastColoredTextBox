@@ -84,14 +84,29 @@ namespace FastColoredTextBoxNS
             sourceFileLinePositions.Add((int)fs.Position);
             base.lines.Add(null);
             //other lines
+            int prev = 0;
             while(fs.Position < length)
             {
                 var b = fs.ReadByte();
-                if (b == 10)// char \n
+
+                if (b == 10)// \n
                 {
                     sourceFileLinePositions.Add((int)(fs.Position) + shift);
                     base.lines.Add(null);
+                }else
+                if (prev == 13)// \r (Mac format)
+                {
+                    sourceFileLinePositions.Add((int)(fs.Position - 1) + shift);
+                    base.lines.Add(null);
                 }
+
+                prev = b;
+            }
+
+            if (prev == 13)
+            {
+                sourceFileLinePositions.Add((int)(fs.Position) + shift);
+                base.lines.Add(null);
             }
 
             Line[] temp = new Line[100];

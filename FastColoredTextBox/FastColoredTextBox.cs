@@ -18,6 +18,7 @@
 // This restriction saves memory.
 // However, you can to compile FCTB with 32 styles supporting.
 // Uncomment following definition if you need 32 styles instead of 16:
+//
 // #define Styles32
 
 using System;
