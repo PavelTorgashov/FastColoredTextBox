@@ -76,6 +76,8 @@ namespace FastColoredTextBoxNS
             if (fs != null)
                 fs.Dispose();
 
+            SaveEOL = Environment.NewLine;
+
             //read lines of file
             fs = new FileStream(fileName, FileMode.Open);
             var length = fs.Length;
