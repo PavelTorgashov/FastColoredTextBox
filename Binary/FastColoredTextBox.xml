@@ -538,6 +538,11 @@
             Occurs when need to save line in the file
             </summary>
         </member>
+        <member name="P:FastColoredTextBoxNS.FileTextSource.SaveEOL">
+            <summary>
+            End Of Line characters used for saving
+            </summary>
+        </member>
         <member name="P:FastColoredTextBoxNS.LineNeededEventArgs.DisplayedLineText">
             <summary>
             This text will be displayed in textbox

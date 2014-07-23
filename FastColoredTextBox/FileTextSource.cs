@@ -34,6 +34,8 @@ namespace FastColoredTextBoxNS
             timer.Interval = 10000;
             timer.Tick += new EventHandler(timer_Tick);
             timer.Enabled = true;
+
+            SaveEOL = Environment.NewLine;
         }
 
         void timer_Tick(object sender, EventArgs e)
@@ -98,6 +100,7 @@ namespace FastColoredTextBoxNS
                 {
                     sourceFileLinePositions.Add((int)(fs.Position - 1) + shift);
                     base.lines.Add(null);
+                    SaveEOL = "\r";
                 }
 
                 prev = b;
@@ -210,6 +213,11 @@ namespace FastColoredTextBoxNS
             fs = null;
         }
 
+        /// <summary>
+        /// End Of Line characters used for saving
+        /// </summary>
+        public string SaveEOL { get; set; }
+
         public override void SaveToFile(string fileName, Encoding enc)
         {
             //
@@ -249,10 +257,10 @@ namespace FastColoredTextBoxNS
                     }
 
                     //save line to file
-                    if (i == Count - 1)
-                        sw.Write(line);
-                    else
-                        sw.WriteLine(line);
+                    sw.Write(line);
+
+                    if (i < Count - 1)
+                        sw.Write(SaveEOL);
 
                     sw.Flush();
                 }
