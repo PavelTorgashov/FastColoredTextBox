@@ -161,16 +161,6 @@ namespace FastColoredTextBoxNS
             }
         }
 
-        public override void Dispose()
-        {
-            base.Dispose();
-            
-            if(ForeBrush!=null)
-                ForeBrush.Dispose();
-            if(BackgroundBrush!=null)
-                BackgroundBrush.Dispose();
-        }
-
         public override string GetCSS()
         {
             string result = "";
@@ -266,17 +256,18 @@ namespace FastColoredTextBoxNS
     /// </summary>
     public class SelectionStyle : Style
     {
-        public Brush BackgroundBrush{get;set;}
-        public bool InvertForeColor { get; set; }
+        public Brush BackgroundBrush{ get; set;}
+        public Brush ForegroundBrush { get; private set; }
 
         public override bool IsExportable
         {
             get{return false;}  set{}
         }
 
-        public SelectionStyle(Brush backgroundBrush)
+        public SelectionStyle(Brush backgroundBrush, Brush foregroundBrush = null)
         {
             this.BackgroundBrush = backgroundBrush;
+            this.ForegroundBrush = foregroundBrush;
         }
 
         public override void Draw(Graphics gr, Point position, Range range)
@@ -284,25 +275,22 @@ namespace FastColoredTextBoxNS
             //draw background
             if (BackgroundBrush != null)
             {
-                Rectangle rect = new Rectangle(position.X, position.Y, (range.End.iChar - range.Start.iChar) * range.tb.CharWidth, range.tb.CharHeight);
+                gr.SmoothingMode = SmoothingMode.None;
+                var rect = new Rectangle(position.X, position.Y, (range.End.iChar - range.Start.iChar) * range.tb.CharWidth, range.tb.CharHeight);
                 if (rect.Width == 0)
                     return;
                 gr.FillRectangle(BackgroundBrush, rect);
+                //
+                if (ForegroundBrush != null)
+                {
+                    gr.SmoothingMode = SmoothingMode.AntiAlias;
+
+                    var r = new Range(range.tb, range.Start.iChar, range.Start.iLine,
+                                      Math.Min(range.tb[range.End.iLine].Count, range.End.iChar), range.End.iLine);
+                    using (var style = new TextStyle(ForegroundBrush, null, FontStyle.Regular))
+                        style.Draw(gr, position, r);
+                }
             }
-        }
-
-
-        private Color InvertColor(Color color)
-        {
-            return Color.FromArgb(color.A, 255 - color.R, 255 - color.G, 255 - color.B);
-        }
-
-        public override void Dispose()
-        {
-            base.Dispose();
-
-            if (BackgroundBrush != null)
-                BackgroundBrush.Dispose();
         }
     }
 
@@ -330,14 +318,6 @@ namespace FastColoredTextBoxNS
                     return;
                 gr.FillRectangle(BackgroundBrush, rect);
             }
-        }
-
-        public override void Dispose()
-        {
-            base.Dispose();
-
-            if (BackgroundBrush != null)
-                BackgroundBrush.Dispose();
         }
 
         public override string GetCSS()
@@ -377,14 +357,6 @@ namespace FastColoredTextBoxNS
             gr.DrawPath(borderPen, GetRoundedRectangle(rect, 1));
             //add visual marker for handle mouse events
             AddVisualMarker(range.tb, new StyleVisualMarker(new Rectangle(p.X-range.tb.CharWidth, p.Y, range.tb.CharWidth, range.tb.CharHeight), this));
-        }
-
-        public override void Dispose()
-        {
-            base.Dispose();
-
-            if (borderPen != null)
-                borderPen.Dispose();
         }
     }
 
@@ -432,6 +404,7 @@ namespace FastColoredTextBoxNS
         public override void Dispose()
         {
             base.Dispose();
+
             if (Pen != null)
                 Pen.Dispose();
         }
