@@ -31,11 +31,11 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CustomScrollBarsSample));
             this.label2 = new System.Windows.Forms.Label();
-            this.fctb = new FastColoredTextBoxNS.FastColoredTextBox();
             this.vScrollBar = new System.Windows.Forms.VScrollBar();
             this.hScrollBar = new System.Windows.Forms.HScrollBar();
             this.hMyScrollBar = new Tester.MyScrollBar();
             this.vMyScrollBar = new Tester.MyScrollBar();
+            this.fctb = new FastColoredTextBoxNS.FastColoredTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.fctb)).BeginInit();
             this.SuspendLayout();
             // 
@@ -48,37 +48,6 @@
             this.label2.Size = new System.Drawing.Size(461, 38);
             this.label2.TabIndex = 2;
             this.label2.Text = "Here we create custom outside scrollbars for FCTB.";
-            // 
-            // fctb
-            // 
-            this.fctb.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.fctb.AutoScrollMinSize = new System.Drawing.Size(284, 315);
-            this.fctb.BackBrush = null;
-            this.fctb.BackColor = System.Drawing.Color.Gold;
-            this.fctb.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.fctb.CharHeight = 15;
-            this.fctb.CharWidth = 7;
-            this.fctb.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.fctb.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-            this.fctb.Font = new System.Drawing.Font("Consolas", 9.75F);
-            this.fctb.IndentBackColor = System.Drawing.Color.Orange;
-            this.fctb.IsReplaceMode = false;
-            this.fctb.Language = FastColoredTextBoxNS.Language.CSharp;
-            this.fctb.LeftBracket = '(';
-            this.fctb.Location = new System.Drawing.Point(41, 62);
-            this.fctb.Name = "fctb";
-            this.fctb.Paddings = new System.Windows.Forms.Padding(0);
-            this.fctb.RightBracket = ')';
-            this.fctb.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
-            this.fctb.ServiceLinesColor = System.Drawing.Color.DarkGray;
-            this.fctb.ShowScrollBars = false;
-            this.fctb.Size = new System.Drawing.Size(227, 179);
-            this.fctb.TabIndex = 3;
-            this.fctb.Text = resources.GetString("fctb.Text");
-            this.fctb.Zoom = 100;
-            this.fctb.ScrollbarsUpdated += new System.EventHandler(this.fctb_ScrollbarsUpdated);
             // 
             // vScrollBar
             // 
@@ -135,6 +104,53 @@
             this.vMyScrollBar.ThumbSize = 10;
             this.vMyScrollBar.Value = 0;
             this.vMyScrollBar.Scroll += new System.Windows.Forms.ScrollEventHandler(this.ScrollBar_Scroll);
+            // 
+            // fctb
+            // 
+            this.fctb.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.fctb.AutoCompleteBracketsList = new char[] {
+        '(',
+        ')',
+        '{',
+        '}',
+        '[',
+        ']',
+        '\"',
+        '\"',
+        '\'',
+        '\''};
+            this.fctb.AutoIndentCharsPatterns = "\r\n^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;]+);\r\n^\\s*(case|default)\\s*[^:]" +
+    "*(?<range>:)\\s*(?<range>[^;]+);\r\n";
+            this.fctb.AutoScrollMinSize = new System.Drawing.Size(284, 315);
+            this.fctb.BackBrush = null;
+            this.fctb.BackColor = System.Drawing.Color.Gold;
+            this.fctb.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.fctb.BracketsHighlightStrategy = FastColoredTextBoxNS.BracketsHighlightStrategy.Strategy2;
+            this.fctb.CharHeight = 15;
+            this.fctb.CharWidth = 7;
+            this.fctb.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.fctb.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.fctb.Font = new System.Drawing.Font("Consolas", 9.75F);
+            this.fctb.IndentBackColor = System.Drawing.Color.Orange;
+            this.fctb.IsReplaceMode = false;
+            this.fctb.Language = FastColoredTextBoxNS.Language.CSharp;
+            this.fctb.LeftBracket = '(';
+            this.fctb.LeftBracket2 = '{';
+            this.fctb.Location = new System.Drawing.Point(41, 62);
+            this.fctb.Name = "fctb";
+            this.fctb.Paddings = new System.Windows.Forms.Padding(0);
+            this.fctb.RightBracket = ')';
+            this.fctb.RightBracket2 = '}';
+            this.fctb.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
+            this.fctb.ServiceLinesColor = System.Drawing.Color.DarkGray;
+            this.fctb.ShowScrollBars = false;
+            this.fctb.Size = new System.Drawing.Size(227, 179);
+            this.fctb.TabIndex = 3;
+            this.fctb.Text = resources.GetString("fctb.Text");
+            this.fctb.Zoom = 100;
+            this.fctb.ScrollbarsUpdated += new System.EventHandler(this.fctb_ScrollbarsUpdated);
             // 
             // CustomScrollBarsSample
             // 

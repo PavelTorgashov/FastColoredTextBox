@@ -4935,7 +4935,7 @@ namespace FastColoredTextBoxNS
 
                 var caretRect = new Rectangle(HorizontalScroll.Value + car.X, VerticalScroll.Value + car.Y, carWidth, charHeight + 1);
 
-                if (prevCaretRect != caretRect)
+                if (prevCaretRect != caretRect || !ShowScrollBars)
                 {
                     CreateCaret(Handle, 0, carWidth, CharHeight + 1);
                     SetCaretPos(car.X, car.Y);
