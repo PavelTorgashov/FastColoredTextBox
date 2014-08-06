@@ -41,6 +41,12 @@ namespace FastColoredTextBoxNS
                         InsertChar(deletedChar, ref cc, ts);
                     }
                     break;
+                case '\t':
+                    ts.CurrentTB.ExpandBlock(sel.Start.iLine);
+                    for (int i = sel.Start.iChar; i < lastSel.FromX; i++)
+                        ts[sel.Start.iLine].RemoveAt(sel.Start.iChar);
+                    ts.CurrentTB.Selection.Start = sel.Start;
+                    break;
                 default:
                     ts.CurrentTB.ExpandBlock(sel.Start.iLine);
                     ts[sel.Start.iLine].RemoveAt(sel.Start.iChar);

@@ -3397,6 +3397,11 @@ namespace FastColoredTextBoxNS
                 DoAction(act);
                 if (scrollActions.ContainsKey(act))
                     return true;
+                if (keyData == Keys.Tab || keyData == (Keys.Tab | Keys.Shift))
+                {
+                    handledChar = true;
+                    return true;
+                }
             }
             else
             {
@@ -3514,7 +3519,13 @@ namespace FastColoredTextBoxNS
 
                 case FCTBAction.IndentIncrease:
                     if (!Selection.ReadOnly)
-                        IncreaseIndent();
+                    {
+                        if (Selection.Start == Selection.End && this[Selection.Start.iLine].StartSpacesCount < Selection.Start.iChar)
+                        {
+                            ProcessKey('\t', Keys.None);
+                        }else
+                            IncreaseIndent();
+                    }
                     break;
 
                 case FCTBAction.AutoIndentChars:
@@ -4151,32 +4162,28 @@ namespace FastColoredTextBoxNS
             if (c == '\r' && !AcceptsReturn)
                 return false;
 
-            //is not tab?
-            if (c != '\t')
+            //replace \r on \n
+            if (c == '\r')
+                c = '\n';
+            //replace mode? select forward char
+            if (IsReplaceMode)
             {
-                //replace \r on \n
-                if (c == '\r')
-                    c = '\n';
-                //replace mode? select forward char
-                if (IsReplaceMode)
-                {
-                    Selection.GoRight(true);
-                    Selection.Inverse();
-                }
-                //insert char
-                if (!Selection.ReadOnly)
-                {
-                    if (!DoAutocompleteBrackets(c))
-                        InsertChar(c);
-                }
-
-                //do autoindent
-                if (c == '\n' || AutoIndentExistingLines)
-                    DoAutoIndentIfNeed();
-
-                if (AutoIndentChars)
-                    DoAutoIndentChars(Selection.Start.iLine);
+                Selection.GoRight(true);
+                Selection.Inverse();
             }
+            //insert char
+            if (!Selection.ReadOnly)
+            {
+                if (!DoAutocompleteBrackets(c))
+                    InsertChar(c);
+            }
+
+            //do autoindent
+            if (c == '\n' || AutoIndentExistingLines)
+                DoAutoIndentIfNeed();
+
+            if (AutoIndentChars)
+                DoAutoIndentChars(Selection.Start.iLine);
 
             DoCaretVisible();
             Invalidate();
