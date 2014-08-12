@@ -89,7 +89,7 @@ namespace FastColoredTextBoxNS
                 {
                     for (int i = currentLine; i < p.iLine; i++)
                     {
-                        tempSB.Append(UseBr ? "<br>" : "");
+                        tempSB.Append(UseBr ? "<br>" : "\r\n");
                         if (IncludeLineNumbers)
                             tempSB.AppendFormat("<span class=lineNumber>{0}</span>  ", i + 2);
                     }

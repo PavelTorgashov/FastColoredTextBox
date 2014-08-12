@@ -43,7 +43,7 @@ namespace FastColoredTextBoxNS
                     break;
                 case '\t':
                     ts.CurrentTB.ExpandBlock(sel.Start.iLine);
-                    for (int i = sel.Start.iChar; i < lastSel.FromX; i++)
+                    for (int i = sel.FromX; i < lastSel.FromX; i++)
                         ts[sel.Start.iLine].RemoveAt(sel.Start.iChar);
                     ts.CurrentTB.Selection.Start = sel.Start;
                     break;

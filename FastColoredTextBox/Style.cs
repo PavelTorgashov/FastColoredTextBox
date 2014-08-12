@@ -283,6 +283,7 @@ namespace FastColoredTextBoxNS
                 //
                 if (ForegroundBrush != null)
                 {
+                    //draw text
                     gr.SmoothingMode = SmoothingMode.AntiAlias;
 
                     var r = new Range(range.tb, range.Start.iChar, range.Start.iLine,
