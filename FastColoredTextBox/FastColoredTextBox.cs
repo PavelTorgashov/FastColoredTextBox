@@ -212,6 +212,7 @@ namespace FastColoredTextBoxNS
             AutoCompleteBrackets = false;
             AutoIndentCharsPatterns = @"^\s*[\w\.]+\s*(?<range>=)\s*(?<range>[^;]+);";
             AutoIndentChars = true;
+            CaretBlinking = true;
             //
             base.AutoScroll = true;
             timer.Tick += timer_Tick;
@@ -375,6 +376,14 @@ namespace FastColoredTextBoxNS
                 Invalidate();
             }
         }
+
+        /// <summary>
+        /// Enables caret blinking
+        /// </summary>
+        [DefaultValue(true)]
+        [Description("Enables caret blinking")]
+        public bool CaretBlinking { get; set; }
+
 
         Color textAreaBorderColor;
 
@@ -4942,6 +4951,7 @@ namespace FastColoredTextBoxNS
 
                 var caretRect = new Rectangle(HorizontalScroll.Value + car.X, VerticalScroll.Value + car.Y, carWidth, charHeight + 1);
 
+                if (CaretBlinking)
                 if (prevCaretRect != caretRect || !ShowScrollBars)
                 {
                     CreateCaret(Handle, 0, carWidth, CharHeight + 1);

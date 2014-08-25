@@ -28,9 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ConsoleSample));
             this.label2 = new System.Windows.Forms.Label();
             this.consoleTextBox1 = new Tester.ConsoleTextBox();
+            ((System.ComponentModel.ISupportInitialize)(this.consoleTextBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // label2
@@ -48,10 +50,23 @@
             this.consoleTextBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.consoleTextBox1.AutoCompleteBracketsList = new char[] {
+        '(',
+        ')',
+        '{',
+        '}',
+        '[',
+        ']',
+        '\"',
+        '\"',
+        '\'',
+        '\''};
             this.consoleTextBox1.AutoScrollMinSize = new System.Drawing.Size(585, 15);
             this.consoleTextBox1.BackBrush = null;
             this.consoleTextBox1.BackColor = System.Drawing.Color.Black;
             this.consoleTextBox1.CaretColor = System.Drawing.Color.White;
+            this.consoleTextBox1.CharHeight = 15;
+            this.consoleTextBox1.CharWidth = 7;
             this.consoleTextBox1.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.consoleTextBox1.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.consoleTextBox1.FoldingIndicatorColor = System.Drawing.Color.Gold;
@@ -59,6 +74,7 @@
             this.consoleTextBox1.ForeColor = System.Drawing.Color.White;
             this.consoleTextBox1.IndentBackColor = System.Drawing.Color.Black;
             this.consoleTextBox1.IsReadLineMode = false;
+            this.consoleTextBox1.IsReplaceMode = false;
             this.consoleTextBox1.LineNumberColor = System.Drawing.Color.Gold;
             this.consoleTextBox1.Location = new System.Drawing.Point(12, 41);
             this.consoleTextBox1.Name = "consoleTextBox1";
@@ -71,6 +87,7 @@
             this.consoleTextBox1.TabIndex = 0;
             this.consoleTextBox1.WordWrap = true;
             this.consoleTextBox1.WordWrapMode = FastColoredTextBoxNS.WordWrapMode.CharWrapPreferredWidth;
+            this.consoleTextBox1.Zoom = 100;
             // 
             // ConsoleSample
             // 
@@ -81,6 +98,7 @@
             this.Controls.Add(this.consoleTextBox1);
             this.Name = "ConsoleSample";
             this.Text = "ConsoleSample";
+            ((System.ComponentModel.ISupportInitialize)(this.consoleTextBox1)).EndInit();
             this.ResumeLayout(false);
 
         }

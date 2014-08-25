@@ -1793,6 +1793,11 @@
             Shows or hides the caret
             </summary>
         </member>
+        <member name="P:FastColoredTextBoxNS.FastColoredTextBox.CaretBlinking">
+            <summary>
+            Enables caret blinking
+            </summary>
+        </member>
         <member name="P:FastColoredTextBoxNS.FastColoredTextBox.TextAreaBorderColor">
             <summary>
             Color of border of text area
