@@ -7570,7 +7570,6 @@ window.status = ""#print"";
                 if (!draggedRange.Contains(place))
                 {
                     BeginAutoUndo();
-                    Selection.BeginUpdate();
 
                     //remember dragged selection for undo/redo
                     Selection = draggedRange;
@@ -7706,10 +7705,11 @@ window.status = ""#print"";
                         };
                     }
 
-                    Range.EndUpdate();
                     EndAutoUndo();
                 }
+
                 this.selection.Inverse();
+                OnSelectionChanged();
             }
             draggedRange = null;
         }

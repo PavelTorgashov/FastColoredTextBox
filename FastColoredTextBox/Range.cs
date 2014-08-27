@@ -1264,8 +1264,14 @@ namespace FastColoredTextBoxNS
 
             Range range = this.Clone();//to OnSelectionChanged disable
 
-            if(range.CharAfterStart == '\n')
+            bool wasNewLine = false;
+
+
+            if (range.CharAfterStart == '\n')
+            {
                 range.GoRight(shift);
+                wasNewLine = true;
+            }
 
             bool wasSpace = false;
             while (IsSpaceChar(range.CharAfterStart))
@@ -1274,7 +1280,7 @@ namespace FastColoredTextBoxNS
                 range.GoRight(shift);
             }
 
-            if (!(wasSpace && goToStartOfNextWord))
+            if (!((wasSpace || wasNewLine) && goToStartOfNextWord))
             {
 
                 bool wasIdentifier = false;
