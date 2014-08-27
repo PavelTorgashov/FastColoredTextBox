@@ -10,7 +10,7 @@
 //
 //  Copyright (C) Pavel Torgashov, 2011-2014. 
 
-//#define debug
+// #define debug
 
 
 // -------------------------------------------------------------------------------
@@ -3657,11 +3657,11 @@ namespace FastColoredTextBoxNS
                     break;
 
                 case FCTBAction.GoWordRight:
-                    Selection.GoWordRight(false);
+                    Selection.GoWordRight(false, true);
                     break;
 
                 case FCTBAction.GoWordRightWithSelection:
-                    Selection.GoWordRight(true);
+                    Selection.GoWordRight(true, true);
                     break;
 
                 case FCTBAction.GoRight:
@@ -5375,22 +5375,26 @@ namespace FastColoredTextBoxNS
 
         private void DoScrollVertical(int countLines, int direction)
         {
-            int numberOfVisibleLines = ClientSize.Height / CharHeight;
+            if (VerticalScroll.Visible || !ShowScrollBars)
+            {
+                int numberOfVisibleLines = ClientSize.Height/CharHeight;
 
-            int offset;
-            if ((countLines == -1) || (countLines > numberOfVisibleLines))
-                offset = CharHeight*numberOfVisibleLines;
-            else
-                offset = CharHeight*countLines;
+                int offset;
+                if ((countLines == -1) || (countLines > numberOfVisibleLines))
+                    offset = CharHeight*numberOfVisibleLines;
+                else
+                    offset = CharHeight*countLines;
 
-            var newScrollPos = VerticalScroll.Value - Math.Sign(direction) * offset;
+                var newScrollPos = VerticalScroll.Value - Math.Sign(direction)*offset;
 
-            var ea = new ScrollEventArgs(direction > 0 ? ScrollEventType.SmallDecrement : ScrollEventType.SmallIncrement,
-                                         VerticalScroll.Value,
-                                         newScrollPos,
-                                         ScrollOrientation.VerticalScroll);
+                var ea =
+                    new ScrollEventArgs(direction > 0 ? ScrollEventType.SmallDecrement : ScrollEventType.SmallIncrement,
+                                        VerticalScroll.Value,
+                                        newScrollPos,
+                                        ScrollOrientation.VerticalScroll);
 
-            OnScroll(ea);
+                OnScroll(ea);
+            }
         }
 
         /// <summary>

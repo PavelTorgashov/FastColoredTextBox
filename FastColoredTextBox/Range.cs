@@ -1230,7 +1230,7 @@ namespace FastColoredTextBoxNS
                 return;
             }
 
-            Range range = this.Clone();//for OnSelectionChanged disable
+            Range range = this.Clone();//to OnSelectionChanged disable
             bool wasSpace = false;
             while (IsSpaceChar(range.CharBeforeStart))
             {
@@ -1252,7 +1252,7 @@ namespace FastColoredTextBoxNS
                 GoRight(shift);
         }
 
-        public void GoWordRight(bool shift)
+        public void GoWordRight(bool shift, bool goToStartOfNextWord = false)
         {
             ColumnSelectionMode = false;
 
@@ -1262,21 +1262,36 @@ namespace FastColoredTextBoxNS
                 return;
             }
 
-            Range range = this.Clone();//for OnSelectionChanged disable
+            Range range = this.Clone();//to OnSelectionChanged disable
+
+            if(range.CharAfterStart == '\n')
+                range.GoRight(shift);
+
             bool wasSpace = false;
             while (IsSpaceChar(range.CharAfterStart))
             {
                 wasSpace = true;
                 range.GoRight(shift);
             }
-            bool wasIdentifier = false;
-            while (IsIdentifierChar(range.CharAfterStart))
+
+            if (!(wasSpace && goToStartOfNextWord))
             {
-                wasIdentifier = true;
-                range.GoRight(shift);
+
+                bool wasIdentifier = false;
+                while (IsIdentifierChar(range.CharAfterStart))
+                {
+                    wasIdentifier = true;
+                    range.GoRight(shift);
+                }
+
+                if (!wasIdentifier)
+                    range.GoRight(shift);
+
+                if (goToStartOfNextWord && !wasSpace)
+                    while (IsSpaceChar(range.CharAfterStart))
+                        range.GoRight(shift);
             }
-            if (!wasIdentifier && (!wasSpace || range.CharAfterStart != '\n'))
-                range.GoRight(shift);
+
             this.Start = range.Start;
             this.End = range.End;
 
