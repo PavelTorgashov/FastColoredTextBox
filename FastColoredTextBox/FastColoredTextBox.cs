@@ -2691,6 +2691,7 @@ namespace FastColoredTextBoxNS
             InsertText(text, jumpToCaret);
             //get range
             var range = new Range(this, last, Selection.Start){ColumnSelectionMode = Selection.ColumnSelectionMode};
+            range = range.GetIntersectionWith(Range);
             //set style for range
             range.SetStyle(style);
 

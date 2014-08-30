@@ -289,7 +289,7 @@ namespace FastColoredTextBoxNS
                     var r = new Range(range.tb, range.Start.iChar, range.Start.iLine,
                                       Math.Min(range.tb[range.End.iLine].Count, range.End.iChar), range.End.iLine);
                     using (var style = new TextStyle(ForegroundBrush, null, FontStyle.Regular))
-                        style.Draw(gr, position, r);
+                        style.Draw(gr, new Point(position.X, position.Y - 1), r);
                 }
             }
         }

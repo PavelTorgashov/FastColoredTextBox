@@ -16,19 +16,32 @@ namespace Tester
             InitializeComponent();
 
             fctb = new FastColoredTextBox() { Dock = DockStyle.Fill, Parent = this, Language = Language.XML };
-            fctb.TextChanged += new EventHandler<TextChangedEventArgs>(fctb_TextChanged);
             fctb.Text = @"For example: ""This is a Text between the chr(34)"". 
  writing forward the for is blue
 ";
+
+            fctb.SelectionStyle = new SelectionStyle(Brushes.Red, Brushes.White);
+
+            fctb.KeyPressing += new KeyPressEventHandler(fctb_KeyPressing);
         }
 
-        void fctb_TextChanged(object sender, TextChangedEventArgs e)
+        void fctb_KeyPressing(object sender, KeyPressEventArgs e)
         {
-            //clear previous highlighting
-            e.ChangedRange.ClearStyle(brownStyle, blueStyle);
-            //
-            e.ChangedRange.SetStyle(blueStyle, @"\bfor\b");
-            e.ChangedRange.SetStyle(brownStyle, @"""[^""]*""");
+            if (e.KeyChar == 13) //Enter Key
+            {
+                e.Handled = true;
+                fctb.InsertText(Environment.NewLine);
+                fctb.DoAutoIndentIfNeed();
+            }
+            else
+            {
+                e.Handled = true;
+                /*
+                if (fctb.GetStyleIndex(_lastDictatedStyle) >= 0)
+                    fctb.Range.ClearStyle(_lastDictatedStyle);*/
+
+                fctb.InsertText(e.KeyChar.ToString(), fctb.SyntaxHighlighter.BlueStyle, true);
+            }
         }
     }
 }
