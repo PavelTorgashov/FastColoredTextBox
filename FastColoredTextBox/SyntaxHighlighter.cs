@@ -11,7 +11,6 @@ namespace FastColoredTextBoxNS
     public class SyntaxHighlighter : IDisposable
     {
         //styles
-        protected static readonly Platform platformType = PlatformType.GetOperationSystemPlatform();
         public readonly Style BlueBoldStyle = new TextStyle(Brushes.Blue, null, FontStyle.Bold);
         public readonly Style BlueStyle = new TextStyle(Brushes.Blue, null, FontStyle.Regular);
         public readonly Style BoldStyle = new TextStyle(null, null, FontStyle.Bold | FontStyle.Underline);
@@ -114,10 +113,13 @@ namespace FastColoredTextBoxNS
         {
             get
             {
-                if (platformType == Platform.X86)
-                    return RegexOptions.Compiled;
-                else
+                // Dont use regex compilation in 64 bit processes since it is very slow
+                if (IntPtr.Size==8) 
                     return RegexOptions.None;
+                else
+                    return RegexOptions.Compiled;
+
+                
             }
         }
 
