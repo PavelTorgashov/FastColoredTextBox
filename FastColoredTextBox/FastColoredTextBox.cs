@@ -3524,17 +3524,44 @@ namespace FastColoredTextBoxNS
 
                 case FCTBAction.IndentDecrease:
                     if (!Selection.ReadOnly)
+                    {
+                        var sel = Selection.Clone();
+                        if(sel.Start.iLine == sel.End.iLine)
+                        {
+                            var line = this[sel.Start.iLine];
+                            if (sel.Start.iChar == 0 && sel.End.iChar == line.Count)
+                                Selection = new Range(this, line.StartSpacesCount, sel.Start.iLine, line.Count, sel.Start.iLine);
+                            else
+                            if (sel.Start.iChar == line.Count && sel.End.iChar == 0)
+                                Selection = new Range(this, line.Count, sel.Start.iLine, line.StartSpacesCount, sel.Start.iLine);
+                        }
+
+
                         DecreaseIndent();
+                    }
                     break;
 
                 case FCTBAction.IndentIncrease:
                     if (!Selection.ReadOnly)
                     {
-                        if (Selection.Start == Selection.End && this[Selection.Start.iLine].StartSpacesCount < Selection.Start.iChar)
+                        var sel = Selection.Clone();
+                        var inverted = sel.Start > sel.End;
+                        sel.Normalize();
+                        var spaces = this[sel.Start.iLine].StartSpacesCount;
+                        if (sel.Start.iLine != sel.End.iLine || //selected several lines
+                           (sel.Start.iChar <= spaces && sel.End.iChar == this[sel.Start.iLine].Count) || //selected whole line
+                           sel.End.iChar <= spaces)//selected space prefix
                         {
-                            ProcessKey('\t', Keys.None);
-                        }else
                             IncreaseIndent();
+                            if (sel.Start.iLine == sel.End.iLine && !sel.IsEmpty)
+                            {
+                                Selection = new Range(this, this[sel.Start.iLine].StartSpacesCount, sel.End.iLine, this[sel.Start.iLine].Count, sel.End.iLine); //select whole line
+                                if (inverted)
+                                    Selection.Inverse();
+                            }
+                        }
+                        else
+                            ProcessKey('\t', Keys.None);
                     }
                     break;
 

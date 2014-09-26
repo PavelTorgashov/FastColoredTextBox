@@ -73,6 +73,16 @@ namespace FastColoredTextBoxNS
             this.end = end;
         }
 
+        /// <summary>
+        /// Constructor. Creates range of the line
+        /// </summary>
+        public Range(FastColoredTextBox tb, int iLine)
+            : this(tb)
+        {
+            start = new Place(0, iLine);
+            end = new Place(tb[iLine].Count, iLine);
+        }
+
         public bool Contains(Place place)
         {
             if (place.iLine < Math.Min(start.iLine, end.iLine)) return false;

@@ -652,6 +652,11 @@
             Constructor
             </summary>
         </member>
+        <member name="M:FastColoredTextBoxNS.Range.#ctor(FastColoredTextBoxNS.FastColoredTextBox,System.Int32)">
+            <summary>
+            Constructor. Creates range of the line
+            </summary>
+        </member>
         <member name="M:FastColoredTextBoxNS.Range.GetIntersectionWith(FastColoredTextBoxNS.Range)">
             <summary>
             Returns intersection with other range,
