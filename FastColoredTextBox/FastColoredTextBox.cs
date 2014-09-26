@@ -2421,8 +2421,6 @@ namespace FastColoredTextBoxNS
             data.SetData(DataFormats.Rtf, new ExportToRTF().GetRtf(Selection.Clone()));
         }
 
-        [DllImport("user32.dll")]
-        static extern IntPtr GetOpenClipboardWindow();
 
         [DllImport("user32.dll")]
         static extern IntPtr CloseClipboard();
