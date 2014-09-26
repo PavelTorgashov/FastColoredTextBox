@@ -4665,9 +4665,6 @@ namespace FastColoredTextBoxNS
         private static extern bool SetCaretPos(int x, int y);
 
         [DllImport("User32.dll")]
-        private static extern bool DestroyCaret();
-
-        [DllImport("User32.dll")]
         private static extern bool ShowCaret(IntPtr hWnd);
 
         [DllImport("User32.dll")]
