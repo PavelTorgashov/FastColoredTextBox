@@ -69,13 +69,27 @@ namespace FastColoredTextBoxNS
                     items[i].LineIndex = items[i].LineIndex - e.Count;
                     continue;
                 }
-                if (items[i].LineIndex == e.Index + e.Count - 1)
+
+                var was = e.Index <= 0;
+                foreach (var b in items)
+                    if (b.LineIndex == e.Index - 1)
+                        was = true;
+
+                if(was)
                 {
-                    items[i].LineIndex = items[i].LineIndex - e.Count;
-                    continue;
-                }
-                items.RemoveAt(i);
-                i--;
+                    items.RemoveAt(i);
+                    i--;
+                }else
+                    items[i].LineIndex = e.Index - 1;
+
+                //if (items[i].LineIndex == e.Index + e.Count - 1)
+                //{
+                //    items[i].LineIndex = items[i].LineIndex - e.Count;
+                //    continue;
+                //}
+                //
+                //items.RemoveAt(i);
+                //i--;
             }
         }
 
