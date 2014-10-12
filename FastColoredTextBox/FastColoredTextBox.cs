@@ -691,7 +691,9 @@ namespace FastColoredTextBoxNS
         [Description("Paddings of text area.")]
         public Padding Paddings { get; set; }
 
-        //hide parent padding
+        /// <summary>
+        /// --Do not use this property--
+        /// </summary>
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden),
          EditorBrowsable(EditorBrowsableState.Never)]
         public new Padding Padding
@@ -4780,7 +4782,7 @@ namespace FastColoredTextBoxNS
             var sw = Stopwatch.StartNew();
 #endif
             visibleMarkers.Clear();
-            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+            e.Graphics.SmoothingMode = SmoothingMode.None;
             //
             var servicePen = new Pen(ServiceLinesColor);
             Brush changedLineBrush = new SolidBrush(ChangedLineColor);
@@ -4834,6 +4836,9 @@ namespace FastColoredTextBoxNS
             //
             int startLine = YtoLineIndex(VerticalScroll.Value);
             int iLine;
+
+            e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+
             //draw text
             for (iLine = startLine; iLine < lines.Count; iLine++)
             {
@@ -5506,7 +5511,7 @@ namespace FastColoredTextBoxNS
 
             //restore first displayed line
             if (iLine < LinesCount)
-                VerticalScroll.Value = Math.Min(VerticalScroll.Maximum, LineInfos[iLine].startY);
+                VerticalScroll.Value = Math.Min(VerticalScroll.Maximum, LineInfos[iLine].startY - Paddings.Top);
             UpdateScrollbars();
             //
             Invalidate();

@@ -1924,6 +1924,11 @@
             Padings of text area
             </summary>
         </member>
+        <member name="P:FastColoredTextBoxNS.FastColoredTextBox.Padding">
+            <summary>
+            --Do not use this property--
+            </summary>
+        </member>
         <member name="P:FastColoredTextBoxNS.FastColoredTextBox.FoldingIndicatorColor">
             <summary>
             Color of folding area indicator
