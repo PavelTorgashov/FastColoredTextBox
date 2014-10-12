@@ -88,6 +88,12 @@ namespace FastColoredTextBoxNS
             MinFragmentLength = 2;
         }
 
+        public new Font Font
+        {
+            get { return listView.Font; }
+            set { listView.Font = value; }
+        }
+
         new internal void OnOpening(CancelEventArgs args)
         {
             if (Opening != null)
@@ -188,7 +194,12 @@ namespace FastColoredTextBoxNS
         IEnumerable<AutocompleteItem> sourceItems = new List<AutocompleteItem>();
         int focussedItemIndex = 0;
         int hoveredItemIndex = -1;
-        int itemHeight;
+
+        private int ItemHeight
+        {
+            get { return Font.Height + 2; }
+        }
+
         AutocompleteMenu Menu { get { return Parent as AutocompleteMenu; } }
         int oldItemCount = 0;
         FastColoredTextBox tb;
@@ -235,8 +246,7 @@ namespace FastColoredTextBoxNS
             SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.UserPaint, true);
             base.Font = new Font(FontFamily.GenericSansSerif, 9);
             visibleItems = new List<AutocompleteItem>();
-            itemHeight = Font.Height + 2;
-            VerticalScroll.SmallChange = itemHeight;
+            VerticalScroll.SmallChange = ItemHeight;
             MaximumSize = new Size(Size.Width, 180);
             toolTip.ShowAlways = false;
             AppearInterval = 500;
@@ -433,7 +443,7 @@ namespace FastColoredTextBoxNS
             if (oldItemCount == visibleItems.Count)
                 return;
 
-            int needHeight = itemHeight * visibleItems.Count + 1;
+            int needHeight = ItemHeight * visibleItems.Count + 1;
             Height = Math.Min(needHeight, MaximumSize.Height);
             Menu.CalcSize();
 
@@ -444,6 +454,8 @@ namespace FastColoredTextBoxNS
         protected override void OnPaint(PaintEventArgs e)
         {
             AdjustScroll();
+
+            var itemHeight = ItemHeight;
             int startI = VerticalScroll.Value / itemHeight - 1;
             int finishI = (VerticalScroll.Value + ClientSize.Height) / itemHeight + 1;
             startI = Math.Max(startI, 0);
@@ -582,7 +594,7 @@ namespace FastColoredTextBoxNS
 
         int PointToItemIndex(Point p)
         {
-            return (p.Y + VerticalScroll.Value) / itemHeight;
+            return (p.Y + VerticalScroll.Value) / ItemHeight;
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
@@ -638,11 +650,11 @@ namespace FastColoredTextBoxNS
             if (FocussedItem != null)
                 SetToolTip(FocussedItem);
 
-            var y = FocussedItemIndex * itemHeight - VerticalScroll.Value;
+            var y = FocussedItemIndex * ItemHeight - VerticalScroll.Value;
             if (y < 0)
-                VerticalScroll.Value = FocussedItemIndex * itemHeight;
-            if (y > ClientSize.Height - itemHeight)
-                VerticalScroll.Value = Math.Min(VerticalScroll.Maximum, FocussedItemIndex * itemHeight - ClientSize.Height + itemHeight);
+                VerticalScroll.Value = FocussedItemIndex * ItemHeight;
+            if (y > ClientSize.Height - ItemHeight)
+                VerticalScroll.Value = Math.Min(VerticalScroll.Maximum, FocussedItemIndex * ItemHeight - ClientSize.Height + ItemHeight);
             //some magic for update scrolls
             AutoScrollMinSize -= new Size(1, 0);
             AutoScrollMinSize += new Size(1, 0);
