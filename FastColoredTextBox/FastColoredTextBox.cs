@@ -213,6 +213,7 @@ namespace FastColoredTextBoxNS
             AutoIndentCharsPatterns = @"^\s*[\w\.]+\s*(?<range>=)\s*(?<range>[^;]+);";
             AutoIndentChars = true;
             CaretBlinking = true;
+            ServiceColors = new ServiceColors();
             //
             base.AutoScroll = true;
             timer.Tick += timer_Tick;
@@ -235,6 +236,14 @@ namespace FastColoredTextBoxNS
         [DefaultValue(false)]
         [Description("AutoComplete brackets.")]
         public bool AutoCompleteBrackets { get; set; }
+
+        /// <summary>
+        /// Colors of some service visual markers
+        /// </summary>
+        [Browsable(true)] 
+        [Description("Colors of some service visual markers.")]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
+        public ServiceColors ServiceColors { get; set; }
 
         /// <summary>
         /// Contains UniqueId of start lines of folded blocks
@@ -4892,14 +4901,12 @@ namespace FastColoredTextBoxNS
                                               new StringFormat(StringFormatFlags.DirectionRightToLeft));
                 //create markers
                 if (lineInfo.VisibleState == VisibleState.StartOfHiddenBlock)
-                    visibleMarkers.Add(new ExpandFoldingMarker(iLine,
-                                                               new Rectangle(LeftIndentLine - 4, y + CharHeight/2 - 3, 8,
-                                                                             8)));
+                    visibleMarkers.Add(new ExpandFoldingMarker(iLine, new Rectangle(LeftIndentLine - 4, y + CharHeight/2 - 3, 8, 8)));
+
                 if (!string.IsNullOrEmpty(line.FoldingStartMarker) && lineInfo.VisibleState == VisibleState.Visible &&
                     string.IsNullOrEmpty(line.FoldingEndMarker))
-                    visibleMarkers.Add(new CollapseFoldingMarker(iLine,
-                                                                 new Rectangle(LeftIndentLine - 4, y + CharHeight/2 - 3,
-                                                                               8, 8)));
+                        visibleMarkers.Add(new CollapseFoldingMarker(iLine, new Rectangle(LeftIndentLine - 4, y + CharHeight/2 - 3, 8, 8)));
+
                 if (lineInfo.VisibleState == VisibleState.Visible && !string.IsNullOrEmpty(line.FoldingEndMarker) &&
                     string.IsNullOrEmpty(line.FoldingStartMarker))
                     e.Graphics.DrawLine(servicePen, LeftIndentLine, y + CharHeight*lineInfo.WordWrapStringsCount - 1,
@@ -4965,8 +4972,7 @@ namespace FastColoredTextBoxNS
             //draw hint's brackets
             PaintHintBrackets(e.Graphics);
             //draw markers
-            foreach (VisualMarker m in visibleMarkers)
-                m.Draw(e.Graphics, servicePen);
+            DrawMarkers(e, servicePen);
             //draw caret
             Point car = PlaceToPoint(Selection.Start);
 
@@ -5024,6 +5030,26 @@ namespace FastColoredTextBoxNS
 #endif
             //
             base.OnPaint(e);
+        }
+
+        private void DrawMarkers(PaintEventArgs e, Pen servicePen)
+        {
+            foreach (VisualMarker m in visibleMarkers)
+            {
+                if(m is CollapseFoldingMarker)
+                    using(var bk = new SolidBrush(ServiceColors.CollapseMarkerBackColor))
+                    using(var fore = new Pen(ServiceColors.CollapseMarkerForeColor))
+                    using(var border = new Pen(ServiceColors.CollapseMarkerBorderColor))
+                        (m as CollapseFoldingMarker).Draw(e.Graphics, border, bk, fore);
+                else
+                if (m is ExpandFoldingMarker)
+                    using (var bk = new SolidBrush(ServiceColors.ExpandMarkerBackColor))
+                    using (var fore = new Pen(ServiceColors.ExpandMarkerForeColor))
+                    using (var border = new Pen(ServiceColors.ExpandMarkerBorderColor))
+                        (m as ExpandFoldingMarker).Draw(e.Graphics, border, bk, fore);
+                else
+                    m.Draw(e.Graphics, servicePen);
+            }
         }
 
         private Rectangle prevCaretRect;
@@ -8293,6 +8319,27 @@ window.status = ""#print"";
         Right = 2,
         Up = 4,
         Down = 8
+    }
+
+    [Serializable]
+    public class ServiceColors
+    {
+        public Color CollapseMarkerForeColor { get; set; }
+        public Color CollapseMarkerBackColor { get; set; }
+        public Color CollapseMarkerBorderColor { get; set; }
+        public Color ExpandMarkerForeColor { get; set; }
+        public Color ExpandMarkerBackColor { get; set; }
+        public Color ExpandMarkerBorderColor { get; set; }
+
+        public ServiceColors()
+        {
+            CollapseMarkerForeColor = Color.Silver;
+            CollapseMarkerBackColor = Color.White;
+            CollapseMarkerBorderColor = Color.Silver;
+            ExpandMarkerForeColor = Color.Red;
+            ExpandMarkerBackColor = Color.White;
+            ExpandMarkerBorderColor = Color.Silver;
+        }
     }
 
 #if Styles32

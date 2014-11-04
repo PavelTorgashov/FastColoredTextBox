@@ -1321,7 +1321,8 @@ namespace FastColoredTextBoxNS
 
             start = new Place(0, 0);
             if (tb.LineInfos[Start.iLine].VisibleState != VisibleState.Visible)
-                GoRight(shift);
+                tb.ExpandBlock(Start.iLine);
+
             if(!shift)
                 end = start;
 
@@ -1334,7 +1335,8 @@ namespace FastColoredTextBoxNS
 
             start = new Place(tb[tb.LinesCount - 1].Count, tb.LinesCount-1);
             if (tb.LineInfos[Start.iLine].VisibleState != VisibleState.Visible)
-                GoLeft(shift);
+                tb.ExpandBlock(Start.iLine);
+
             if (!shift)
                 end = start;
 

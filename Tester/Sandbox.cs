@@ -15,7 +15,7 @@ namespace Tester
         {
             InitializeComponent();
 
-            fctb = new FastColoredTextBox() { Dock = DockStyle.Fill, Parent = this, Language = Language.XML };
+            fctb = new FastColoredTextBox() { Dock = DockStyle.Fill, Parent = this, Language = Language.CSharp };
             fctb.Text = @"For example: ""This is a Text between the chr(34)"". 
  writing forward the for is blue
 ";

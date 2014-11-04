@@ -7,6 +7,7 @@
 
         'create autocomplete popup menu
         popupMenu = New FastColoredTextBoxNS.AutocompleteMenu(fastColoredTextBox1)
+
         popupMenu.MinFragmentLength = 2
 
         'generate 456976 words

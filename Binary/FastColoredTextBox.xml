@@ -1714,6 +1714,11 @@
             AutoComplete brackets
             </summary>
         </member>
+        <member name="P:FastColoredTextBoxNS.FastColoredTextBox.ServiceColors">
+            <summary>
+            Colors of some service visual markers
+            </summary>
+        </member>
         <member name="P:FastColoredTextBoxNS.FastColoredTextBox.FoldedBlocks">
             <summary>
             Contains UniqueId of start lines of folded blocks
