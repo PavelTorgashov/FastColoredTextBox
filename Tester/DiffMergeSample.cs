@@ -85,11 +85,17 @@ namespace Tester
 
         private void btCompare_Click(object sender, EventArgs e)
         {
+            if (!File.Exists(tbFirstFile.Text) && !File.Exists(tbSecondFile.Text))
+            {
+                MessageBox.Show(this,"Please select a valid file", "Invalid file");
+                return;
+            }
+
             fctb1.Clear();
             fctb2.Clear();
 
             Cursor = Cursors.WaitCursor;
-
+           
             if (Path.GetExtension(tbFirstFile.Text).ToLower() == ".cs")
                 fctb1.Language = fctb2.Language = Language.CSharp;
             else
