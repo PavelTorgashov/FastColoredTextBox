@@ -37,6 +37,25 @@ namespace FastColoredTextBoxNS
                 if (cbWholeWord.Checked)
                     pattern = "\\b" + pattern + "\\b";
                 //
+                int count = 0;
+                Range rangeIsExist = tb.Selection.Clone();
+                rangeIsExist.Start= new Place(0,0);
+                rangeIsExist.End = new Place(tb.GetLineLength(tb.LinesCount - 1), tb.LinesCount - 1);
+
+                var ranges = rangeIsExist.GetRangesByLines(pattern, opt);
+
+                using (IEnumerator<Range> enumerator = ranges.GetEnumerator())
+                {
+                    while (enumerator.MoveNext())
+                        count++;
+                }
+
+                if (count == 0)
+                {
+                    MessageBox.Show("Not found","Find");
+                    return;
+                }
+
                 Range range = tb.Selection.Clone();
                 range.Normalize();
                 //
@@ -66,7 +85,7 @@ namespace FastColoredTextBoxNS
                     FindNext(pattern);
                     return;
                 }
-                MessageBox.Show("Not found");
+                MessageBox.Show("Find reached starting of the search ", "Find");
             }
             catch (Exception ex)
             {
