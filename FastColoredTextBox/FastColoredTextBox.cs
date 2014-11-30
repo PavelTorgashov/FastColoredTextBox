@@ -188,7 +188,7 @@ namespace FastColoredTextBoxNS
             AcceptsTab = true;
             AcceptsReturn = true;
             caretVisible = true;
-            CaretColor = Color.Blue; // FIXME: rever to black
+            CaretColor = Color.Black;
             WideCaret = false;
             Paddings = new Padding(0, 0, 0, 0);
             PaddingBackColor = Color.Transparent;
