@@ -2343,6 +2343,7 @@ namespace FastColoredTextBoxNS
 
             findForm.tbFind.SelectAll();
             findForm.Show();
+            findForm.Focus();
         }
 
         /// <summary>
@@ -2370,6 +2371,7 @@ namespace FastColoredTextBoxNS
 
             replaceForm.tbFind.SelectAll();
             replaceForm.Show();
+            replaceForm.Focus();
         }
 
         /// <summary>
