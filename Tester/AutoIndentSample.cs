@@ -81,7 +81,7 @@ namespace Tester
                 return;
             }
             // if previous line contains "then" or "else", 
-            // and current line do not contain "begin"
+            // and current line does not contain "begin"
             // then shift current line to right
             if (Regex.IsMatch(e.PrevLineText, @"\b(then|else)\b") &&
                 !Regex.IsMatch(e.LineText, @"\bbegin\b"))

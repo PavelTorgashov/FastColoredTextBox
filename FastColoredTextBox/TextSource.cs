@@ -108,7 +108,7 @@ namespace FastColoredTextBoxNS
         public virtual Line this[int i]
         {
             get{
-                return lines[i];
+                 return lines[i];
             }
             set {
                 throw new NotImplementedException();

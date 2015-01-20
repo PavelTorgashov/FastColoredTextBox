@@ -915,51 +915,54 @@ namespace FastColoredTextBoxNS
             range.ClearFoldingMarkers();
 
             //set folding markers
-            //
-			var stack = new Stack<XmlFoldingTag>();
-			var id = 0;
-			var fctb = range.tb;
-			//extract opening and closing tags (exclude open-close tags: <TAG/>)
-            foreach (var r in range.GetRanges(XMLFoldingRegex))
-			{
-				var tagName = r.Text;
-				var iLine = r.Start.iLine;
-				//if it is opening tag...
-				if (tagName[0] != '/')
-				{
-					// ...push into stack
-					var tag = new XmlFoldingTag { Name = tagName, id = id++, startLine = r.Start.iLine };
-					stack.Push(tag);
-					// if this line has no markers - set marker
-					if (string.IsNullOrEmpty(fctb[iLine].FoldingStartMarker))
-						fctb[iLine].FoldingStartMarker = tag.Marker;
-				}
-				else
-				{
-					//if it is closing tag - pop from stack
-					if (stack.Count > 0)
-					{
-						var tag = stack.Pop();
-						//compare line number
-						if (iLine == tag.startLine)
-						{
-							//remove marker, because same line can not be folding
-							if (fctb[iLine].FoldingStartMarker == tag.Marker)//was it our marker?
-								fctb[iLine].FoldingStartMarker = null;
-						}
-						else
-						{
-							//set end folding marker
-							if (string.IsNullOrEmpty(fctb[iLine].FoldingEndMarker))
-								fctb[iLine].FoldingEndMarker = tag.Marker;
-						}
-					}
-				}
-			}
-
+            XmlFolding(range);
         }
 
-		class XmlFoldingTag
+        private void XmlFolding(Range range)
+        {
+            var stack = new Stack<XmlFoldingTag>();
+            var id = 0;
+            var fctb = range.tb;
+            //extract opening and closing tags (exclude open-close tags: <TAG/>)
+            foreach (var r in range.GetRanges(XMLFoldingRegex))
+            {
+                var tagName = r.Text;
+                var iLine = r.Start.iLine;
+                //if it is opening tag...
+                if (tagName[0] != '/')
+                {
+                    // ...push into stack
+                    var tag = new XmlFoldingTag {Name = tagName, id = id++, startLine = r.Start.iLine};
+                    stack.Push(tag);
+                    // if this line has no markers - set marker
+                    if (string.IsNullOrEmpty(fctb[iLine].FoldingStartMarker))
+                        fctb[iLine].FoldingStartMarker = tag.Marker;
+                }
+                else
+                {
+                    //if it is closing tag - pop from stack
+                    if (stack.Count > 0)
+                    {
+                        var tag = stack.Pop();
+                        //compare line number
+                        if (iLine == tag.startLine)
+                        {
+                            //remove marker, because same line can not be folding
+                            if (fctb[iLine].FoldingStartMarker == tag.Marker) //was it our marker?
+                                fctb[iLine].FoldingStartMarker = null;
+                        }
+                        else
+                        {
+                            //set end folding marker
+                            if (string.IsNullOrEmpty(fctb[iLine].FoldingEndMarker))
+                                fctb[iLine].FoldingEndMarker = tag.Marker;
+                        }
+                    }
+                }
+            }
+        }
+
+        class XmlFoldingTag
 		{
 			public string Name;
 			public int id;

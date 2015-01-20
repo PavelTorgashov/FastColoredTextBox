@@ -2591,7 +2591,7 @@ namespace FastColoredTextBoxNS
         /// <summary>
         /// Clear text, styles, history, caches
         /// </summary>
-        public void Clear()
+        public virtual void Clear()
         {
             Selection.BeginUpdate();
             try

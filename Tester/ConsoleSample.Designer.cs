@@ -82,6 +82,7 @@
             this.consoleTextBox1.Paddings = new System.Windows.Forms.Padding(0);
             this.consoleTextBox1.PreferredLineWidth = 80;
             this.consoleTextBox1.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.consoleTextBox1.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("consoleTextBox1.ServiceColors")));
             this.consoleTextBox1.ServiceLinesColor = System.Drawing.Color.DimGray;
             this.consoleTextBox1.Size = new System.Drawing.Size(713, 342);
             this.consoleTextBox1.TabIndex = 0;

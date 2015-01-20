@@ -139,5 +139,20 @@ namespace Tester
 
             base.OnTextChanging(ref text);
         }
+
+        public override void Clear()
+        {
+            var oldIsReadMode = isReadLineMode;
+
+            isReadLineMode = false;
+            isUpdating = true;
+
+            base.Clear();
+
+            isUpdating = false;
+            isReadLineMode = oldIsReadMode;
+
+            StartReadPlace = Place.Empty;
+        }
     }
 }
