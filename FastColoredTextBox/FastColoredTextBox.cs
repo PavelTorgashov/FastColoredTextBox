@@ -1,4 +1,4 @@
-﻿//
+//
 //  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
 //  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
 //  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
@@ -60,6 +60,7 @@ namespace FastColoredTextBoxNS
         private readonly Timer timer = new Timer();
         private readonly Timer timer2 = new Timer();
         private readonly Timer timer3 = new Timer();
+
         private readonly List<VisualMarker> visibleMarkers = new List<VisualMarker>();
         public int TextHeight;
         public bool AllowInsertRemoveLines = true;
@@ -386,13 +387,31 @@ namespace FastColoredTextBoxNS
             }
         }
 
+        private bool caretBlinking;
+
         /// <summary>
         /// Enables caret blinking
         /// </summary>
         [DefaultValue(true)]
         [Description("Enables caret blinking")]
-        public bool CaretBlinking { get; set; }
-
+        public bool CaretBlinking {
+            get {
+                return caretBlinking;
+            }
+            set {
+                caretBlinking = value;
+                if (caretBlinking) {
+                    if (caretBlinkTimer == null) {
+                        caretBlinkTimer = new Timer();
+                        caretBlinkTimer.Tick += BlinkCaret;
+                    }
+                    caretBlinkTimer.Interval = GetCaretBlinkTime();
+                    caretBlinkTimer.Start();
+                } else {
+                    caretBlinkTimer.Stop();
+                }
+            }
+        }
 
         Color textAreaBorderColor;
 
@@ -913,7 +932,7 @@ namespace FastColoredTextBoxNS
                        (!Selection.ColumnSelectionMode) &&
                        Selection.Start.iChar < lines[Selection.Start.iLine].Count;
             }
-            set { isReplaceMode = value; }
+            set { isReplaceMode = value; if (IsReplaceModeChanged != null) IsReplaceModeChanged.Invoke(this, EventArgs.Empty); }
         }
 
         /// <summary>
@@ -1835,6 +1854,14 @@ namespace FastColoredTextBoxNS
         [Browsable(true)]
         [Description("It occurs before insert, delete, clear, undo and redo operations.")]
         public event EventHandler<TextChangingEventArgs> TextChanging;
+
+        /// <summary>
+        /// IsReplaceModeChanged event.
+        /// It occurs when Insert key is pressed or IsReplaceMode is changed with code.
+        /// </summary>
+        [Browsable(true)]
+        [Description("It occurs when Insert key is pressed or IsReplaceMode is changed with code.")]
+        public event EventHandler IsReplaceModeChanged;
 
         /// <summary>
         /// SelectionChanged event.
@@ -4701,19 +4728,7 @@ namespace FastColoredTextBoxNS
         }
 
         [DllImport("User32.dll")]
-        private static extern bool CreateCaret(IntPtr hWnd, int hBitmap, int nWidth, int nHeight);
-
-        [DllImport("User32.dll")]
-        private static extern bool SetCaretPos(int x, int y);
-
-        [DllImport("User32.dll")]
-        private static extern bool DestroyCaret();
-
-        [DllImport("User32.dll")]
-        private static extern bool ShowCaret(IntPtr hWnd);
-
-        [DllImport("User32.dll")]
-        private static extern bool HideCaret(IntPtr hWnd);
+        private static extern int GetCaretBlinkTime();
 
         protected override void OnPaintBackground(PaintEventArgs e)
         {
@@ -4766,6 +4781,7 @@ namespace FastColoredTextBoxNS
                         gr.FillRectangle(line.BackgroundBrush, new Rectangle(0, y, size.Width, CharHeight * lineInfo.WordWrapStringsCount));
                 //
                 gr.SmoothingMode = SmoothingMode.AntiAlias;
+                
 
                 //draw wordwrap strings of line
                 for (int iWordWrapLine = 0; iWordWrapLine < lineInfo.WordWrapStringsCount; iWordWrapLine++)
@@ -4778,6 +4794,46 @@ namespace FastColoredTextBoxNS
                 }
             }
         }
+
+        // --- Custom caret starts ---
+
+        private Timer caretBlinkTimer;
+        
+        private bool caretBlinkState;
+
+        private void DrawCaret(Graphics g) {
+            var p = PlaceToPoint(Selection.Start);
+            if ((Focused || IsDragDrop) && p.X >= LeftIndent && CaretVisible) {
+                var color = CaretBlinking ? (caretBlinkState ? CaretColor : BackColor) : CaretColor;
+                var brush = new SolidBrush(color);
+                var pen = new Pen(color);
+                if (IsReplaceMode) g.FillRectangle(brush, p.X, p.Y + CharHeight, CharWidth, 2);
+                else if (WideCaret)
+                    g.FillRectangle(brush, p.X, p.Y, CharWidth, CharHeight);
+                    else g.DrawLine(pen, p.X, p.Y, p.X, p.Y + CharHeight + 1);
+                brush.Dispose();
+                pen.Dispose();
+            }
+        }
+
+        private void BlinkCaret(object sender, EventArgs e) {
+            caretBlinkState = !caretBlinkState;
+            var p = PlaceToPoint(Selection.Start);
+            if ((Focused || IsDragDrop) && p.X >= LeftIndent && CaretVisible)
+                Invalidate(new Rectangle(p.X, p.Y, CharWidth, CharHeight + 2), false);
+            return;
+        }
+
+        private void EnsureCaretVisible() {
+            if (CaretBlinking) {
+                caretBlinkTimer.Stop();
+                caretBlinkState = false;
+                BlinkCaret(this, EventArgs.Empty);
+                caretBlinkTimer.Start();
+            }
+        }
+
+        // --- Custom caret ends ---
 
         /// <summary>
         /// Draw control
@@ -4976,38 +5032,7 @@ namespace FastColoredTextBoxNS
             //draw markers
             DrawMarkers(e, servicePen);
             //draw caret
-            Point car = PlaceToPoint(Selection.Start);
-
-            if ((Focused || IsDragDrop) && car.X >= LeftIndent && CaretVisible)
-            {
-                int carWidth = (IsReplaceMode || WideCaret) ? CharWidth : 1;
-                if (WideCaret)
-                {
-                    using (var brush = new SolidBrush(CaretColor))
-                        e.Graphics.FillRectangle(brush, car.X, car.Y, carWidth, CharHeight + 1);
-                }
-                else
-                    using (var pen = new Pen(CaretColor))
-                        e.Graphics.DrawLine(pen, car.X, car.Y, car.X, car.Y + CharHeight);
-
-                var caretRect = new Rectangle(HorizontalScroll.Value + car.X, VerticalScroll.Value + car.Y, carWidth, charHeight + 1);
-
-                if (CaretBlinking)
-                if (prevCaretRect != caretRect || !ShowScrollBars)
-                {
-                    CreateCaret(Handle, 0, carWidth, CharHeight + 1);
-                    SetCaretPos(car.X, car.Y);
-                    ShowCaret(Handle);
-                }
-
-                prevCaretRect = caretRect;
-            }
-            else
-            {
-                HideCaret(Handle);
-                prevCaretRect = Rectangle.Empty;
-            }
-
+            if (caretBlinkState || !CaretBlinking) DrawCaret(e.Graphics);
             //draw disabled mask
             if (!Enabled)
                 using (var brush = new SolidBrush(DisabledColor))
@@ -5053,8 +5078,6 @@ namespace FastColoredTextBoxNS
                     m.Draw(e.Graphics, servicePen);
             }
         }
-
-        private Rectangle prevCaretRect;
 
         private void DrawRecordingHint(Graphics graphics)
         {
@@ -5307,6 +5330,7 @@ namespace FastColoredTextBoxNS
 
             if (e.Button == MouseButtons.Left)
             {
+                
                 VisualMarker marker = FindVisualMarkerForPoint(e.Location);
                 //click on marker
                 if (marker != null)
@@ -5936,7 +5960,7 @@ namespace FastColoredTextBoxNS
         {
 #if debug
             var sw = Stopwatch.StartNew();
-            #endif
+#endif
             //find folding markers for highlighting
             if (HighlightFoldingIndicator)
                 HighlightFoldings();
@@ -5946,6 +5970,7 @@ namespace FastColoredTextBoxNS
 
             if (SelectionChanged != null)
                 SelectionChanged(this, new EventArgs());
+            EnsureCaretVisible();
 
 #if debug
             Console.WriteLine("OnSelectionChanged: "+ sw.ElapsedMilliseconds);
