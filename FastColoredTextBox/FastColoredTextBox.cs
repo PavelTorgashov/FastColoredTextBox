@@ -162,6 +162,7 @@ namespace FastColoredTextBoxNS
             HighlightFoldingIndicator = true;
             ShowLineNumbers = true;
             TabLength = 4;
+            ExpandTab = true;
             FoldedBlockStyle = new FoldedBlockStyle(Brushes.Gray, null, FontStyle.Regular);
             SelectionColor = Color.Blue;
             BracketsStyle = new MarkerStyle(new SolidBrush(Color.FromArgb(80, Color.Lime)));
@@ -514,6 +515,32 @@ namespace FastColoredTextBoxNS
         [DefaultValue(4)]
         [Description("Spaces count for tab")]
         public int TabLength { get; set; }
+
+        /// <summary>
+        /// Expand tab to spaces
+        /// </summary>
+        [DefaultValue(true)]
+        public bool ExpandTab { get; set; }
+
+        public string TabString(int spaces)
+        {
+            if (ExpandTab)
+                return new String(' ', spaces);
+            if (spaces <= 1)
+                return new String('\t', spaces);
+            if (spaces <= TabLength)
+                return new String(' ', spaces - 1) + "\t";
+            StringBuilder sb = new StringBuilder(spaces);
+            if (spaces % TabLength != 0)
+            {
+                sb.Append(new String(' ', (spaces % TabLength) - 1));
+                sb.Append('\t');
+            }
+            var tab = new String(' ', TabLength - 1) + "\t";
+            while (sb.Length < spaces)
+                sb.Append(tab);
+            return sb.ToString();
+        }
 
         /// <summary>
         /// Text was changed
@@ -4414,7 +4441,7 @@ namespace FastColoredTextBoxNS
                         oldSel.Start = new Place(oldSel.Start.iChar + addSpaces, i);
 
                     if (addSpaces > 0)
-                        texts[i] = texts[i].Insert(cap.Index, new string(' ', addSpaces));
+                        texts[i] = texts[i].Insert(cap.Index, TabString(addSpaces));
                     else
                         texts[i] = texts[i].Remove(cap.Index + addSpaces, -addSpaces);
                     
@@ -4568,7 +4595,7 @@ namespace FastColoredTextBoxNS
                 return;
             Selection.Start = new Place(0, iLine);
             if (needToInsert > 0)
-                InsertText(new String(' ', needToInsert));
+                InsertText(TabString(needToInsert));
             else
             {
                 Selection.Start = new Place(0, iLine);
@@ -6548,7 +6575,7 @@ namespace FastColoredTextBoxNS
                         Selection.Inverse();
                     }
 
-                    InsertText(new String(' ', spaces));
+                    InsertText(TabString(spaces));
                 }
                 return;
             }
@@ -6579,7 +6606,7 @@ namespace FastColoredTextBoxNS
             {
                 if (lines[i].Count == 0) continue;
                 Selection.Start = new Place(startChar, i);
-                lines.Manager.ExecuteCommand(new InsertTextCommand(TextSource, new String(' ', TabLength)));
+                lines.Manager.ExecuteCommand(new InsertTextCommand(TextSource, TabString(TabLength)));
             }
 
             // Restore selection

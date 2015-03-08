@@ -1634,6 +1634,11 @@
             Spaces count for tab
             </summary>
         </member>
+        <member name="P:FastColoredTextBoxNS.FastColoredTextBox.ExpandTab">
+            <summary>
+            Expand tab to spaces
+            </summary>
+        </member>
         <member name="P:FastColoredTextBoxNS.FastColoredTextBox.IsChanged">
             <summary>
             Text was changed

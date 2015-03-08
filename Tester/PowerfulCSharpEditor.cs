@@ -62,6 +62,7 @@ namespace Tester
                 //tb.VirtualSpace = true;
                 tb.LeftPadding = 17;
                 tb.Language = Language.CSharp;
+                tb.ExpandTab = expandTabButton.Checked;
                 tb.AddStyle(sameWordsStyle);//same words style
                 var tab = new FATabStripItem(fileName!=null?Path.GetFileName(fileName):"[new]", tb);
                 tab.Tag = fileName;
@@ -582,6 +583,8 @@ namespace Tester
                 ThreadPool.QueueUserWorkItem(
                     (o) => ReBuildObjectExplorer(text)
                 );
+
+                expandTabButton.Checked = CurrentTB.ExpandTab;
             }
         }
 
@@ -901,6 +904,12 @@ namespace Tester
             if (CurrentTB != null)
                 CurrentTB.Zoom = int.Parse((sender as ToolStripItem).Tag.ToString());
         }
+
+        private void expandTabButton_Click(object sender, EventArgs e)
+        {
+            if (CurrentTB != null)
+                CurrentTB.ExpandTab = expandTabButton.Checked;
+        }
     }
 
     public class InvisibleCharsRenderer : Style
@@ -924,6 +933,13 @@ namespace Tester
                         var point = tb.PlaceToPoint(place);
                         point.Offset(tb.CharWidth / 2, tb.CharHeight / 2);
                         gr.DrawLine(pen, point.X, point.Y, point.X + 1, point.Y);
+                        break;
+                    case '\t':
+                        // make it different from space to see it
+                        point = tb.PlaceToPoint(place);
+                        point.Offset(tb.CharWidth / 2, tb.CharHeight / 2);
+                        gr.DrawLine(pen, point.X, point.Y, point.X + 1, point.Y);
+                        gr.DrawLine(pen, point.X + 2, point.Y - 1, point.X + 2, point.Y + 1);
                         break;
                 }
 

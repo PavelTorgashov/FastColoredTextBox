@@ -93,7 +93,7 @@ namespace FastColoredTextBoxNS
             {
                 int spacesCount = 0;
                 for (int i = 0; i < Count; i++)
-                    if (this[i].c == ' ')
+                    if (char.IsWhiteSpace(this[i].c))
                         spacesCount++;
                     else
                         break;

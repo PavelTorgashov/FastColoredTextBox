@@ -120,8 +120,17 @@ namespace FastColoredTextBoxNS
                     if (spaceCountNextTabStop == 0)
                         spaceCountNextTabStop = tb.TabLength;
 
-                    for (int i = 0; i < spaceCountNextTabStop; i++)
-                        ts[tb.Selection.Start.iLine].Insert(tb.Selection.Start.iChar, new Char(' '));
+                    if (tb.ExpandTab)
+                        for (int i = 0; i < spaceCountNextTabStop; i++)
+                            ts[tb.Selection.Start.iLine].Insert(tb.Selection.Start.iChar, new Char(' '));
+                    else
+                    {
+                    //  FIRDA: Use "   \t" for tabs not to mess with paint and regex logic too much
+                    //  ...... but that requires other changes for file open/save
+                        for (int i = 1; i < spaceCountNextTabStop; i++)
+                            ts[tb.Selection.Start.iLine].Insert(tb.Selection.Start.iChar, new Char(' '));
+                        ts[tb.Selection.Start.iLine].Insert(tb.Selection.Start.iChar, new Char(c));
+                    }                        
 
                     tb.Selection.Start = new Place(tb.Selection.Start.iChar + spaceCountNextTabStop, tb.Selection.Start.iLine);
                     break;
@@ -720,7 +729,7 @@ namespace FastColoredTextBoxNS
                     if (r.End < r.Start && insertedText!="")
                     {
                         //add forwarding spaces
-                        insertedText = new string(' ', r.Start.iChar - r.End.iChar) + insertedText;
+                        insertedText = ts.CurrentTB.TabString(r.Start.iChar - r.End.iChar) + insertedText;
                         r.Start = r.End;
                     }
                     ts.CurrentTB.Selection = r;
