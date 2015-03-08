@@ -54,7 +54,7 @@
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label2.Location = new System.Drawing.Point(0, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(610, 93);
+            this.label2.Size = new System.Drawing.Size(610, 106);
             this.label2.TabIndex = 3;
             this.label2.Text = resources.GetString("label2.Text");
             // 
@@ -98,14 +98,14 @@
             this.fctbMaster.LeftBracket = '(';
             this.fctbMaster.LeftBracket2 = '{';
             this.fctbMaster.LinkedTextBox = this.fctbSlave;
-            this.fctbMaster.Location = new System.Drawing.Point(0, 93);
+            this.fctbMaster.Location = new System.Drawing.Point(0, 106);
             this.fctbMaster.Name = "fctbMaster";
             this.fctbMaster.Paddings = new System.Windows.Forms.Padding(0);
             this.fctbMaster.RightBracket = ')';
             this.fctbMaster.RightBracket2 = '}';
             this.fctbMaster.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.fctbMaster.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("fctbMaster.ServiceColors")));
-            this.fctbMaster.Size = new System.Drawing.Size(610, 205);
+            this.fctbMaster.Size = new System.Drawing.Size(610, 192);
             this.fctbMaster.TabIndex = 0;
             this.fctbMaster.Text = resources.GetString("fctbMaster.Text");
             this.fctbMaster.Zoom = 100;

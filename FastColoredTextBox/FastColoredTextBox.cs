@@ -1118,6 +1118,20 @@ namespace FastColoredTextBoxNS
         }
 
         // FIRDA: Changed original SourceTextBox to produce unlimited text sharing
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Obsolete("Use HasLinkedTextBox. The logic is a bit different (no master but a group).")]
+        public bool HasSourceTextBox
+        {
+            get { return HasLinkedTextBox; }
+        }
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [Obsolete("Use LinkedTextBox. The logic is a bit different (no master but a group).")]
+        public FastColoredTextBox SourceTextBox
+        {
+            get { return LinkedTextBox; }
+        }
 
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]

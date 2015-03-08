@@ -119,8 +119,8 @@
   </resheader>
   <data name="label2.Text" xml:space="preserve">
     <value>This example shows how to make split-screen mode.
-The form contains  two FCTB. One of them works as a master, the other - as a slave. Slave FCTB has property LinkedTextBox referenced to the master FCTB.
-Note: Main properties (for example Language) and handlers(for example  TextChanged) for each control (master and slave) must be equal. 
+The form contains two FCTB. The focused works as a master, the other - as a slave. Both have property LinkedTextBox referencing the other, but only one needs to be set (the other will get updated automatically).
+Note: Main properties (for example Language) and handlers (for example TextChanged) for each control (master and slave) must be equal. 
 </value>
   </data>
   <data name="fctbSlave.ServiceColors" mimetype="application/x-microsoft.net.object.binary.base64">
