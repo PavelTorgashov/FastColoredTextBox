@@ -115,7 +115,7 @@ namespace FastColoredTextBoxNS
         private Color serviceLinesColor;
         private bool showFoldingLines;
         private bool showLineNumbers;
-        private FastColoredTextBox sourceTextBox;
+        private FastColoredTextBox linkedTextBox;
         private int startFoldingLine = -1;
         private int updating;
         private Range updatingRange;
@@ -1090,32 +1090,56 @@ namespace FastColoredTextBoxNS
             set { InitTextSource(value); }
         }
 
+        // FIRDA: Changed original SourceTextBox to produce unlimited text sharing
+
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public bool HasSourceTextBox
+        public bool HasLinkedTextBox
         {
-            get { return SourceTextBox != null; }
+            get { return LinkedTextBox != null; }
         }
 
         /// <summary>
-        /// The source of the text.
-        /// Allows to get text from other FastColoredTextBox.
+        /// Linked text box with same text.
+        /// Allows to share text with other FastColoredTextBox(es).
         /// </summary>
         [Browsable(true)]
         [DefaultValue(null)]
-        [Description("Allows to get text from other FastColoredTextBox.")]
-        //[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-            public FastColoredTextBox SourceTextBox
+        [Description("Allows to get share text with FastColoredTextBox(es).")]
+        public FastColoredTextBox LinkedTextBox
         {
-            get { return sourceTextBox; }
+            get { return linkedTextBox; }
             set
             {
-                if (value == sourceTextBox)
+                if (value == linkedTextBox)
                     return;
 
-                sourceTextBox = value;
+                if (linkedTextBox != null)
+                {
+                    if (linkedTextBox.linkedTextBox == this)
+                    //  only two linked, source won't be shared anymore
+                        linkedTextBox.linkedTextBox = null;
+                    else
+                    //  more than one linked
+                        for (var link = linkedTextBox; ; link = link.linkedTextBox)
+                        {
+                            if (link == value)
+                            //  already linked, don't change anything
+                                return;
+                            if (link.linkedTextBox == this)
+                            {
+                                link.linkedTextBox = linkedTextBox;
+                                break;
+                            }
+                        }
+                    //  relik source if this box is current
+                    if (TextSource.CurrentTB == this)
+                        TextSource.CurrentTB = linkedTextBox;
+                }
 
-                if (sourceTextBox == null)
+                linkedTextBox = value;
+
+                if (value == null)
                 {
                     InitTextSource(CreateTextSource());
                     lines.InsertLine(0, TextSource.CreateLine());
@@ -1123,8 +1147,19 @@ namespace FastColoredTextBoxNS
                 }
                 else
                 {
-                    InitTextSource(SourceTextBox.TextSource);
+                    InitTextSource(LinkedTextBox.TextSource);
                     isChanged = false;
+                    if (value.linkedTextBox == null)
+                    //  two boxes are now linked
+                        value.linkedTextBox = this;
+                    else
+                    {
+                    //  find insertion point (the box pointing to value)
+                        var link = value;
+                        while (link.linkedTextBox != value)
+                            link = link.linkedTextBox;
+                        link.linkedTextBox = this;
+                    }
                 }
                 Invalidate();
             }
@@ -2019,13 +2054,13 @@ namespace FastColoredTextBoxNS
         protected void InitTextSource(TextSource ts)
         {
             if (lines != null)
-            {
-                ts.LineInserted -= ts_LineInserted;
-                ts.LineRemoved -= ts_LineRemoved;
-                ts.TextChanged -= ts_TextChanged;
-                ts.RecalcNeeded -= ts_RecalcNeeded;
-                ts.RecalcWordWrap -= ts_RecalcWordWrap;
-                ts.TextChanging -= ts_TextChanging;
+            {// FIRDA: ts->lines
+                lines.LineInserted -= ts_LineInserted;
+                lines.LineRemoved -= ts_LineRemoved;
+                lines.TextChanged -= ts_TextChanged;
+                lines.RecalcNeeded -= ts_RecalcNeeded;
+                lines.RecalcWordWrap -= ts_RecalcWordWrap;
+                lines.TextChanging -= ts_TextChanging;
 
                 lines.Dispose();
             }
