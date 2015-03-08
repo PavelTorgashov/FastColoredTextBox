@@ -328,10 +328,20 @@ namespace FastColoredTextBoxNS
         {
             using (StreamWriter sw = new StreamWriter(fileName, false, enc))
             {
-                for (int i = 0; i < Count - 1;i++ )
-                    sw.WriteLine(lines[i].Text);
-
-                sw.Write(lines[Count-1].Text);
+                if (CurrentTB.ExpandTab)
+                {
+                    for (int i = 0; i < Count - 1; i++)
+                        sw.WriteLine(lines[i].Text);
+                    sw.Write(lines[Count-1].Text);
+                }
+                else
+                {
+                    int tl = CurrentTB.TabLength;
+                    var sb = new StringBuilder();
+                    for (int i = 0; i < Count - 1; i++)
+                        sw.WriteLine(lines[i].GetCleanText(tl, sb));
+                    sw.Write(lines[Count-1].GetCleanText(tl, sb));
+                }
             }
         }
     }

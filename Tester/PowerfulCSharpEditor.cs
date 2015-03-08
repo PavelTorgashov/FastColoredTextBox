@@ -342,7 +342,8 @@ namespace Tester
 
             try
             {
-                File.WriteAllText(tab.Tag as string, tb.Text);
+                //File.WriteAllText(tab.Tag as string, tb.Text);
+                tb.SaveToFile(tab.Tag as string, new UTF8Encoding(false));
                 tb.IsChanged = false;
             }
             catch (Exception ex)

@@ -126,10 +126,10 @@ namespace FastColoredTextBoxNS
                     else
                     {
                     //  FIRDA: Use "   \t" for tabs not to mess with paint and regex logic too much
-                    //  ...... but that requires other changes for file open/save
+                    //  NOTE:  The insertion is backwards (all at same position = tab first, spaces next)
+                        ts[tb.Selection.Start.iLine].Insert(tb.Selection.Start.iChar, new Char(c));
                         for (int i = 1; i < spaceCountNextTabStop; i++)
                             ts[tb.Selection.Start.iLine].Insert(tb.Selection.Start.iChar, new Char(' '));
-                        ts[tb.Selection.Start.iLine].Insert(tb.Selection.Start.iChar, new Char(c));
                     }                        
 
                     tb.Selection.Start = new Place(tb.Selection.Start.iChar + spaceCountNextTabStop, tb.Selection.Start.iLine);
