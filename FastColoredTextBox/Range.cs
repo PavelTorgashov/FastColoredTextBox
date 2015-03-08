@@ -362,7 +362,7 @@ namespace FastColoredTextBoxNS
         }
 
         /// <summary>
-        /// Move range left
+        /// Move range right
         /// </summary>
         /// <remarks>This method can to go inside folded blocks</remarks>
         public virtual bool GoRightThroughFolded()
@@ -373,10 +373,34 @@ namespace FastColoredTextBoxNS
             if (start.iLine >= tb.LinesCount - 1 && start.iChar >= tb[tb.LinesCount - 1].Count)
                 return false;
 
-            if (start.iChar < tb[start.iLine].Count)
-                start.Offset(1, 0);
-            else
+            var line = tb[start.iLine];
+            if (start.iChar >= line.Count)
                 start = new Place(0, start.iLine + 1);
+            else
+            {
+                int next =  start.iChar + 1;
+                if (!tb.ExpandTab
+                && next < line.Count
+                && (next % tb.TabLength != 0)
+                && line[start.iChar].c == ' ')
+                {
+                    //skip "   \t"
+                    int peek = next;
+                    for (; ; )
+                    {
+                        if (line[peek].c == '\t')
+                        {
+                            next = peek + 1;
+                            break;
+                        }
+                        if (line[peek].c != ' ')
+                            break;
+                        if (++peek >= line.Count)
+                            break;
+                    }
+                }
+                start.iChar = next;
+            }
 
             preferedPos = -1;
             end = start;
@@ -408,10 +432,29 @@ namespace FastColoredTextBoxNS
             if (start.iChar == 0 && start.iLine == 0)
                 return false;
 
-            if (start.iChar > 0)
+            if (start.iChar == 0)
+                start = new Place(tb[start.iLine - 1].Count, start.iLine - 1);
+            else if (tb.ExpandTab || start.iChar == 1)
                 start.Offset(-1, 0);
             else
-                start = new Place(tb[start.iLine - 1].Count, start.iLine - 1);
+            {
+                var line = tb[start.iLine];
+                int prev = start.iChar - 1;
+                if (line[prev].c == '\t')
+                {
+                    int peek = prev;
+                    for (; ; --peek)
+                    {
+                        if (peek % tb.TabLength == 0
+                        || line[peek-1].c != ' ')
+                        {
+                            prev = peek;
+                            break;
+                        }
+                    }
+                }
+                start.iChar = prev;
+            }
 
             preferedPos = -1;
             end = start;
@@ -432,12 +475,36 @@ namespace FastColoredTextBoxNS
 
             if (start.iChar != 0 || start.iLine != 0)
             {
-                if (start.iChar > 0 && tb.LineInfos[start.iLine].VisibleState == VisibleState.Visible)
-                    start.Offset(-1, 0);
+                if (start.iChar > 0
+                && tb.LineInfos[start.iLine].VisibleState == VisibleState.Visible)
+                {
+                    if (tb.ExpandTab || start.iChar == 1)
+                        start.Offset(-1, 0);
+                    else
+                    {
+                        var line = tb[start.iLine];
+                        int prev = start.iChar - 1;
+                        if (line[prev].c == '\t')
+                        {
+                            int peek = prev;
+                            for (; ; --peek)
+                            {
+                                if (peek % tb.TabLength == 0
+                                || line[peek-1].c != ' ')
+                                {
+                                    prev = peek;
+                                    break;
+                                }
+                            }
+                        }
+                        start.iChar = prev;
+                    }
+                }
                 else
                 {
                     int i = tb.FindPrevVisibleLine(start.iLine);
-                    if (i == start.iLine) return;
+                    if (i == start.iLine)
+                        return;
                     start = new Place(tb[i].Count, i);
                 }
             }
@@ -463,12 +530,38 @@ namespace FastColoredTextBoxNS
 
             if (start.iLine < tb.LinesCount - 1 || start.iChar < tb[tb.LinesCount - 1].Count)
             {
-                if (start.iChar < tb[start.iLine].Count && tb.LineInfos[start.iLine].VisibleState == VisibleState.Visible)
-                    start.Offset(1, 0);
+                var line = tb[start.iLine];
+                if (start.iChar < line.Count
+                    && tb.LineInfos[start.iLine].VisibleState == VisibleState.Visible)
+                {
+                    int next =  start.iChar + 1;
+                    if (!tb.ExpandTab
+                    && next < line.Count
+                    && (next % tb.TabLength != 0)
+                    && line[start.iChar].c == ' ')
+                    {
+                        //skip "   \t"
+                        int peek = next;
+                        for (; ; )
+                        {
+                            if (line[peek].c == '\t')
+                            {
+                                next = peek + 1;
+                                break;
+                            }
+                            if (line[peek].c != ' ')
+                                break;
+                            if (++peek >= line.Count)
+                                break;
+                        }
+                    }
+                    start.iChar = next;
+                }
                 else
                 {
                     int i = tb.FindNextVisibleLine(start.iLine);
-                    if (i == start.iLine) return;
+                    if (i == start.iLine)
+                        return;
                     start = new Place(0, i);
                 }
             }

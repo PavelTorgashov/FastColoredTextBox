@@ -2717,7 +2717,7 @@
         </member>
         <member name="M:FastColoredTextBoxNS.Range.GoRightThroughFolded">
             <summary>
-            Move range left
+            Move range right
             </summary>
             <remarks>This method can to go inside folded blocks</remarks>
         </member>

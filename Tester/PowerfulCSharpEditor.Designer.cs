@@ -386,6 +386,7 @@
             this.expandTabButton.Name = "expandTabButton";
             this.expandTabButton.Size = new System.Drawing.Size(23, 22);
             this.expandTabButton.Text = "xt";
+            this.expandTabButton.ToolTipText = "Expand Tab(s)";
             this.expandTabButton.Click += new System.EventHandler(this.expandTabButton_Click);
             // 
             // btHighlightCurrentLine

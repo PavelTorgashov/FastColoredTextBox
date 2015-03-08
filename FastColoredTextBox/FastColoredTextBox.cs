@@ -152,7 +152,7 @@ namespace FastColoredTextBoxNS
             selection = new Range(this) {Start = new Place(0, 0)};
             //default settings
             Cursor = Cursors.IBeam;
-            BackColor = Color.White;
+            BackColor = SystemColors.Window;
             LineNumberColor = Color.Teal;
             IndentBackColor = Color.WhiteSmoke;
             ServiceLinesColor = Color.Silver;
@@ -1230,7 +1230,7 @@ namespace FastColoredTextBoxNS
         /// Background color.
         /// It is used if BackBrush is null.
         /// </summary>
-        [DefaultValue(typeof (Color), "White")]
+        [DefaultValue(typeof (Color), "Window")]
         [Description("Background color.")]
         public override Color BackColor
         {
