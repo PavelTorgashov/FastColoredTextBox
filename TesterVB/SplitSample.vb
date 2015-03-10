@@ -90,7 +90,7 @@ Namespace TesterVB
             Me.fctbSlave.RightBracket = ")"
             Me.fctbSlave.SelectionColor = Color.FromArgb(50, 0, 0, 255)
             Me.fctbSlave.Size = New Size(610, 166)
-            Me.fctbSlave.LinkedTextBox = Me.fctbMaster
+            Me.fctbSlave.SourceTextBox = Me.fctbMaster
             Me.fctbSlave.TabIndex = 1
             Me.fctbSlave.Text = "#region Char" & vbCrLf & "    /// <summary>" & vbCrLf & "    /// Char and style" & vbCrLf & "    /// </summary>" & vbCrLf & "    struct Char" & vbCrLf & "    {" & vbCrLf & "        public char c;" & vbCrLf & "        public StyleIndex style;" & vbCrLf & "" & vbCrLf & "        public Char(char c)" & vbCrLf & "        {" & vbCrLf & "            this.c = c;" & vbCrLf & "            style = StyleIndex.None;" & vbCrLf & "        }" & vbCrLf & "    }" & vbCrLf & "    #endregion"
             Me.fctbSlave.WordWrap = True
