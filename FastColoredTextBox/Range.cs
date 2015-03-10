@@ -379,7 +379,7 @@ namespace FastColoredTextBoxNS
             else
             {
                 int next =  start.iChar + 1;
-                if (!tb.ExpandTab
+                if (tb.SupportTabs
                 && next < line.Count
                 && (next % tb.TabLength != 0)
                 && line[start.iChar].c == ' ')
@@ -434,7 +434,7 @@ namespace FastColoredTextBoxNS
 
             if (start.iChar == 0)
                 start = new Place(tb[start.iLine - 1].Count, start.iLine - 1);
-            else if (tb.ExpandTab || start.iChar == 1)
+            else if (!tb.SupportTabs || start.iChar == 1)
                 start.Offset(-1, 0);
             else
             {
@@ -478,7 +478,7 @@ namespace FastColoredTextBoxNS
                 if (start.iChar > 0
                 && tb.LineInfos[start.iLine].VisibleState == VisibleState.Visible)
                 {
-                    if (tb.ExpandTab || start.iChar == 1)
+                    if (!tb.SupportTabs || start.iChar == 1)
                         start.Offset(-1, 0);
                     else
                     {
@@ -535,7 +535,7 @@ namespace FastColoredTextBoxNS
                     && tb.LineInfos[start.iLine].VisibleState == VisibleState.Visible)
                 {
                     int next =  start.iChar + 1;
-                    if (!tb.ExpandTab
+                    if (tb.SupportTabs
                     && next < line.Count
                     && (next % tb.TabLength != 0)
                     && line[start.iChar].c == ' ')
@@ -606,10 +606,50 @@ namespace FastColoredTextBoxNS
                     start.iChar = finish + 1;
             }
 
+            AdjustIfTab();
+
             if (!shift)
                 end = start;
 
             OnSelectionChanged();
+        }
+
+        internal void AdjustIfTab()
+        {
+            AdjustIfTab(ref start);
+        }
+        internal void AdjustIfTab(ref Place p)
+        {
+            if (!tb.SupportTabs)
+                return;
+            int mod = p.iChar % tb.TabLength;
+            if (mod == 0)
+                return;
+            var line = tb[p.iLine];
+            if (p.iChar >= line.Count)
+                return;
+            int tpos = p.iChar - mod;
+            if (mod == tb.TabLength - 1)
+            {
+                if (line[p.iChar].c != '\t')
+                    return;
+            }
+            else
+            {
+                int n = Math.Min(line.Count, tpos + tb.TabLength) - 1;
+                for (int j = p.iChar; j < n; j++)
+                    if (line[j].c != ' ')
+                        return;
+            }
+            for (int i = p.iChar - 1; i >= tpos; i--)
+                if (line[i].c != ' ')
+                {
+                    p.iChar = i+1;
+                    return;
+                }
+            p.iChar = tpos;
+            return;
+            p.iChar = tpos;
         }
 
         internal void GoPageUp(bool shift)
@@ -642,6 +682,8 @@ namespace FastColoredTextBoxNS
                         start.iChar = finish + 1;
                 }
             }
+
+            AdjustIfTab();
 
             if (!shift)
                 end = start;
@@ -682,6 +724,8 @@ namespace FastColoredTextBoxNS
                     start.iChar = finish + 1;
             }
 
+            AdjustIfTab();
+
             if (!shift)
                 end = start;
 
@@ -718,6 +762,8 @@ namespace FastColoredTextBoxNS
                         start.iChar = finish + 1;
                 }
             }
+
+            AdjustIfTab();
 
             if (!shift)
                 end = start;

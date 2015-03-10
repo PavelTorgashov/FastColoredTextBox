@@ -120,7 +120,7 @@ namespace FastColoredTextBoxNS
                     if (spaceCountNextTabStop == 0)
                         spaceCountNextTabStop = tb.TabLength;
 
-                    if (tb.ExpandTab)
+                    if (!tb.SupportTabs)
                         for (int i = 0; i < spaceCountNextTabStop; i++)
                             ts[tb.Selection.Start.iLine].Insert(tb.Selection.Start.iChar, new Char(' '));
                     else

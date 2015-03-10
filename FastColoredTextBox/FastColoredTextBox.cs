@@ -115,6 +115,7 @@ namespace FastColoredTextBoxNS
         private Color serviceLinesColor;
         private bool showFoldingLines;
         private bool showLineNumbers;
+        private FastColoredTextBox sourceTextBox;
         private FastColoredTextBox linkedTextBox;
         private int startFoldingLine = -1;
         private int updating;
@@ -162,7 +163,6 @@ namespace FastColoredTextBoxNS
             HighlightFoldingIndicator = true;
             ShowLineNumbers = true;
             TabLength = 4;
-            ExpandTab = true;
             FoldedBlockStyle = new FoldedBlockStyle(Brushes.Gray, null, FontStyle.Regular);
             SelectionColor = Color.Blue;
             BracketsStyle = new MarkerStyle(new SolidBrush(Color.FromArgb(80, Color.Lime)));
@@ -517,14 +517,15 @@ namespace FastColoredTextBoxNS
         public int TabLength { get; set; }
 
         /// <summary>
-        /// Expand tab to spaces
+        /// Support tabs by expanding them to sequence of spaces and one tab.
+        /// Navigation and SaveToFile will be modified as well to make it behave accordingly.
         /// </summary>
-        [DefaultValue(true)]
-        public bool ExpandTab { get; set; }
+        [DefaultValue(false)]
+        public bool SupportTabs { get; set; }
 
         public string TabString(int spaces)
         {
-            if (ExpandTab)
+            if (!SupportTabs)
                 return new String(' ', spaces);
             if (spaces <= 1)
                 return new String('\t', spaces);
@@ -1117,20 +1118,42 @@ namespace FastColoredTextBoxNS
             set { InitTextSource(value); }
         }
 
-        // FIRDA: Changed original SourceTextBox to produce unlimited text sharing
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [Obsolete("Use HasLinkedTextBox. The logic is a bit different (no master but a group).")]
         public bool HasSourceTextBox
         {
-            get { return HasLinkedTextBox; }
+            get { return SourceTextBox != null; }
         }
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [Obsolete("Use LinkedTextBox. The logic is a bit different (no master but a group).")]
+
+        /// <summary>
+        /// The source of the text.
+        /// Allows to get text from other FastColoredTextBox.
+        /// </summary>
+        [Browsable(true)]
+        [DefaultValue(null)]
+        [Description("Allows to get text from other FastColoredTextBox.")]
+        //[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public FastColoredTextBox SourceTextBox
         {
-            get { return LinkedTextBox; }
+            get { return sourceTextBox; }
+            set
+            {
+                if (value == sourceTextBox)
+                    return;
+                sourceTextBox = value;
+                if (sourceTextBox == null)
+                {
+                    InitTextSource(CreateTextSource());
+                    lines.InsertLine(0, TextSource.CreateLine());
+                    IsChanged = false;
+                }
+                else
+                {
+                    InitTextSource(SourceTextBox.TextSource);
+                    isChanged = false;
+                }
+                Invalidate();
+            }
         }
 
         [Browsable(false)]

@@ -328,7 +328,7 @@ namespace FastColoredTextBoxNS
         {
             using (StreamWriter sw = new StreamWriter(fileName, false, enc))
             {
-                if (CurrentTB.ExpandTab)
+                if (!CurrentTB.SupportTabs)
                 {
                     for (int i = 0; i < Count - 1; i++)
                         sw.WriteLine(lines[i].Text);

@@ -1634,9 +1634,10 @@
             Spaces count for tab
             </summary>
         </member>
-        <member name="P:FastColoredTextBoxNS.FastColoredTextBox.ExpandTab">
+        <member name="P:FastColoredTextBoxNS.FastColoredTextBox.SupportTabs">
             <summary>
-            Expand tab to spaces
+            Support tabs by expanding them to sequence of spaces and one tab.
+            Navigation and SaveToFile will be modified as well to make it behave accordingly.
             </summary>
         </member>
         <member name="P:FastColoredTextBoxNS.FastColoredTextBox.IsChanged">
@@ -1908,6 +1909,12 @@
         <member name="P:FastColoredTextBoxNS.FastColoredTextBox.TextSource">
             <summary>
             TextSource
+            </summary>
+        </member>
+        <member name="P:FastColoredTextBoxNS.FastColoredTextBox.SourceTextBox">
+            <summary>
+            The source of the text.
+            Allows to get text from other FastColoredTextBox.
             </summary>
         </member>
         <member name="P:FastColoredTextBoxNS.FastColoredTextBox.LinkedTextBox">

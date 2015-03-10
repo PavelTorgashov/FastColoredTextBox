@@ -62,7 +62,7 @@ namespace Tester
                 //tb.VirtualSpace = true;
                 tb.LeftPadding = 17;
                 tb.Language = Language.CSharp;
-                tb.ExpandTab = expandTabButton.Checked;
+                tb.SupportTabs = !expandTabButton.Checked;
                 tb.AddStyle(sameWordsStyle);//same words style
                 var tab = new FATabStripItem(fileName!=null?Path.GetFileName(fileName):"[new]", tb);
                 tab.Tag = fileName;
@@ -585,7 +585,7 @@ namespace Tester
                     (o) => ReBuildObjectExplorer(text)
                 );
 
-                expandTabButton.Checked = CurrentTB.ExpandTab;
+                expandTabButton.Checked = !CurrentTB.SupportTabs;
             }
         }
 
@@ -909,7 +909,7 @@ namespace Tester
         private void expandTabButton_Click(object sender, EventArgs e)
         {
             if (CurrentTB != null)
-                CurrentTB.ExpandTab = expandTabButton.Checked;
+                CurrentTB.SupportTabs = !expandTabButton.Checked;
         }
     }
 

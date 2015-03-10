@@ -268,7 +268,6 @@
             this.copyToolStripButton,
             this.pasteToolStripButton,
             this.btInvisibleChars,
-            this.expandTabButton,
             this.btHighlightCurrentLine,
             this.btShowFoldingLines,
             this.toolStripSeparator4,
@@ -282,7 +281,8 @@
             this.toolStripSeparator6,
             this.bookmarkPlusButton,
             this.bookmarkMinusButton,
-            this.gotoButton});
+            this.gotoButton,
+            this.expandTabButton});
             this.tsMain.Location = new System.Drawing.Point(0, 24);
             this.tsMain.Name = "tsMain";
             this.tsMain.Size = new System.Drawing.Size(769, 25);
@@ -378,15 +378,15 @@
             // 
             // expandTabButton
             // 
+            this.expandTabButton.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.expandTabButton.Checked = true;
             this.expandTabButton.CheckOnClick = true;
             this.expandTabButton.CheckState = System.Windows.Forms.CheckState.Checked;
             this.expandTabButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.expandTabButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.expandTabButton.Name = "expandTabButton";
-            this.expandTabButton.Size = new System.Drawing.Size(23, 22);
-            this.expandTabButton.Text = "xt";
-            this.expandTabButton.ToolTipText = "Expand Tab(s)";
+            this.expandTabButton.Size = new System.Drawing.Size(85, 22);
+            this.expandTabButton.Text = "Expand Tab(s)";
             this.expandTabButton.Click += new System.EventHandler(this.expandTabButton_Click);
             // 
             // btHighlightCurrentLine
