@@ -113,6 +113,19 @@ namespace FastColoredTextBoxNS
                         deletedChar = ts[tb.Selection.Start.iLine][tb.Selection.Start.iChar - 1].c;
                         ts[tb.Selection.Start.iLine].RemoveAt(tb.Selection.Start.iChar - 1);
                         tb.Selection.Start = new Place(tb.Selection.Start.iChar - 1, tb.Selection.Start.iLine);
+
+						if( tb.SupportTabs && deletedChar == '\t' )
+						{
+							for(int i = 1; i < tb.TabLength; i++)
+							{
+								if( tb.Selection.Start.iChar == 0 )
+									break;
+								if( ' ' != ts[ tb.Selection.Start.iLine ][ tb.Selection.Start.iChar - 1 ].c )
+									break;
+								ts[ tb.Selection.Start.iLine ].RemoveAt( tb.Selection.Start.iChar - 1 );
+								tb.Selection.Start = new Place( tb.Selection.Start.iChar - 1, tb.Selection.Start.iLine );
+							}
+						}
                     }
                     break;
                 case '\t':

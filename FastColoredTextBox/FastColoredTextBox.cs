@@ -4630,15 +4630,27 @@ namespace FastColoredTextBoxNS
             //insert start spaces
             if (needToInsert == 0)
                 return;
-            Selection.Start = new Place(0, iLine);
-            if (needToInsert > 0)
-                InsertText(TabString(needToInsert));
-            else
-            {
-                Selection.Start = new Place(0, iLine);
-                Selection.End = new Place(-needToInsert, iLine);
-                ClearSelected();
-            }
+			if( needToInsert > 0 )
+			{
+				if( !SupportTabs
+				|| (needToInsert % TabLength == 0
+				&&	spaces % TabLength == 0) )
+				{// insert spaces or '   \t' at the start of the line
+					Selection.Start = new Place( 0, iLine );
+					InsertText( TabString( needToInsert ) );
+				}
+				else
+				{//	insert spaces after leading white-spaces
+					Selection.Start = new Place( spaces, iLine );
+					InsertText( new string( ' ', needToInsert ) );
+				}
+			}
+			else
+			{//	remove spaces or '    \t' at the and of leading white-space range
+				Selection.Start = new Place( spaces, iLine );
+				Selection.End = new Place( spaces + needToInsert, iLine );
+				ClearSelected();
+			}
 
             Selection.Start = new Place(Math.Min(lines[iLine].Count, Math.Max(0, oldStart.iChar + needToInsert)), iLine);
         }
@@ -5478,10 +5490,11 @@ namespace FastColoredTextBoxNS
             }
             else
             {
-                if (VirtualSpace)
-                    Selection.Start = PointToPlaceSimple(e.Location);
-                else
-                    Selection.Start = PointToPlace(e.Location);
+				Place start = VirtualSpace
+					? PointToPlaceSimple( e.Location )
+					: PointToPlace( e.Location );
+				Selection.AdjustIfTab( ref start );
+				Selection.Start = start;
             }
 
             if ((lastModifiers & Keys.Shift) != 0)
@@ -5707,23 +5720,27 @@ namespace FastColoredTextBoxNS
                     UpdateScrollbars();
                     Invalidate();
                 }
-                else if (place != Selection.Start)
-                {
-                    Place oldEnd = Selection.End;
-                    Selection.BeginUpdate();
-                    if (Selection.ColumnSelectionMode)
-                    {
-                        Selection.Start = place;
-                        Selection.ColumnSelectionMode = true;
-                    }
-                    else
-                        Selection.Start = place;
-                    Selection.End = oldEnd;
-                    Selection.EndUpdate();
-                    DoCaretVisible();
-                    Invalidate();
-                    return;
-                }
+                else
+				{
+					Selection.AdjustIfTab( ref place );
+					if( place != Selection.Start )
+					{
+						Place oldEnd = Selection.End;
+						Selection.BeginUpdate();
+						if( Selection.ColumnSelectionMode )
+						{
+							Selection.Start = place;
+							Selection.ColumnSelectionMode = true;
+						}
+						else
+							Selection.Start = place;
+						Selection.End = oldEnd;
+						Selection.EndUpdate();
+						DoCaretVisible();
+						Invalidate();
+						return;
+					}
+				}
             }
 
             VisualMarker marker = FindVisualMarkerForPoint(e.Location);

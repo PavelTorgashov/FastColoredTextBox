@@ -40,6 +40,11 @@ namespace Tester
             copyToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("copyToolStripButton.Image")));
             cutToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("cutToolStripButton.Image")));
             pasteToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("pasteToolStripButton.Image")));
+
+		#if DEBUG
+			btSupportTabs.Checked = true;
+			btInvisibleChars.Checked = true;
+		#endif
         }
 
 
@@ -62,7 +67,7 @@ namespace Tester
                 //tb.VirtualSpace = true;
                 tb.LeftPadding = 17;
                 tb.Language = Language.CSharp;
-                tb.SupportTabs = !expandTabButton.Checked;
+                tb.SupportTabs = btSupportTabs.Checked;
                 tb.AddStyle(sameWordsStyle);//same words style
                 var tab = new FATabStripItem(fileName!=null?Path.GetFileName(fileName):"[new]", tb);
                 tab.Tag = fileName;
@@ -585,7 +590,7 @@ namespace Tester
                     (o) => ReBuildObjectExplorer(text)
                 );
 
-                expandTabButton.Checked = !CurrentTB.SupportTabs;
+                btSupportTabs.Checked = CurrentTB.SupportTabs;
             }
         }
 
@@ -906,10 +911,10 @@ namespace Tester
                 CurrentTB.Zoom = int.Parse((sender as ToolStripItem).Tag.ToString());
         }
 
-        private void expandTabButton_Click(object sender, EventArgs e)
+        private void supportTabs_Click(object sender, EventArgs e)
         {
             if (CurrentTB != null)
-                CurrentTB.SupportTabs = !expandTabButton.Checked;
+                CurrentTB.SupportTabs = btSupportTabs.Checked;
         }
     }
 

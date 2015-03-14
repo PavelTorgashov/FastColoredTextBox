@@ -614,43 +614,49 @@ namespace FastColoredTextBoxNS
             OnSelectionChanged();
         }
 
-        internal void AdjustIfTab()
-        {
-            AdjustIfTab(ref start);
-        }
-        internal void AdjustIfTab(ref Place p)
-        {
-            if (!tb.SupportTabs)
-                return;
-            int mod = p.iChar % tb.TabLength;
-            if (mod == 0)
-                return;
-            var line = tb[p.iLine];
-            if (p.iChar >= line.Count)
-                return;
-            int tpos = p.iChar - mod;
-            if (mod == tb.TabLength - 1)
-            {
-                if (line[p.iChar].c != '\t')
-                    return;
-            }
-            else
-            {
-                int n = Math.Min(line.Count, tpos + tb.TabLength) - 1;
-                for (int j = p.iChar; j < n; j++)
-                    if (line[j].c != ' ')
-                        return;
-            }
-            for (int i = p.iChar - 1; i >= tpos; i--)
-                if (line[i].c != ' ')
-                {
-                    p.iChar = i+1;
-                    return;
-                }
-            p.iChar = tpos;
-            return;
-            p.iChar = tpos;
-        }
+		internal bool AdjustIfTab()
+		{
+			if( !tb.SupportTabs )
+				return false;
+			bool same = start == end;
+			if( !AdjustIfTab( ref start ) )
+				return false;
+			if( same )
+				end = start;
+			return true;
+		}
+		internal bool AdjustIfTab( ref Place p )
+		{
+			if( !tb.SupportTabs )
+				return false;
+			int mod = p.iChar % tb.TabLength;
+			if( mod == 0 )
+				return false;
+			var line = tb[ p.iLine ];
+			if( p.iChar >= line.Count )
+				return false;
+			int tpos = p.iChar - mod;
+			if( mod == tb.TabLength - 1 )
+			{
+				if( line[ p.iChar ].c != '\t' )
+					return false;
+			}
+			else
+			{
+				int n = Math.Min( line.Count, tpos + tb.TabLength ) - 1;
+				for( int j = p.iChar; j < n; j++ )
+					if( line[ j ].c != ' ' )
+						return false;
+			}
+			for( int i = p.iChar - 1; i >= tpos; i-- )
+				if( line[ i ].c != ' ' )
+				{
+					p.iChar = i+1;
+					return true;
+				}
+			p.iChar = tpos;
+			return true;
+		}
 
         internal void GoPageUp(bool shift)
         {
