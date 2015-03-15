@@ -40,6 +40,11 @@ namespace Tester
             copyToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("copyToolStripButton.Image")));
             cutToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("cutToolStripButton.Image")));
             pasteToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("pasteToolStripButton.Image")));
+
+		#if DEBUG
+			btSupportTabs.Checked = true;
+			btInvisibleChars.Checked = true;
+		#endif
         }
 
 
@@ -62,6 +67,7 @@ namespace Tester
                 //tb.VirtualSpace = true;
                 tb.LeftPadding = 17;
                 tb.Language = Language.CSharp;
+                tb.SupportTabs = btSupportTabs.Checked;
                 tb.AddStyle(sameWordsStyle);//same words style
                 var tab = new FATabStripItem(fileName!=null?Path.GetFileName(fileName):"[new]", tb);
                 tab.Tag = fileName;
@@ -341,7 +347,8 @@ namespace Tester
 
             try
             {
-                File.WriteAllText(tab.Tag as string, tb.Text);
+                //File.WriteAllText(tab.Tag as string, tb.Text);
+                tb.SaveToFile(tab.Tag as string, new UTF8Encoding(false));
                 tb.IsChanged = false;
             }
             catch (Exception ex)
@@ -582,6 +589,8 @@ namespace Tester
                 ThreadPool.QueueUserWorkItem(
                     (o) => ReBuildObjectExplorer(text)
                 );
+
+                btSupportTabs.Checked = CurrentTB.SupportTabs;
             }
         }
 
@@ -901,6 +910,12 @@ namespace Tester
             if (CurrentTB != null)
                 CurrentTB.Zoom = int.Parse((sender as ToolStripItem).Tag.ToString());
         }
+
+        private void supportTabs_Click(object sender, EventArgs e)
+        {
+            if (CurrentTB != null)
+                CurrentTB.SupportTabs = btSupportTabs.Checked;
+        }
     }
 
     public class InvisibleCharsRenderer : Style
@@ -924,6 +939,13 @@ namespace Tester
                         var point = tb.PlaceToPoint(place);
                         point.Offset(tb.CharWidth / 2, tb.CharHeight / 2);
                         gr.DrawLine(pen, point.X, point.Y, point.X + 1, point.Y);
+                        break;
+                    case '\t':
+                        // make it different from space to see it
+                        point = tb.PlaceToPoint(place);
+                        point.Offset(tb.CharWidth / 2, tb.CharHeight / 2);
+                        gr.DrawLine(pen, point.X, point.Y, point.X + 1, point.Y);
+                        gr.DrawLine(pen, point.X + 2, point.Y - 1, point.X + 2, point.Y + 1);
                         break;
                 }
 

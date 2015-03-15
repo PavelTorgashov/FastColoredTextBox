@@ -75,6 +75,26 @@ namespace FastColoredTextBoxNS
             }
         }
 
+        public string GetCleanText(int TabLength)
+        {
+            return GetCleanText(TabLength, new StringBuilder(Count));
+        }
+        public virtual string GetCleanText(int TabLength, StringBuilder sb)
+        {
+            sb.Length = 0;
+            for (int i = 0; i < chars.Count; i++)
+            {
+                char c = chars[i].c;
+                if (c == '\t')
+                {
+                    for (int j = i; j % TabLength != 0 && sb[sb.Length-1] == ' '; j--)
+                        sb.Length = sb.Length - 1;
+                }
+                sb.Append(c);
+            }
+            return sb.ToString();
+        }
+
         /// <summary>
         /// Clears folding markers
         /// </summary>
@@ -93,7 +113,7 @@ namespace FastColoredTextBoxNS
             {
                 int spacesCount = 0;
                 for (int i = 0; i < Count; i++)
-                    if (this[i].c == ' ')
+                    if (char.IsWhiteSpace(this[i].c))
                         spacesCount++;
                     else
                         break;

@@ -116,6 +116,7 @@ namespace FastColoredTextBoxNS
         private bool showFoldingLines;
         private bool showLineNumbers;
         private FastColoredTextBox sourceTextBox;
+        private FastColoredTextBox linkedTextBox;
         private int startFoldingLine = -1;
         private int updating;
         private Range updatingRange;
@@ -152,7 +153,7 @@ namespace FastColoredTextBoxNS
             selection = new Range(this) {Start = new Place(0, 0)};
             //default settings
             Cursor = Cursors.IBeam;
-            BackColor = Color.White;
+            BackColor = SystemColors.Window;
             LineNumberColor = Color.Teal;
             IndentBackColor = Color.WhiteSmoke;
             ServiceLinesColor = Color.Silver;
@@ -514,6 +515,33 @@ namespace FastColoredTextBoxNS
         [DefaultValue(4)]
         [Description("Spaces count for tab")]
         public int TabLength { get; set; }
+
+        /// <summary>
+        /// Support tabs by expanding them to sequence of spaces and one tab.
+        /// Navigation and SaveToFile will be modified as well to make it behave accordingly.
+        /// </summary>
+        [DefaultValue(false)]
+        public bool SupportTabs { get; set; }
+
+        public string TabString(int spaces)
+        {
+            if (!SupportTabs)
+                return new String(' ', spaces);
+            if (spaces <= 1)
+                return new String('\t', spaces);
+            if (spaces <= TabLength)
+                return new String(' ', spaces - 1) + "\t";
+            StringBuilder sb = new StringBuilder(spaces);
+            if (spaces % TabLength != 0)
+            {
+                sb.Append(new String(' ', (spaces % TabLength) - 1));
+                sb.Append('\t');
+            }
+            var tab = new String(' ', TabLength - 1) + "\t";
+            while (sb.Length < spaces)
+                sb.Append(tab);
+            return sb.ToString();
+        }
 
         /// <summary>
         /// Text was changed
@@ -1105,16 +1133,14 @@ namespace FastColoredTextBoxNS
         [DefaultValue(null)]
         [Description("Allows to get text from other FastColoredTextBox.")]
         //[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-            public FastColoredTextBox SourceTextBox
+        public FastColoredTextBox SourceTextBox
         {
             get { return sourceTextBox; }
             set
             {
                 if (value == sourceTextBox)
                     return;
-
                 sourceTextBox = value;
-
                 if (sourceTextBox == null)
                 {
                     InitTextSource(CreateTextSource());
@@ -1125,6 +1151,79 @@ namespace FastColoredTextBoxNS
                 {
                     InitTextSource(SourceTextBox.TextSource);
                     isChanged = false;
+                }
+                Invalidate();
+            }
+        }
+
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public bool HasLinkedTextBox
+        {
+            get { return LinkedTextBox != null; }
+        }
+
+        /// <summary>
+        /// Linked text box with same text.
+        /// Allows to share text with other FastColoredTextBox(es).
+        /// </summary>
+        [Browsable(true)]
+        [DefaultValue(null)]
+        [Description("Allows to get share text with FastColoredTextBox(es).")]
+        public FastColoredTextBox LinkedTextBox
+        {
+            get { return linkedTextBox; }
+            set
+            {
+                if (value == linkedTextBox)
+                    return;
+
+                if (linkedTextBox != null)
+                {
+                    if (linkedTextBox.linkedTextBox == this)
+                    //  only two linked, source won't be shared anymore
+                        linkedTextBox.linkedTextBox = null;
+                    else
+                    //  more than one linked
+                        for (var link = linkedTextBox; ; link = link.linkedTextBox)
+                        {
+                            if (link == value)
+                            //  already linked, don't change anything
+                                return;
+                            if (link.linkedTextBox == this)
+                            {
+                                link.linkedTextBox = linkedTextBox;
+                                break;
+                            }
+                        }
+                    //  relik source if this box is current
+                    if (TextSource.CurrentTB == this)
+                        TextSource.CurrentTB = linkedTextBox;
+                }
+
+                linkedTextBox = value;
+
+                if (value == null)
+                {
+                    InitTextSource(CreateTextSource());
+                    lines.InsertLine(0, TextSource.CreateLine());
+                    IsChanged = false;
+                }
+                else
+                {
+                    InitTextSource(LinkedTextBox.TextSource);
+                    isChanged = false;
+                    if (value.linkedTextBox == null)
+                    //  two boxes are now linked
+                        value.linkedTextBox = this;
+                    else
+                    {
+                    //  find insertion point (the box pointing to value)
+                        var link = value;
+                        while (link.linkedTextBox != value)
+                            link = link.linkedTextBox;
+                        link.linkedTextBox = this;
+                    }
                 }
                 Invalidate();
             }
@@ -1168,7 +1267,7 @@ namespace FastColoredTextBoxNS
         /// Background color.
         /// It is used if BackBrush is null.
         /// </summary>
-        [DefaultValue(typeof (Color), "White")]
+        [DefaultValue(typeof (Color), "Window")]
         [Description("Background color.")]
         public override Color BackColor
         {
@@ -2019,13 +2118,13 @@ namespace FastColoredTextBoxNS
         protected void InitTextSource(TextSource ts)
         {
             if (lines != null)
-            {
-                ts.LineInserted -= ts_LineInserted;
-                ts.LineRemoved -= ts_LineRemoved;
-                ts.TextChanged -= ts_TextChanged;
-                ts.RecalcNeeded -= ts_RecalcNeeded;
-                ts.RecalcWordWrap -= ts_RecalcWordWrap;
-                ts.TextChanging -= ts_TextChanging;
+            {// FIRDA: ts->lines
+                lines.LineInserted -= ts_LineInserted;
+                lines.LineRemoved -= ts_LineRemoved;
+                lines.TextChanged -= ts_TextChanged;
+                lines.RecalcNeeded -= ts_RecalcNeeded;
+                lines.RecalcWordWrap -= ts_RecalcWordWrap;
+                lines.TextChanging -= ts_TextChanging;
 
                 lines.Dispose();
             }
@@ -4379,7 +4478,7 @@ namespace FastColoredTextBoxNS
                         oldSel.Start = new Place(oldSel.Start.iChar + addSpaces, i);
 
                     if (addSpaces > 0)
-                        texts[i] = texts[i].Insert(cap.Index, new string(' ', addSpaces));
+                        texts[i] = texts[i].Insert(cap.Index, TabString(addSpaces));
                     else
                         texts[i] = texts[i].Remove(cap.Index + addSpaces, -addSpaces);
                     
@@ -4531,15 +4630,27 @@ namespace FastColoredTextBoxNS
             //insert start spaces
             if (needToInsert == 0)
                 return;
-            Selection.Start = new Place(0, iLine);
-            if (needToInsert > 0)
-                InsertText(new String(' ', needToInsert));
-            else
-            {
-                Selection.Start = new Place(0, iLine);
-                Selection.End = new Place(-needToInsert, iLine);
-                ClearSelected();
-            }
+			if( needToInsert > 0 )
+			{
+				if( !SupportTabs
+				|| (needToInsert % TabLength == 0
+				&&	spaces % TabLength == 0) )
+				{// insert spaces or '   \t' at the start of the line
+					Selection.Start = new Place( 0, iLine );
+					InsertText( TabString( needToInsert ) );
+				}
+				else
+				{//	insert spaces after leading white-spaces
+					Selection.Start = new Place( spaces, iLine );
+					InsertText( new string( ' ', needToInsert ) );
+				}
+			}
+			else
+			{//	remove spaces or '    \t' at the and of leading white-space range
+				Selection.Start = new Place( spaces, iLine );
+				Selection.End = new Place( spaces + needToInsert, iLine );
+				ClearSelected();
+			}
 
             Selection.Start = new Place(Math.Min(lines[iLine].Count, Math.Max(0, oldStart.iChar + needToInsert)), iLine);
         }
@@ -5379,10 +5490,11 @@ namespace FastColoredTextBoxNS
             }
             else
             {
-                if (VirtualSpace)
-                    Selection.Start = PointToPlaceSimple(e.Location);
-                else
-                    Selection.Start = PointToPlace(e.Location);
+				Place start = VirtualSpace
+					? PointToPlaceSimple( e.Location )
+					: PointToPlace( e.Location );
+				Selection.AdjustIfTab( ref start );
+				Selection.Start = start;
             }
 
             if ((lastModifiers & Keys.Shift) != 0)
@@ -5608,23 +5720,27 @@ namespace FastColoredTextBoxNS
                     UpdateScrollbars();
                     Invalidate();
                 }
-                else if (place != Selection.Start)
-                {
-                    Place oldEnd = Selection.End;
-                    Selection.BeginUpdate();
-                    if (Selection.ColumnSelectionMode)
-                    {
-                        Selection.Start = place;
-                        Selection.ColumnSelectionMode = true;
-                    }
-                    else
-                        Selection.Start = place;
-                    Selection.End = oldEnd;
-                    Selection.EndUpdate();
-                    DoCaretVisible();
-                    Invalidate();
-                    return;
-                }
+                else
+				{
+					Selection.AdjustIfTab( ref place );
+					if( place != Selection.Start )
+					{
+						Place oldEnd = Selection.End;
+						Selection.BeginUpdate();
+						if( Selection.ColumnSelectionMode )
+						{
+							Selection.Start = place;
+							Selection.ColumnSelectionMode = true;
+						}
+						else
+							Selection.Start = place;
+						Selection.End = oldEnd;
+						Selection.EndUpdate();
+						DoCaretVisible();
+						Invalidate();
+						return;
+					}
+				}
             }
 
             VisualMarker marker = FindVisualMarkerForPoint(e.Location);
@@ -6513,7 +6629,7 @@ namespace FastColoredTextBoxNS
                         Selection.Inverse();
                     }
 
-                    InsertText(new String(' ', spaces));
+                    InsertText(TabString(spaces));
                 }
                 return;
             }
@@ -6544,7 +6660,7 @@ namespace FastColoredTextBoxNS
             {
                 if (lines[i].Count == 0) continue;
                 Selection.Start = new Place(startChar, i);
-                lines.Manager.ExecuteCommand(new InsertTextCommand(TextSource, new String(' ', TabLength)));
+                lines.Manager.ExecuteCommand(new InsertTextCommand(TextSource, TabString(TabLength)));
             }
 
             // Restore selection

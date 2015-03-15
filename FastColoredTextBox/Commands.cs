@@ -113,6 +113,19 @@ namespace FastColoredTextBoxNS
                         deletedChar = ts[tb.Selection.Start.iLine][tb.Selection.Start.iChar - 1].c;
                         ts[tb.Selection.Start.iLine].RemoveAt(tb.Selection.Start.iChar - 1);
                         tb.Selection.Start = new Place(tb.Selection.Start.iChar - 1, tb.Selection.Start.iLine);
+
+						if( tb.SupportTabs && deletedChar == '\t' )
+						{
+							for(int i = 1; i < tb.TabLength; i++)
+							{
+								if( tb.Selection.Start.iChar == 0 )
+									break;
+								if( ' ' != ts[ tb.Selection.Start.iLine ][ tb.Selection.Start.iChar - 1 ].c )
+									break;
+								ts[ tb.Selection.Start.iLine ].RemoveAt( tb.Selection.Start.iChar - 1 );
+								tb.Selection.Start = new Place( tb.Selection.Start.iChar - 1, tb.Selection.Start.iLine );
+							}
+						}
                     }
                     break;
                 case '\t':
@@ -120,8 +133,17 @@ namespace FastColoredTextBoxNS
                     if (spaceCountNextTabStop == 0)
                         spaceCountNextTabStop = tb.TabLength;
 
-                    for (int i = 0; i < spaceCountNextTabStop; i++)
-                        ts[tb.Selection.Start.iLine].Insert(tb.Selection.Start.iChar, new Char(' '));
+                    if (!tb.SupportTabs)
+                        for (int i = 0; i < spaceCountNextTabStop; i++)
+                            ts[tb.Selection.Start.iLine].Insert(tb.Selection.Start.iChar, new Char(' '));
+                    else
+                    {
+                    //  FIRDA: Use "   \t" for tabs not to mess with paint and regex logic too much
+                    //  NOTE:  The insertion is backwards (all at same position = tab first, spaces next)
+                        ts[tb.Selection.Start.iLine].Insert(tb.Selection.Start.iChar, new Char(c));
+                        for (int i = 1; i < spaceCountNextTabStop; i++)
+                            ts[tb.Selection.Start.iLine].Insert(tb.Selection.Start.iChar, new Char(' '));
+                    }                        
 
                     tb.Selection.Start = new Place(tb.Selection.Start.iChar + spaceCountNextTabStop, tb.Selection.Start.iLine);
                     break;
@@ -720,7 +742,7 @@ namespace FastColoredTextBoxNS
                     if (r.End < r.Start && insertedText!="")
                     {
                         //add forwarding spaces
-                        insertedText = new string(' ', r.Start.iChar - r.End.iChar) + insertedText;
+                        insertedText = ts.CurrentTB.TabString(r.Start.iChar - r.End.iChar) + insertedText;
                         r.Start = r.End;
                     }
                     ts.CurrentTB.Selection = r;
