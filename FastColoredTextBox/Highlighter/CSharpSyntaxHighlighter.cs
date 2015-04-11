@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text.RegularExpressions;
+using FastColoredTextBoxNS.Highlighter;
 
 namespace FastColoredTextBoxNS
 {
@@ -107,29 +108,14 @@ namespace FastColoredTextBoxNS
             range.SetStyle(KeywordStyle, CSharpKeywordRegex);
 
             // TODO: hier muss ein html syntaxhighlighter benutzt werden
-            ////find document comments
-            //foreach (Range r in range.GetRanges(@"^\s*///.*$", RegexOptions.Multiline))
-            //{
-            //    //remove C# highlighting from this fragment
-            //    r.ClearStyle(StyleIndex.All);
-            //    //do XML highlighting
-            //    if (HTMLTagRegex == null)
-            //        InitHTMLRegex();
-            //    //
-            //    r.SetStyle(CommentStyle);
-            //    //tags
-            //    foreach (Range rr in r.GetRanges(HTMLTagContentRegex))
-            //    {
-            //        rr.ClearStyle(StyleIndex.All);
-            //        rr.SetStyle(CommentTagStyle);
-            //    }
-            //    //prefix '///'
-            //    foreach (Range rr in r.GetRanges(@"^\s*///", RegexOptions.Multiline))
-            //    {
-            //        rr.ClearStyle(StyleIndex.All);
-            //        rr.SetStyle(CommentTagStyle);
-            //    }
-            //}
+            //find document comments
+            foreach (Range r in range.GetRanges(@"^\s*///.*$", RegexOptions.Multiline))
+            {
+                //remove C# highlighting from this fragment
+                r.ClearStyle(StyleIndex.All);
+                r.SetStyle(CommentStyle);
+                HtmlHighlighter.HighlightSyntax(r);
+            }
 
             //clear folding markers
             range.ClearFoldingMarkers();
@@ -205,6 +191,8 @@ namespace FastColoredTextBoxNS
         private Style ClassNameStyle { get; set; }
         private Style KeywordStyle { get; set; }
         private Style CommentTagStyle { get; set; }
+
+        private static readonly HtmlSyntaxHighlighter HtmlHighlighter = new HtmlSyntaxHighlighter();
         #endregion
     }
 }
