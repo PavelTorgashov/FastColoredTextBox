@@ -22,7 +22,7 @@ namespace FastColoredTextBoxNS.Highlighter
 
         public override void AutoIndentNeeded(object sender, AutoIndentEventArgs args)
         {
-            throw new NotImplementedException();
+            HTMLAutoIndentNeeded(sender, args);
         }
 
         private void InitStyleSchema()
@@ -89,6 +89,13 @@ namespace FastColoredTextBoxNS.Highlighter
             range.SetFoldingMarkers("<script", "</script>", RegexOptions.IgnoreCase);
             range.SetFoldingMarkers("<tr", "</tr>", RegexOptions.IgnoreCase);
         }
+
+        private void HTMLAutoIndentNeeded(object sender, AutoIndentEventArgs args)
+        {
+            var tb = sender as FastColoredTextBox;
+            tb.CalcAutoIndentShiftByCodeFolding(sender, args);
+        }
+
 
         #region private members
         private Regex HTMLAttrRegex, HTMLAttrValRegex, HTMLCommentRegex1, HTMLCommentRegex2;
