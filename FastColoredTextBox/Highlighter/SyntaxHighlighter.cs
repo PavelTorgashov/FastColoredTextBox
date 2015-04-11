@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace FastColoredTextBoxNS
 {
-    abstract class SyntaxHighlighter : ISyntaxHighlighter
+    public abstract class SyntaxHighlighter : ISyntaxHighlighter
     {
         public readonly Style BlueBoldStyle = new TextStyle(Brushes.Blue, null, FontStyle.Bold);
         public readonly Style BlueStyle = new TextStyle(Brushes.Blue, null, FontStyle.Regular);
@@ -21,6 +21,8 @@ namespace FastColoredTextBoxNS
         public abstract void AutoIndentNeeded(object sender, AutoIndentEventArgs args);
 
         public abstract void Dispose();
+
+        public abstract void setTextBoxParameter(FastColoredTextBox tb);
 
         public static RegexOptions RegexCompiledOption
         {

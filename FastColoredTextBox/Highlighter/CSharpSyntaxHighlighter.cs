@@ -87,14 +87,6 @@ namespace FastColoredTextBoxNS
             if (CSharpStringRegex == null)
                 InitCShaprRegex();
 
-            range.tb.CommentPrefix = "//";
-            range.tb.LeftBracket = '(';
-            range.tb.RightBracket = ')';
-            range.tb.LeftBracket2 = '{';
-            range.tb.RightBracket2 = '}';
-            range.tb.BracketsHighlightStrategy = BracketsHighlightStrategy.Strategy2;
-
-            range.tb.AutoIndentCharsPatterns = @"^\s*[\w\.]+(\s\w+)?\s*(?<range>=)\s*(?<range>[^;]+);^\s*(case|default)\s*[^:]*(?<range>:)\s*(?<range>[^;]+);";
             //clear style of changed range
             range.ClearStyle(StringStyle, CommentStyle, NumberStyle, AttributeStyle, ClassNameStyle, KeywordStyle);
             //
@@ -185,6 +177,18 @@ namespace FastColoredTextBoxNS
                     args.Shift = args.TabLength;
                     return;
                 }
+        }
+
+        public override void setTextBoxParameter(FastColoredTextBox tb)
+        {
+            tb.CommentPrefix = "//";
+            tb.LeftBracket = '(';
+            tb.RightBracket = ')';
+            tb.LeftBracket2 = '{';
+            tb.RightBracket2 = '}';
+            tb.BracketsHighlightStrategy = BracketsHighlightStrategy.Strategy2;
+
+            tb.AutoIndentCharsPatterns = @"^\s*[\w\.]+(\s\w+)?\s*(?<range>=)\s*(?<range>[^;]+);^\s*(case|default)\s*[^:]*(?<range>:)\s*(?<range>[^;]+);";
         }
 
         #region private members

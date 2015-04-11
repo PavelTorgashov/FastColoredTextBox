@@ -53,12 +53,6 @@ namespace FastColoredTextBoxNS.Highlighter
             if (HTMLTagRegex == null)
                 InitHTMLRegex();
 
-            range.tb.CommentPrefix = null;
-            range.tb.LeftBracket = '<';
-            range.tb.RightBracket = '>';
-            range.tb.LeftBracket2 = '(';
-            range.tb.RightBracket2 = ')';
-            range.tb.AutoIndentCharsPatterns = @"";
             //clear style of changed range
             range.ClearStyle(CommentStyle, TagBracketStyle, TagNameStyle, AttributeStyle, AttributeValueStyle, HtmlEntityStyle);
 
@@ -96,6 +90,15 @@ namespace FastColoredTextBoxNS.Highlighter
             tb.CalcAutoIndentShiftByCodeFolding(sender, args);
         }
 
+        public override void setTextBoxParameter(FastColoredTextBox tb)
+        {
+            tb.CommentPrefix = null;
+            tb.LeftBracket = '<';
+            tb.RightBracket = '>';
+            tb.LeftBracket2 = '(';
+            tb.RightBracket2 = ')';
+            tb.AutoIndentCharsPatterns = @"";
+        }
 
         #region private members
         private Regex HTMLAttrRegex, HTMLAttrValRegex, HTMLCommentRegex1, HTMLCommentRegex2;
