@@ -9,7 +9,7 @@ using System.Globalization;
 
 namespace FastColoredTextBoxNS.Highlighter
 {
-    class CustomSyntaxHighlighter : SyntaxHighlighter
+    public class CustomSyntaxHighlighter : SyntaxHighlighter
     {
         public CustomSyntaxHighlighter(string XMLdescriptionFile)
         {

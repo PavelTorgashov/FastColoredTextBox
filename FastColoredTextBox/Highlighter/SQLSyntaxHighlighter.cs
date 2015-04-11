@@ -3,11 +3,12 @@ using System.Text.RegularExpressions;
 
 namespace FastColoredTextBoxNS.Highlighter
 {
-    class SQLSyntaxHighlighter : SyntaxHighlighter
+    public class SQLSyntaxHighlighter : SyntaxHighlighter
     {
         public SQLSyntaxHighlighter()
         {
             InitStyleSchema();
+            InitSQLRegex();
         }
 
         public override void Dispose()
@@ -63,9 +64,6 @@ namespace FastColoredTextBoxNS.Highlighter
 
         private void SQLSyntaxHighlight(Range range)
         {
-            if (SQLStringRegex == null)
-                InitSQLRegex();
-
             //clear style of changed range
             range.ClearStyle(CommentStyle, StringStyle, NumberStyle, VariableStyle, StatementsStyle, KeywordStyle, FunctionsStyle, TypesStyle);
             //comment highlighting

@@ -3,11 +3,12 @@ using System.Text.RegularExpressions;
 
 namespace FastColoredTextBoxNS.Highlighter
 {
-    class LuaSyntaxHighlighter : SyntaxHighlighter
+    public class LuaSyntaxHighlighter : SyntaxHighlighter
     {
         public LuaSyntaxHighlighter()
         {
             InitStyleSchema();
+            InitLuaRegex();
         }
 
         public override void Dispose()
@@ -58,8 +59,6 @@ namespace FastColoredTextBoxNS.Highlighter
 
         private void LuaSyntaxHighlight(Range range)
         {
-            if (LuaStringRegex == null)
-                InitLuaRegex();
             //clear style of changed range
             range.ClearStyle(StringStyle, CommentStyle, NumberStyle, KeywordStyle, FunctionsStyle);
             //string highlighting

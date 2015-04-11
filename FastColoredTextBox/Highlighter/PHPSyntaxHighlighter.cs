@@ -3,11 +3,12 @@ using System.Text.RegularExpressions;
 
 namespace FastColoredTextBoxNS.Highlighter
 {
-    class PHPSyntaxHighlighter : SyntaxHighlighter
+    public class PHPSyntaxHighlighter : SyntaxHighlighter
     {
         public PHPSyntaxHighlighter()
         {
             InitStyleSchema();
+            InitPHPRegex();
         }
 
         public override void Dispose()
@@ -62,9 +63,6 @@ namespace FastColoredTextBoxNS.Highlighter
 
         private void PHPSyntaxHighlight(Range range)
         {
-            if (PHPStringRegex == null)
-                InitPHPRegex();
-
             //clear style of changed range
             range.ClearStyle(StringStyle, CommentStyle, NumberStyle, VariableStyle, KeywordStyle, KeywordStyle2, KeywordStyle3);
             //string highlighting

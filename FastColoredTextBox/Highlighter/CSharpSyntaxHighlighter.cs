@@ -4,11 +4,12 @@ using FastColoredTextBoxNS.Highlighter;
 
 namespace FastColoredTextBoxNS
 {
-    class CSharpSyntaxHighlighter : SyntaxHighlighter
+    public class CSharpSyntaxHighlighter : SyntaxHighlighter
     {
         public CSharpSyntaxHighlighter()
         {
             InitStyleSchema();
+            InitCSharpRegex();
         }
 
         public override void Dispose()
@@ -97,9 +98,6 @@ namespace FastColoredTextBoxNS
 
         private void CSharpSyntaxHighlight(Range range)
         {
-            if (CSharpStringRegex == null)
-                InitCSharpRegex();
-
             //clear style of changed range
             range.ClearStyle(StringStyle, CommentStyle, NumberStyle, AttributeStyle, ClassNameStyle, KeywordStyle);
             //

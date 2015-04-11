@@ -2,7 +2,7 @@
 
 namespace FastColoredTextBoxNS
 {
-    interface ISyntaxHighlighter : IDisposable
+    public interface ISyntaxHighlighter : IDisposable
     {
         void HighlightSyntax(Range range);
         void AutoIndentNeeded(object sender, AutoIndentEventArgs args);

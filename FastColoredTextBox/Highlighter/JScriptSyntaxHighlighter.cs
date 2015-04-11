@@ -3,11 +3,12 @@ using System.Text.RegularExpressions;
 
 namespace FastColoredTextBoxNS.Highlighter
 {
-    class JScriptSyntaxHighlighter : SyntaxHighlighter
+    public class JScriptSyntaxHighlighter : SyntaxHighlighter
     {
         public JScriptSyntaxHighlighter()
         {
             InitStyleSchema();
+            InitJScriptRegex();
         }
 
         public override void Dispose()
@@ -57,9 +58,6 @@ namespace FastColoredTextBoxNS.Highlighter
 
         private void JScriptSyntaxHighlight(Range range)
         {
-            if (JScriptStringRegex == null)
-                InitJScriptRegex();
-
             //clear style of changed range
             range.ClearStyle(StringStyle, CommentStyle, NumberStyle, KeywordStyle);
             //string highlighting

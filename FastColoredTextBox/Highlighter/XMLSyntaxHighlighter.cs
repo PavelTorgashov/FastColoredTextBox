@@ -4,11 +4,12 @@ using System.Text.RegularExpressions;
 
 namespace FastColoredTextBoxNS.Highlighter
 {
-    class XMLSyntaxHighlighter : SyntaxHighlighter
+    public class XMLSyntaxHighlighter : SyntaxHighlighter
     {
         public XMLSyntaxHighlighter()
         {
             InitStyleSchema();
+            InitXMLRegex();
         }
 
         public override void Dispose()
@@ -64,9 +65,6 @@ namespace FastColoredTextBoxNS.Highlighter
 
         private void XMLSyntaxHighlight(Range range)
         {
-            if (XMLTagRegex == null)
-                InitXMLRegex();
-
             //clear style of changed range
             range.ClearStyle(CommentStyle, XmlTagBracketStyle, XmlTagNameStyle, XmlAttributeStyle, XmlAttributeValueStyle, XmlEntityStyle, XmlCDataStyle);
             //xml CData

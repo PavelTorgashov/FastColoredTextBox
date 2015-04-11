@@ -3,11 +3,12 @@ using System.Text.RegularExpressions;
 
 namespace FastColoredTextBoxNS.Highlighter
 {
-    class HtmlSyntaxHighlighter : SyntaxHighlighter
+    public class HtmlSyntaxHighlighter : SyntaxHighlighter
     {
         public HtmlSyntaxHighlighter()
         {
             InitStyleSchema();
+            InitHTMLRegex();
         }
 
         public override void Dispose()
@@ -60,9 +61,6 @@ namespace FastColoredTextBoxNS.Highlighter
 
         private void HtmlSyntaxHighlight(Range range)
         {
-            if (HTMLTagRegex == null)
-                InitHTMLRegex();
-
             //clear style of changed range
             range.ClearStyle(CommentStyle, TagBracketStyle, TagNameStyle, AttributeStyle, AttributeValueStyle, HtmlEntityStyle);
 

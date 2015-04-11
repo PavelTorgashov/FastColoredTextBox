@@ -3,11 +3,12 @@ using System.Text.RegularExpressions;
 
 namespace FastColoredTextBoxNS.Highlighter
 {
-    class VBSyntaxHighlighter : SyntaxHighlighter
+    public class VBSyntaxHighlighter : SyntaxHighlighter
     {
         public VBSyntaxHighlighter()
         {
             InitStyleSchema();
+            InitVBRegex();
         }
 
         public override void HighlightSyntax(Range range)
@@ -56,9 +57,6 @@ namespace FastColoredTextBoxNS.Highlighter
 
         private void VBSyntaxHighlight(Range range)
         {
-            if (VBStringRegex == null)
-                InitVBRegex();
-
             //clear style of changed range
             range.ClearStyle(StringStyle, CommentStyle, NumberStyle, ClassNameStyle, KeywordStyle);
             //string highlighting
