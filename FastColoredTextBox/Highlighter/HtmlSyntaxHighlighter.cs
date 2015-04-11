@@ -25,6 +25,16 @@ namespace FastColoredTextBoxNS.Highlighter
             HTMLAutoIndentNeeded(sender, args);
         }
 
+        public override void setTextBoxParameter(FastColoredTextBox tb)
+        {
+            tb.CommentPrefix = null;
+            tb.LeftBracket = '<';
+            tb.RightBracket = '>';
+            tb.LeftBracket2 = '(';
+            tb.RightBracket2 = ')';
+            tb.AutoIndentCharsPatterns = @"";
+        }
+
         private void InitStyleSchema()
         {
             CommentStyle = GreenStyle;
@@ -88,16 +98,6 @@ namespace FastColoredTextBoxNS.Highlighter
         {
             var tb = sender as FastColoredTextBox;
             tb.CalcAutoIndentShiftByCodeFolding(sender, args);
-        }
-
-        public override void setTextBoxParameter(FastColoredTextBox tb)
-        {
-            tb.CommentPrefix = null;
-            tb.LeftBracket = '<';
-            tb.RightBracket = '>';
-            tb.LeftBracket2 = '(';
-            tb.RightBracket2 = ')';
-            tb.AutoIndentCharsPatterns = @"";
         }
 
         #region private members

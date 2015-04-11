@@ -26,6 +26,18 @@ namespace FastColoredTextBoxNS
             CSharpAutoIndentNeeded(sender, args);
         }
 
+        public override void setTextBoxParameter(FastColoredTextBox tb)
+        {
+            tb.CommentPrefix = "//";
+            tb.LeftBracket = '(';
+            tb.RightBracket = ')';
+            tb.LeftBracket2 = '{';
+            tb.RightBracket2 = '}';
+            tb.BracketsHighlightStrategy = BracketsHighlightStrategy.Strategy2;
+
+            tb.AutoIndentCharsPatterns = @"^\s*[\w\.]+(\s\w+)?\s*(?<range>=)\s*(?<range>[^;]+);^\s*(case|default)\s*[^:]*(?<range>:)\s*(?<range>[^;]+);";
+        }
+
         private void InitStyleSchema()
         {
             StringStyle = BrownStyle;
@@ -37,7 +49,7 @@ namespace FastColoredTextBoxNS
             CommentTagStyle = GrayStyle;
         }
 
-        private void InitCShaprRegex()
+        private void InitCSharpRegex()
         {
             CSharpStringRegex =
                 new Regex(
@@ -86,7 +98,7 @@ namespace FastColoredTextBoxNS
         private void CSharpSyntaxHighlight(Range range)
         {
             if (CSharpStringRegex == null)
-                InitCShaprRegex();
+                InitCSharpRegex();
 
             //clear style of changed range
             range.ClearStyle(StringStyle, CommentStyle, NumberStyle, AttributeStyle, ClassNameStyle, KeywordStyle);
@@ -163,18 +175,6 @@ namespace FastColoredTextBoxNS
                     args.Shift = args.TabLength;
                     return;
                 }
-        }
-
-        public override void setTextBoxParameter(FastColoredTextBox tb)
-        {
-            tb.CommentPrefix = "//";
-            tb.LeftBracket = '(';
-            tb.RightBracket = ')';
-            tb.LeftBracket2 = '{';
-            tb.RightBracket2 = '}';
-            tb.BracketsHighlightStrategy = BracketsHighlightStrategy.Strategy2;
-
-            tb.AutoIndentCharsPatterns = @"^\s*[\w\.]+(\s\w+)?\s*(?<range>=)\s*(?<range>[^;]+);^\s*(case|default)\s*[^:]*(?<range>:)\s*(?<range>[^;]+);";
         }
 
         #region private members
