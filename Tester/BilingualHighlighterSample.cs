@@ -8,14 +8,19 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using FastColoredTextBoxNS;
+using FastColoredTextBoxNS.Highlighter;
 
 namespace Tester
 {
     public partial class BilingualHighlighterSample : Form
     {
+        private SyntaxHighlighter m_HtmlHighlighter;
+        private SyntaxHighlighter m_PhpHighlighter;
         public BilingualHighlighterSample()
         {
             InitializeComponent();
+            this.m_HtmlHighlighter = new HtmlSyntaxHighlighter();
+            this.m_PhpHighlighter = new PHPSyntaxHighlighter();
         }
 
         private void tb_TextChangedDelayed(object sender, TextChangedEventArgs e)
@@ -23,16 +28,16 @@ namespace Tester
             var tb = (FastColoredTextBox) sender;
             
             //highlight html
-            tb.SyntaxHighlighter.InitStyleSchema(Language.HTML);
-            tb.SyntaxHighlighter.HTMLSyntaxHighlight(tb.Range);
+            tb.SyntaxHighlighter = this.m_HtmlHighlighter;
+            tb.SyntaxHighlighter.HighlightSyntax(tb.Range);
             //find PHP fragments
             foreach(var r in tb.GetRanges(@"<\?php.*?\?>", RegexOptions.Singleline))
             {
                 //remove HTML highlighting from this fragment
                 r.ClearStyle(StyleIndex.All);
                 //do PHP highlighting
-                tb.SyntaxHighlighter.InitStyleSchema(Language.PHP);
-                tb.SyntaxHighlighter.PHPSyntaxHighlight(r);
+                tb.SyntaxHighlighter = this.m_PhpHighlighter;
+                tb.SyntaxHighlighter.HighlightSyntax(r);
             }
         }
     }
