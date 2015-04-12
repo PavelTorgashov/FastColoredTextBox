@@ -4,6 +4,7 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Drawing;
 using FastColoredTextBoxNS;
+using FastColoredTextBoxNS.Highlighter;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.IO;
@@ -53,7 +54,7 @@ namespace Tester
 
             if (fctb.Text.Trim().StartsWith("<?xml"))
             {
-                fctb.Language = Language.XML;
+                fctb.SyntaxHighlighter = new XMLSyntaxHighlighter();
 
                 fctb.ClearStylesBuffer();
                 fctb.Range.ClearStyle(StyleIndex.All);
@@ -126,20 +127,20 @@ namespace Tester
             {
                 //For example, we will highlight the syntax of C# manually, although could use built-in highlighter
                 case "CSharp (custom highlighter)":
-                    fctb.Language = Language.Custom;
+                    fctb.SyntaxHighlighter = new CustomSyntaxHighlighter();
                     fctb.CommentPrefix = "//";
                     fctb.AutoIndentNeeded += fctb_AutoIndentNeeded;
                     //call OnTextChanged for refresh syntax highlighting
                     fctb.OnTextChanged();
                     break;
-                case "CSharp (built-in highlighter)": fctb.Language = Language.CSharp; break;
-                case "VB": fctb.Language = Language.VB; break;
-                case "HTML": fctb.Language = Language.HTML; break;
-                case "XML": fctb.Language = Language.XML; break;
-                case "SQL": fctb.Language = Language.SQL; break;
-                case "PHP": fctb.Language = Language.PHP; break;
-                case "JS": fctb.Language = Language.JS; break;
-                case "Lua": fctb.Language = Language.Lua; break;
+                case "CSharp (built-in highlighter)": fctb.SyntaxHighlighter = new CSharpSyntaxHighlighter(); break;
+                case "VB": fctb.SyntaxHighlighter = new VBSyntaxHighlighter(); break;
+                case "HTML": fctb.SyntaxHighlighter = new HtmlSyntaxHighlighter(); break;
+                case "XML": fctb.SyntaxHighlighter = new XMLSyntaxHighlighter(); break;
+                case "SQL": fctb.SyntaxHighlighter = new SQLSyntaxHighlighter(); break;
+                case "PHP": fctb.SyntaxHighlighter = new PHPSyntaxHighlighter(); break;
+                case "JS": fctb.SyntaxHighlighter = new JScriptSyntaxHighlighter(); break;
+                case "Lua": fctb.SyntaxHighlighter = new LuaSyntaxHighlighter(); break;
             }
             fctb.OnSyntaxHighlight(new TextChangedEventArgs(fctb.Range));
             miChangeColors.Enabled = lang != "CSharp (custom highlighter)";
@@ -351,13 +352,10 @@ namespace Tester
         private void miChangeColors_Click(object sender, EventArgs e)
         {
             var styles = new Style[] { fctb.SyntaxHighlighter.BlueBoldStyle, fctb.SyntaxHighlighter.BlueStyle, fctb.SyntaxHighlighter.BoldStyle, fctb.SyntaxHighlighter.BrownStyle, fctb.SyntaxHighlighter.GrayStyle, fctb.SyntaxHighlighter.GreenStyle, fctb.SyntaxHighlighter.MagentaStyle, fctb.SyntaxHighlighter.MaroonStyle, fctb.SyntaxHighlighter.RedStyle };
-            fctb.SyntaxHighlighter.AttributeStyle = styles[rnd.Next(styles.Length)];
-            fctb.SyntaxHighlighter.ClassNameStyle = styles[rnd.Next(styles.Length)];
-            fctb.SyntaxHighlighter.CommentStyle = styles[rnd.Next(styles.Length)];
-            fctb.SyntaxHighlighter.CommentTagStyle = styles[rnd.Next(styles.Length)];
-            fctb.SyntaxHighlighter.KeywordStyle = styles[rnd.Next(styles.Length)];
-            fctb.SyntaxHighlighter.NumberStyle = styles[rnd.Next(styles.Length)];
-            fctb.SyntaxHighlighter.StringStyle = styles[rnd.Next(styles.Length)];
+            foreach (string s in fctb.SyntaxHighlighter.getStyleSchemaNames())
+            {
+                fctb.SyntaxHighlighter.setStyleSchema(s, styles[rnd.Next(styles.Length)]);
+            }
 
             fctb.OnSyntaxHighlight(new TextChangedEventArgs(fctb.Range));
         }

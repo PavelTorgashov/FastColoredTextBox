@@ -1,4 +1,6 @@
-﻿namespace Tester
+﻿using FastColoredTextBoxNS;
+using FastColoredTextBoxNS.Highlighter;
+namespace Tester
 {
     partial class CustomScrollBarsSample
     {
@@ -135,7 +137,7 @@
             this.fctb.Font = new System.Drawing.Font("Consolas", 9.75F);
             this.fctb.IndentBackColor = System.Drawing.Color.Orange;
             this.fctb.IsReplaceMode = false;
-            this.fctb.Language = FastColoredTextBoxNS.Language.CSharp;
+            this.fctb.SyntaxHighlighter = new CSharpSyntaxHighlighter();
             this.fctb.LeftBracket = '(';
             this.fctb.LeftBracket2 = '{';
             this.fctb.Location = new System.Drawing.Point(41, 62);

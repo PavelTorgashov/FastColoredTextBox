@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using FastColoredTextBoxNS.Highlighter;
 
 namespace Tester
 {
@@ -20,7 +21,7 @@ namespace Tester
         {
             if(cbAutoIndentType.SelectedIndex == 0)//built-in C# AutoIndent
             {
-                fctb.Language = Language.CSharp;
+                fctb.SyntaxHighlighter = new CSharpSyntaxHighlighter();
                 fctb.AutoIndentNeeded -= new EventHandler<AutoIndentEventArgs>(fctb_AutoIndentNeeded);
                 fctb.Text = @"/// Please, type next text (without slashes):
 /// int Foo()
@@ -44,7 +45,7 @@ namespace Tester
 
             if(cbAutoIndentType.SelectedIndex == 1)//custom AutoIndent
             {
-                fctb.Language = Language.Custom;
+                fctb.SyntaxHighlighter = new CustomSyntaxHighlighter();
                 fctb.AutoIndentNeeded += new EventHandler<AutoIndentEventArgs>(fctb_AutoIndentNeeded);
                 fctb.Text = @"/// Please, type next text (without slashes):
 /// begin

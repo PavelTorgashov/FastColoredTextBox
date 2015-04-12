@@ -1,4 +1,5 @@
-﻿namespace Tester
+﻿using FastColoredTextBoxNS.Highlighter;
+namespace Tester
 {
     partial class SyntaxHighlightingByXmlDescription
     {
@@ -28,7 +29,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            FastColoredTextBoxNS.SyntaxHighlighter syntaxHighlighter1 = new FastColoredTextBoxNS.SyntaxHighlighter();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SyntaxHighlightingByXmlDescription));
             this.label1 = new System.Windows.Forms.Label();
             this.fctb = new FastColoredTextBoxNS.FastColoredTextBox();
@@ -49,7 +49,6 @@
             this.fctb.AutoScroll = true;
             this.fctb.AutoScrollMinSize = new System.Drawing.Size(0, 176);
             this.fctb.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.fctb.DescriptionFile = "htmlDesc.xml";
             this.fctb.Dock = System.Windows.Forms.DockStyle.Fill;
             this.fctb.IsChanged = true;
             this.fctb.LeftBracket = '(';
@@ -59,7 +58,7 @@
             this.fctb.SelectedText = "";
             this.fctb.SelectionStart = 373;
             this.fctb.Size = new System.Drawing.Size(370, 275);
-            this.fctb.SyntaxHighlighter = syntaxHighlighter1;
+            this.fctb.SyntaxHighlighter = new FileSyntaxHighlighter("htmlDesc.xml");
             this.fctb.TabIndex = 4;
             this.fctb.Text = @"<div class=""clip5x9 nav_arrows"">
       <img src=""http://i3.msdn.microsoft.com/Hash/0f73868cd340280cac28f7eeb3d2dd7d.png"" class=""cl_nav_arrow"" alt="""" />
