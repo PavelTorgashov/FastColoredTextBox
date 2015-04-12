@@ -18,7 +18,7 @@ namespace FastColoredTextBoxNS.Highlighter
 
         public override void HighlightSyntax(Range range)
         {
-            throw new NotImplementedException();
+            PHPSyntaxHighlight(range);
         }
 
         public override void AutoIndentNeeded(object sender, AutoIndentEventArgs args)

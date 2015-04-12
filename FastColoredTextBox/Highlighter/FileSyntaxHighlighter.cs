@@ -9,9 +9,9 @@ using System.Globalization;
 
 namespace FastColoredTextBoxNS.Highlighter
 {
-    public class CustomSyntaxHighlighter : SyntaxHighlighter
+    public class FileSyntaxHighlighter : SyntaxHighlighter
     {
-        public CustomSyntaxHighlighter(string XMLdescriptionFile)
+        public FileSyntaxHighlighter(string XMLdescriptionFile)
         {
             if (!File.Exists(XMLdescriptionFile))
             {
@@ -41,10 +41,7 @@ namespace FastColoredTextBoxNS.Highlighter
                 this.SyntaxDesc.Dispose();
         }
 
-        public override void setTextBoxParameter(FastColoredTextBox tb)
-        {
-            throw new NotImplementedException();
-        }
+        public override void setTextBoxParameter(FastColoredTextBox tb){}
 
         private void CustomAutoIndentNeeded(object sender, AutoIndentEventArgs args)
         {

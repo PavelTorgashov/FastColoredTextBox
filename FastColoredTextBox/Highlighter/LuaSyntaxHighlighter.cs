@@ -18,7 +18,7 @@ namespace FastColoredTextBoxNS.Highlighter
 
         public override void HighlightSyntax(Range range)
         {
-            throw new NotImplementedException();
+            LuaSyntaxHighlight(range);
         }
 
         public override void AutoIndentNeeded(object sender, AutoIndentEventArgs args)
