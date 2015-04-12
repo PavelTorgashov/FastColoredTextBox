@@ -7,6 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using FastColoredTextBoxNS;
 using Tester.DiffMergeStuffs;
+using FastColoredTextBoxNS.Highlighter;
 
 namespace Tester
 {
@@ -97,9 +98,9 @@ namespace Tester
             Cursor = Cursors.WaitCursor;
            
             if (Path.GetExtension(tbFirstFile.Text).ToLower() == ".cs")
-                fctb1.Language = fctb2.Language = Language.CSharp;
+                fctb1.SyntaxHighlighter = new CSharpSyntaxHighlighter();
             else
-                fctb1.Language = fctb2.Language = Language.Custom;
+                fctb1.SyntaxHighlighter = fctb2.SyntaxHighlighter = new CSharpSyntaxHighlighter();
 
             var source1 = Lines.Load(tbFirstFile.Text);
             var source2 = Lines.Load(tbSecondFile.Text);

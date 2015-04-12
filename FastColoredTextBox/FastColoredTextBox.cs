@@ -38,6 +38,7 @@ using System.Windows.Forms;
 using System.Windows.Forms.Design;
 using Microsoft.Win32;
 using Timer = System.Windows.Forms.Timer;
+using FastColoredTextBoxNS.Highlighter;
 
 namespace FastColoredTextBoxNS
 {
@@ -71,7 +72,7 @@ namespace FastColoredTextBoxNS
         private Color currentLineColor;
         private Cursor defaultCursor;
         private Range delayedTextChangedRange;
-        private string descriptionFile;
+        private SyntaxHighlighter syntaxHighlighter;
         private int endFoldingLine = -1;
         private Color foldingIndicatorColor;
         protected Dictionary<int, int> foldingPairs = new Dictionary<int, int>();
@@ -82,7 +83,6 @@ namespace FastColoredTextBoxNS
         private bool isChanged;
         private bool isLineSelect;
         private bool isReplaceMode;
-        private Language language;
         private Keys lastModifiers;
         private Point lastMouseCoord;
         private DateTime lastNavigatedDateTime;
@@ -173,8 +173,7 @@ namespace FastColoredTextBoxNS
             RightBracket = '\x0';
             LeftBracket2 = '\x0';
             RightBracket2 = '\x0';
-            SyntaxHighlighter = new SyntaxHighlighter();
-            language = Language.Custom;
+            SyntaxHighlighter = new CustomSyntaxHighlighter();
             PreferredLineWidth = 0;
             needRecalc = true;
             lastNavigatedDateTime = DateTime.Now;
@@ -975,47 +974,18 @@ namespace FastColoredTextBoxNS
         }
 
         /// <summary>
-        /// Language for highlighting by built-in highlighter.
-        /// </summary>
-        [Browsable(true)]
-        [DefaultValue(typeof (Language), "Custom")]
-        [Description("Language for highlighting by built-in highlighter.")]
-        public Language Language
-        {
-            get { return language; }
-            set
-            {
-                language = value;
-                if (SyntaxHighlighter != null)
-                    SyntaxHighlighter.InitStyleSchema(language);
-                Invalidate();
-            }
-        }
-
-        /// <summary>
         /// Syntax Highlighter
         /// </summary>
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public SyntaxHighlighter SyntaxHighlighter { get; set; }
-
-        /// <summary>
-        /// XML file with description of syntax highlighting.
-        /// This property works only with Language == Language.Custom.
-        /// </summary>
-        [Browsable(true)]
-        [DefaultValue(null)]
-        [Editor(typeof (FileNameEditor), typeof (UITypeEditor))]
-        [Description(
-            "XML file with description of syntax highlighting. This property works only with Language == Language.Custom."
-            )]
-        public string DescriptionFile
+        public SyntaxHighlighter SyntaxHighlighter 
         {
-            get { return descriptionFile; }
+            get { return syntaxHighlighter; }
             set
             {
-                descriptionFile = value;
-                Invalidate();
+                syntaxHighlighter = value;
+                if (syntaxHighlighter != null)
+                    syntaxHighlighter.setTextBoxParameter(this);
             }
         }
 
@@ -2650,7 +2620,8 @@ namespace FastColoredTextBoxNS
         /// <summary>
         /// Insert text into current selected position
         /// </summary>
-        /// <param name="text"></param>
+        /// <param name="text">text to insert</param>
+        /// <param name="jumpToCaret">After insert scroll view to caret</param>
         public virtual void InsertText(string text, bool jumpToCaret)
         {
             if (text == null)
@@ -2685,6 +2656,7 @@ namespace FastColoredTextBoxNS
         /// Insert text into current selection position (with predefined style)
         /// </summary>
         /// <param name="text"></param>
+        /// <param name="style">Style for inserted text</param>
         public virtual Range InsertText(string text, Style style)
         {
             return InsertText(text, style, true);
@@ -4551,10 +4523,9 @@ namespace FastColoredTextBoxNS
         {
             if (iLine < 0 || iLine >= LinesCount) return 0;
 
-
             EventHandler<AutoIndentEventArgs> calculator = AutoIndentNeeded;
             if (calculator == null)
-                if (Language != Language.Custom && SyntaxHighlighter != null)
+                if (SyntaxHighlighter != null)
                     calculator = SyntaxHighlighter.AutoIndentNeeded;
                 else
                     calculator = CalcAutoIndentShiftByCodeFolding;
@@ -6136,6 +6107,7 @@ namespace FastColoredTextBoxNS
         /// Finds ranges for given regex pattern
         /// </summary>
         /// <param name="regexPattern">Regex pattern</param>
+        /// <param name="options">Regex options</param>
         /// <returns>Enumeration of ranges</returns>
         public IEnumerable<Range> GetRanges(string regexPattern, RegexOptions options)
         {
@@ -6265,7 +6237,6 @@ namespace FastColoredTextBoxNS
         /// <summary>
         /// Exapnds all folded blocks
         /// </summary>
-        /// <param name="iLine"></param>
         public virtual void ExpandAllFoldingBlocks()
         {
             for (int i = 0; i < LinesCount; i++)
@@ -7049,12 +7020,7 @@ namespace FastColoredTextBoxNS
             }
 
             if (SyntaxHighlighter != null)
-            {
-                if (Language == Language.Custom && !string.IsNullOrEmpty(DescriptionFile))
-                    SyntaxHighlighter.HighlightSyntax(DescriptionFile, range);
-                else
-                    SyntaxHighlighter.HighlightSyntax(Language, range);
-            }
+                SyntaxHighlighter.HighlightSyntax(range);
 
 #if debug
             Console.WriteLine("OnSyntaxHighlight: "+ sw.ElapsedMilliseconds);
@@ -8174,14 +8140,14 @@ window.status = ""#print"";
         /// <summary>
         /// Footer of page.
         /// Here you can use special codes: &amp;w (Window title), &amp;D, &amp;d (Date), &amp;t(), &amp;4 (Time), &amp;p (Current page number), &amp;P (Total number of pages),  &amp;&amp; (A single ampersand), &amp;b (Right justify text, Center text. If &amp;b occurs once, then anything after the &amp;b is right justified. If &amp;b occurs twice, then anything between the two &amp;b is centered, and anything after the second &amp;b is right justified).
-        /// More detailed see <see cref="http://msdn.microsoft.com/en-us/library/aa969429(v=vs.85).aspx">here</see>
+        /// More detailed see <see cref="!:http://msdn.microsoft.com/en-us/library/aa969429(v=vs.85).aspx">here</see>
         /// </summary>
         public string Footer { get; set; }
 
         /// <summary>
         /// Header of page
         /// Here you can use special codes: &amp;w (Window title), &amp;D, &amp;d (Date), &amp;t(), &amp;4 (Time), &amp;p (Current page number), &amp;P (Total number of pages),  &amp;&amp; (A single ampersand), &amp;b (Right justify text, Center text. If &amp;b occurs once, then anything after the &amp;b is right justified. If &amp;b occurs twice, then anything between the two &amp;b is centered, and anything after the second &amp;b is right justified).
-        /// More detailed see <see cref="http://msdn.microsoft.com/en-us/library/aa969429(v=vs.85).aspx">here</see>
+        /// More detailed see <see cref="!:http://msdn.microsoft.com/en-us/library/aa969429(v=vs.85).aspx">here</see>
         /// </summary>
         public string Header { get; set; }
 

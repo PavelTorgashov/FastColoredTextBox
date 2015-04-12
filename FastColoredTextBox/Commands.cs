@@ -15,7 +15,7 @@ namespace FastColoredTextBoxNS
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="tb">Underlaying textbox</param>
+        /// <param name="ts">Underlaying textbox</param>
         /// <param name="c">Inserting char</param>
         public InsertCharCommand(TextSource ts, char c): base(ts)
         {
@@ -202,7 +202,7 @@ namespace FastColoredTextBoxNS
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="tb">Underlaying textbox</param>
+        /// <param name="ts">Underlaying textbox</param>
         /// <param name="insertedText">Text for inserting</param>
         public InsertTextCommand(TextSource ts, string insertedText): base(ts)
         {
@@ -279,7 +279,7 @@ namespace FastColoredTextBoxNS
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="tb">Underlaying textbox</param>
+        /// <param name="ts">Underlaying textbox</param>
         /// <param name="ranges">List of ranges for replace</param>
         /// <param name="insertedText">Text for inserting</param>
         public ReplaceTextCommand(TextSource ts, List<Range> ranges, string insertedText)
@@ -397,7 +397,7 @@ namespace FastColoredTextBoxNS
         /// <summary>
         /// Construstor
         /// </summary>
-        /// <param name="tb">Underlaying textbox</param>
+        /// <param name="ts">Underlaying textbox</param>
         public ClearSelectedCommand(TextSource ts): base(ts)
         {
         }
@@ -568,9 +568,8 @@ namespace FastColoredTextBoxNS
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="tb">Underlaying textbox</param>
-        /// <param name="ranges">List of ranges for replace</param>
-        /// <param name="insertedText">Text for inserting</param>
+        /// <param name="ts">Underlaying textbox</param>
+        /// <param name="iLines">List of lines to remove</param>
         public RemoveLinesCommand(TextSource ts, List<int> iLines)
             : base(ts)
         {
