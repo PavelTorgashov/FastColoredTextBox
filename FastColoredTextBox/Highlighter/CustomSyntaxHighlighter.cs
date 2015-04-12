@@ -19,5 +19,15 @@ namespace FastColoredTextBoxNS.Highlighter
         }
 
         public override void setTextBoxParameter(FastColoredTextBox tb) { }
+
+        public override List<string> getStyleSchemaNames()
+        {
+            return new List<string>();
+        }
+
+        public override bool setStyleSchema(string name, Style newStyle)
+        {
+            return false;
+        }
     }
 }

@@ -37,6 +37,34 @@ namespace FastColoredTextBoxNS.Highlighter
             tb.AutoIndentCharsPatterns = @"";
         }
 
+        public override List<string> getStyleSchemaNames()
+        {
+            string[] namesArray = { "CommentStyle", "XmlTagBracketStyle", "XmlTagNameStyle", "XmlAttributeStyle", "XmlAttributeValueStyle", "XmlEntityStyle", "XmlCDataStyle" };
+            return new List<string>(namesArray);
+        }
+
+        public override bool setStyleSchema(string name, Style newStyle)
+        {
+            switch (name)
+            {
+                case "CommentStyle":
+                    return (this.CommentStyle = newStyle) == newStyle;
+                case "XmlTagBracketStyle":
+                    return (this.XmlTagBracketStyle = newStyle) == newStyle;
+                case "XmlTagNameStyle":
+                    return (this.XmlTagNameStyle = newStyle) == newStyle;
+                case "XmlAttributeStyle":
+                    return (this.XmlAttributeStyle = newStyle) == newStyle;
+                case "XmlAttributeValueStyle":
+                    return (this.XmlAttributeValueStyle = newStyle) == newStyle;
+                case "XmlEntityStyle":
+                    return (this.XmlEntityStyle = newStyle) == newStyle;
+                case "XmlCDataStyle":
+                    return (this.XmlCDataStyle = newStyle) == newStyle;
+            }
+            return false;
+        }
+
         private void InitStyleSchema()
         {
             CommentStyle = GreenStyle;

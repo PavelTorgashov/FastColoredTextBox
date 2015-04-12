@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using System.Text.RegularExpressions;
+using System.Collections.Generic;
 
 namespace FastColoredTextBoxNS.Highlighter
 {
@@ -23,6 +24,10 @@ namespace FastColoredTextBoxNS.Highlighter
         public abstract void Dispose();
 
         public abstract void setTextBoxParameter(FastColoredTextBox tb);
+
+        public abstract List<string> getStyleSchemaNames();
+
+        public abstract bool setStyleSchema(string name, Style newStyle);
 
         public static RegexOptions RegexCompiledOption
         {

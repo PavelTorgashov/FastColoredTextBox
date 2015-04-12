@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text.RegularExpressions;
+using System.Collections.Generic;
 
 namespace FastColoredTextBoxNS.Highlighter
 {
@@ -34,6 +35,32 @@ namespace FastColoredTextBoxNS.Highlighter
             tb.LeftBracket2 = '(';
             tb.RightBracket2 = ')';
             tb.AutoIndentCharsPatterns = @"";
+        }
+
+        public override List<string> getStyleSchemaNames()
+        {
+            string[] namesArray = { "CommentStyle","TagBracketStyle","TagNameStyle","AttributeStyle","AttributeValueStyle","HtmlEntityStyle" };
+            return new List<string>(namesArray);
+        }
+
+        public override bool setStyleSchema(string name, Style newStyle)
+        {
+            switch (name)
+            {
+                case "CommentStyle":
+                    return (this.CommentStyle = newStyle) == newStyle;
+                case "TagBracketStyle":
+                    return (this.TagBracketStyle = newStyle) == newStyle;
+                case "TagNameStyle":
+                    return (this.TagNameStyle = newStyle) == newStyle;
+                case "AttributeStyle":
+                    return (this.AttributeStyle = newStyle) == newStyle;
+                case "AttributeValueStyle":
+                    return (this.AttributeValueStyle = newStyle) == newStyle;
+                case "HtmlEntityStyle":
+                    return (this.HtmlEntityStyle = newStyle) == newStyle;
+            }
+            return false;
         }
 
         private void InitStyleSchema()

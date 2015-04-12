@@ -43,6 +43,16 @@ namespace FastColoredTextBoxNS.Highlighter
 
         public override void setTextBoxParameter(FastColoredTextBox tb){}
 
+        public override List<string> getStyleSchemaNames()
+        {
+            return new List<string>();
+        }
+
+        public override bool setStyleSchema(string name, Style newStyle)
+        {
+            return false;
+        }
+
         private void CustomAutoIndentNeeded(object sender, AutoIndentEventArgs args)
         {
             var tb = sender as FastColoredTextBox;

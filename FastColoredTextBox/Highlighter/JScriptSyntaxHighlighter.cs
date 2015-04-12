@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text.RegularExpressions;
+using System.Collections.Generic;
 
 namespace FastColoredTextBoxNS.Highlighter
 {
@@ -36,6 +37,28 @@ namespace FastColoredTextBoxNS.Highlighter
             tb.BracketsHighlightStrategy = BracketsHighlightStrategy.Strategy2;
 
             tb.AutoIndentCharsPatterns = @"^\s*[\w\.]+(\s\w+)?\s*(?<range>=)\s*(?<range>[^;]+);";
+        }
+
+        public override List<string> getStyleSchemaNames()
+        {
+            string[] namesArray = { "StringStyle", "CommentStyle", "NumberStyle", "KeywordStyle" };
+            return new List<string>(namesArray);
+        }
+
+        public override bool setStyleSchema(string name, Style newStyle)
+        {
+            switch (name)
+            {
+                case "StringStyle":
+                    return (this.StringStyle = newStyle) == newStyle;
+                case "CommentStyle":
+                    return (this.CommentStyle = newStyle) == newStyle;
+                case "NumberStyle":
+                    return (this.NumberStyle = newStyle) == newStyle;
+                case "KeywordStyle":
+                    return (this.KeywordStyle = newStyle) == newStyle;
+            }
+            return false;
         }
 
         private void InitStyleSchema()
