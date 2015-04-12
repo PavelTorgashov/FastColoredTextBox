@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FastColoredTextBoxNS
+namespace FastColoredTextBoxNS.Highlighter
 {
     public interface ISyntaxHighlighter : IDisposable
     {

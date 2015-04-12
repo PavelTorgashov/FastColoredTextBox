@@ -2,7 +2,7 @@
 using System.Text.RegularExpressions;
 using FastColoredTextBoxNS.Highlighter;
 
-namespace FastColoredTextBoxNS
+namespace FastColoredTextBoxNS.Highlighter
 {
     public class CSharpSyntaxHighlighter : SyntaxHighlighter
     {
@@ -117,7 +117,6 @@ namespace FastColoredTextBoxNS
             //keyword highlighting
             range.SetStyle(KeywordStyle, CSharpKeywordRegex);
 
-            // TODO: hier muss ein html syntaxhighlighter benutzt werden
             //find document comments
             foreach (Range r in range.GetRanges(@"^\s*///.*$", RegexOptions.Multiline))
             {

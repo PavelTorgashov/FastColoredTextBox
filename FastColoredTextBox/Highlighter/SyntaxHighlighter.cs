@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
 using System.Text.RegularExpressions;
 
-namespace FastColoredTextBoxNS
+namespace FastColoredTextBoxNS.Highlighter
 {
     public abstract class SyntaxHighlighter : ISyntaxHighlighter
     {
