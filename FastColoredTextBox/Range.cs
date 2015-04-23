@@ -306,6 +306,25 @@ namespace FastColoredTextBoxNS
         }
 
         /// <summary>
+        /// Returns required char's number before start of the Range
+        /// </summary>
+        public string GetCharsBeforeStart(int charsCount)
+        {
+            var pos = tb.PlaceToPosition(Start) - charsCount;
+            if(pos < 0) pos = 0;
+
+            return new Range(tb, tb.PositionToPlace(pos), Start).Text;
+        }
+
+        /// <summary>
+        /// Returns required char's number after start of the Range
+        /// </summary>
+        public string GetCharsAfterStart(int charsCount)
+        {
+            return GetCharsBeforeStart(-charsCount);
+        }
+
+        /// <summary>
         /// Clone range
         /// </summary>
         /// <returns></returns>

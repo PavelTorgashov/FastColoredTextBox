@@ -8,7 +8,7 @@
 //
 //  Email: pavel_torgashov@ukr.net.
 //
-//  Copyright (C) Pavel Torgashov, 2011-2014. 
+//  Copyright (C) Pavel Torgashov, 2011-2015. 
 
 // #define debug
 
@@ -1105,7 +1105,7 @@ namespace FastColoredTextBoxNS
         [DefaultValue(null)]
         [Description("Allows to get text from other FastColoredTextBox.")]
         //[DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-            public FastColoredTextBox SourceTextBox
+        public FastColoredTextBox SourceTextBox
         {
             get { return sourceTextBox; }
             set
@@ -1156,6 +1156,9 @@ namespace FastColoredTextBoxNS
             get { return selection; }
             set
             {
+                if (value == selection)
+                    return;
+
                 selection.BeginUpdate();
                 selection.Start = value.Start;
                 selection.End = value.End;
@@ -2020,12 +2023,12 @@ namespace FastColoredTextBoxNS
         {
             if (lines != null)
             {
-                ts.LineInserted -= ts_LineInserted;
-                ts.LineRemoved -= ts_LineRemoved;
-                ts.TextChanged -= ts_TextChanged;
-                ts.RecalcNeeded -= ts_RecalcNeeded;
-                ts.RecalcWordWrap -= ts_RecalcWordWrap;
-                ts.TextChanging -= ts_TextChanging;
+                lines.LineInserted -= ts_LineInserted;
+                lines.LineRemoved -= ts_LineRemoved;
+                lines.TextChanged -= ts_TextChanged;
+                lines.RecalcNeeded -= ts_RecalcNeeded;
+                lines.RecalcWordWrap -= ts_RecalcWordWrap;
+                lines.TextChanging -= ts_TextChanging;
 
                 lines.Dispose();
             }
@@ -2134,10 +2137,27 @@ namespace FastColoredTextBoxNS
             if (e.Index >= 0 && e.Index < LineInfos.Count && LineInfos[e.Index].VisibleState == VisibleState.Hidden)
                 newState = VisibleState.Hidden;
 
-            var temp = new List<LineInfo>(e.Count);
+            if (e.Count > 100000)
+                LineInfos.Capacity = LineInfos.Count + e.Count + 1000;
+
+            var temp = new LineInfo[e.Count];
             for (int i = 0; i < e.Count; i++)
-                temp.Add(new LineInfo(-1) {VisibleState = newState});
+            {
+                temp[i].startY = -1;
+                temp[i].VisibleState = newState;
+            }
             LineInfos.InsertRange(e.Index, temp);
+
+            /* 
+            for (int i = 0; i < e.Count; i++)
+            {
+                LineInfos.Add(new LineInfo(-1) { VisibleState = newState });//<---- needed Insert
+                if(i % 1000000 == 0 && i > 0)
+                    GC.Collect();
+            }*/
+
+            if (e.Count > 1000000)
+                GC.Collect();
 
             OnLineInserted(e.Index, e.Count);
         }
@@ -2279,6 +2299,11 @@ namespace FastColoredTextBoxNS
 
         private void ResetTimer(Timer timer)
         {
+            if(InvokeRequired)
+            {
+                BeginInvoke(new MethodInvoker(()=>ResetTimer(timer)));
+                return;
+            }
             timer.Stop();
             if (IsHandleCreated)
                 timer.Start();
@@ -2357,7 +2382,7 @@ namespace FastColoredTextBoxNS
         /// <summary>
         /// Shows replace dialog
         /// </summary>
-        public void ShowReplaceDialog(string findText)
+        public virtual void ShowReplaceDialog(string findText)
         {
             if (ReadOnly)
                 return;
@@ -3127,7 +3152,7 @@ namespace FastColoredTextBoxNS
                         cutOff = i;
                     }
                     else
-                        if (!char.IsLetterOrDigit(c) && c != '_' && c != '\'')
+                        if (!char.IsLetterOrDigit(c) && c != '_' && c != '\'' && c != '\xa0')
                             cutOff = Math.Min(i + 1, line.Count - 1);
                 }
 
@@ -4054,7 +4079,7 @@ namespace FastColoredTextBoxNS
         /// <summary>
         /// Convert selected text to upper case
         /// </summary>
-        public void UpperCase()
+        public virtual void UpperCase()
         {
             Range old = Selection.Clone();
             SelectedText = SelectedText.ToUpper();
@@ -4065,10 +4090,21 @@ namespace FastColoredTextBoxNS
         /// <summary>
         /// Convert selected text to lower case
         /// </summary>
-        public void LowerCase()
+        public virtual void LowerCase()
         {
             Range old = Selection.Clone();
             SelectedText = SelectedText.ToLower();
+            Selection.Start = old.Start;
+            Selection.End = old.End;
+        }
+
+        /// <summary>
+        /// Convert selected text to title case
+        /// </summary>
+        public virtual void TitleCase()
+        {
+            Range old = Selection.Clone();
+            SelectedText = Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(SelectedText.ToLower());
             Selection.Start = old.Start;
             Selection.End = old.End;
         }
@@ -4977,6 +5013,8 @@ namespace FastColoredTextBoxNS
             DrawMarkers(e, servicePen);
             //draw caret
             Point car = PlaceToPoint(Selection.Start);
+            var caretHeight = CharHeight - lineInterval;
+            car.Offset(0, lineInterval / 2);
 
             if ((Focused || IsDragDrop) && car.X >= LeftIndent && CaretVisible)
             {
@@ -4984,18 +5022,18 @@ namespace FastColoredTextBoxNS
                 if (WideCaret)
                 {
                     using (var brush = new SolidBrush(CaretColor))
-                        e.Graphics.FillRectangle(brush, car.X, car.Y, carWidth, CharHeight + 1);
+                        e.Graphics.FillRectangle(brush, car.X, car.Y, carWidth, caretHeight + 1);
                 }
                 else
                     using (var pen = new Pen(CaretColor))
-                        e.Graphics.DrawLine(pen, car.X, car.Y, car.X, car.Y + CharHeight);
+                        e.Graphics.DrawLine(pen, car.X, car.Y, car.X, car.Y + caretHeight);
 
-                var caretRect = new Rectangle(HorizontalScroll.Value + car.X, VerticalScroll.Value + car.Y, carWidth, charHeight + 1);
+                var caretRect = new Rectangle(HorizontalScroll.Value + car.X, VerticalScroll.Value + car.Y, carWidth, caretHeight + 1);
 
                 if (CaretBlinking)
                 if (prevCaretRect != caretRect || !ShowScrollBars)
                 {
-                    CreateCaret(Handle, 0, carWidth, CharHeight + 1);
+                    CreateCaret(Handle, 0, carWidth, caretHeight + 1);
                     SetCaretPos(car.X, car.Y);
                     ShowCaret(Handle);
                 }
@@ -6898,13 +6936,36 @@ namespace FastColoredTextBoxNS
             //
             Range oldLeftBracketPosition = leftBracketPosition;
             Range oldRightBracketPosition = rightBracketPosition;
-            Range range = Selection.Clone(); //need clone because we will move caret
+            var range = GetBracketsRange(Selection.Start, LeftBracket, RightBracket);
+
+            if(range != null)
+            {
+                leftBracketPosition = new Range(this, range.Start, new Place(range.Start.iChar + 1, range.Start.iLine));
+                rightBracketPosition = new Range(this, new Place(range.End.iChar - 1, range.End.iLine), range.End);
+            }
+
+            if (oldLeftBracketPosition != leftBracketPosition ||
+                oldRightBracketPosition != rightBracketPosition)
+                Invalidate();
+        }
+
+        /// <summary>
+        /// Returns range between brackets (or null if not found)
+        /// </summary>
+        public Range GetBracketsRange(Place placeInsideBrackets, char leftBracket, char rightBracket)
+        {
+            var startRange = new Range(this, placeInsideBrackets, placeInsideBrackets);
+            var range = startRange.Clone();
+
+            Range leftBracketPosition = null;
+            Range rightBracketPosition = null;
+
             int counter = 0;
             int maxIterations = maxBracketSearchIterations;
             while (range.GoLeftThroughFolded()) //move caret left
             {
-                if (range.CharAfterStart == LeftBracket) counter++;
-                if (range.CharAfterStart == RightBracket) counter--;
+                if (range.CharAfterStart == leftBracket) counter++;
+                if (range.CharAfterStart == rightBracket) counter--;
                 if (counter == 1)
                 {
                     //highlighting
@@ -6917,13 +6978,13 @@ namespace FastColoredTextBoxNS
                 if (maxIterations <= 0) break;
             }
             //
-            range = Selection.Clone(); //need clone because we will move caret
+            range = startRange.Clone();
             counter = 0;
             maxIterations = maxBracketSearchIterations;
             do
             {
-                if (range.CharAfterStart == LeftBracket) counter++;
-                if (range.CharAfterStart == RightBracket) counter--;
+                if (range.CharAfterStart == leftBracket) counter++;
+                if (range.CharAfterStart == rightBracket) counter--;
                 if (counter == -1)
                 {
                     //highlighting
@@ -6936,9 +6997,10 @@ namespace FastColoredTextBoxNS
                 if (maxIterations <= 0) break;
             } while (range.GoRightThroughFolded()); //move caret right
 
-            if (oldLeftBracketPosition != leftBracketPosition ||
-                oldRightBracketPosition != rightBracketPosition)
-                Invalidate();
+            if (leftBracketPosition != null && rightBracketPosition != null)
+                return new Range(this, leftBracketPosition.Start, rightBracketPosition.End);
+            else
+                return null;
         }
 
         private void HighlightBrackets2(char LeftBracket, char RightBracket, ref Range leftBracketPosition, ref Range rightBracketPosition)

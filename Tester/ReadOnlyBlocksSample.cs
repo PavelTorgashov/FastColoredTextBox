@@ -16,10 +16,7 @@ namespace Tester
 
         private void fctb_KeyPressing(object sender, KeyPressEventArgs e)
         {
-            if (fctb.Selection.IsEmpty &&
-                fctb.Selection.ReadOnly &&
-                fctb.Selection.CharBeforeStart == '>' &&
-                fctb.Selection.CharAfterStart == '<')
+            if (fctb.Selection.IsEmpty && fctb.Selection.ReadOnly && fctb.Selection.CharBeforeStart == '>' && fctb.Selection.CharAfterStart == '<')
             if (e.KeyChar != '\b')
             {
                 //Hey, user completely removed whole tag body and now he cannot insert any text here

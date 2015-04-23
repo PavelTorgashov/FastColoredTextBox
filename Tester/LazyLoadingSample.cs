@@ -112,5 +112,18 @@ namespace Tester
             var iLines = fctb.FindLines(@"^\s*$", RegexOptions.None);
             fctb.RemoveLines(iLines);
         }
+        /*
+        private void button1_Click(object sender, EventArgs e)
+        {
+            var replaces = new List<ReplaceMultipleTextCommand.ReplaceRange>();
+            replaces.Add(new ReplaceMultipleTextCommand.ReplaceRange() { ReplacedRange = new Range(fctb, 0), ReplaceText = "0"});
+            replaces.Add(new ReplaceMultipleTextCommand.ReplaceRange() { ReplacedRange = new Range(fctb, 1), ReplaceText = "1" });
+            replaces.Add(new ReplaceMultipleTextCommand.ReplaceRange() { ReplacedRange = new Range(fctb, 2), ReplaceText = "2" });
+            fctb.TextSource.Manager.ExecuteCommand(new ReplaceMultipleTextCommand(fctb.TextSource, replaces));
+
+            Console.WriteLine(fctb[0].IsChanged);
+            Console.WriteLine(fctb[1].IsChanged);
+            Console.WriteLine(fctb[2].IsChanged);
+        }*/
     }
 }

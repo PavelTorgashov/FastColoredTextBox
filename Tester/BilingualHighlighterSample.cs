@@ -25,6 +25,7 @@ namespace Tester
             //highlight html
             tb.SyntaxHighlighter.InitStyleSchema(Language.HTML);
             tb.SyntaxHighlighter.HTMLSyntaxHighlight(tb.Range);
+            tb.Range.ClearFoldingMarkers();
             //find PHP fragments
             foreach(var r in tb.GetRanges(@"<\?php.*?\?>", RegexOptions.Singleline))
             {

@@ -677,6 +677,16 @@
             Select all chars of control
             </summary>
         </member>
+        <member name="M:FastColoredTextBoxNS.Range.GetCharsBeforeStart(System.Int32)">
+            <summary>
+            Returns required char's number before start of the Range
+            </summary>
+        </member>
+        <member name="M:FastColoredTextBoxNS.Range.GetCharsAfterStart(System.Int32)">
+            <summary>
+            Returns required char's number after start of the Range
+            </summary>
+        </member>
         <member name="M:FastColoredTextBoxNS.Range.Clone">
             <summary>
             Clone range
@@ -1318,6 +1328,11 @@
             Convert selected text to lower case
             </summary>
         </member>
+        <member name="M:FastColoredTextBoxNS.FastColoredTextBox.TitleCase">
+            <summary>
+            Convert selected text to title case
+            </summary>
+        </member>
         <member name="M:FastColoredTextBoxNS.FastColoredTextBox.CommentSelected">
             <summary>
             Insert/remove comment prefix into selected lines
@@ -1612,6 +1627,11 @@
         <member name="M:FastColoredTextBoxNS.FastColoredTextBox.HighlightBrackets(System.Char,System.Char,FastColoredTextBoxNS.Range@,FastColoredTextBoxNS.Range@)">
             <summary>
             Highlights brackets around caret
+            </summary>
+        </member>
+        <member name="M:FastColoredTextBoxNS.FastColoredTextBox.GetBracketsRange(FastColoredTextBoxNS.Place,System.Char,System.Char)">
+            <summary>
+            Returns range between brackets (or null if not found)
             </summary>
         </member>
         <member name="M:FastColoredTextBoxNS.FastColoredTextBox.SelectNext(System.String,System.Boolean,System.Text.RegularExpressions.RegexOptions)">

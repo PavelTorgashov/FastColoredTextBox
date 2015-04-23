@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using FastColoredTextBoxNS;
 
@@ -12,10 +16,7 @@ namespace Tester
         {
             InitializeComponent();
 
-            fctb = new FastColoredTextBox() { Dock = DockStyle.Fill, Parent = this};
-            var menu = new AutocompleteMenu(fctb);
-            var item = new MethodAutocompleteItem("ToString");
-            menu.Items.SetAutocompleteItems(new AutocompleteItem[]{item});
+            fctb = new FastColoredTextBox() { Dock = DockStyle.Fill, Parent = this, Language = Language.XML, HighlightingRangeType = HighlightingRangeType.AllTextRange, ShowFoldingLines = true};
         }
     }
 }
