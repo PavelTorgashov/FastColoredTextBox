@@ -12,55 +12,40 @@ namespace FastColoredTextBoxNS
         const ushort PROCESSOR_ARCHITECTURE_AMD64 = 9;
         const ushort PROCESSOR_ARCHITECTURE_UNKNOWN = 0xFFFF;
 
-        [StructLayout(LayoutKind.Sequential)]
-        struct SYSTEM_INFO
-        {
-            public ushort wProcessorArchitecture;
-            public ushort wReserved;
-            public uint dwPageSize;
-            public IntPtr lpMinimumApplicationAddress;
-            public IntPtr lpMaximumApplicationAddress;
-            public UIntPtr dwActiveProcessorMask;
-            public uint dwNumberOfProcessors;
-            public uint dwProcessorType;
-            public uint dwAllocationGranularity;
-            public ushort wProcessorLevel;
-            public ushort wProcessorRevision;
-        };
-
-        [DllImport("kernel32.dll")]
-        static extern void GetNativeSystemInfo(ref SYSTEM_INFO lpSystemInfo);
-
-        [DllImport("kernel32.dll")]
-        static extern void GetSystemInfo(ref SYSTEM_INFO lpSystemInfo);
-
         public static Platform GetOperationSystemPlatform()
         {
-            var sysInfo = new SYSTEM_INFO();
-
-            // WinXP and older - use GetNativeSystemInfo
-            if (Environment.OSVersion.Version.Major > 5 ||
-                (Environment.OSVersion.Version.Major == 5 && Environment.OSVersion.Version.Minor >= 1))
+            if(MonoUtility.IsLinux)
             {
-                GetNativeSystemInfo(ref sysInfo);
+                return Platform.Unknown;
             }
-            // else use GetSystemInfo
             else
             {
-                GetSystemInfo(ref sysInfo);
-            }
+                var sysInfo = new NativeMethods.SYSTEM_INFO();
 
-            switch (sysInfo.wProcessorArchitecture)
-            {
-                case PROCESSOR_ARCHITECTURE_IA64:
-                case PROCESSOR_ARCHITECTURE_AMD64:
-                    return Platform.X64;
+                // WinXP and older - use GetNativeSystemInfo
+                if (Environment.OSVersion.Version.Major > 5 ||
+                    (Environment.OSVersion.Version.Major == 5 && Environment.OSVersion.Version.Minor >= 1))
+                {
+                    NativeMethodsWrapper.GetNativeSystemInfo(ref sysInfo);
+                }
+                // else use GetSystemInfo
+                else
+                {
+                    NativeMethodsWrapper.GetSystemInfo(ref sysInfo);
+                }
 
-                case PROCESSOR_ARCHITECTURE_INTEL:
-                    return Platform.X86;
+                switch (sysInfo.wProcessorArchitecture)
+                {
+                    case PROCESSOR_ARCHITECTURE_IA64:
+                    case PROCESSOR_ARCHITECTURE_AMD64:
+                        return Platform.X64;
 
-                default:
-                    return Platform.Unknown;
+                    case PROCESSOR_ARCHITECTURE_INTEL:
+                        return Platform.X86;
+
+                    default:
+                        return Platform.Unknown;
+                }
             }
         }
     }

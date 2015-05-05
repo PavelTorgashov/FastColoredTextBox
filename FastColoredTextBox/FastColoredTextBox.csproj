@@ -74,6 +74,9 @@
     </Compile>
     <Compile Include="LinesAccessor.cs" />
     <Compile Include="MacrosManager.cs" />
+    <Compile Include="MonoUtility.cs" />
+    <Compile Include="NativeMethods.cs" />
+    <Compile Include="NativeMethodsWrapper.cs" />
     <Compile Include="PlatformType.cs" />
     <Compile Include="Hotkeys.cs" />
     <Compile Include="Ruler.cs">
