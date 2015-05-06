@@ -62,7 +62,7 @@
     <Compile Include="GoToForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GoToForm.designer.cs">
+    <Compile Include="GoToForm.Designer.cs">
       <DependentUpon>GoToForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Hints.cs" />
