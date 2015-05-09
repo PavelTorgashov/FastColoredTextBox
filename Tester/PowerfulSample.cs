@@ -414,5 +414,20 @@ namespace Tester
         {
             fctb.RemoveLinePrefix(fctb.CommentPrefix);
         }
+
+        private void AddFindSuggestions(ComboBox searchBox)
+        {
+            searchBox.Items.Clear();
+
+            for (int i = 0; i < 5; i++)
+            {
+                searchBox.Items.Add("Search Text " + Convert.ToString(i));
+            }
+        }
+
+        private void PowerfulSample_Load(object sender, EventArgs e)
+        {
+            fctb.AddFindSuggestionItems += this.AddFindSuggestions;
+        }
     }
 }

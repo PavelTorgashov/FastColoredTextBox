@@ -30,11 +30,11 @@
         {
             this.btClose = new System.Windows.Forms.Button();
             this.btFindNext = new System.Windows.Forms.Button();
-            this.tbFind = new System.Windows.Forms.TextBox();
             this.cbRegex = new System.Windows.Forms.CheckBox();
             this.cbMatchCase = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.cbWholeWord = new System.Windows.Forms.CheckBox();
+            this.cBxFind = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // btClose
@@ -56,15 +56,6 @@
             this.btFindNext.Text = "Find next";
             this.btFindNext.UseVisualStyleBackColor = true;
             this.btFindNext.Click += new System.EventHandler(this.btFindNext_Click);
-            // 
-            // tbFind
-            // 
-            this.tbFind.Location = new System.Drawing.Point(42, 12);
-            this.tbFind.Name = "tbFind";
-            this.tbFind.Size = new System.Drawing.Size(306, 20);
-            this.tbFind.TabIndex = 0;
-            this.tbFind.TextChanged += new System.EventHandler(this.cbMatchCase_CheckedChanged);
-            this.tbFind.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbFind_KeyPress);
             // 
             // cbRegex
             // 
@@ -108,16 +99,26 @@
             this.cbWholeWord.UseVisualStyleBackColor = true;
             this.cbWholeWord.CheckedChanged += new System.EventHandler(this.cbMatchCase_CheckedChanged);
             // 
+            // cBxFind
+            // 
+            this.cBxFind.FormattingEnabled = true;
+            this.cBxFind.Location = new System.Drawing.Point(42, 11);
+            this.cBxFind.Name = "cBxFind";
+            this.cBxFind.Size = new System.Drawing.Size(306, 21);
+            this.cBxFind.TabIndex = 6;
+            this.cBxFind.TextChanged += new System.EventHandler(this.cbMatchCase_CheckedChanged);
+            this.cBxFind.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbFind_KeyPress);
+            // 
             // FindForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(360, 108);
+            this.Controls.Add(this.cBxFind);
             this.Controls.Add(this.cbWholeWord);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.cbMatchCase);
             this.Controls.Add(this.cbRegex);
-            this.Controls.Add(this.tbFind);
             this.Controls.Add(this.btFindNext);
             this.Controls.Add(this.btClose);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
@@ -128,6 +129,7 @@
             this.Text = "Find";
             this.TopMost = true;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FindForm_FormClosing);
+            this.Shown += new System.EventHandler(this.FindForm_Shown);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -141,6 +143,6 @@
         private System.Windows.Forms.CheckBox cbMatchCase;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckBox cbWholeWord;
-        public System.Windows.Forms.TextBox tbFind;
+        public System.Windows.Forms.ComboBox cBxFind;
     }
 }

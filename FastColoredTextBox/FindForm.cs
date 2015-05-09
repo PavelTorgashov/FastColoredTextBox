@@ -10,6 +10,11 @@ namespace FastColoredTextBoxNS
         bool firstSearch = true;
         Place startPlace;
         FastColoredTextBox tb;
+        
+        /// <summary>
+        /// Gets or sets Suggestions Items to the Find ComboBox
+        /// </summary>
+        public FastColoredTextBox.AddFindSuggestionItemsDelegate AddFindSuggestionItems { get; set; }
 
         public FindForm(FastColoredTextBox tb)
         {
@@ -24,7 +29,7 @@ namespace FastColoredTextBoxNS
 
         private void btFindNext_Click(object sender, EventArgs e)
         {
-            FindNext(tbFind.Text);
+            FindNext(cBxFind.Text);
         }
 
         public virtual void FindNext(string pattern)
@@ -112,7 +117,7 @@ namespace FastColoredTextBoxNS
 
         protected override void OnActivated(EventArgs e)
         {
-            tbFind.Focus();
+            cBxFind.Focus();
             ResetSerach();
         }
 
@@ -124,6 +129,18 @@ namespace FastColoredTextBoxNS
         private void cbMatchCase_CheckedChanged(object sender, EventArgs e)
         {
             ResetSerach();
+        }
+
+        private void FindForm_Shown(object sender, EventArgs e)
+        {
+            if (this.AddFindSuggestionItems == null)
+            {
+                return;
+            }
+
+            this.AddFindSuggestionItems(this.cBxFind);
+            this.cBxFind.AutoCompleteMode = AutoCompleteMode.Suggest;
+            this.cBxFind.AutoCompleteSource = AutoCompleteSource.ListItems;
         }
     }
 }

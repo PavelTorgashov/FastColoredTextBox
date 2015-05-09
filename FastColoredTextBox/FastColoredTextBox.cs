@@ -125,7 +125,18 @@ namespace FastColoredTextBoxNS
         private int reservedCountOfLineNumberChars = 1;
         private int zoom = 100;
         private Size localAutoScrollMinSize;
- 
+
+        /// <summary>
+        /// Delegate to add Suggestion Items to the Find Window
+        /// </summary>
+        /// <param name="findComboBox"></param>
+        public delegate void AddFindSuggestionItemsDelegate(ComboBox findComboBox);
+
+        /// <summary>
+        /// Gets or sets Suggestions Items to the Find ComboBox
+        /// </summary>
+        public AddFindSuggestionItemsDelegate AddFindSuggestionItems { get; set; }
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -2362,11 +2373,16 @@ namespace FastColoredTextBoxNS
                 findForm = new FindForm(this);
 
             if (findText != null)
-                findForm.tbFind.Text = findText;
+                findForm.cBxFind.Text = findText;
             else if (!Selection.IsEmpty && Selection.Start.iLine == Selection.End.iLine)
-                findForm.tbFind.Text = Selection.Text;
+                findForm.cBxFind.Text = Selection.Text;
 
-            findForm.tbFind.SelectAll();
+            if (this.AddFindSuggestionItems != null)
+            {
+                this.findForm.AddFindSuggestionItems = box => this.AddFindSuggestionItems(box);
+            }
+
+            findForm.cBxFind.SelectAll();
             findForm.Show();
             findForm.Focus();
         }
@@ -3508,10 +3524,10 @@ namespace FastColoredTextBoxNS
                     break;
 
                 case FCTBAction.FindNext:
-                    if (findForm == null || findForm.tbFind.Text == "")
+                    if (findForm == null || findForm.cBxFind.Text == "")
                         ShowFindDialog();
                     else
-                        findForm.FindNext(findForm.tbFind.Text);
+                        findForm.FindNext(findForm.cBxFind.Text);
                     break;
 
                 case FCTBAction.ReplaceDialog:
