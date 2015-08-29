@@ -212,6 +212,11 @@ namespace FastColoredTextBoxNS
         internal int AppearInterval { get { return timer.Interval; } set { timer.Interval = value; } }
         internal int ToolTipDuration { get; set; }
 
+        public override Size GetPreferredSize(Size proposedSize)
+        {
+            return Size;
+        }
+
         public Color SelectedColor { get; set; }
         public Color HoveredColor { get; set; }
         public int FocussedItemIndex
