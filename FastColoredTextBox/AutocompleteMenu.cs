@@ -671,25 +671,30 @@ namespace FastColoredTextBoxNS
             var title = autocompleteItem.ToolTipTitle;
             var text = autocompleteItem.ToolTipText;
 
+            Control window = tb;
             if (string.IsNullOrEmpty(title))
             {
-                toolTip.ToolTipTitle = null;
-                toolTip.SetToolTip(this, null);
+                toolTip.Hide(window);
                 return;
             }
 
-            IWin32Window window = this.Parent ?? this;
-            Point location = new Point((window == this ? Width : Right) + 3, 0);
-
+            var tbLocationOnScreen = tb.PointToScreen(Point.Empty);
+            var location = new Point(Right + 3 + Menu.Left - tbLocationOnScreen.X, Menu.Top - tbLocationOnScreen.Y);
             if (string.IsNullOrEmpty(text))
             {
                 toolTip.ToolTipTitle = null;
-                toolTip.Show(title, window, location.X, location.Y, ToolTipDuration);
+                if (ToolTipDuration == 0)
+                    toolTip.Show(title, window, location);
+                else
+                    toolTip.Show(title, window, location, ToolTipDuration);
             }
             else
             {
                 toolTip.ToolTipTitle = title;
-                toolTip.Show(text, window, location.X, location.Y, ToolTipDuration);
+                if (ToolTipDuration == 0)
+                    toolTip.Show(text, window, location);
+                else
+                    toolTip.Show(text, window, location, ToolTipDuration);
             }
         }
 
