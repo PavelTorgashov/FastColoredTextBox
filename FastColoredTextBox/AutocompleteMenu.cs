@@ -12,10 +12,9 @@ namespace FastColoredTextBoxNS
     /// Popup menu for autocomplete
     /// </summary>
     [Browsable(false)]
-    public class AutocompleteMenu : ToolStripDropDown
+    public class AutocompleteMenu : UserControl
     {
         AutocompleteListView listView;
-        public ToolStripControlHost host;
         public Range Fragment { get; internal set; }
 
         /// <summary>
@@ -70,20 +69,15 @@ namespace FastColoredTextBoxNS
         public AutocompleteMenu(FastColoredTextBox tb)
         {
             // create a new popup and add the list view to it 
-            AutoClose = false;
+            Visible = false;
+            BorderStyle = BorderStyle.FixedSingle;
             AutoSize = false;
             Margin = Padding.Empty;
             Padding = Padding.Empty;
             BackColor = Color.White;
             listView = new AutocompleteListView(tb);
-            host = new ToolStripControlHost(listView);
-            host.Margin = new Padding(2, 2, 2, 2);
-            host.Padding = Padding.Empty;
-            host.AutoSize = false;
-            host.AutoToolTip = false;
             CalcSize();
-            base.Items.Add(host);
-            listView.Parent = this;
+            this.Controls.Add(listView);
             SearchPattern = @"[\w\.]";
             MinFragmentLength = 2;
 
@@ -104,12 +98,11 @@ namespace FastColoredTextBoxNS
         public new void Close()
         {
             listView.toolTip.Hide(listView);
-            base.Close();
+            this.Hide();
         }
 
         internal void CalcSize()
         {
-            host.Size = listView.Size;
             Size = new System.Drawing.Size(listView.Size.Width + 4, listView.Size.Height + 4);
         }
 
@@ -211,6 +204,11 @@ namespace FastColoredTextBoxNS
         public ImageList ImageList { get; set; }
         internal int AppearInterval { get { return timer.Interval; } set { timer.Interval = value; } }
         internal int ToolTipDuration { get; set; }
+
+        public override Size GetPreferredSize(Size proposedSize)
+        {
+            return Size;
+        }
 
         public Color SelectedColor { get; set; }
         public Color HoveredColor { get; set; }
@@ -328,8 +326,8 @@ namespace FastColoredTextBoxNS
             FocussedItemIndex = 0;
             VerticalScroll.Value = 0;
             //some magic for update scrolls
-            AutoScrollMinSize -= new Size(1, 0);
             AutoScrollMinSize += new Size(1, 0);
+            AutoScrollMinSize -= new Size(1, 0);
             //get fragment around caret
             Range fragment = tb.Selection.GetFragment(Menu.SearchPattern);
             string text = fragment.Text;
@@ -371,8 +369,12 @@ namespace FastColoredTextBoxNS
                 {
                     CancelEventArgs args = new CancelEventArgs();
                     Menu.OnOpening(args);
-                    if(!args.Cancel)
-                        Menu.Show(tb, point);
+                    if (!args.Cancel)
+                    {
+                        Menu.Location = point;
+                        Menu.Parent = tb;
+                        Menu.Show();
+                    }
                 }
                 else
                     Invalidate();
@@ -666,25 +668,29 @@ namespace FastColoredTextBoxNS
             var title = autocompleteItem.ToolTipTitle;
             var text = autocompleteItem.ToolTipText;
 
+            Control window = tb;
             if (string.IsNullOrEmpty(title))
             {
-                toolTip.ToolTipTitle = null;
-                toolTip.SetToolTip(this, null);
+                toolTip.Hide(window);
                 return;
             }
 
-            IWin32Window window = this.Parent ?? this;
-            Point location = new Point((window == this ? Width : Right) + 3, 0);
-
+            var location = new Point(Right + 3 + Menu.Left, Menu.Top);
             if (string.IsNullOrEmpty(text))
             {
                 toolTip.ToolTipTitle = null;
-                toolTip.Show(title, window, location.X, location.Y, ToolTipDuration);
+                if (ToolTipDuration == 0)
+                    toolTip.Show(title, window, location);
+                else
+                    toolTip.Show(title, window, location, ToolTipDuration);
             }
             else
             {
                 toolTip.ToolTipTitle = title;
-                toolTip.Show(text, window, location.X, location.Y, ToolTipDuration);
+                if (ToolTipDuration == 0)
+                    toolTip.Show(text, window, location);
+                else
+                    toolTip.Show(text, window, location, ToolTipDuration);
             }
         }
 
