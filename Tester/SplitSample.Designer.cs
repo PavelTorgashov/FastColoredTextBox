@@ -1,4 +1,6 @@
-﻿namespace Tester
+﻿using FastColoredTextBoxNS;
+using FastColoredTextBoxNS.Highlighter;
+namespace Tester
 {
     partial class SplitSample
     {
@@ -74,7 +76,7 @@
             this.fctbMaster.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.fctbMaster.Dock = System.Windows.Forms.DockStyle.Fill;
             this.fctbMaster.Font = new System.Drawing.Font("Consolas", 9.75F);
-            this.fctbMaster.Language = FastColoredTextBoxNS.Language.CSharp;
+            this.fctbMaster.SyntaxHighlighter = new CSharpSyntaxHighlighter();
             this.fctbMaster.LeftBracket = '(';
             this.fctbMaster.Location = new System.Drawing.Point(0, 93);
             this.fctbMaster.Name = "fctbMaster";
@@ -93,7 +95,7 @@
             this.fctbSlave.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.fctbSlave.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.fctbSlave.Font = new System.Drawing.Font("Consolas", 9.75F);
-            this.fctbSlave.Language = FastColoredTextBoxNS.Language.CSharp;
+            this.fctbSlave.SyntaxHighlighter = new CSharpSyntaxHighlighter();
             this.fctbSlave.LeftBracket = '(';
             this.fctbSlave.Location = new System.Drawing.Point(0, 304);
             this.fctbSlave.Name = "fctbSlave";

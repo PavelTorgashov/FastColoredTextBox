@@ -54,6 +54,7 @@
     </Compile>
     <Compile Include="Bookmarks.cs" />
     <Compile Include="Char.cs" />
+    <Compile Include="Highlighter\CSharpSyntaxHighlighter.cs" />
     <Compile Include="DocumentMap.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -66,6 +67,15 @@
     <Compile Include="GoToForm.designer.cs">
       <DependentUpon>GoToForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Highlighter\CustomSyntaxHighlighter.cs" />
+    <Compile Include="Highlighter\FileSyntaxHighlighter.cs" />
+    <Compile Include="Highlighter\HtmlSyntaxHighlighter.cs" />
+    <Compile Include="Highlighter\JScriptSyntaxHighlighter.cs" />
+    <Compile Include="Highlighter\LuaSyntaxHighlighter.cs" />
+    <Compile Include="Highlighter\PHPSyntaxHighlighter.cs" />
+    <Compile Include="Highlighter\SQLSyntaxHighlighter.cs" />
+    <Compile Include="Highlighter\VBSyntaxHighlighter.cs" />
+    <Compile Include="Highlighter\XMLSyntaxHighlighter.cs" />
     <Compile Include="Hints.cs" />
     <Compile Include="HotkeysEditorForm.cs">
       <SubType>Form</SubType>
@@ -73,6 +83,7 @@
     <Compile Include="HotkeysEditorForm.Designer.cs">
       <DependentUpon>HotkeysEditorForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Highlighter\ISyntaxHighlighter.cs" />
     <Compile Include="LinesAccessor.cs" />
     <Compile Include="MacrosManager.cs" />
     <Compile Include="PlatformType.cs" />
@@ -84,7 +95,7 @@
       <DependentUpon>Ruler.cs</DependentUpon>
     </Compile>
     <Compile Include="SyntaxDescriptor.cs" />
-    <Compile Include="SyntaxHighlighter.cs" />
+    <Compile Include="Highlighter\SyntaxHighlighter.cs" />
     <Compile Include="ReplaceForm.cs">
       <SubType>Form</SubType>
     </Compile>
