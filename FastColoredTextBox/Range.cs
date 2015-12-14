@@ -452,7 +452,12 @@ namespace FastColoredTextBoxNS
             if (start.iChar != 0 || start.iLine != 0)
             {
                 if (start.iChar > 0 && tb.LineInfos[start.iLine].VisibleState == VisibleState.Visible)
-                    start.Offset(-1, 0);
+                {
+                    if (start.iChar >= tb.TabLength && start.iChar % tb.TabLength == 0 && tb[start.iLine].Text.Substring(start.iChar - tb.TabLength, tb.TabLength) == new String(' ', tb.TabLength))
+                        start.Offset(-tb.TabLength, 0);
+                    else
+                        start.Offset(-1, 0);
+                }
                 else
                 {
                     int i = tb.FindPrevVisibleLine(start.iLine);
@@ -483,7 +488,12 @@ namespace FastColoredTextBoxNS
             if (start.iLine < tb.LinesCount - 1 || start.iChar < tb[tb.LinesCount - 1].Count)
             {
                 if (start.iChar < tb[start.iLine].Count && tb.LineInfos[start.iLine].VisibleState == VisibleState.Visible)
-                    start.Offset(1, 0);
+                {
+                    if ((tb[start.iLine].Text.Length - start.iChar) >= tb.TabLength && start.iChar % tb.TabLength == 0 && tb[start.iLine].Text.Substring(start.iChar, tb.TabLength) == new String(' ', tb.TabLength))
+                        start.Offset(tb.TabLength, 0);
+                    else
+                        start.Offset(1, 0);
+                }
                 else
                 {
                     int i = tb.FindNextVisibleLine(start.iLine);
