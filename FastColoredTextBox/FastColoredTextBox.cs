@@ -4066,8 +4066,7 @@ namespace FastColoredTextBoxNS
                 else
                 {
                     Selection.GoHome(shift);
-                    for (int i = 0; i < spaces; i++)
-                        Selection.GoRight(shift);
+                    Selection.Start = new Place(spaces, iLine);
                 }
             }
             finally
