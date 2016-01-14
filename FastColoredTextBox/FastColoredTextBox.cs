@@ -4059,7 +4059,8 @@ namespace FastColoredTextBoxNS
             Selection.BeginUpdate();
             try
             {
-                int iLine = Selection.Start.iLine;
+				Place oldStart = Selection.Start;
+				int iLine = Selection.Start.iLine;
                 int spaces = this[iLine].StartSpacesCount;
                 if (Selection.Start.iChar <= spaces)
                     Selection.GoHome(shift);
@@ -4067,6 +4068,10 @@ namespace FastColoredTextBoxNS
                 {
                     Selection.GoHome(shift);
                     Selection.Start = new Place(spaces, iLine);
+					if (shift)
+					{
+						Selection.End = oldStart;
+                    }
                 }
             }
             finally
