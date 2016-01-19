@@ -3116,7 +3116,7 @@ namespace FastColoredTextBoxNS
                         cutOff = i;
                     }
                     else
-                        if (!char.IsLetterOrDigit(c) && c != '_' && c != '\'')
+                        if (!char.IsLetterOrDigit(c) && c != '_' && c != '\'' && c != '\xa0')
                             cutOff = Math.Min(i + 1, line.Count - 1);
                 }
 
