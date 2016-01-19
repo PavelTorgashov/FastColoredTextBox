@@ -2344,7 +2344,7 @@ namespace FastColoredTextBoxNS
         /// <summary>
         /// Shows replace dialog
         /// </summary>
-        public void ShowReplaceDialog(string findText)
+        public virtual void ShowReplaceDialog(string findText)
         {
             if (ReadOnly)
                 return;
@@ -4043,7 +4043,7 @@ namespace FastColoredTextBoxNS
         /// <summary>
         /// Convert selected text to upper case
         /// </summary>
-        public void UpperCase()
+        public virtual void UpperCase()
         {
             Range old = Selection.Clone();
             SelectedText = SelectedText.ToUpper();
@@ -4054,7 +4054,7 @@ namespace FastColoredTextBoxNS
         /// <summary>
         /// Convert selected text to lower case
         /// </summary>
-        public void LowerCase()
+        public virtual void LowerCase()
         {
             Range old = Selection.Clone();
             SelectedText = SelectedText.ToLower();
