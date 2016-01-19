@@ -6899,13 +6899,36 @@ namespace FastColoredTextBoxNS
             //
             Range oldLeftBracketPosition = leftBracketPosition;
             Range oldRightBracketPosition = rightBracketPosition;
-            Range range = Selection.Clone(); //need clone because we will move caret
+            var range = GetBracketsRange(Selection.Start, LeftBracket, RightBracket);
+
+            if (range != null)
+            {
+                leftBracketPosition = new Range(this, range.Start, new Place(range.Start.iChar + 1, range.Start.iLine));
+                rightBracketPosition = new Range(this, new Place(range.End.iChar - 1, range.End.iLine), range.End);
+            }
+
+            if (oldLeftBracketPosition != leftBracketPosition ||
+                oldRightBracketPosition != rightBracketPosition)
+                Invalidate();
+        }
+
+        /// <summary>
+        /// Returns range between brackets (or null if not found)
+        /// </summary>
+        public Range GetBracketsRange(Place placeInsideBrackets, char leftBracket, char rightBracket)
+        {
+            var startRange = new Range(this, placeInsideBrackets, placeInsideBrackets);
+            var range = startRange.Clone();
+
+            Range leftBracketPosition = null;
+            Range rightBracketPosition = null;
+
             int counter = 0;
             int maxIterations = maxBracketSearchIterations;
             while (range.GoLeftThroughFolded()) //move caret left
             {
-                if (range.CharAfterStart == LeftBracket) counter++;
-                if (range.CharAfterStart == RightBracket) counter--;
+                if (range.CharAfterStart == leftBracket) counter++;
+                if (range.CharAfterStart == rightBracket) counter--;
                 if (counter == 1)
                 {
                     //highlighting
@@ -6918,13 +6941,13 @@ namespace FastColoredTextBoxNS
                 if (maxIterations <= 0) break;
             }
             //
-            range = Selection.Clone(); //need clone because we will move caret
+            range = startRange.Clone();
             counter = 0;
             maxIterations = maxBracketSearchIterations;
             do
             {
-                if (range.CharAfterStart == LeftBracket) counter++;
-                if (range.CharAfterStart == RightBracket) counter--;
+                if (range.CharAfterStart == leftBracket) counter++;
+                if (range.CharAfterStart == rightBracket) counter--;
                 if (counter == -1)
                 {
                     //highlighting
@@ -6937,9 +6960,10 @@ namespace FastColoredTextBoxNS
                 if (maxIterations <= 0) break;
             } while (range.GoRightThroughFolded()); //move caret right
 
-            if (oldLeftBracketPosition != leftBracketPosition ||
-                oldRightBracketPosition != rightBracketPosition)
-                Invalidate();
+            if (leftBracketPosition != null && rightBracketPosition != null)
+                return new Range(this, leftBracketPosition.Start, rightBracketPosition.End);
+            else
+                return null;
         }
 
         private void HighlightBrackets2(char LeftBracket, char RightBracket, ref Range leftBracketPosition, ref Range rightBracketPosition)
