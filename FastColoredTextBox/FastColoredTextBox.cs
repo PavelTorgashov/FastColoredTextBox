@@ -2107,10 +2107,19 @@ namespace FastColoredTextBoxNS
             if (e.Index >= 0 && e.Index < LineInfos.Count && LineInfos[e.Index].VisibleState == VisibleState.Hidden)
                 newState = VisibleState.Hidden;
 
-            var temp = new List<LineInfo>(e.Count);
+            if (e.Count > 100000)
+                LineInfos.Capacity = LineInfos.Count + e.Count + 1000;
+
+            var temp = new LineInfo[e.Count];
             for (int i = 0; i < e.Count; i++)
-                temp.Add(new LineInfo(-1) {VisibleState = newState});
+            {
+                temp[i].startY = -1;
+                temp[i].VisibleState = newState;
+            }
             LineInfos.InsertRange(e.Index, temp);
+
+            if (e.Count > 1000000)
+                GC.Collect();
 
             OnLineInserted(e.Index, e.Count);
         }
