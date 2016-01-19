@@ -2261,6 +2261,11 @@ namespace FastColoredTextBoxNS
 
         private void ResetTimer(Timer timer)
         {
+            if (InvokeRequired)
+            {
+                BeginInvoke(new MethodInvoker(() => ResetTimer(timer)));
+                return;
+            }
             timer.Stop();
             if (IsHandleCreated)
                 timer.Start();
