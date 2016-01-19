@@ -1126,6 +1126,9 @@ namespace FastColoredTextBoxNS
             get { return selection; }
             set
             {
+                if (value == selection)
+                    return;
+
                 selection.BeginUpdate();
                 selection.Start = value.Start;
                 selection.End = value.End;
