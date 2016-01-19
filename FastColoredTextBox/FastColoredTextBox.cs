@@ -4063,6 +4063,17 @@ namespace FastColoredTextBoxNS
         }
 
         /// <summary>
+        /// Convert selected text to title case
+        /// </summary>
+        public virtual void TitleCase()
+        {
+            Range old = Selection.Clone();
+            SelectedText = Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(SelectedText.ToLower());
+            Selection.Start = old.Start;
+            Selection.End = old.End;
+        }
+
+        /// <summary>
         /// Insert/remove comment prefix into selected lines
         /// </summary>
         public void CommentSelected()
