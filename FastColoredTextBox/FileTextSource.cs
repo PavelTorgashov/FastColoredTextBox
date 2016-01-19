@@ -88,6 +88,7 @@ namespace FastColoredTextBoxNS
             sourceFileLinePositions.Add((int)fs.Position);
             base.lines.Add(null);
             //other lines
+            sourceFileLinePositions.Capacity = (int)(length / 7 + 1000);
             int prev = 0;
             while(fs.Position < length)
             {
@@ -114,6 +115,9 @@ namespace FastColoredTextBoxNS
                 base.lines.Add(null);
             }
 
+            if (length > 2000000)
+                GC.Collect();
+
             Line[] temp = new Line[100];
             var c = base.lines.Count;
             base.lines.AddRange(temp);
@@ -126,7 +130,6 @@ namespace FastColoredTextBoxNS
             sourceFileLinePositions.AddRange(temp2);
             sourceFileLinePositions.TrimExcess();
             sourceFileLinePositions.RemoveRange(c, temp.Length);
-            
 
             fileEncoding = enc;
 
