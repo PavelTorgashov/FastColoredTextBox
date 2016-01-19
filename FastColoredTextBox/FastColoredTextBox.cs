@@ -4389,23 +4389,23 @@ namespace FastColoredTextBoxNS
 
         private bool DoAutocompleteBrackets(char c)
         {
-            if (AutoCompleteBrackets)
-            {
-                if (!Selection.ColumnSelectionMode)
-                    for (int i = 1; i < autoCompleteBracketsList.Length; i += 2)
-                        if (c == autoCompleteBracketsList[i] && c == Selection.CharAfterStart)
-                        {
-                            Selection.GoRight();
-                            return true;
-                        }
+            if (!AutoCompleteBrackets)
+                return false;
 
-                for (int i = 0; i < autoCompleteBracketsList.Length; i += 2)
-                    if (c == autoCompleteBracketsList[i])
+            if (!Selection.ColumnSelectionMode)
+                for (int i = 1; i < autoCompleteBracketsList.Length; i += 2)
+                    if (c == autoCompleteBracketsList[i] && c == Selection.CharAfterStart)
                     {
-                        InsertBrackets(autoCompleteBracketsList[i], autoCompleteBracketsList[i + 1]);
+                        Selection.GoRight();
                         return true;
                     }
-            }
+
+            for (int i = 0; i < autoCompleteBracketsList.Length; i += 2)
+                if (c == autoCompleteBracketsList[i])
+                {
+                    InsertBrackets(autoCompleteBracketsList[i], autoCompleteBracketsList[i + 1]);
+                    return true;
+                }
             return false;
         }
 

@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>FastColoredTextBoxNS</RootNamespace>
     <AssemblyName>FastColoredTextBox</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -70,6 +70,7 @@
     <Compile Include="Highlighter\CustomSyntaxHighlighter.cs" />
     <Compile Include="Highlighter\FileSyntaxHighlighter.cs" />
     <Compile Include="Highlighter\HtmlSyntaxHighlighter.cs" />
+    <Compile Include="Highlighter\JawsSyntaxHighlighter.cs" />
     <Compile Include="Highlighter\JScriptSyntaxHighlighter.cs" />
     <Compile Include="Highlighter\LuaSyntaxHighlighter.cs" />
     <Compile Include="Highlighter\PHPSyntaxHighlighter.cs" />
