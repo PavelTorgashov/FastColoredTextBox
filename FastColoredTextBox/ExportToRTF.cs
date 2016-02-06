@@ -8,7 +8,7 @@ namespace FastColoredTextBoxNS
     /// <summary>
     /// Exports colored text as RTF
     /// </summary>
-    /// <remarks>At this time only TextStyle renderer is supported. Other styles is not exported.</remarks>
+    /// <remarks>At this time only TextStyle renderer is supported. Other styles are not exported.</remarks>
     public class ExportToRTF
     {
         /// <summary>

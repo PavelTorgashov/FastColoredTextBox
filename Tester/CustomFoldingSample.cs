@@ -43,7 +43,7 @@ namespace Tester
 
         private void fctb_AutoIndentNeeded(object sender, AutoIndentEventArgs e)
         {
-            //we assign this handler for disable AutoIndent by folding
+            //we assign this handler to disable AutoIndent by folding
         }
     }
 }

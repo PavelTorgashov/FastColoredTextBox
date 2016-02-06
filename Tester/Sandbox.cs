@@ -10,13 +10,10 @@ namespace Tester
 {
     public partial class Sandbox : Form
     {
-        private FastColoredTextBox fctb;
-
         public Sandbox()
         {
             InitializeComponent();
 
-            fctb = new FastColoredTextBox() { Dock = DockStyle.Fill, Parent = this, Language = Language.XML, HighlightingRangeType = HighlightingRangeType.AllTextRange, ShowFoldingLines = true};
         }
     }
 }

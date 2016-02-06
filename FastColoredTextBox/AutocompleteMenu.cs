@@ -12,7 +12,7 @@ namespace FastColoredTextBoxNS
     /// Popup menu for autocomplete
     /// </summary>
     [Browsable(false)]
-    public class AutocompleteMenu : ToolStripDropDown
+    public class AutocompleteMenu : ToolStripDropDown, IDisposable
     {
         AutocompleteListView listView;
         public ToolStripControlHost host;
@@ -184,6 +184,13 @@ namespace FastColoredTextBoxNS
             get { return Items.toolTip; }
             set { Items.toolTip = value; }
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+            if (listView != null && !listView.IsDisposed)
+                listView.Dispose();
+        }
     }
 
     [System.ComponentModel.ToolboxItem(false)]
@@ -265,24 +272,32 @@ namespace FastColoredTextBoxNS
             Form form = tb.FindForm();
             if (form != null)
             {
-                form.LocationChanged += (o, e) => Menu.Close();
-                form.ResizeBegin += (o, e) => Menu.Close();
-                form.FormClosing += (o, e) => Menu.Close();
-                form.LostFocus += (o, e) => Menu.Close();
+                form.LocationChanged += delegate { SafetyClose(); };
+                form.ResizeBegin += delegate { SafetyClose(); };
+                form.FormClosing += delegate { SafetyClose(); };
+                form.LostFocus += delegate { SafetyClose(); };
             }
 
             tb.LostFocus += (o, e) =>
             {
-                if (!Menu.Focused) Menu.Close();
+                if (Menu != null && !Menu.IsDisposed)
+                if (!Menu.Focused) 
+                    SafetyClose();
             };
 
-            tb.Scroll += (o, e) => Menu.Close();
+            tb.Scroll += delegate { SafetyClose(); };
 
             this.VisibleChanged += (o, e) =>
             {
                 if (this.Visible)
                     DoSelectedVisible();
             };
+        }
+
+        void SafetyClose()
+        {
+            if (Menu != null && !Menu.IsDisposed)
+                Menu.Close();
         }
 
         void tb_KeyPressed(object sender, KeyPressEventArgs e)

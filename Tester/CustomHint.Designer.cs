@@ -36,8 +36,9 @@
             // textBox1
             // 
             this.textBox1.Location = new System.Drawing.Point(2, 20);
+            this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 20);
+            this.textBox1.Size = new System.Drawing.Size(100, 49);
             this.textBox1.TabIndex = 6;
             // 
             // linkLabel1
@@ -68,7 +69,7 @@
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.button1);
             this.Name = "CustomHint";
-            this.Size = new System.Drawing.Size(219, 43);
+            this.Size = new System.Drawing.Size(219, 73);
             this.ResumeLayout(false);
             this.PerformLayout();
 

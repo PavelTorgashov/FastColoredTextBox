@@ -1333,6 +1333,11 @@
             Convert selected text to title case
             </summary>
         </member>
+        <member name="M:FastColoredTextBoxNS.FastColoredTextBox.SentenceCase">
+            <summary>
+            Convert selected text to sentence case
+            </summary>
+        </member>
         <member name="M:FastColoredTextBoxNS.FastColoredTextBox.CommentSelected">
             <summary>
             Insert/remove comment prefix into selected lines
@@ -1629,7 +1634,7 @@
             Highlights brackets around caret
             </summary>
         </member>
-        <member name="M:FastColoredTextBoxNS.FastColoredTextBox.GetBracketsRange(FastColoredTextBoxNS.Place,System.Char,System.Char)">
+        <member name="M:FastColoredTextBoxNS.FastColoredTextBox.GetBracketsRange(FastColoredTextBoxNS.Place,System.Char,System.Char,System.Boolean)">
             <summary>
             Returns range between brackets (or null if not found)
             </summary>
@@ -2972,7 +2977,7 @@
             <summary>
             Exports colored text as RTF
             </summary>
-            <remarks>At this time only TextStyle renderer is supported. Other styles is not exported.</remarks>
+            <remarks>At this time only TextStyle renderer is supported. Other styles are not exported.</remarks>
         </member>
         <member name="P:FastColoredTextBoxNS.ExportToRTF.IncludeLineNumbers">
             <summary>
