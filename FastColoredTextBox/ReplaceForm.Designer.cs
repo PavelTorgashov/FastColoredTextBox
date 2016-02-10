@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ReplaceForm));
             this.btClose = new System.Windows.Forms.Button();
             this.btFindNext = new System.Windows.Forms.Button();
             this.tbFind = new System.Windows.Forms.TextBox();
@@ -43,118 +44,81 @@
             // 
             // btClose
             // 
-            this.btClose.Location = new System.Drawing.Point(273, 153);
+            resources.ApplyResources(this.btClose, "btClose");
             this.btClose.Name = "btClose";
-            this.btClose.Size = new System.Drawing.Size(75, 23);
-            this.btClose.TabIndex = 8;
-            this.btClose.Text = "Close";
             this.btClose.UseVisualStyleBackColor = true;
             this.btClose.Click += new System.EventHandler(this.btClose_Click);
             // 
             // btFindNext
             // 
-            this.btFindNext.Location = new System.Drawing.Point(111, 124);
+            resources.ApplyResources(this.btFindNext, "btFindNext");
             this.btFindNext.Name = "btFindNext";
-            this.btFindNext.Size = new System.Drawing.Size(75, 23);
-            this.btFindNext.TabIndex = 5;
-            this.btFindNext.Text = "Find next";
             this.btFindNext.UseVisualStyleBackColor = true;
             this.btFindNext.Click += new System.EventHandler(this.btFindNext_Click);
             // 
             // tbFind
             // 
-            this.tbFind.Location = new System.Drawing.Point(62, 12);
+            resources.ApplyResources(this.tbFind, "tbFind");
             this.tbFind.Name = "tbFind";
-            this.tbFind.Size = new System.Drawing.Size(286, 20);
-            this.tbFind.TabIndex = 0;
             this.tbFind.TextChanged += new System.EventHandler(this.cbMatchCase_CheckedChanged);
             this.tbFind.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbFind_KeyPress);
             // 
             // cbRegex
             // 
-            this.cbRegex.AutoSize = true;
-            this.cbRegex.Location = new System.Drawing.Point(273, 38);
+            resources.ApplyResources(this.cbRegex, "cbRegex");
             this.cbRegex.Name = "cbRegex";
-            this.cbRegex.Size = new System.Drawing.Size(57, 17);
-            this.cbRegex.TabIndex = 3;
-            this.cbRegex.Text = "Regex";
             this.cbRegex.UseVisualStyleBackColor = true;
             this.cbRegex.CheckedChanged += new System.EventHandler(this.cbMatchCase_CheckedChanged);
             // 
             // cbMatchCase
             // 
-            this.cbMatchCase.AutoSize = true;
-            this.cbMatchCase.Location = new System.Drawing.Point(66, 38);
+            resources.ApplyResources(this.cbMatchCase, "cbMatchCase");
             this.cbMatchCase.Name = "cbMatchCase";
-            this.cbMatchCase.Size = new System.Drawing.Size(82, 17);
-            this.cbMatchCase.TabIndex = 1;
-            this.cbMatchCase.Text = "Match case";
             this.cbMatchCase.UseVisualStyleBackColor = true;
             this.cbMatchCase.CheckedChanged += new System.EventHandler(this.cbMatchCase_CheckedChanged);
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(23, 14);
+            resources.ApplyResources(this.label1, "label1");
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(33, 13);
-            this.label1.TabIndex = 5;
-            this.label1.Text = "Find: ";
             // 
             // cbWholeWord
             // 
-            this.cbWholeWord.AutoSize = true;
-            this.cbWholeWord.Location = new System.Drawing.Point(154, 38);
+            resources.ApplyResources(this.cbWholeWord, "cbWholeWord");
             this.cbWholeWord.Name = "cbWholeWord";
-            this.cbWholeWord.Size = new System.Drawing.Size(113, 17);
-            this.cbWholeWord.TabIndex = 2;
-            this.cbWholeWord.Text = "Match whole word";
             this.cbWholeWord.UseVisualStyleBackColor = true;
             this.cbWholeWord.CheckedChanged += new System.EventHandler(this.cbMatchCase_CheckedChanged);
             // 
             // btReplace
             // 
-            this.btReplace.Location = new System.Drawing.Point(192, 124);
+            resources.ApplyResources(this.btReplace, "btReplace");
             this.btReplace.Name = "btReplace";
-            this.btReplace.Size = new System.Drawing.Size(75, 23);
-            this.btReplace.TabIndex = 6;
-            this.btReplace.Text = "Replace";
             this.btReplace.UseVisualStyleBackColor = true;
             this.btReplace.Click += new System.EventHandler(this.btReplace_Click);
             // 
             // btReplaceAll
             // 
-            this.btReplaceAll.Location = new System.Drawing.Point(273, 124);
+            resources.ApplyResources(this.btReplaceAll, "btReplaceAll");
             this.btReplaceAll.Name = "btReplaceAll";
-            this.btReplaceAll.Size = new System.Drawing.Size(75, 23);
-            this.btReplaceAll.TabIndex = 7;
-            this.btReplaceAll.Text = "Replace all";
             this.btReplaceAll.UseVisualStyleBackColor = true;
             this.btReplaceAll.Click += new System.EventHandler(this.btReplaceAll_Click);
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 81);
+            resources.ApplyResources(this.label2, "label2");
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(50, 13);
-            this.label2.TabIndex = 9;
-            this.label2.Text = "Replace:";
             // 
             // tbReplace
             // 
-            this.tbReplace.Location = new System.Drawing.Point(62, 78);
+            resources.ApplyResources(this.tbReplace, "tbReplace");
             this.tbReplace.Name = "tbReplace";
-            this.tbReplace.Size = new System.Drawing.Size(286, 20);
-            this.tbReplace.TabIndex = 0;
             this.tbReplace.TextChanged += new System.EventHandler(this.cbMatchCase_CheckedChanged);
             this.tbReplace.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.tbFind_KeyPress);
             // 
             // ReplaceForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(360, 191);
             this.Controls.Add(this.tbFind);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.tbReplace);
@@ -170,8 +134,6 @@
             this.Name = "ReplaceForm";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Find and replace";
             this.TopMost = true;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ReplaceForm_FormClosing);
             this.ResumeLayout(false);
