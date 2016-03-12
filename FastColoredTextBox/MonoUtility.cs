@@ -13,7 +13,6 @@ namespace FastColoredTextBoxNS
 		{
 			get
 			{
-				return true;
 				PlatformID p = Environment.OSVersion.Platform;
 				return (p == PlatformID.Unix) || (p == PlatformID.MacOSX) || (p == MonoUnix);
 			}
