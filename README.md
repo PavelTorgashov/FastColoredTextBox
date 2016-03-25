@@ -14,5 +14,5 @@ More details http://www.codeproject.com/Articles/161871/Fast-Colored-TextBox-for
 Nuget package https://www.nuget.org/packages/FCTB/
 
 ----------------
-[b]You can help me to develop free components! <br/>
-My Skrill: pavel_torgashov[at]ukr.net[/b]
+You can help me to develop free components! <br/>
+My Skrill: pavel_torgashov[at]ukr.net
