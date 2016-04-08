@@ -2343,7 +2343,7 @@ namespace FastColoredTextBoxNS
         /// <summary>
         /// Shows find dialog
         /// </summary>
-        public void ShowFindDialog()
+        public virtual void ShowFindDialog()
         {
             ShowFindDialog(null);
         }
@@ -2351,7 +2351,7 @@ namespace FastColoredTextBoxNS
         /// <summary>
         /// Shows find dialog
         /// </summary>
-        public void ShowFindDialog(string findText)
+        public virtual void ShowFindDialog(string findText)
         {
             if (findForm == null)
                 findForm = new FindForm(this);
@@ -2369,7 +2369,7 @@ namespace FastColoredTextBoxNS
         /// <summary>
         /// Shows replace dialog
         /// </summary>
-        public void ShowReplaceDialog()
+        public virtual void ShowReplaceDialog()
         {
             ShowReplaceDialog(null);
         }
@@ -3472,7 +3472,6 @@ namespace FastColoredTextBoxNS
             if (macrosManager != null)
             if (!HotkeysMapping.ContainsKey(keyData) || (HotkeysMapping[keyData] != FCTBAction.MacroExecute && HotkeysMapping[keyData] != FCTBAction.MacroRecord))
                 macrosManager.ProcessKey(keyData);
-
 
             if (HotkeysMapping.ContainsKey(keyData))
             {

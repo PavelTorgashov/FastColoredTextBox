@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SimplestSyntaxHighlightingSample));
             this.label1 = new System.Windows.Forms.Label();
             this.fctb = new FastColoredTextBoxNS.FastColoredTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.fctb)).BeginInit();
@@ -46,9 +47,21 @@
             // 
             // fctb
             // 
-            this.fctb.AllowDrop = true;
+            this.fctb.AutoCompleteBracketsList = new char[] {
+        '(',
+        ')',
+        '{',
+        '}',
+        '[',
+        ']',
+        '\"',
+        '\"',
+        '\'',
+        '\''};
             this.fctb.AutoScrollMinSize = new System.Drawing.Size(480, 75);
             this.fctb.BackBrush = null;
+            this.fctb.CharHeight = 15;
+            this.fctb.CharWidth = 7;
             this.fctb.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.fctb.DescriptionFile = "";
             this.fctb.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
@@ -59,11 +72,13 @@
             this.fctb.Name = "fctb";
             this.fctb.Paddings = new System.Windows.Forms.Padding(0);
             this.fctb.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
+            this.fctb.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("fctb.ServiceColors")));
             this.fctb.Size = new System.Drawing.Size(498, 216);
             this.fctb.TabIndex = 0;
             this.fctb.Text = "<li>Article\r\n<a href=\\\"#_comments\\\">Ask a Question about this article</a></li>\r\n<" +
     "li class=\\\"heading\\\">Quick Answers</li>\r\n<li><a href=\\\"/Questions/ask.aspx\\\">Ask" +
     " a Question</a></li>\r\n";
+            this.fctb.Zoom = 100;
             this.fctb.TextChanged += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.fctb_TextChanged);
             // 
             // SimplestSyntaxHighlightingSample

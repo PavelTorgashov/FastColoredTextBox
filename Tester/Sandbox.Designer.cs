@@ -62,6 +62,7 @@
             this.fctb.CharHeight = 14;
             this.fctb.CharWidth = 8;
             this.fctb.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.fctb.DelayedEventsInterval = 5000;
             this.fctb.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.fctb.Hotkeys = resources.GetString("fctb.Hotkeys");
             this.fctb.IsReplaceMode = false;
