@@ -355,6 +355,21 @@ namespace FastColoredTextBoxNS
                 }
         }
 
+        /// <summary>
+        /// Uses the given <paramref name="doc"/> to parse a XML description and adds it as syntax descriptor. 
+        /// The syntax descriptor is used for highlighting when 
+        /// <list type="bullet">
+        ///     <item>Language property of FCTB is set to <see cref="Language.Custom"/></item>
+        ///     <item>DescriptionFile property of FCTB has the same value as the method parameter <paramref name="descriptionFileName"/></item>
+        /// </list>
+        /// </summary>
+        /// <param name="descriptionFileName">Name of the description file</param>
+        /// <param name="doc">XmlDocument to parse</param>
+        public virtual void AddXmlDescription(string descriptionFileName, XmlDocument doc) {
+            SyntaxDescriptor desc = ParseXmlDescription(doc);
+            descByXMLfileNames[descriptionFileName] = desc;
+        }
+
         public static SyntaxDescriptor ParseXmlDescription(XmlDocument doc)
         {
             var desc = new SyntaxDescriptor();
