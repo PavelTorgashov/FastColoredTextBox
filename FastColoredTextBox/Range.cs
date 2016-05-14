@@ -451,7 +451,7 @@ namespace FastColoredTextBoxNS
 
             if (start.iChar != 0 || start.iLine != 0)
             {
-                if (start.iChar > 0 && tb.LineInfos[start.iLine].VisibleState == VisibleState.Visible)
+                if (start.iChar > 0 && (tb.LineInfos[start.iLine].VisibleState == VisibleState.Visible || tb.LineInfos[start.iLine].VisibleState == VisibleState.StartOfHiddenBlock))
                     start.Offset(-1, 0);
                 else
                 {
@@ -482,7 +482,7 @@ namespace FastColoredTextBoxNS
 
             if (start.iLine < tb.LinesCount - 1 || start.iChar < tb[tb.LinesCount - 1].Count)
             {
-                if (start.iChar < tb[start.iLine].Count && tb.LineInfos[start.iLine].VisibleState == VisibleState.Visible)
+                if (start.iChar < tb[start.iLine].Count && (tb.LineInfos[start.iLine].VisibleState == VisibleState.Visible || tb.LineInfos[start.iLine].VisibleState == VisibleState.StartOfHiddenBlock))
                     start.Offset(1, 0);
                 else
                 {

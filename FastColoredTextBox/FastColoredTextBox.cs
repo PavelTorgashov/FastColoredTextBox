@@ -6545,29 +6545,22 @@ namespace FastColoredTextBoxNS
 
         internal int FindNextVisibleLine(int iLine)
         {
-            if (iLine >= lines.Count - 1) return iLine;
-            int old = iLine;
-            do
-                iLine++; while (iLine < lines.Count - 1 && LineInfos[iLine].VisibleState != VisibleState.Visible);
+            var iEnd = lines.Count - 1;
+            for (int i = iLine + 1; i < iEnd; i++)
+                if (LineInfos[i].VisibleState == VisibleState.Visible || LineInfos[i].VisibleState == VisibleState.StartOfHiddenBlock)
+                    return i;
 
-            if (LineInfos[iLine].VisibleState != VisibleState.Visible)
-                return old;
-            else
-                return iLine;
+            return iLine;
         }
 
 
         internal int FindPrevVisibleLine(int iLine)
         {
-            if (iLine <= 0) return iLine;
-            int old = iLine;
-            do
-                iLine--; while (iLine > 0 && LineInfos[iLine].VisibleState != VisibleState.Visible);
+            for (int i = iLine - 1; i >= 0; i--)
+                if (LineInfos[i].VisibleState == VisibleState.Visible || LineInfos[i].VisibleState == VisibleState.StartOfHiddenBlock)
+                    return i;
 
-            if (LineInfos[iLine].VisibleState != VisibleState.Visible)
-                return old;
-            else
-                return iLine;
+            return iLine;
         }
 
         private VisualMarker FindVisualMarkerForPoint(Point p)
