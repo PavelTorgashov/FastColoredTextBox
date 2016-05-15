@@ -91,7 +91,8 @@ namespace FastColoredTextBoxNS
             this[KEYS.Control | KEYS.Subtract] = FCTBAction.ZoomOut;
             this[KEYS.Control | KEYS.Add] = FCTBAction.ZoomIn;
             this[KEYS.Control | KEYS.D0] = FCTBAction.ZoomNormal;
-            this[KEYS.Control | KEYS.I] = FCTBAction.AutoIndentChars;   
+            this[KEYS.Control | KEYS.I] = FCTBAction.AutoIndentChars;
+            this[KEYS.Control | KEYS.Shift | KEYS.F] = FCTBAction.CollapsOrExpand;
         }
 
         public override string ToString()
@@ -226,7 +227,8 @@ namespace FastColoredTextBoxNS
         CustomAction17,
         CustomAction18,
         CustomAction19,
-        CustomAction20
+        CustomAction20,
+        CollapsOrExpand
     }
 
     internal class HotkeysEditor : UITypeEditor

@@ -451,7 +451,7 @@ namespace FastColoredTextBoxNS
 
             if (start.iChar != 0 || start.iLine != 0)
             {
-                if (start.iChar > 0 && tb.LineInfos[start.iLine].VisibleState == VisibleState.Visible)
+                if (start.iChar > 0 && (tb.LineInfos[start.iLine].VisibleState == VisibleState.Visible || tb.LineInfos[start.iLine].VisibleState == VisibleState.StartOfHiddenBlock))
                     start.Offset(-1, 0);
                 else
                 {
@@ -482,7 +482,7 @@ namespace FastColoredTextBoxNS
 
             if (start.iLine < tb.LinesCount - 1 || start.iChar < tb[tb.LinesCount - 1].Count)
             {
-                if (start.iChar < tb[start.iLine].Count && tb.LineInfos[start.iLine].VisibleState == VisibleState.Visible)
+                if (start.iChar < tb[start.iLine].Count && (tb.LineInfos[start.iLine].VisibleState == VisibleState.Visible || tb.LineInfos[start.iLine].VisibleState == VisibleState.StartOfHiddenBlock))
                     start.Offset(1, 0);
                 else
                 {
@@ -658,7 +658,7 @@ namespace FastColoredTextBoxNS
             if (start.iLine < 0)
                 return;
 
-            if (tb.LineInfos[start.iLine].VisibleState != VisibleState.Visible)
+            if (tb.LineInfos[start.iLine].VisibleState != VisibleState.Visible && tb.LineInfos[start.iLine].VisibleState != VisibleState.StartOfHiddenBlock)
                 return;
 
             start = new Place(0, start.iLine);
@@ -677,7 +677,7 @@ namespace FastColoredTextBoxNS
 
             if (start.iLine < 0)
                 return;
-            if (tb.LineInfos[start.iLine].VisibleState != VisibleState.Visible)
+            if (tb.LineInfos[start.iLine].VisibleState != VisibleState.Visible && tb.LineInfos[start.iLine].VisibleState != VisibleState.StartOfHiddenBlock)
                 return;
 
             start = new Place(tb[start.iLine].Count, start.iLine);
@@ -1277,7 +1277,7 @@ namespace FastColoredTextBoxNS
             this.Start = range.Start;
             this.End = range.End;
 
-            if (tb.LineInfos[Start.iLine].VisibleState != VisibleState.Visible)
+            if (tb.LineInfos[Start.iLine].VisibleState != VisibleState.Visible && tb.LineInfos[Start.iLine].VisibleState != VisibleState.StartOfHiddenBlock)
                 GoRight(shift);
         }
 
@@ -1330,7 +1330,7 @@ namespace FastColoredTextBoxNS
             this.Start = range.Start;
             this.End = range.End;
 
-            if (tb.LineInfos[Start.iLine].VisibleState != VisibleState.Visible)
+            if (tb.LineInfos[Start.iLine].VisibleState != VisibleState.Visible && tb.LineInfos[Start.iLine].VisibleState != VisibleState.StartOfHiddenBlock)
                 GoLeft(shift);
         }
 
@@ -1339,8 +1339,6 @@ namespace FastColoredTextBoxNS
             ColumnSelectionMode = false;
 
             start = new Place(0, 0);
-            if (tb.LineInfos[Start.iLine].VisibleState != VisibleState.Visible)
-                tb.ExpandBlock(Start.iLine);
 
             if(!shift)
                 end = start;
@@ -1352,9 +1350,12 @@ namespace FastColoredTextBoxNS
         {
             ColumnSelectionMode = false;
 
-            start = new Place(tb[tb.LinesCount - 1].Count, tb.LinesCount-1);
-            if (tb.LineInfos[Start.iLine].VisibleState != VisibleState.Visible)
-                tb.ExpandBlock(Start.iLine);
+            for (int i = tb.LinesCount - 1; i >= 0; i--)
+                if (tb.LineInfos[i].VisibleState == VisibleState.Visible || tb.LineInfos[i].VisibleState == VisibleState.StartOfHiddenBlock)
+                {
+                    start = new Place(tb[i].Count, i);
+                    break;
+                }
 
             if (!shift)
                 end = start;

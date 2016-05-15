@@ -3921,7 +3921,35 @@ namespace FastColoredTextBoxNS
                 case FCTBAction.CustomAction20:
                     OnCustomAction(new CustomActionEventArgs(action));
                     break;
+                case FCTBAction.CollapsOrExpand:
+                    ColapsOrExpand(Selection.Start.iLine);
+                    break;
             }
+        }
+
+        protected void ColapsOrExpand(int iLine)
+        {
+            if(LineInfos[iLine].VisibleState == VisibleState.StartOfHiddenBlock)
+            {
+                ExpandBlock(iLine);
+                return;
+            }
+
+            if(lines.LineHasFoldingStartMarker(iLine) )
+            {
+                CollapseFoldingBlock(iLine);
+                return;
+            }
+
+            for(int i = iLine-1; i>=0; i--)
+            {
+                if(lines.LineHasFoldingStartMarker(i))
+                {
+                    CollapseFoldingBlock(i);
+                    return;
+                }
+            }
+
         }
 
         protected virtual void OnCustomAction(CustomActionEventArgs e)
@@ -5799,12 +5827,12 @@ namespace FastColoredTextBoxNS
             for (; iLine < lines.Count; iLine++)
             {
                 y = LineInfos[iLine].startY + LineInfos[iLine].WordWrapStringsCount*CharHeight;
-                if (y > point.Y && LineInfos[iLine].VisibleState == VisibleState.Visible)
+                if (y > point.Y && (LineInfos[iLine].VisibleState == VisibleState.Visible || LineInfos[iLine].VisibleState == VisibleState.StartOfHiddenBlock))
                     break;
             }
             if (iLine >= lines.Count)
                 iLine = lines.Count - 1;
-            if (LineInfos[iLine].VisibleState != VisibleState.Visible)
+            if (LineInfos[iLine].VisibleState != VisibleState.Visible && LineInfos[iLine].VisibleState != VisibleState.StartOfHiddenBlock)
                 iLine = FindPrevVisibleLine(iLine);
             //
             int iWordWrapLine = LineInfos[iLine].WordWrapStringsCount;
@@ -6529,13 +6557,7 @@ namespace FastColoredTextBoxNS
                     break;
                 }
             }
-            //Move caret outside
-            from = Math.Min(fromLine, toLine);
-            to = Math.Max(fromLine, toLine);
-            int newLine = FindNextVisibleLine(to);
-            if (newLine == to)
-                newLine = FindPrevVisibleLine(from);
-            Selection.Start = new Place(0, newLine);
+            Selection.Start = new Place(0, from);
             //
             needRecalc = true;
             Invalidate();
@@ -6545,29 +6567,22 @@ namespace FastColoredTextBoxNS
 
         internal int FindNextVisibleLine(int iLine)
         {
-            if (iLine >= lines.Count - 1) return iLine;
-            int old = iLine;
-            do
-                iLine++; while (iLine < lines.Count - 1 && LineInfos[iLine].VisibleState != VisibleState.Visible);
+            var iEnd = lines.Count;
+            for (int i = iLine + 1; i < iEnd; i++)
+                if (LineInfos[i].VisibleState == VisibleState.Visible || LineInfos[i].VisibleState == VisibleState.StartOfHiddenBlock)
+                    return i;
 
-            if (LineInfos[iLine].VisibleState != VisibleState.Visible)
-                return old;
-            else
-                return iLine;
+            return iLine;
         }
 
 
         internal int FindPrevVisibleLine(int iLine)
         {
-            if (iLine <= 0) return iLine;
-            int old = iLine;
-            do
-                iLine--; while (iLine > 0 && LineInfos[iLine].VisibleState != VisibleState.Visible);
+            for (int i = iLine - 1; i >= 0; i--)
+                if (LineInfos[i].VisibleState == VisibleState.Visible || LineInfos[i].VisibleState == VisibleState.StartOfHiddenBlock)
+                    return i;
 
-            if (LineInfos[iLine].VisibleState != VisibleState.Visible)
-                return old;
-            else
-                return iLine;
+            return iLine;
         }
 
         private VisualMarker FindVisualMarkerForPoint(Point p)
