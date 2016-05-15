@@ -1339,8 +1339,6 @@ namespace FastColoredTextBoxNS
             ColumnSelectionMode = false;
 
             start = new Place(0, 0);
-            if (tb.LineInfos[Start.iLine].VisibleState != VisibleState.Visible)
-                tb.ExpandBlock(Start.iLine);
 
             if(!shift)
                 end = start;
@@ -1352,9 +1350,12 @@ namespace FastColoredTextBoxNS
         {
             ColumnSelectionMode = false;
 
-            start = new Place(tb[tb.LinesCount - 1].Count, tb.LinesCount-1);
-            if (tb.LineInfos[Start.iLine].VisibleState != VisibleState.Visible)
-                tb.ExpandBlock(Start.iLine);
+            for (int i = tb.LinesCount - 1; i >= 0; i--)
+                if (tb.LineInfos[i].VisibleState == VisibleState.Visible || tb.LineInfos[i].VisibleState == VisibleState.StartOfHiddenBlock)
+                {
+                    start = new Place(tb[i].Count, i);
+                    break;
+                }
 
             if (!shift)
                 end = start;
