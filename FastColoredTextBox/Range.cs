@@ -658,7 +658,7 @@ namespace FastColoredTextBoxNS
             if (start.iLine < 0)
                 return;
 
-            if (tb.LineInfos[start.iLine].VisibleState != VisibleState.Visible)
+            if (tb.LineInfos[start.iLine].VisibleState != VisibleState.Visible && tb.LineInfos[start.iLine].VisibleState != VisibleState.StartOfHiddenBlock)
                 return;
 
             start = new Place(0, start.iLine);
@@ -677,7 +677,7 @@ namespace FastColoredTextBoxNS
 
             if (start.iLine < 0)
                 return;
-            if (tb.LineInfos[start.iLine].VisibleState != VisibleState.Visible)
+            if (tb.LineInfos[start.iLine].VisibleState != VisibleState.Visible && tb.LineInfos[start.iLine].VisibleState != VisibleState.StartOfHiddenBlock)
                 return;
 
             start = new Place(tb[start.iLine].Count, start.iLine);
