@@ -1277,7 +1277,7 @@ namespace FastColoredTextBoxNS
             this.Start = range.Start;
             this.End = range.End;
 
-            if (tb.LineInfos[Start.iLine].VisibleState != VisibleState.Visible)
+            if (tb.LineInfos[Start.iLine].VisibleState != VisibleState.Visible && tb.LineInfos[Start.iLine].VisibleState != VisibleState.StartOfHiddenBlock)
                 GoRight(shift);
         }
 
@@ -1330,7 +1330,7 @@ namespace FastColoredTextBoxNS
             this.Start = range.Start;
             this.End = range.End;
 
-            if (tb.LineInfos[Start.iLine].VisibleState != VisibleState.Visible)
+            if (tb.LineInfos[Start.iLine].VisibleState != VisibleState.Visible && tb.LineInfos[Start.iLine].VisibleState != VisibleState.StartOfHiddenBlock)
                 GoLeft(shift);
         }
 
