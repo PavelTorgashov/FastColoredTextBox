@@ -5827,12 +5827,12 @@ namespace FastColoredTextBoxNS
             for (; iLine < lines.Count; iLine++)
             {
                 y = LineInfos[iLine].startY + LineInfos[iLine].WordWrapStringsCount*CharHeight;
-                if (y > point.Y && LineInfos[iLine].VisibleState == VisibleState.Visible)
+                if (y > point.Y && (LineInfos[iLine].VisibleState == VisibleState.Visible || LineInfos[iLine].VisibleState == VisibleState.StartOfHiddenBlock))
                     break;
             }
             if (iLine >= lines.Count)
                 iLine = lines.Count - 1;
-            if (LineInfos[iLine].VisibleState != VisibleState.Visible)
+            if (LineInfos[iLine].VisibleState != VisibleState.Visible && LineInfos[iLine].VisibleState != VisibleState.StartOfHiddenBlock)
                 iLine = FindPrevVisibleLine(iLine);
             //
             int iWordWrapLine = LineInfos[iLine].WordWrapStringsCount;
