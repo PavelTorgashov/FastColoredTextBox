@@ -6567,7 +6567,7 @@ namespace FastColoredTextBoxNS
 
         internal int FindNextVisibleLine(int iLine)
         {
-            var iEnd = lines.Count - 1;
+            var iEnd = lines.Count;
             for (int i = iLine + 1; i < iEnd; i++)
                 if (LineInfos[i].VisibleState == VisibleState.Visible || LineInfos[i].VisibleState == VisibleState.StartOfHiddenBlock)
                     return i;
