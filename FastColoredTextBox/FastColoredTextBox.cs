@@ -3921,7 +3921,35 @@ namespace FastColoredTextBoxNS
                 case FCTBAction.CustomAction20:
                     OnCustomAction(new CustomActionEventArgs(action));
                     break;
+                case FCTBAction.CollapsOrExpand:
+                    ColapsOrExpand(Selection.Start.iLine);
+                    break;
             }
+        }
+
+        protected void ColapsOrExpand(int iLine)
+        {
+            if(LineInfos[iLine].VisibleState == VisibleState.StartOfHiddenBlock)
+            {
+                ExpandBlock(iLine);
+                return;
+            }
+
+            if(lines.LineHasFoldingStartMarker(iLine) )
+            {
+                CollapseFoldingBlock(iLine);
+                return;
+            }
+
+            for(int i = iLine-1; i>=0; i--)
+            {
+                if(lines.LineHasFoldingStartMarker(i))
+                {
+                    CollapseFoldingBlock(i);
+                    return;
+                }
+            }
+
         }
 
         protected virtual void OnCustomAction(CustomActionEventArgs e)
@@ -6529,13 +6557,7 @@ namespace FastColoredTextBoxNS
                     break;
                 }
             }
-            //Move caret outside
-            from = Math.Min(fromLine, toLine);
-            to = Math.Max(fromLine, toLine);
-            int newLine = FindNextVisibleLine(to);
-            if (newLine == to)
-                newLine = FindPrevVisibleLine(from);
-            Selection.Start = new Place(0, newLine);
+            Selection.Start = new Place(0, from);
             //
             needRecalc = true;
             Invalidate();
