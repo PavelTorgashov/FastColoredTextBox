@@ -591,6 +591,15 @@
             <param name="descriptionFileName">Name of the description file</param>
             <param name="doc">XmlDocument to parse</param>
         </member>
+        <member name="M:FastColoredTextBoxNS.SyntaxHighlighter.AddResilientStyle(FastColoredTextBoxNS.Style)">
+            <summary>
+            Adds the given <paramref name="style"/> as resilient style. A resilient style is additionally available when highlighting is 
+            based on a syntax descriptor that has been derived from a XML description file. In the run of the highlighting routine 
+            the styles used by the FCTB are always dropped and replaced with the (initial) ones from the syntax descriptor. Resilient styles are 
+            added afterwards and can be used anyway. 
+            </summary>
+            <param name="style">Style to add</param>
+        </member>
         <member name="M:FastColoredTextBoxNS.SyntaxHighlighter.CSharpSyntaxHighlight(FastColoredTextBoxNS.Range)">
             <summary>
             Highlights C# code
