@@ -26,6 +26,8 @@ namespace FastColoredTextBoxNS
         protected readonly Dictionary<string, SyntaxDescriptor> descByXMLfileNames =
             new Dictionary<string, SyntaxDescriptor>();
 
+        protected readonly List<Style> resilientStyles = new List<Style>(5);
+
         protected Regex CSharpAttributeRegex,
                       CSharpClassNameRegex;
 
@@ -370,6 +372,18 @@ namespace FastColoredTextBoxNS
             descByXMLfileNames[descriptionFileName] = desc;
         }
 
+        /// <summary>
+        /// Adds the given <paramref name="style"/> as resilient style. A resilient style is additionally available when highlighting is 
+        /// based on a syntax descriptor that has been derived from a XML description file. In the run of the highlighting routine 
+        /// the styles used by the FCTB are always dropped and replaced with the (initial) ones from the syntax descriptor. Resilient styles are 
+        /// added afterwards and can be used anyway. 
+        /// </summary>
+        /// <param name="style">Style to add</param>
+        public virtual void AddResilientStyle(Style style) {
+            if (resilientStyles.Contains(style)) return;
+            resilientStyles.Add(style);
+        }
+
         public static SyntaxDescriptor ParseXmlDescription(XmlDocument doc)
         {
             var desc = new SyntaxDescriptor();
@@ -498,6 +512,10 @@ namespace FastColoredTextBoxNS
             range.tb.ClearStylesBuffer();
             for (int i = 0; i < desc.styles.Count; i++)
                 range.tb.Styles[i] = desc.styles[i];
+            // add resilient styles
+            int l = desc.styles.Count;
+            for (int i = 0; i < resilientStyles.Count; i++)
+                range.tb.Styles[l + i] = resilientStyles[i];
             //brackets
             char[] oldBrackets = RememberBrackets(range.tb);
             range.tb.LeftBracket = desc.leftBracket;
