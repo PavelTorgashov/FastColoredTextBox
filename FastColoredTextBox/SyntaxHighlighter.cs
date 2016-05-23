@@ -114,6 +114,8 @@ namespace FastColoredTextBoxNS
         protected Regex VBNumberRegex;
         protected Regex VBStringRegex;
 
+        protected FastColoredTextBox currentTb;
+
         public static RegexOptions RegexCompiledOption
         {
             get
@@ -123,6 +125,10 @@ namespace FastColoredTextBoxNS
                 else
                     return RegexOptions.None;
             }
+        }
+
+        public SyntaxHighlighter(FastColoredTextBox currentTb) {
+            this.currentTb = currentTb;
         }
 
         #region IDisposable Members
@@ -381,6 +387,7 @@ namespace FastColoredTextBoxNS
         /// <param name="style">Style to add</param>
         public virtual void AddResilientStyle(Style style) {
             if (resilientStyles.Contains(style)) return;
+            currentTb.CheckStylesBufferSize(); // Prevent buffer overflow
             resilientStyles.Add(style);
         }
 

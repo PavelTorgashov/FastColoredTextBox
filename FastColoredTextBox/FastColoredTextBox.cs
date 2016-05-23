@@ -169,7 +169,7 @@ namespace FastColoredTextBoxNS
             RightBracket = '\x0';
             LeftBracket2 = '\x0';
             RightBracket2 = '\x0';
-            SyntaxHighlighter = new SyntaxHighlighter();
+            SyntaxHighlighter = new SyntaxHighlighter(this);
             language = Language.Custom;
             PreferredLineWidth = 0;
             needRecalc = true;
@@ -2328,6 +2328,20 @@ namespace FastColoredTextBoxNS
             if (i >= 0)
                 return i;
 
+            i = CheckStylesBufferSize();
+            Styles[i] = style;
+            return i;
+        }
+
+        /// <summary>
+        /// Checks if the styles buffer has enough space to add one 
+        /// more element. If not, an exception is thrown. Otherwise, 
+        /// the index of a free slot is returned. 
+        /// </summary>
+        /// <returns>Index of free styles buffer slot</returns>
+        /// <exception cref="Exception">If maximum count of styles is exceeded</exception>
+        public int CheckStylesBufferSize() {
+            int i;
             for (i = Styles.Length - 1; i >= 0; i--)
                 if (Styles[i] != null)
                     break;
@@ -2336,7 +2350,6 @@ namespace FastColoredTextBoxNS
             if (i >= Styles.Length)
                 throw new Exception("Maximum count of Styles is exceeded.");
 
-            Styles[i] = style;
             return i;
         }
 
