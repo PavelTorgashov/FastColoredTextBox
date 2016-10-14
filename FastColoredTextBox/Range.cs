@@ -238,7 +238,7 @@ namespace FastColoredTextBoxNS
             get
             {
                 if (ColumnSelectionMode)
-                    return 0; // ¿?
+                    return Length_ColumnSelectionMode;
 
                 int fromLine = Math.Min(end.iLine, start.iLine);
                 int toLine = Math.Max(end.iLine, start.iLine);
@@ -1659,6 +1659,29 @@ namespace FastColoredTextBoxNS
                 }
 
                 return sb.ToString();
+            }
+        }
+
+        private int Length_ColumnSelectionMode
+        {
+            get
+            {
+                var bounds = Bounds;
+                if (bounds.iStartLine < 0) return 0;
+                int cnt = 0;
+                //
+                for (int y = bounds.iStartLine; y <= bounds.iEndLine; y++)
+                {
+                    for (int x = bounds.iStartChar; x < bounds.iEndChar; x++)
+                    {
+                        if (x < tb[y].Count)
+                            cnt++;
+                    }
+                    if (bounds.iEndLine != bounds.iStartLine && y != bounds.iEndLine)
+                        cnt += Environment.NewLine.Length;
+                }
+
+                return cnt;
             }
         }
 
