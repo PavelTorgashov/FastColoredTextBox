@@ -1385,6 +1385,18 @@ namespace FastColoredTextBoxNS
             }
         }
 
+        public int TextLength
+        {
+            get
+            {
+                if (LinesCount == 0)
+                    return 0;
+                var sel = new Range(this);
+                sel.SelectAll();
+                return sel.Length;
+            }
+        }
+
         /// <summary>
         /// Text lines
         /// </summary>
