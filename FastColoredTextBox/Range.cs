@@ -248,12 +248,13 @@ namespace FastColoredTextBoxNS
 
                 for (int y = fromLine; y <= toLine; y++)
                 {
+                    int fromX = y == fromLine ? FromX : 0;
                     int toX = y == toLine ? Math.Min(tb[y].Count - 1, ToX - 1) : tb[y].Count - 1;
 
-                    cnt += toX + 1;
+                    cnt += toX - fromX + 1;
 
                     if (y != toLine && fromLine != toLine)
-                        cnt += 2;
+                        cnt += Environment.NewLine.Length;
                 }
 
                 return cnt;
