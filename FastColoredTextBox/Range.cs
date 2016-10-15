@@ -238,7 +238,7 @@ namespace FastColoredTextBoxNS
             get
             {
                 if (ColumnSelectionMode)
-                    return 0; // ¿?
+                    return Length_ColumnSelectionMode(false);
 
                 int fromLine = Math.Min(end.iLine, start.iLine);
                 int toLine = Math.Max(end.iLine, start.iLine);
@@ -257,6 +257,17 @@ namespace FastColoredTextBoxNS
                 }
 
                 return cnt;
+            }
+        }
+
+        public int TextLength
+        {
+            get
+            {
+                if (ColumnSelectionMode)
+                    return Length_ColumnSelectionMode(true);
+                else
+                    return Length;
             }
         }
 
@@ -1660,6 +1671,26 @@ namespace FastColoredTextBoxNS
 
                 return sb.ToString();
             }
+        }
+
+        private int Length_ColumnSelectionMode(bool withNewLines)
+        {
+            var bounds = Bounds;
+            if (bounds.iStartLine < 0) return 0;
+            int cnt = 0;
+            //
+            for (int y = bounds.iStartLine; y <= bounds.iEndLine; y++)
+            {
+                for (int x = bounds.iStartChar; x < bounds.iEndChar; x++)
+                {
+                    if (x < tb[y].Count)
+                        cnt++;
+                }
+                if (withNewLines && bounds.iEndLine != bounds.iStartLine && y != bounds.iEndLine)
+                    cnt += Environment.NewLine.Length;
+            }
+
+            return cnt;
         }
 
         internal void GoDown_ColumnSelectionMode()

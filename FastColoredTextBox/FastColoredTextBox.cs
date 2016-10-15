@@ -1466,7 +1466,7 @@ namespace FastColoredTextBoxNS
         [DefaultValue(0)]
         public int SelectionLength
         {
-            get { return Math.Abs(PlaceToPosition(Selection.Start) - PlaceToPosition(Selection.End)); }
+            get { return Selection.Length; }
             set
             {
                 if (value > 0)
