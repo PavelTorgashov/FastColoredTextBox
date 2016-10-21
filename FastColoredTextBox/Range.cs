@@ -244,7 +244,6 @@ namespace FastColoredTextBoxNS
                 int toLine = Math.Max(end.iLine, start.iLine);
                 int cnt = 0;
                 if (fromLine < 0) return 0;
-                if (toLine < 0) return 0;
 
                 for (int y = fromLine; y <= toLine; y++)
                 {
