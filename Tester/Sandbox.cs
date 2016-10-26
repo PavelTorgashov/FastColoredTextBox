@@ -5,6 +5,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using FastColoredTextBoxNS;
+using System.Linq;
 
 namespace Tester
 {
@@ -14,6 +15,10 @@ namespace Tester
         {
             InitializeComponent();
 
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
         }
     }
 }

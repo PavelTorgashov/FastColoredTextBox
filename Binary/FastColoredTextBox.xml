@@ -1205,6 +1205,11 @@
             Insert text into current selection position (with predefined style)
             </summary>
         </member>
+        <member name="M:FastColoredTextBoxNS.FastColoredTextBox.InsertTextAndRestoreSelection(FastColoredTextBoxNS.Range,System.String,FastColoredTextBoxNS.Style)">
+            <summary>
+            Insert text into replaceRange and restore previous selection
+            </summary>
+        </member>
         <member name="M:FastColoredTextBoxNS.FastColoredTextBox.AppendText(System.String)">
             <summary>
             Append string to end of the Text
