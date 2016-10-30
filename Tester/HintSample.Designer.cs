@@ -44,10 +44,9 @@
             // 
             // btFind
             // 
-            this.btFind.Location = new System.Drawing.Point(22, 22);
-            this.btFind.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.btFind.Location = new System.Drawing.Point(12, 12);
             this.btFind.Name = "btFind";
-            this.btFind.Size = new System.Drawing.Size(161, 52);
+            this.btFind.Size = new System.Drawing.Size(88, 28);
             this.btFind.TabIndex = 2;
             this.btFind.Text = "Find and hint:";
             this.btFind.UseVisualStyleBackColor = true;
@@ -58,10 +57,9 @@
             this.cbInline.AutoSize = true;
             this.cbInline.Checked = true;
             this.cbInline.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbInline.Location = new System.Drawing.Point(413, 35);
-            this.cbInline.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.cbInline.Location = new System.Drawing.Point(225, 19);
             this.cbInline.Name = "cbInline";
-            this.cbInline.Size = new System.Drawing.Size(74, 28);
+            this.cbInline.Size = new System.Drawing.Size(51, 17);
             this.cbInline.TabIndex = 3;
             this.cbInline.Text = "Inline";
             this.cbInline.UseVisualStyleBackColor = true;
@@ -74,10 +72,9 @@
             this.panel2.Controls.Add(this.btFind);
             this.panel2.Controls.Add(this.cbInline);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel2.Location = new System.Drawing.Point(0, 72);
-            this.panel2.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.panel2.Location = new System.Drawing.Point(0, 39);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(900, 89);
+            this.panel2.Size = new System.Drawing.Size(491, 48);
             this.panel2.TabIndex = 4;
             // 
             // cbSimple
@@ -85,20 +82,18 @@
             this.cbSimple.AutoSize = true;
             this.cbSimple.Checked = true;
             this.cbSimple.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbSimple.Location = new System.Drawing.Point(636, 35);
-            this.cbSimple.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.cbSimple.Location = new System.Drawing.Point(347, 19);
             this.cbSimple.Name = "cbSimple";
-            this.cbSimple.Size = new System.Drawing.Size(87, 28);
+            this.cbSimple.Size = new System.Drawing.Size(57, 17);
             this.cbSimple.TabIndex = 6;
             this.cbSimple.Text = "Simple";
             this.cbSimple.UseVisualStyleBackColor = true;
             // 
             // tbFind
             // 
-            this.tbFind.Location = new System.Drawing.Point(194, 31);
-            this.tbFind.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.tbFind.Location = new System.Drawing.Point(106, 17);
             this.tbFind.Name = "tbFind";
-            this.tbFind.Size = new System.Drawing.Size(180, 29);
+            this.tbFind.Size = new System.Drawing.Size(100, 20);
             this.tbFind.TabIndex = 5;
             this.tbFind.Text = "char";
             // 
@@ -107,10 +102,9 @@
             this.cbDock.AutoSize = true;
             this.cbDock.Checked = true;
             this.cbDock.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbDock.Location = new System.Drawing.Point(530, 35);
-            this.cbDock.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.cbDock.Location = new System.Drawing.Point(289, 19);
             this.cbDock.Name = "cbDock";
-            this.cbDock.Size = new System.Drawing.Size(72, 28);
+            this.cbDock.Size = new System.Drawing.Size(52, 17);
             this.cbDock.TabIndex = 4;
             this.cbDock.Text = "Dock";
             this.cbDock.UseVisualStyleBackColor = true;
@@ -120,9 +114,8 @@
             this.label2.Dock = System.Windows.Forms.DockStyle.Top;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label2.Location = new System.Drawing.Point(0, 0);
-            this.label2.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(900, 72);
+            this.label2.Size = new System.Drawing.Size(491, 39);
             this.label2.TabIndex = 5;
             this.label2.Text = "The example shows usage of Hints. Press Find to add some hints. Press Esc to remo" +
     "ve all hints.";
@@ -140,8 +133,8 @@
         '\"',
         '\'',
         '\''};
-            this.fctb.AutoIndentCharsPatterns = "\r\n^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;]+);\r\n^\\s*(case|default)\\s*[^:]" +
-    "*(?<range>:)\\s*(?<range>[^;]+);\r\n";
+            this.fctb.AutoIndentCharsPatterns = "\n^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;]+);\n^\\s*(case|default)\\s*[^:]*(" +
+    "?<range>:)\\s*(?<range>[^;]+);\n";
             this.fctb.AutoScrollMinSize = new System.Drawing.Size(0, 290);
             this.fctb.BackBrush = null;
             this.fctb.BracketsHighlightStrategy = FastColoredTextBoxNS.BracketsHighlightStrategy.Strategy2;
@@ -155,8 +148,7 @@
             this.fctb.Language = FastColoredTextBoxNS.Language.CSharp;
             this.fctb.LeftBracket = '(';
             this.fctb.LeftBracket2 = '{';
-            this.fctb.Location = new System.Drawing.Point(0, 161);
-            this.fctb.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.fctb.Location = new System.Drawing.Point(0, 87);
             this.fctb.Name = "fctb";
             this.fctb.PaddingBackColor = System.Drawing.Color.WhiteSmoke;
             this.fctb.Paddings = new System.Windows.Forms.Padding(10);
@@ -164,7 +156,7 @@
             this.fctb.RightBracket2 = '}';
             this.fctb.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.fctb.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("fctb.ServiceColors")));
-            this.fctb.Size = new System.Drawing.Size(900, 736);
+            this.fctb.Size = new System.Drawing.Size(491, 399);
             this.fctb.TabIndex = 0;
             this.fctb.Text = resources.GetString("fctb.Text");
             this.fctb.TextAreaBorder = FastColoredTextBoxNS.TextAreaBorderType.Shadow;
@@ -175,14 +167,12 @@
             // 
             // HintSample
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(900, 897);
+            this.ClientSize = new System.Drawing.Size(491, 486);
             this.Controls.Add(this.fctb);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.label2);
-            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.Name = "HintSample";
             this.Text = "HintSample";
             this.panel2.ResumeLayout(false);

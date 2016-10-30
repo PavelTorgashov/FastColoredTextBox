@@ -31,6 +31,18 @@
             Highlights syntax for given XML description file
             </summary>
         </member>
+        <member name="M:FastColoredTextBoxNS.SyntaxHighlighter.AddXmlDescription(System.String,System.Xml.XmlDocument)">
+            <summary>
+            Uses the given <paramref name="doc"/> to parse a XML description and adds it as syntax descriptor. 
+            The syntax descriptor is used for highlighting when 
+            <list type="bullet">
+                <item>Language property of FCTB is set to <see cref="F:FastColoredTextBoxNS.Language.Custom"/></item>
+                <item>DescriptionFile property of FCTB has the same value as the method parameter <paramref name="descriptionFileName"/></item>
+            </list>
+            </summary>
+            <param name="descriptionFileName">Name of the description file</param>
+            <param name="doc">XmlDocument to parse</param>
+        </member>
         <member name="M:FastColoredTextBoxNS.SyntaxHighlighter.CSharpSyntaxHighlight(FastColoredTextBoxNS.Range)">
             <summary>
             Highlights C# code

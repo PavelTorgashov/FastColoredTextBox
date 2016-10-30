@@ -15,4 +15,4 @@ Nuget package https://www.nuget.org/packages/FCTB/
 
 ----------------
 You can help me to develop free components! <br/>
-My Skrill: pavel_torgashov[at]ukr.net
+My Skrill: p_torgashov[at]ukr.net

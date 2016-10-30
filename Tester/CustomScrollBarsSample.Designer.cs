@@ -36,7 +36,6 @@
             this.hMyScrollBar = new Tester.MyScrollBar();
             this.vMyScrollBar = new Tester.MyScrollBar();
             this.fctb = new FastColoredTextBoxNS.FastColoredTextBox();
-            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.fctb)).BeginInit();
             this.SuspendLayout();
             // 
@@ -122,9 +121,9 @@
         '\"',
         '\'',
         '\''};
-            this.fctb.AutoIndentCharsPatterns = "\r\n^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;]+);\r\n^\\s*(case|default)\\s*[^:]" +
-    "*(?<range>:)\\s*(?<range>[^;]+);\r\n";
-            this.fctb.AutoScrollMinSize = new System.Drawing.Size(0, 360);
+            this.fctb.AutoIndentCharsPatterns = "\n^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;]+);\n^\\s*(case|default)\\s*[^:]*(" +
+    "?<range>:)\\s*(?<range>[^;]+);\n";
+            this.fctb.AutoScrollMinSize = new System.Drawing.Size(284, 315);
             this.fctb.BackBrush = null;
             this.fctb.BackColor = System.Drawing.Color.Gold;
             this.fctb.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -151,26 +150,14 @@
             this.fctb.Size = new System.Drawing.Size(227, 179);
             this.fctb.TabIndex = 3;
             this.fctb.Text = resources.GetString("fctb.Text");
-            this.fctb.WordWrap = true;
             this.fctb.Zoom = 100;
             this.fctb.ScrollbarsUpdated += new System.EventHandler(this.fctb_ScrollbarsUpdated);
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(314, 320);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 10;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // CustomScrollBarsSample
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(461, 403);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.hScrollBar);
             this.Controls.Add(this.vScrollBar);
             this.Controls.Add(this.hMyScrollBar);
@@ -179,7 +166,6 @@
             this.Controls.Add(this.label2);
             this.Name = "CustomScrollBarsSample";
             this.Text = "CustomScrollBarsSample";
-            this.Load += new System.EventHandler(this.CustomScrollBarsSample_Load);
             ((System.ComponentModel.ISupportInitialize)(this.fctb)).EndInit();
             this.ResumeLayout(false);
 
@@ -193,7 +179,6 @@
         private MyScrollBar hMyScrollBar;
         private System.Windows.Forms.VScrollBar vScrollBar;
         private System.Windows.Forms.HScrollBar hScrollBar;
-        private System.Windows.Forms.Button button1;
 
     }
 }

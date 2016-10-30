@@ -1385,6 +1385,18 @@ namespace FastColoredTextBoxNS
             }
         }
 
+        public int TextLength
+        {
+            get
+            {
+                if (LinesCount == 0)
+                    return 0;
+                var sel = new Range(this);
+                sel.SelectAll();
+                return sel.Length;
+            }
+        }
+
         /// <summary>
         /// Text lines
         /// </summary>
@@ -1454,7 +1466,7 @@ namespace FastColoredTextBoxNS
         [DefaultValue(0)]
         public int SelectionLength
         {
-            get { return Math.Abs(PlaceToPosition(Selection.Start) - PlaceToPosition(Selection.End)); }
+            get { return Selection.Length; }
             set
             {
                 if (value > 0)

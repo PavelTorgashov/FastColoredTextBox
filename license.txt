@@ -8,4 +8,4 @@
 
   Email: pavel_torgashov@ukr.net.
 
-  Copyright (C) Pavel Torgashov, 2011-2014. 
+  Copyright (C) Pavel Torgashov, 2011-2016. 

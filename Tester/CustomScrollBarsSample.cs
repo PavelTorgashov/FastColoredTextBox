@@ -53,22 +53,6 @@ namespace Tester
         {
             fctb.OnScroll(e, e.Type != ScrollEventType.ThumbTrack && e.Type != ScrollEventType.ThumbPosition);
         }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            fctb.ClearHints();
-
-            foreach(var r in fctb.Range.GetRanges("this"))
-            {
-                fctb.AddHint(r, new UserControl(){MinimumSize = new Size(100, 100)}, true, true, true);
-                break;
-            }
-        }
-
-        private void CustomScrollBarsSample_Load(object sender, EventArgs e)
-        {
-
-        }
     }
 
     #region MyScrollBar
