@@ -1,4 +1,4 @@
-﻿//
+//
 //  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
 //  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
 //  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
@@ -124,6 +124,15 @@ namespace FastColoredTextBoxNS
         private WordWrapMode wordWrapMode = WordWrapMode.WordWrapControlWidth;
         private int reservedCountOfLineNumberChars = 1;
         private int zoom = 100;
+        private ContextMenuStrip popupEditFn;
+        private IContainer components;
+        private ToolStripMenuItem menuUndo;
+        private ToolStripSeparator toolStripMenuItem1;
+        private ToolStripMenuItem menuCut;
+        private ToolStripMenuItem menuCopy;
+        private ToolStripMenuItem menuPaste;
+        private ToolStripSeparator toolStripMenuItem2;
+        private ToolStripMenuItem menuSelectAll;
         private Size localAutoScrollMinSize;
  
         /// <summary>
@@ -131,6 +140,7 @@ namespace FastColoredTextBoxNS
         /// </summary>
         public FastColoredTextBox()
         {
+            InitializeComponent();
             //register type provider
             TypeDescriptionProvider prov = TypeDescriptor.GetProvider(GetType());
             object theProvider =
@@ -5433,10 +5443,14 @@ namespace FastColoredTextBoxNS
             base.OnMouseUp(e);
             isLineSelect = false;
 
-            if (e.Button == System.Windows.Forms.MouseButtons.Left)
-            {
+            switch (e.Button) {
+            case MouseButtons.Left:
                 if (mouseIsDragDrop)
                     OnMouseClickText(e);
+                break;
+            case MouseButtons.Right:
+                popupEditFn.Show(this, e.Location);
+                break;
             }
         }
 
@@ -7238,12 +7252,81 @@ namespace FastColoredTextBoxNS
 
         private void InitializeComponent()
         {
-            SuspendLayout();
+            this.components = new System.ComponentModel.Container();
+            this.popupEditFn = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.menuUndo = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.menuCut = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuCopy = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuPaste = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
+            this.menuSelectAll = new System.Windows.Forms.ToolStripMenuItem();
+            this.popupEditFn.SuspendLayout();
+            this.SuspendLayout();
+            // 
+            // popupEditFn
+            // 
+            this.popupEditFn.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuUndo,
+            this.toolStripMenuItem1,
+            this.menuCut,
+            this.menuCopy,
+            this.menuPaste,
+            this.toolStripMenuItem2,
+            this.menuSelectAll});
+            this.popupEditFn.Name = "popupEditFn";
+            this.popupEditFn.Size = new System.Drawing.Size(123, 126);
+            // 
+            // menuUndo
+            // 
+            this.menuUndo.Name = "menuUndo";
+            this.menuUndo.Size = new System.Drawing.Size(122, 22);
+            this.menuUndo.Text = "Undo";
+            this.menuUndo.Click += new System.EventHandler(this.menuUndo_Click);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(119, 6);
+            // 
+            // menuCut
+            // 
+            this.menuCut.Name = "menuCut";
+            this.menuCut.Size = new System.Drawing.Size(122, 22);
+            this.menuCut.Text = "Cut";
+            this.menuCut.Click += new System.EventHandler(this.menuCut_Click);
+            // 
+            // menuCopy
+            // 
+            this.menuCopy.Name = "menuCopy";
+            this.menuCopy.Size = new System.Drawing.Size(122, 22);
+            this.menuCopy.Text = "Copy";
+            this.menuCopy.Click += new System.EventHandler(this.menuCopy_Click);
+            // 
+            // menuPaste
+            // 
+            this.menuPaste.Name = "menuPaste";
+            this.menuPaste.Size = new System.Drawing.Size(122, 22);
+            this.menuPaste.Text = "Paste";
+            this.menuPaste.Click += new System.EventHandler(this.menuPaste_Click);
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(119, 6);
+            // 
+            // menuSelectAll
+            // 
+            this.menuSelectAll.Name = "menuSelectAll";
+            this.menuSelectAll.Size = new System.Drawing.Size(122, 22);
+            this.menuSelectAll.Text = "Select All";
+            this.menuSelectAll.Click += new System.EventHandler(this.menuSelectAll_Click);
             // 
             // FastColoredTextBox
             // 
-            Name = "FastColoredTextBox";
-            ResumeLayout(false);
+            this.Name = "FastColoredTextBox";
+            this.popupEditFn.ResumeLayout(false);
+            this.ResumeLayout(false);
         }
 
         /// <summary>
@@ -8197,6 +8280,33 @@ window.status = ""#print"";
             #endregion
         }
 
+        #endregion
+
+        #region popup Edit commands
+        private void menuCut_Click(object sender, EventArgs e)
+        {
+            DoAction(FCTBAction.Cut);
+        }
+
+        private void menuCopy_Click(object sender, EventArgs e)
+        {
+            DoAction(FCTBAction.Copy);
+        }
+
+        private void menuPaste_Click(object sender, EventArgs e)
+        {
+            DoAction(FCTBAction.Paste);
+        }
+
+        private void menuUndo_Click(object sender, EventArgs e)
+        {
+            DoAction(FCTBAction.Undo);
+        }
+
+        private void menuSelectAll_Click(object sender, EventArgs e)
+        {
+            DoAction(FCTBAction.SelectAll);
+        }
         #endregion
     }
 
