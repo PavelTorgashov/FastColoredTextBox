@@ -57,8 +57,10 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="EncodingDetector.cs" />
+    <Compile Include="EventArgs.cs" />
     <Compile Include="ExportToHTML.cs" />
     <Compile Include="ExportToRTF.cs" />
+    <Compile Include="FastColoredTextBoxSupport.cs" />
     <Compile Include="GoToForm.cs">
       <SubType>Form</SubType>
     </Compile>
