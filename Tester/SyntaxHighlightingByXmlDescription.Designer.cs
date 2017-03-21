@@ -28,10 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
-            FastColoredTextBoxNS.SyntaxHighlighter syntaxHighlighter1 = new FastColoredTextBoxNS.SyntaxHighlighter();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SyntaxHighlightingByXmlDescription));
             this.label1 = new System.Windows.Forms.Label();
             this.fctb = new FastColoredTextBoxNS.FastColoredTextBox();
+            FastColoredTextBoxNS.SyntaxHighlighter syntaxHighlighter1 = new FastColoredTextBoxNS.SyntaxHighlighter(fctb);
             this.SuspendLayout();
             // 
             // label1
