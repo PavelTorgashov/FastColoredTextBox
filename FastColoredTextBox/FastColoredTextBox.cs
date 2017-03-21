@@ -10,7 +10,6 @@
 //
 //  Copyright (C) Pavel Torgashov, 2011-2016. 
 
-// #define debug
 
 
 // -------------------------------------------------------------------------------
@@ -3048,7 +3047,7 @@ namespace FastColoredTextBoxNS
             if (!needRecalc)
                 return;
 
-#if debug
+#if DEBUG
             var sw = Stopwatch.StartNew();
 #endif
 
@@ -3088,7 +3087,7 @@ namespace FastColoredTextBoxNS
             
             AutoScrollMinSize = new Size(minWidth, TextHeight + Paddings.Top + Paddings.Bottom);
             UpdateScrollbars();
-#if debug
+#if DEBUG
             sw.Stop();
             Console.WriteLine("Recalc: " + sw.ElapsedMilliseconds);
 #endif
@@ -4940,7 +4939,7 @@ namespace FastColoredTextBoxNS
 
             if (needRecalcFoldingLines)
                 RecalcFoldingLines();
-#if debug
+#if DEBUG
             var sw = Stopwatch.StartNew();
 #endif
             visibleMarkers.Clear();
@@ -5179,7 +5178,7 @@ namespace FastColoredTextBoxNS
             currentLineBrush.Dispose();
             paddingBrush.Dispose();
             //
-#if debug
+#if DEBUG
             sw.Stop();
             Console.WriteLine("OnPaint: "+ sw.ElapsedMilliseconds);
 #endif
@@ -5853,7 +5852,7 @@ namespace FastColoredTextBoxNS
         /// <returns>Line and char position</returns>
         public Place PointToPlace(Point point)
         {
-            #if debug
+            #if DEBUG
             var sw = Stopwatch.StartNew();
             #endif
             point.Offset(HorizontalScroll.Value, VerticalScroll.Value);
@@ -5895,7 +5894,7 @@ namespace FastColoredTextBoxNS
             if (x > lines[iLine].Count)
                 x = lines[iLine].Count;
 
-#if debug
+#if DEBUG
             Console.WriteLine("PointToPlace: " + sw.ElapsedMilliseconds);
 #endif
 
@@ -6023,7 +6022,7 @@ namespace FastColoredTextBoxNS
                 return;
             }
             //
-#if debug
+#if DEBUG
             var sw = Stopwatch.StartNew();
             #endif
             CancelToolTip();
@@ -6057,7 +6056,7 @@ namespace FastColoredTextBoxNS
             //
             base.OnTextChanged(EventArgs.Empty);
             //
-#if debug
+#if DEBUG
             Console.WriteLine("OnTextChanged: " + sw.ElapsedMilliseconds);
 #endif
 
@@ -6087,7 +6086,7 @@ namespace FastColoredTextBoxNS
         /// </summary>
         public virtual void OnSelectionChanged()
         {
-#if debug
+#if DEBUG
             var sw = Stopwatch.StartNew();
             #endif
             //find folding markers for highlighting
@@ -6100,7 +6099,7 @@ namespace FastColoredTextBoxNS
             if (SelectionChanged != null)
                 SelectionChanged(this, new EventArgs());
 
-#if debug
+#if DEBUG
             Console.WriteLine("OnSelectionChanged: "+ sw.ElapsedMilliseconds);
 #endif
         }
@@ -7204,7 +7203,7 @@ namespace FastColoredTextBoxNS
 
         public virtual void OnSyntaxHighlight(TextChangedEventArgs args)
         {
-            #if debug
+            #if DEBUG
             Stopwatch sw = Stopwatch.StartNew();
             #endif
 
@@ -7231,7 +7230,7 @@ namespace FastColoredTextBoxNS
                     SyntaxHighlighter.HighlightSyntax(Language, range);
             }
 
-#if debug
+#if DEBUG
             Console.WriteLine("OnSyntaxHighlight: "+ sw.ElapsedMilliseconds);
 #endif
         }
