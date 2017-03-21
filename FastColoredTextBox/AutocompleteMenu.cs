@@ -389,8 +389,9 @@ namespace FastColoredTextBoxNS
                     if(!args.Cancel)
                         Menu.Show(tb, point);
                 }
-                else
-                    Invalidate();
+
+                DoSelectedVisible();
+                Invalidate();
             }
             else
                 Menu.Close();
