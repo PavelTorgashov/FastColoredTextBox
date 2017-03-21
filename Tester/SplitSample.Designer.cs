@@ -28,12 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SplitSample));
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.splitter1 = new System.Windows.Forms.Splitter();
             this.fctbMaster = new FastColoredTextBoxNS.FastColoredTextBox();
             this.fctbSlave = new FastColoredTextBoxNS.FastColoredTextBox();
+            ((System.ComponentModel.ISupportInitialize)(this.fctbMaster)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.fctbSlave)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -68,43 +71,87 @@
             // 
             // fctbMaster
             // 
+            this.fctbMaster.AutoCompleteBracketsList = new char[] {
+        '(',
+        ')',
+        '{',
+        '}',
+        '[',
+        ']',
+        '\"',
+        '\"',
+        '\'',
+        '\''};
+            this.fctbMaster.AutoIndentCharsPatterns = "\r\n^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;]+);\r\n^\\s*(case|default)\\s*[^:]" +
+    "*(?<range>:)\\s*(?<range>[^;]+);\r\n";
             this.fctbMaster.AutoScrollMinSize = new System.Drawing.Size(284, 255);
             this.fctbMaster.BackBrush = null;
+            this.fctbMaster.BracketsHighlightStrategy = FastColoredTextBoxNS.BracketsHighlightStrategy.Strategy2;
+            this.fctbMaster.CharHeight = 15;
+            this.fctbMaster.CharWidth = 7;
             this.fctbMaster.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.fctbMaster.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.fctbMaster.Dock = System.Windows.Forms.DockStyle.Fill;
             this.fctbMaster.Font = new System.Drawing.Font("Consolas", 9.75F);
+            this.fctbMaster.IsReplaceMode = false;
             this.fctbMaster.Language = FastColoredTextBoxNS.Language.CSharp;
             this.fctbMaster.LeftBracket = '(';
+            this.fctbMaster.LeftBracket2 = '{';
             this.fctbMaster.Location = new System.Drawing.Point(0, 93);
             this.fctbMaster.Name = "fctbMaster";
             this.fctbMaster.Paddings = new System.Windows.Forms.Padding(0);
             this.fctbMaster.RightBracket = ')';
+            this.fctbMaster.RightBracket2 = '}';
             this.fctbMaster.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
+            this.fctbMaster.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("fctbMaster.ServiceColors")));
+            this.fctbMaster.ShowCaretWhenInactive = true;
             this.fctbMaster.Size = new System.Drawing.Size(610, 205);
             this.fctbMaster.TabIndex = 0;
             this.fctbMaster.Text = resources.GetString("fctbMaster.Text");
+            this.fctbMaster.Zoom = 100;
             // 
             // fctbSlave
             // 
+            this.fctbSlave.AutoCompleteBracketsList = new char[] {
+        '(',
+        ')',
+        '{',
+        '}',
+        '[',
+        ']',
+        '\"',
+        '\"',
+        '\'',
+        '\''};
+            this.fctbSlave.AutoIndentCharsPatterns = "\r\n^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;]+);\r\n^\\s*(case|default)\\s*[^:]" +
+    "*(?<range>:)\\s*(?<range>[^;]+);\r\n";
             this.fctbSlave.AutoScrollMinSize = new System.Drawing.Size(0, 255);
             this.fctbSlave.BackBrush = null;
+            this.fctbSlave.BracketsHighlightStrategy = FastColoredTextBoxNS.BracketsHighlightStrategy.Strategy2;
+            this.fctbSlave.CharHeight = 15;
+            this.fctbSlave.CharWidth = 7;
             this.fctbSlave.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.fctbSlave.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.fctbSlave.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.fctbSlave.Font = new System.Drawing.Font("Consolas", 9.75F);
+            this.fctbSlave.IsReplaceMode = false;
             this.fctbSlave.Language = FastColoredTextBoxNS.Language.CSharp;
             this.fctbSlave.LeftBracket = '(';
+            this.fctbSlave.LeftBracket2 = '{';
             this.fctbSlave.Location = new System.Drawing.Point(0, 304);
             this.fctbSlave.Name = "fctbSlave";
             this.fctbSlave.Paddings = new System.Windows.Forms.Padding(0);
             this.fctbSlave.RightBracket = ')';
+            this.fctbSlave.RightBracket2 = '}';
             this.fctbSlave.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
+            this.fctbSlave.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("fctbSlave.ServiceColors")));
+            this.fctbSlave.ShowCaretWhenInactive = true;
             this.fctbSlave.Size = new System.Drawing.Size(610, 166);
             this.fctbSlave.SourceTextBox = this.fctbMaster;
             this.fctbSlave.TabIndex = 1;
             this.fctbSlave.Text = resources.GetString("fctbSlave.Text");
             this.fctbSlave.WordWrap = true;
+            this.fctbSlave.Zoom = 100;
             // 
             // SplitSample
             // 
@@ -118,6 +165,8 @@
             this.Controls.Add(this.fctbSlave);
             this.Name = "SplitSample";
             this.Text = "SplitSample";
+            ((System.ComponentModel.ISupportInitialize)(this.fctbMaster)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.fctbSlave)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

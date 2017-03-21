@@ -24,6 +24,7 @@ namespace Tester
             popupMenu.SelectedColor = Color.Purple;
             popupMenu.SearchPattern = @"[\w\.]";
             popupMenu.AllowTabKey = true;
+            popupMenu.AlwaysShowTooltip = true;
             //assign DynamicCollection as items source
             popupMenu.Items.SetAutocompleteItems(new DynamicCollection(popupMenu, fctb));
         }

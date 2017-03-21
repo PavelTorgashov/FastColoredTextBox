@@ -389,6 +389,12 @@ namespace FastColoredTextBoxNS
         [Description("Enables caret blinking")]
         public bool CaretBlinking { get; set; }
 
+        /// <summary>
+        /// Draw caret when the control is not focused
+        /// </summary>
+        [DefaultValue(false)]
+        public bool ShowCaretWhenInactive { get; set; }
+
 
         Color textAreaBorderColor;
 
@@ -2026,7 +2032,7 @@ namespace FastColoredTextBoxNS
             TextSource.CurrentTB = this;
         }
 
-        protected void InitTextSource(TextSource ts)
+        protected virtual void InitTextSource(TextSource ts)
         {
             if (lines != null)
             {
@@ -5112,7 +5118,7 @@ namespace FastColoredTextBoxNS
             var caretHeight = CharHeight - lineInterval;
             car.Offset(0, lineInterval / 2);
 
-            if ((Focused || IsDragDrop) && car.X >= LeftIndent && CaretVisible)
+            if ((Focused || IsDragDrop || ShowCaretWhenInactive) && car.X >= LeftIndent && CaretVisible)
             {
                 int carWidth = (IsReplaceMode || WideCaret) ? CharWidth : 1;
                 if (WideCaret)

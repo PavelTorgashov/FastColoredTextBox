@@ -437,6 +437,16 @@
             Interval of menu appear (ms)
             </summary>
         </member>
+        <member name="P:FastColoredTextBoxNS.AutocompleteMenu.MaxTooltipSize">
+            <summary>
+            Sets the max tooltip window size
+            </summary>
+        </member>
+        <member name="P:FastColoredTextBoxNS.AutocompleteMenu.AlwaysShowTooltip">
+            <summary>
+            Tooltip will perm show and duration will be ignored
+            </summary>
+        </member>
         <member name="P:FastColoredTextBoxNS.AutocompleteMenu.SelectedColor">
             <summary>
             Back color of selected item
@@ -1848,6 +1858,11 @@
         <member name="P:FastColoredTextBoxNS.FastColoredTextBox.CaretBlinking">
             <summary>
             Enables caret blinking
+            </summary>
+        </member>
+        <member name="P:FastColoredTextBoxNS.FastColoredTextBox.ShowCaretWhenInactive">
+            <summary>
+            Draw caret when the control is not focused
             </summary>
         </member>
         <member name="P:FastColoredTextBoxNS.FastColoredTextBox.TextAreaBorderColor">

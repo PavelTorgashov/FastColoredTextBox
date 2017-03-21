@@ -480,25 +480,25 @@ namespace Tester
                 int iLine = -1;
 
                 diff.LineUpdate += (o, e) =>
-                                       {
-                                           if (e.DiffType == DiffType.Inserted)
-                                           {
-                                               if (this[iLine].subLines == null)
-                                                   this[iLine].subLines = new Lines();
-                                               e.LineValue.state = DiffType.Inserted;
-                                               this[iLine].subLines.Add(e.LineValue);
-                                           }
-                                           else
-                                           {
-                                               iLine++;
-                                               this[iLine].state = e.DiffType;
-                                               if (iLine > 0 &&
-                                                   this[iLine - 1].state == DiffType.Deleted &&
-                                                   this[iLine - 1].subLines == null &&
-                                                   e.DiffType == DiffType.None)
-                                                   this[iLine - 1].subLines = new Lines();
-                                           }
-                                       };
+                {
+                    if (e.DiffType == DiffType.Inserted)
+                    {
+                        if (this[iLine].subLines == null)
+                            this[iLine].subLines = new Lines();
+                        e.LineValue.state = DiffType.Inserted;
+                        this[iLine].subLines.Add(e.LineValue);
+                    }
+                    else
+                    {
+                        iLine++;
+                        this[iLine].state = e.DiffType;
+                        if (iLine > 0 &&
+                            this[iLine - 1].state == DiffType.Deleted &&
+                            this[iLine - 1].subLines == null &&
+                            e.DiffType == DiffType.None)
+                            this[iLine - 1].subLines = new Lines();
+                    }
+                };
                 //запускаем алгоритм нахождения максимальной подпоследовательности (LCS)
                 diff.RunDiff();
             }

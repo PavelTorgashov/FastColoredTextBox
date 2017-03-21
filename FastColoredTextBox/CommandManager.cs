@@ -11,6 +11,8 @@ namespace FastColoredTextBoxNS
         public TextSource TextSource{ get; private set; }
         public bool UndoRedoStackIsEnabled { get; set; }
 
+        public event EventHandler RedoCompleted = delegate { };
+
         public CommandManager(TextSource ts)
         {
             history = new LimitedStack<UndoableCommand>(maxHistoryLength);
@@ -139,6 +141,9 @@ namespace FastColoredTextBoxNS
             {
                 EndDisableCommands();
             }
+
+            //call event
+            RedoCompleted(this, EventArgs.Empty);
 
             //redo command after autoUndoable command
             if (cmd.autoUndo)
