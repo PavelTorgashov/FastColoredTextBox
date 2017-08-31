@@ -125,18 +125,20 @@ namespace FastColoredTextBoxNS
         private int reservedCountOfLineNumberChars = 1;
         private int zoom = 100;
         private Size localAutoScrollMinSize;
- 
+        private int suspendingEvents;
+        private static readonly object EventText = new object();
+
         /// <summary>
         /// Constructor
         /// </summary>
         public FastColoredTextBox()
         {
             //register type provider
-            TypeDescriptionProvider prov = TypeDescriptor.GetProvider(GetType());
-            object theProvider =
-                prov.GetType().GetField("Provider", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(prov);
-            if (theProvider.GetType() != typeof (FCTBDescriptionProvider))
-                TypeDescriptor.AddProvider(new FCTBDescriptionProvider(GetType()), GetType());
+            //TypeDescriptionProvider prov = TypeDescriptor.GetProvider(GetType());
+            //object theProvider =
+            //    prov.GetType().GetField("Provider", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(prov);
+            //if (theProvider.GetType() != typeof (FCTBDescriptionProvider))
+            //    TypeDescriptor.AddProvider(new FCTBDescriptionProvider(GetType()), GetType());
             //drawing optimization
             SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
             //append monospace font
@@ -1830,7 +1832,18 @@ namespace FastColoredTextBoxNS
         /// </summary>
         [Browsable(true)]
         [Description("It occurs after insert, delete, clear, undo and redo operations.")]
-        public new event EventHandler<TextChangedEventArgs> TextChanged;
+        //public new event EventHandler<TextChangedEventArgs> TextChanged;
+        public new event EventHandler TextChanged
+        {
+            add
+            {
+                this.Events.AddHandler(EventText, (Delegate)value);
+            }
+            remove
+            {
+                this.Events.RemoveHandler(EventText, (Delegate)value);
+            }
+        }
 
         /// <summary>
         /// Fake event for correct data binding
@@ -5929,7 +5942,7 @@ namespace FastColoredTextBoxNS
         {
             ClearBracketsPositions();
 
-            if (TextChanging != null)
+            if (!IsSuspendingEvents() && TextChanging != null)
             {
                 var args = new TextChangingEventArgs {InsertingText = text};
                 TextChanging(this, args);
@@ -5972,6 +5985,29 @@ namespace FastColoredTextBoxNS
         public virtual void OnTextChanged(Range r)
         {
             OnTextChanged(new TextChangedEventArgs(r));
+        }
+
+        public bool IsSuspendingEvents()
+        {
+            return suspendingEvents > 0;
+        }
+
+        /// <summary>
+        /// Call this method to stop raising these events: TextChanging, TextChanged, TextChangedDelayed
+        /// </summary>
+        public void SuspendEvents()
+        {
+            ++suspendingEvents;
+        }
+
+        /// <summary>
+        /// Call this method to start raising these events: TextChanging, TextChanged, TextChangedDelayed
+        /// </summary>
+        public void ResumeEvents()
+        {
+            if (suspendingEvents == 0)
+                return;
+            --suspendingEvents;
         }
 
         /// <summary>
@@ -6045,14 +6081,17 @@ namespace FastColoredTextBoxNS
                 delayedTextChangedRange = delayedTextChangedRange.GetUnionWith(args.ChangedRange);
 
             needRiseTextChangedDelayed = true;
-            ResetTimer(timer2);
+            // TextChangedDelayed
+            if (!IsSuspendingEvents())
+                ResetTimer(timer2);
             //
             OnSyntaxHighlight(args);
-            //
-            if (TextChanged != null)
-                TextChanged(this, args);
-            //
-            if (BindingTextChanged != null)
+            // TextChanged
+            EventHandler eventTextChangedHandler = this.Events[EventText] as EventHandler;
+            if (!IsSuspendingEvents() && eventTextChangedHandler != null)
+                eventTextChangedHandler(this, args);
+            // BindingTextChanged
+            if (!IsSuspendingEvents() && BindingTextChanged != null)
                 BindingTextChanged(this, EventArgs.Empty);
             //
             base.OnTextChanged(EventArgs.Empty);

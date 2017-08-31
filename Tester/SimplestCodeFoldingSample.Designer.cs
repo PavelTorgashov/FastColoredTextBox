@@ -66,7 +66,7 @@
             this.fctb.Size = new System.Drawing.Size(361, 295);
             this.fctb.TabIndex = 3;
             this.fctb.Text = resources.GetString("fctb.Text");
-            this.fctb.TextChanged += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.fctb_TextChanged);
+            this.fctb.TextChanged += new System.EventHandler(this.fctb_TextChanged);
             // 
             // SimplestCodeFoldingSample
             // 

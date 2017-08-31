@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using FastColoredTextBoxNS;
@@ -15,8 +16,9 @@ namespace Tester
             InitializeComponent();
         }
 
-        private void fctb_TextChanged(object sender, TextChangedEventArgs e)
+        private void fctb_TextChanged(object sender, EventArgs arg)
         {
+            var e = (TextChangedEventArgs)arg;
             //clear previous highlighting
             e.ChangedRange.ClearStyle(brownStyle);
             //highlight tags

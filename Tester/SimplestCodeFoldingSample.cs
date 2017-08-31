@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 using FastColoredTextBoxNS;
 using System.Text.RegularExpressions;
 
@@ -11,8 +12,9 @@ namespace Tester
             InitializeComponent();
         }
 
-        private void fctb_TextChanged(object sender, TextChangedEventArgs e)
+        private void fctb_TextChanged(object sender, EventArgs arg)
         {
+            var e = (TextChangedEventArgs)arg;
             //clear folding markers
             e.ChangedRange.ClearFoldingMarkers();
             //set markers for folding

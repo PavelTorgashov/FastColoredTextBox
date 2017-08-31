@@ -47,7 +47,7 @@ Namespace TesterVB
             Me.fctb.SelectionColor = Color.FromArgb(50, 0, 0, 255)
             Me.fctb.Size = New Size(498, 216)
             Me.fctb.TabIndex = 0
-            AddHandler Me.fctb.TextChanged, New EventHandler(Of TextChangedEventArgs)(AddressOf Me.fctb_TextChanged)
+            AddHandler Me.fctb.TextChanged, New EventHandler(AddressOf Me.fctb_TextChanged)
             MyBase.AutoScaleDimensions = New SizeF(6.0F, 13.0F)
             MyBase.AutoScaleMode = AutoScaleMode.Font
             MyBase.ClientSize = New Size(498, 261)
@@ -63,7 +63,8 @@ Namespace TesterVB
             Me.fctb.Text = "<li>Article" & vbLf & "<a href=""#_comments"">Ask a Question about this article</a></li>" & vbLf & "<li class=""heading"">Quick Answers</li>" & vbLf & "<li><a href=""/Questions/ask.aspx"">Ask a Question</a></li>"
         End Sub
 
-        Private Sub fctb_TextChanged(sender As Object, e As TextChangedEventArgs)
+        Private Sub fctb_TextChanged(sender As Object, arg As EventArgs)
+            Dim e = CType(arg, TextChangedEventArgs)
             e.ChangedRange.ClearStyle(New Style() {Me.maroonStyle})
             e.ChangedRange.SetStyle(Me.maroonStyle, "<[^>]+>")
         End Sub

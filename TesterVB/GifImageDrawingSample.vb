@@ -31,7 +31,8 @@ Namespace TesterVB
             Me.fctb.Text = "This example draws smile image instead of text smile" & vbCrLf & ": + D  = :D" & vbCrLf & ": + @ = :@" & vbCrLf & "8 + ) = 8)" & vbCrLf & ": + bb = :bb" & vbCrLf & ": + ) = :)" & vbCrLf & ": + ( = :("
         End Sub
 
-        Private Sub fctb_TextChanged(sender As Object, e As TextChangedEventArgs)
+        Private Sub fctb_TextChanged(sender As Object, arg As EventArgs)
+            Dim e = CType(arg, TextChangedEventArgs)
             e.ChangedRange.ClearStyle(StyleIndex.All)
             For Each key As String In Me.style.ImagesByText.Keys
                 Dim pattern As String = Regex.Replace(key, GifImageDrawingSample.RegexSpecSymbolsPattern, "\$0")
@@ -59,7 +60,7 @@ Namespace TesterVB
             Me.fctb.Size = New Size(314, 262)
             Me.fctb.TabIndex = 1
             Me.fctb.WordWrap = True
-            AddHandler Me.fctb.TextChanged, New EventHandler(Of TextChangedEventArgs)(AddressOf Me.fctb_TextChanged)
+            AddHandler Me.fctb.TextChanged, New EventHandler(AddressOf Me.fctb_TextChanged)
             MyBase.AutoScaleDimensions = New SizeF(6.0F, 13.0F)
             MyBase.AutoScaleMode = AutoScaleMode.Font
             MyBase.ClientSize = New Size(314, 262)

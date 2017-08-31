@@ -79,7 +79,7 @@
     "li class=\\\"heading\\\">Quick Answers</li>\r\n<li><a href=\\\"/Questions/ask.aspx\\\">Ask" +
     " a Question</a></li>\r\n";
             this.fctb.Zoom = 100;
-            this.fctb.TextChanged += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.fctb_TextChanged);
+            this.fctb.TextChanged += new System.EventHandler(this.fctb_TextChanged);
             // 
             // SimplestSyntaxHighlightingSample
             // 

@@ -30,7 +30,7 @@ namespace FastColoredTextBoxNS
                 Clear();
         }
 
-        protected virtual void OnTextBoxTextChanged(object sender, TextChangedEventArgs e)
+        protected virtual void OnTextBoxTextChanged(object sender, EventArgs e)
         {
             Clear();
         }

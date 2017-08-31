@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 using FastColoredTextBoxNS;
 using System.Text.RegularExpressions;
@@ -15,8 +16,9 @@ namespace Tester
             InitializeComponent();
         }
 
-        private void fctb_TextChanged(object sender, TextChangedEventArgs e)
+        private void fctb_TextChanged(object sender, EventArgs arg)
         {
+            var e = (TextChangedEventArgs)arg;
             //clear old styles of chars
             e.ChangedRange.ClearStyle(ellipseStyle);
             //append style for word 'Babylon'

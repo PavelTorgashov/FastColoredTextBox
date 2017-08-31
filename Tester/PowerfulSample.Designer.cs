@@ -473,7 +473,7 @@ namespace Tester
             this.fctb.TabIndex = 3;
             this.fctb.Text = resources.GetString("fctb.Text");
             this.fctb.Zoom = 100;
-            this.fctb.TextChanged += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.fctb_TextChanged);
+            this.fctb.TextChanged += new System.EventHandler(this.fctb_TextChanged);
             this.fctb.SelectionChangedDelayed += new System.EventHandler(this.fctb_SelectionChangedDelayed);
             this.fctb.AutoIndentNeeded += new System.EventHandler<FastColoredTextBoxNS.AutoIndentEventArgs>(this.fctb_AutoIndentNeeded);
             this.fctb.CustomAction += new System.EventHandler<FastColoredTextBoxNS.CustomActionEventArgs>(this.fctb_CustomAction);

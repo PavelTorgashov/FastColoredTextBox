@@ -67,7 +67,7 @@
     "+ ) = 8)\r\n: + bb = :bb\r\n: + ) = :)\r\n: + ( = :(\r\n";
             this.fctb.WordWrap = true;
             this.fctb.Zoom = 100;
-            this.fctb.TextChanged += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.fctb_TextChanged);
+            this.fctb.TextChanged += new System.EventHandler(this.fctb_TextChanged);
             // 
             // GifImageDrawingSample
             // 

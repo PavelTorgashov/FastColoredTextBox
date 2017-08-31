@@ -39,8 +39,9 @@ namespace Tester
             fctb.AddStyle(SameWordsStyle);
         }
         
-        private void fctb_TextChanged(object sender, TextChangedEventArgs e)
+        private void fctb_TextChanged(object sender, EventArgs arg)
         {
+            var e = (TextChangedEventArgs)arg;
             switch (lang)
             {
                 case "CSharp (custom highlighter)":

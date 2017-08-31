@@ -35,8 +35,9 @@ namespace Tester
             fctb.OnTextChanged();
         }
 
-        private void fctb_TextChanged(object sender, FastColoredTextBoxNS.TextChangedEventArgs e)
+        private void fctb_TextChanged(object sender, EventArgs arg)
         {
+            var e = (TextChangedEventArgs)arg;
             if (style == null) return;
             e.ChangedRange.ClearStyle(StyleIndex.All);
             foreach (var key in style.ImagesByText.Keys)
