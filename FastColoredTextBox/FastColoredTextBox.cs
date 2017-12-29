@@ -4814,7 +4814,7 @@ namespace FastColoredTextBoxNS
 
         protected override bool IsInputKey(Keys keyData)
         {
-            if (keyData == Keys.Tab && !AcceptsTab)
+            if (keyData == Keys.Tab || keyData == (Keys.Shift | Keys.Tab) && !AcceptsTab)
                 return false;
             if (keyData == Keys.Enter && !AcceptsReturn)
                 return false;
