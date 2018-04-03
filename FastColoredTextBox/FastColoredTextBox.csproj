@@ -74,6 +74,14 @@
     </Compile>
     <Compile Include="LinesAccessor.cs" />
     <Compile Include="MacrosManager.cs" />
+    <Compile Include="Models\Traits\CSharp.cs" />
+    <Compile Include="Models\Traits\HTML.cs" />
+    <Compile Include="Models\Traits\JavaScript.cs" />
+    <Compile Include="Models\Traits\Lua.cs" />
+    <Compile Include="Models\Traits\PHP.cs" />
+    <Compile Include="Models\Traits\SQL.cs" />
+    <Compile Include="Models\Traits\VisualBasic.cs" />
+    <Compile Include="Models\Traits\XML.cs" />
     <Compile Include="PlatformType.cs" />
     <Compile Include="Hotkeys.cs" />
     <Compile Include="Ruler.cs">
