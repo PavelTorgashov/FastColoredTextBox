@@ -59,11 +59,9 @@
             this.fctb.Font = new System.Drawing.Font("Consolas", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.fctb.ImeMode = System.Windows.Forms.ImeMode.On;
             this.fctb.IsReplaceMode = false;
-            this.fctb.LeftBracket = '(';
             this.fctb.Location = new System.Drawing.Point(0, 85);
             this.fctb.Name = "fctb";
             this.fctb.Paddings = new System.Windows.Forms.Padding(0);
-            this.fctb.RightBracket = ')';
             this.fctb.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.fctb.ShowLineNumbers = false;
             this.fctb.Size = new System.Drawing.Size(417, 217);

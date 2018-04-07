@@ -20,7 +20,6 @@ namespace Tester
         {
             if(cbAutoIndentType.SelectedIndex == 0)//built-in C# AutoIndent
             {
-                fctb.Language = Language.CSharp;
                 fctb.AutoIndentNeeded -= new EventHandler<AutoIndentEventArgs>(fctb_AutoIndentNeeded);
                 fctb.Text = @"/// Please, type next text (without slashes):
 /// int Foo()
@@ -44,7 +43,7 @@ namespace Tester
 
             if(cbAutoIndentType.SelectedIndex == 1)//custom AutoIndent
             {
-                fctb.Language = Language.Custom;
+                fctb.LanguageEnum = Language.Custom;
                 fctb.AutoIndentNeeded += new EventHandler<AutoIndentEventArgs>(fctb_AutoIndentNeeded);
                 fctb.Text = @"/// Please, type next text (without slashes):
 /// begin

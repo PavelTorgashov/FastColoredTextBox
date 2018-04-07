@@ -95,13 +95,11 @@
             this.fctb.Dock = System.Windows.Forms.DockStyle.Fill;
             this.fctb.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.fctb.IsReplaceMode = false;
-            this.fctb.Language = FastColoredTextBoxNS.Language.CSharp;
-            this.fctb.LeftBracket = '(';
+            this.fctb.LanguageEnum = FastColoredTextBoxNS.Language.CSharp;
             this.fctb.LeftPadding = 17;
             this.fctb.Location = new System.Drawing.Point(0, 63);
             this.fctb.Name = "fctb";
             this.fctb.Paddings = new System.Windows.Forms.Padding(0);
-            this.fctb.RightBracket = ')';
             this.fctb.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.fctb.Size = new System.Drawing.Size(487, 235);
             this.fctb.TabIndex = 0;

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Text;
-using System.Drawing;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 
@@ -829,6 +828,7 @@ namespace FastColoredTextBoxNS
         /// <param name="finishFoldingPattern">Pattern for finish folding line</param>
         public void SetFoldingMarkers(string startFoldingPattern, string finishFoldingPattern)
         {
+            // TODO: Ezt valszeg lehet majd törölni
             SetFoldingMarkers(startFoldingPattern, finishFoldingPattern, SyntaxHighlighter.RegexCompiledOption);
         }
 
@@ -837,6 +837,7 @@ namespace FastColoredTextBoxNS
         /// </summary>
         /// <param name="startFoldingPattern">Pattern for start folding line</param>
         /// <param name="finishFoldingPattern">Pattern for finish folding line</param>
+        /// <param name="options">
         public void SetFoldingMarkers(string startFoldingPattern, string finishFoldingPattern, RegexOptions options)
         {
             if (startFoldingPattern == finishFoldingPattern)
@@ -958,6 +959,7 @@ namespace FastColoredTextBoxNS
         /// This method requires less memory than GetRanges().
         /// </summary>
         /// <param name="regexPattern">Regex pattern</param>
+        /// <param name="options">Regex options</param>
         /// <returns>Enumeration of ranges</returns>
         public IEnumerable<Range> GetRangesByLinesReversed(string regexPattern, RegexOptions options)
         {

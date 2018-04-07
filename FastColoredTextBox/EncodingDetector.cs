@@ -70,36 +70,41 @@ namespace FastColoredTextBoxNS
             if (BOMBytes.Length < 2)
                 return null;
 
-            if (BOMBytes[0] == 0xff
-                && BOMBytes[1] == 0xfe
-                && (BOMBytes.Length < 4
-                    || BOMBytes[2] != 0
-                    || BOMBytes[3] != 0
-                    )
-                )
+            if (BOMBytes[0] == 0xff &&
+		BOMBytes[1] == 0xfe &&
+		(BOMBytes.Length < 4 || BOMBytes[2] != 0 || BOMBytes[3] != 0))
                 return Encoding.Unicode;
 
-            if (BOMBytes[0] == 0xfe
-                && BOMBytes[1] == 0xff
-                )
+            if (BOMBytes[0] == 0xfe &&
+		BOMBytes[1] == 0xff)
                 return Encoding.BigEndianUnicode;
 
             if (BOMBytes.Length < 3)
                 return null;
 
-            if (BOMBytes[0] == 0xef && BOMBytes[1] == 0xbb && BOMBytes[2] == 0xbf)
+            if (BOMBytes[0] == 0xef &&
+		BOMBytes[1] == 0xbb &&
+		BOMBytes[2] == 0xbf)
                 return Encoding.UTF8;
 
-            if (BOMBytes[0] == 0x2b && BOMBytes[1] == 0x2f && BOMBytes[2] == 0x76)
+            if (BOMBytes[0] == 0x2b &&
+		BOMBytes[1] == 0x2f &&
+		BOMBytes[2] == 0x76)
                 return Encoding.UTF7;
 
             if (BOMBytes.Length < 4)
                 return null;
 
-            if (BOMBytes[0] == 0xff && BOMBytes[1] == 0xfe && BOMBytes[2] == 0 && BOMBytes[3] == 0)
+            if (BOMBytes[0] == 0xff &&
+		BOMBytes[1] == 0xfe &&
+		BOMBytes[2] == 0 &&
+		BOMBytes[3] == 0)
                 return Encoding.UTF32;
 
-            if (BOMBytes[0] == 0 && BOMBytes[1] == 0 && BOMBytes[2] == 0xfe && BOMBytes[3] == 0xff)
+            if (BOMBytes[0] == 0 &&
+		BOMBytes[1] == 0 &&
+		BOMBytes[2] == 0xfe &&
+		BOMBytes[3] == 0xff)
                 return Encoding.GetEncoding(12001);
 
             return null;

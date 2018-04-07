@@ -49,6 +49,9 @@ ipch/
 *.vsp
 *.vspx
 
+# Visual Studio 2015/2017 cache/options directory
+.vs/
+
 # Guidance Automation Toolkit
 *.gpState
 

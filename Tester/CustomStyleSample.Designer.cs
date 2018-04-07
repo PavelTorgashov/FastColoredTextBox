@@ -56,14 +56,12 @@
             this.fctb.Dock = System.Windows.Forms.DockStyle.Fill;
             this.fctb.Font = new System.Drawing.Font("Consolas", 9.75F);
             this.fctb.IsReplaceMode = false;
-            this.fctb.LeftBracket = '(';
             this.fctb.LeftPadding = 3;
             this.fctb.Location = new System.Drawing.Point(0, 39);
             this.fctb.Name = "fctb";
             this.fctb.PaddingBackColor = System.Drawing.Color.WhiteSmoke;
             this.fctb.Paddings = new System.Windows.Forms.Padding(15);
             this.fctb.PreferredLineWidth = 80;
-            this.fctb.RightBracket = ')';
             this.fctb.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.fctb.ShowLineNumbers = false;
             this.fctb.Size = new System.Drawing.Size(600, 266);

@@ -22,7 +22,8 @@
     <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\FastColoredTextBox.XML</DocumentationFile>
+    <DocumentationFile>bin\Debug\FastColoredTextBox.xml</DocumentationFile>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -48,32 +49,41 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AutocompleteItem.cs" />
-    <Compile Include="AutocompleteMenu.cs">
+    <Compile Include="Views\AutocompleteMenu.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Bookmarks.cs" />
-    <Compile Include="Char.cs" />
+    <Compile Include="Models\Char.cs" />
+    <Compile Include="Controllers\IXmlDocParser.cs" />
+    <Compile Include="Controllers\XmlDocParser.cs" />
     <Compile Include="DocumentMap.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="EncodingDetector.cs" />
     <Compile Include="ExportToHTML.cs" />
     <Compile Include="ExportToRTF.cs" />
-    <Compile Include="GoToForm.cs">
+    <Compile Include="Views\Forms\GoToForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GoToForm.Designer.cs">
+    <Compile Include="Views\Forms\GoToForm.Designer.cs">
       <DependentUpon>GoToForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Hints.cs" />
-    <Compile Include="HotkeysEditorForm.cs">
+    <Compile Include="Views\Forms\HotkeysEditorForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="HotkeysEditorForm.Designer.cs">
+    <Compile Include="Views\Forms\HotkeysEditorForm.Designer.cs">
       <DependentUpon>HotkeysEditorForm.cs</DependentUpon>
     </Compile>
     <Compile Include="LinesAccessor.cs" />
     <Compile Include="MacrosManager.cs" />
+    <Compile Include="Models\Syntaxes\Bracket.cs" />
+    <Compile Include="Models\Syntaxes\CustomSyntax.cs" />
+    <Compile Include="Models\Syntaxes\ILanguage.cs" />
+    <Compile Include="Models\Syntaxes\ISyntax.cs" />
+    <Compile Include="Models\Syntaxes\LuaSyntax.cs" />
+    <Compile Include="Models\Syntaxes\Marker.cs" />
+    <Compile Include="Models\Syntaxes\Rule.cs" />
     <Compile Include="PlatformType.cs" />
     <Compile Include="Hotkeys.cs" />
     <Compile Include="Ruler.cs">
@@ -82,23 +92,24 @@
     <Compile Include="Ruler.Designer.cs">
       <DependentUpon>Ruler.cs</DependentUpon>
     </Compile>
-    <Compile Include="SyntaxDescriptor.cs" />
+    <Compile Include="StaticResources\Styles.cs" />
+    <Compile Include="Models\SyntaxDescriptor.cs" />
     <Compile Include="SyntaxHighlighter.cs" />
-    <Compile Include="ReplaceForm.cs">
+    <Compile Include="Views\Forms\ReplaceForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ReplaceForm.Designer.cs">
+    <Compile Include="Views\Forms\ReplaceForm.Designer.cs">
       <DependentUpon>ReplaceForm.cs</DependentUpon>
     </Compile>
     <Compile Include="FastColoredTextBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="CommandManager.cs" />
-    <Compile Include="Commands.cs" />
-    <Compile Include="FindForm.cs">
+    <Compile Include="Commands\CommandManager.cs" />
+    <Compile Include="Commands\Commands.cs" />
+    <Compile Include="Views\Forms\FindForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FindForm.Designer.cs">
+    <Compile Include="Views\Forms\FindForm.Designer.cs">
       <DependentUpon>FindForm.cs</DependentUpon>
     </Compile>
     <Compile Include="LimitedStack.cs" />
@@ -119,16 +130,16 @@
     <EmbeddedResource Include="FastColoredTextBox.resx">
       <DependentUpon>FastColoredTextBox.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FindForm.resx">
+    <EmbeddedResource Include="Views\Forms\FindForm.resx">
       <DependentUpon>FindForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GoToForm.resx">
+    <EmbeddedResource Include="Views\Forms\GoToForm.resx">
       <DependentUpon>GoToForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="HotkeysEditorForm.resx">
+    <EmbeddedResource Include="Views\Forms\HotkeysEditorForm.resx">
       <DependentUpon>HotkeysEditorForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ReplaceForm.resx">
+    <EmbeddedResource Include="Views\Forms\ReplaceForm.resx">
       <DependentUpon>ReplaceForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>

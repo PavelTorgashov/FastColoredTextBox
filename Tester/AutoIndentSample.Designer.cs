@@ -61,12 +61,10 @@
             this.fctb.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.fctb.Dock = System.Windows.Forms.DockStyle.Fill;
             this.fctb.Font = new System.Drawing.Font("Consolas", 9.75F);
-            this.fctb.Language = FastColoredTextBoxNS.Language.CSharp;
-            this.fctb.LeftBracket = '(';
+            this.fctb.LanguageEnum = FastColoredTextBoxNS.Language.CSharp;
             this.fctb.Location = new System.Drawing.Point(0, 75);
             this.fctb.Name = "fctb";
             this.fctb.Paddings = new System.Windows.Forms.Padding(0);
-            this.fctb.RightBracket = ')';
             this.fctb.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.fctb.Size = new System.Drawing.Size(490, 278);
             this.fctb.TabIndex = 3;

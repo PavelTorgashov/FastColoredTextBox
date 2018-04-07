@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Drawing.Drawing2D;
-using System.Threading;
 using System.Windows.Forms;
 using System.Drawing;
 using FastColoredTextBoxNS;
-using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.IO;
 using System.Linq;
-using System.Collections.Generic;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
+using FastColoredTextBoxNS.Models.Syntaxes;
 
 namespace Tester
 {
@@ -31,29 +26,21 @@ namespace Tester
         public PowerfulSample()
         {
             InitializeComponent();
-        }
+			
+			fctb.Language = new LuaSyntax();
+		}
 
         private void InitStylesPriority()
-        {           
+        {
             //add this style explicitly for drawing under other styles
             fctb.AddStyle(SameWordsStyle);
         }
         
         private void fctb_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            switch (lang)
-            {
-                case "CSharp (custom highlighter)":
-                    //For sample, we will highlight the syntax of C# manually, although could use built-in highlighter
-                    CSharpSyntaxHighlight(e);//custom highlighting
-                    break;
-                default:
-                    break;//for highlighting of other languages, we using built-in FastColoredTextBox highlighter
-            }
-
+		{
             if (fctb.Text.Trim().StartsWith("<?xml"))
             {
-                fctb.Language = Language.XML;
+                fctb.LanguageEnum = Language.XML;
 
                 fctb.ClearStylesBuffer();
                 fctb.Range.ClearStyle(StyleIndex.All);
@@ -62,39 +49,6 @@ namespace Tester
 
                 fctb.OnSyntaxHighlight(new TextChangedEventArgs(fctb.Range));
             }
-        }   
-
-        private void CSharpSyntaxHighlight(TextChangedEventArgs e)
-        {
-            fctb.LeftBracket = '(';
-            fctb.RightBracket = ')';
-            fctb.LeftBracket2 = '\x0';
-            fctb.RightBracket2 = '\x0';
-            //clear style of changed range
-            e.ChangedRange.ClearStyle(BlueStyle, BoldStyle, GrayStyle, MagentaStyle, GreenStyle, BrownStyle);
-
-            //string highlighting
-            e.ChangedRange.SetStyle(BrownStyle, @"""""|@""""|''|@"".*?""|(?<!@)(?<range>"".*?[^\\]"")|'.*?[^\\]'");
-            //comment highlighting
-            e.ChangedRange.SetStyle(GreenStyle, @"//.*$", RegexOptions.Multiline);
-            e.ChangedRange.SetStyle(GreenStyle, @"(/\*.*?\*/)|(/\*.*)", RegexOptions.Singleline);
-            e.ChangedRange.SetStyle(GreenStyle, @"(/\*.*?\*/)|(.*\*/)", RegexOptions.Singleline|RegexOptions.RightToLeft);
-            //number highlighting
-            e.ChangedRange.SetStyle(MagentaStyle, @"\b\d+[\.]?\d*([eE]\-?\d+)?[lLdDfF]?\b|\b0x[a-fA-F\d]+\b");
-            //attribute highlighting
-            e.ChangedRange.SetStyle(GrayStyle, @"^\s*(?<range>\[.+?\])\s*$", RegexOptions.Multiline);
-            //class name highlighting
-            e.ChangedRange.SetStyle(BoldStyle, @"\b(class|struct|enum|interface)\s+(?<range>\w+?)\b");
-            //keyword highlighting
-            e.ChangedRange.SetStyle(BlueStyle, @"\b(abstract|as|base|bool|break|byte|case|catch|char|checked|class|const|continue|decimal|default|delegate|do|double|else|enum|event|explicit|extern|false|finally|fixed|float|for|foreach|goto|if|implicit|in|int|interface|internal|is|lock|long|namespace|new|null|object|operator|out|override|params|private|protected|public|readonly|ref|return|sbyte|sealed|short|sizeof|stackalloc|static|string|struct|switch|this|throw|true|try|typeof|uint|ulong|unchecked|unsafe|ushort|using|virtual|void|volatile|while|add|alias|ascending|descending|dynamic|from|get|global|group|into|join|let|orderby|partial|remove|select|set|value|var|where|yield)\b|#region\b|#endregion\b");
-
-            //clear folding markers
-            e.ChangedRange.ClearFoldingMarkers();
-
-            //set folding markers
-            e.ChangedRange.SetFoldingMarkers("{", "}");//allow to collapse brackets block
-            e.ChangedRange.SetFoldingMarkers(@"#region\b", @"#endregion\b");//allow to collapse #region blocks
-            e.ChangedRange.SetFoldingMarkers(@"/\*", @"\*/");//allow to collapse comment block
         }
 
         private void findToolStripMenuItem_Click(object sender, EventArgs e)
@@ -126,20 +80,14 @@ namespace Tester
             {
                 //For example, we will highlight the syntax of C# manually, although could use built-in highlighter
                 case "CSharp (custom highlighter)":
-                    fctb.Language = Language.Custom;
+                    fctb.LanguageEnum = Language.Custom;
                     fctb.CommentPrefix = "//";
                     fctb.AutoIndentNeeded += fctb_AutoIndentNeeded;
                     //call OnTextChanged for refresh syntax highlighting
                     fctb.OnTextChanged();
                     break;
-                case "CSharp (built-in highlighter)": fctb.Language = Language.CSharp; break;
-                case "VB": fctb.Language = Language.VB; break;
-                case "HTML": fctb.Language = Language.HTML; break;
-                case "XML": fctb.Language = Language.XML; break;
-                case "SQL": fctb.Language = Language.SQL; break;
-                case "PHP": fctb.Language = Language.PHP; break;
-                case "JS": fctb.Language = Language.JS; break;
-                case "Lua": fctb.Language = Language.Lua; break;
+                case "Lua":
+					break;
             }
             fctb.OnSyntaxHighlight(new TextChangedEventArgs(fctb.Range));
             miChangeColors.Enabled = lang != "CSharp (custom highlighter)";
@@ -152,25 +100,29 @@ namespace Tester
 
         private void collapseAllregionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //this example shows how to collapse all #region blocks (C#)
-            if (!lang.StartsWith("CSharp")) return;
+            //this example shows how to collapse all #region blocks
             for (int iLine = 0; iLine < fctb.LinesCount; iLine++)
             {
-                if (fctb[iLine].FoldingStartMarker == @"#region\b")//marker @"#region\b" was used in SetFoldingMarkers()
-                    fctb.CollapseFoldingBlock(iLine);
+				foreach (var foldingMarker in fctb.Language.FoldingMarkers)
+				{
+					if (fctb[iLine].FoldingStartMarker == foldingMarker.EndMarker)
+						fctb.CollapseFoldingBlock(iLine);
+				}
             }
         }
 
         private void exapndAllregionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            //this example shows how to expand all #region blocks (C#)
-            if (!lang.StartsWith("CSharp")) return;
-            for (int iLine = 0; iLine < fctb.LinesCount; iLine++)
-            {
-                if (fctb[iLine].FoldingStartMarker == @"#region\b")//marker @"#region\b" was used in SetFoldingMarkers()
-                    fctb.ExpandFoldedBlock(iLine);
-            }
-        }
+			//this example shows how to expand all #region blocks (C#)
+			for (int iLine = 0; iLine < fctb.LinesCount; iLine++)
+			{
+				foreach (var foldingMarker in fctb.Language.FoldingMarkers)
+				{
+					if (fctb[iLine].FoldingStartMarker == foldingMarker.EndMarker)
+						fctb.CollapseFoldingBlock(iLine);
+				}
+			}
+		}
 
         private void increaseIndentSiftTabToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -350,16 +302,18 @@ namespace Tester
 
         private void miChangeColors_Click(object sender, EventArgs e)
         {
-            var styles = new Style[] { fctb.SyntaxHighlighter.BlueBoldStyle, fctb.SyntaxHighlighter.BlueStyle, fctb.SyntaxHighlighter.BoldStyle, fctb.SyntaxHighlighter.BrownStyle, fctb.SyntaxHighlighter.GrayStyle, fctb.SyntaxHighlighter.GreenStyle, fctb.SyntaxHighlighter.MagentaStyle, fctb.SyntaxHighlighter.MaroonStyle, fctb.SyntaxHighlighter.RedStyle };
-            fctb.SyntaxHighlighter.AttributeStyle = styles[rnd.Next(styles.Length)];
-            fctb.SyntaxHighlighter.ClassNameStyle = styles[rnd.Next(styles.Length)];
-            fctb.SyntaxHighlighter.CommentStyle = styles[rnd.Next(styles.Length)];
-            fctb.SyntaxHighlighter.CommentTagStyle = styles[rnd.Next(styles.Length)];
-            fctb.SyntaxHighlighter.KeywordStyle = styles[rnd.Next(styles.Length)];
-            fctb.SyntaxHighlighter.NumberStyle = styles[rnd.Next(styles.Length)];
-            fctb.SyntaxHighlighter.StringStyle = styles[rnd.Next(styles.Length)];
+            MessageBox.Show("Function commented out right now");
 
-            fctb.OnSyntaxHighlight(new TextChangedEventArgs(fctb.Range));
+            //var styles = new Style[] { Styles.BlueBoldStyle, Styles.BlueStyle, Styles.BoldStyle, Styles.BrownStyle, Styles.GrayStyle, Styles.GreenStyle, Styles.MagentaStyle, Styles.MaroonStyle, Styles.RedStyle };
+            //fctb.SyntaxHighlighter.AttributeStyle = styles[rnd.Next(styles.Length)];
+            //fctb.SyntaxHighlighter.ClassNameStyle = styles[rnd.Next(styles.Length)];
+            //fctb.SyntaxHighlighter.CommentStyle = styles[rnd.Next(styles.Length)];
+            //fctb.SyntaxHighlighter.CommentTagStyle = styles[rnd.Next(styles.Length)];
+            //fctb.SyntaxHighlighter.KeywordStyle = styles[rnd.Next(styles.Length)];
+            //fctb.SyntaxHighlighter.NumberStyle = styles[rnd.Next(styles.Length)];
+            //fctb.SyntaxHighlighter.StringStyle = styles[rnd.Next(styles.Length)];
+
+            //fctb.OnSyntaxHighlight(new TextChangedEventArgs(fctb.Range));
         }
 
         private void setSelectedAsReadonlyToolStripMenuItem_Click(object sender, EventArgs e)
@@ -414,6 +368,5 @@ namespace Tester
         {
             fctb.RemoveLinePrefix(fctb.CommentPrefix);
         }
-
     }
 }
