@@ -1,28 +1,15 @@
-﻿using System;
+﻿using FastColoredTextBoxNS.Controllers;
+using FastColoredTextBoxNS.Models.Syntaxes;
+using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Globalization;
-using System.IO;
 using System.Text.RegularExpressions;
-using System.Xml;
 
 namespace FastColoredTextBoxNS
 {
     public partial class SyntaxHighlighter : IDisposable
     {
-        //styles
         protected static readonly Platform platformType = PlatformType.GetOperationSystemPlatform();
-        public readonly Style BlueBoldStyle = new TextStyle(Brushes.Blue, null, FontStyle.Bold);
-        public readonly Style BlueStyle = new TextStyle(Brushes.Blue, null, FontStyle.Regular);
-        public readonly Style BoldStyle = new TextStyle(null, null, FontStyle.Bold | FontStyle.Underline);
-        public readonly Style BrownStyle = new TextStyle(Brushes.Brown, null, FontStyle.Italic);
-        public readonly Style GrayStyle = new TextStyle(Brushes.Gray, null, FontStyle.Regular);
-        public readonly Style GreenStyle = new TextStyle(Brushes.Green, null, FontStyle.Italic);
-        public readonly Style MagentaStyle = new TextStyle(Brushes.Magenta, null, FontStyle.Regular);
-        public readonly Style MaroonStyle = new TextStyle(Brushes.Maroon, null, FontStyle.Regular);
-        public readonly Style RedStyle = new TextStyle(Brushes.Red, null, FontStyle.Regular);
-        public readonly Style BlackStyle = new TextStyle(Brushes.Black, null, FontStyle.Regular);
-        //
+
         protected readonly Dictionary<string, SyntaxDescriptor> descByXMLfileNames =
             new Dictionary<string, SyntaxDescriptor>();
 
@@ -58,93 +45,67 @@ namespace FastColoredTextBoxNS
         /// <summary>
         /// Highlights syntax for given language
         /// </summary>
-        public virtual void HighlightSyntax(Language language, Range range)
+        public virtual void HighlightSyntax(ILanguage language, Range range)
         {
-            switch (language)
-            {
-                case Language.CSharp:
-                    CSharpSyntaxHighlight(range);
-                    break;
-                case Language.VB:
-                    VBSyntaxHighlight(range);
-                    break;
-                case Language.HTML:
-                    HTMLSyntaxHighlight(range);
-                    break;
-                case Language.XML:
-                    XMLSyntaxHighlight(range);
-                    break;
-                case Language.SQL:
-                    SQLSyntaxHighlight(range);
-                    break;
-                case Language.PHP:
-                    PHPSyntaxHighlight(range);
-                    break;
-                case Language.JS:
-                    JScriptSyntaxHighlight(range);
-                    break;
-                case Language.Lua:
-                    LuaSyntaxHighlight(range);
-                    break;
-                default:
-                    break;
-            }
+            range.tb.BracketsHighlightStrategy = BracketsHighlightStrategy.Strategy2;
+            range.tb.AutoIndentCharsPatterns   = language.AutoIndentCharsPatterns;
+            
+            range.ClearStyle(language.GetStyles());
+
+            foreach (var rule in language.Rules)
+                range.SetStyle(rule.Style, rule.Regex);
+            
+            range.ClearFoldingMarkers();
+
+            foreach (var marker in language.FoldingMarkers)
+                range.SetFoldingMarkers(marker.StartMarker, marker.EndMarker, marker.RegexOption);
         }
 
         /// <summary>
         /// Highlights syntax for given XML description file
         /// </summary>
-        public virtual void HighlightSyntax(string XMLdescriptionFile, Range range)
+        public virtual void HighlightSyntax(string xmlDdescriptionFile, Range range)
         {
-            SyntaxDescriptor desc = null;
-            if (!descByXMLfileNames.TryGetValue(XMLdescriptionFile, out desc))
-            {
-                var doc = new XmlDocument();
-                string file = XMLdescriptionFile;
-                if (!File.Exists(file))
-                    file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Path.GetFileName(file));
+            var customxmlParser  = new XmlDocParser(xmlDdescriptionFile);
+            var xmlDoc           = customxmlParser.LoadSyntaxFile();
+            var syntaxDescriptor = customxmlParser.ConvertXmlDocumet(xmlDoc);
 
-                doc.LoadXml(File.ReadAllText(file));
-                desc = ParseXmlDescription(doc);
-                descByXMLfileNames[XMLdescriptionFile] = desc;
-            }
+            HighlightSyntax(syntaxDescriptor, range);
+        }
+        
+        public void HighlightSyntax(SyntaxDescriptor desc, Range range)
+        {
+            range.tb.ClearStylesBuffer();
+            
+            int l = desc.styles.Count;
+            for (int i = 0; i < resilientStyles.Count; i++)
+                range.tb.Styles[l + i] = resilientStyles[i];
 
-            HighlightSyntax(desc, range);
+            char[] oldBrackets = RememberBrackets(range.tb);
+
+            range.tb.Language.LeftBracket = desc.LeftBracket;
+            range.tb.Language.RightBracket = desc.RightBracket;
+            range.tb.Language.LeftBracket2 = desc.LeftBracket2;
+            range.tb.Language.RightBracket2 = desc.RightBracket2;
+
+            range.ClearStyle(desc.styles.ToArray());
+
+            foreach (RuleDesc rule in desc.rules)
+                range.SetStyle(rule.style, rule.Regex);
+
+            range.ClearFoldingMarkers();
+
+            foreach (FoldingDesc folding in desc.foldings)
+                range.SetFoldingMarkers(folding.startMarkerRegex, folding.finishMarkerRegex, folding.options);
+
+            RestoreBrackets(range.tb, oldBrackets);
         }
 
         public virtual void AutoIndentNeeded(object sender, AutoIndentEventArgs args)
         {
             var tb = (sender as FastColoredTextBox);
-            Language language = tb.Language;
-            switch (language)
-            {
-                case Language.CSharp:
-                    CSharpAutoIndentNeeded(sender, args);
-                    break;
-                case Language.VB:
-                    VBAutoIndentNeeded(sender, args);
-                    break;
-                case Language.HTML:
-                    HTMLAutoIndentNeeded(sender, args);
-                    break;
-                case Language.XML:
-                    XMLAutoIndentNeeded(sender, args);
-                    break;
-                case Language.SQL:
-                    SQLAutoIndentNeeded(sender, args);
-                    break;
-                case Language.PHP:
-                    PHPAutoIndentNeeded(sender, args);
-                    break;
-                case Language.JS:
-                    CSharpAutoIndentNeeded(sender, args);
-                    break; //JS like C#
-                case Language.Lua:
-                    LuaAutoIndentNeeded(sender, args);
-                    break;
-                default:
-                    break;
-            }
+            
+            tb.Language.AutoIndentNeeded(args);
         }
 
         /// <summary>
@@ -161,230 +122,89 @@ namespace FastColoredTextBoxNS
             resilientStyles.Add(style);
         }
 
-        protected static FoldingDesc ParseFolding(XmlNode foldingNode)
-        {
-            var folding = new FoldingDesc();
-            //regex
-            folding.startMarkerRegex = foldingNode.Attributes["start"].Value;
-            folding.finishMarkerRegex = foldingNode.Attributes["finish"].Value;
-            //options
-            XmlAttribute optionsA = foldingNode.Attributes["options"];
-            if (optionsA != null)
-                folding.options = (RegexOptions)Enum.Parse(typeof(RegexOptions), optionsA.Value);
-
-            return folding;
-        }
-
-        protected static RuleDesc ParseRule(XmlNode ruleNode, Dictionary<string, Style> styles)
-        {
-            var rule = new RuleDesc();
-            rule.pattern = ruleNode.InnerText;
-            //
-            XmlAttribute styleA = ruleNode.Attributes["style"];
-            XmlAttribute optionsA = ruleNode.Attributes["options"];
-            //Style
-            if (styleA == null)
-                throw new Exception("Rule must contain style name.");
-            if (!styles.ContainsKey(styleA.Value))
-                throw new Exception("Style '" + styleA.Value + "' is not found.");
-            rule.style = styles[styleA.Value];
-            //options
-            if (optionsA != null)
-                rule.options = (RegexOptions)Enum.Parse(typeof(RegexOptions), optionsA.Value);
-
-            return rule;
-        }
-
-        protected static Style ParseStyle(XmlNode styleNode)
-        {
-            XmlAttribute typeA = styleNode.Attributes["type"];
-            XmlAttribute colorA = styleNode.Attributes["color"];
-            XmlAttribute backColorA = styleNode.Attributes["backColor"];
-            XmlAttribute fontStyleA = styleNode.Attributes["fontStyle"];
-            XmlAttribute nameA = styleNode.Attributes["name"];
-            //colors
-            SolidBrush foreBrush = null;
-            if (colorA != null)
-                foreBrush = new SolidBrush(ParseColor(colorA.Value));
-            SolidBrush backBrush = null;
-            if (backColorA != null)
-                backBrush = new SolidBrush(ParseColor(backColorA.Value));
-            //fontStyle
-            FontStyle fontStyle = FontStyle.Regular;
-            if (fontStyleA != null)
-                fontStyle = (FontStyle)Enum.Parse(typeof(FontStyle), fontStyleA.Value);
-
-            return new TextStyle(foreBrush, backBrush, fontStyle);
-        }
-
-        protected static Color ParseColor(string s)
-        {
-            if (s.StartsWith("#"))
-            {
-                if (s.Length <= 7)
-                    return Color.FromArgb(255,
-                                          Color.FromArgb(Int32.Parse(s.Substring(1), NumberStyles.AllowHexSpecifier)));
-                else
-                    return Color.FromArgb(Int32.Parse(s.Substring(1), NumberStyles.AllowHexSpecifier));
-            }
-            else
-                return Color.FromName(s);
-        }
-
-        public void HighlightSyntax(SyntaxDescriptor desc, Range range)
-        {
-            //set style order
-            range.tb.ClearStylesBuffer();
-            for (int i = 0; i < desc.styles.Count; i++)
-                range.tb.Styles[i] = desc.styles[i];
-            // add resilient styles
-            int l = desc.styles.Count;
-            for (int i = 0; i < resilientStyles.Count; i++)
-                range.tb.Styles[l + i] = resilientStyles[i];
-            //brackets
-            char[] oldBrackets = RememberBrackets(range.tb);
-            range.tb.LeftBracket = desc.leftBracket;
-            range.tb.RightBracket = desc.rightBracket;
-            range.tb.LeftBracket2 = desc.leftBracket2;
-            range.tb.RightBracket2 = desc.rightBracket2;
-            //clear styles of range
-            range.ClearStyle(desc.styles.ToArray());
-            //highlight syntax
-            foreach (RuleDesc rule in desc.rules)
-                range.SetStyle(rule.style, rule.Regex);
-            //clear folding
-            range.ClearFoldingMarkers();
-            //folding markers
-            foreach (FoldingDesc folding in desc.foldings)
-                range.SetFoldingMarkers(folding.startMarkerRegex, folding.finishMarkerRegex, folding.options);
-
-            //
-            RestoreBrackets(range.tb, oldBrackets);
-        }
-
         protected void RestoreBrackets(FastColoredTextBox tb, char[] oldBrackets)
         {
-            tb.LeftBracket = oldBrackets[0];
-            tb.RightBracket = oldBrackets[1];
-            tb.LeftBracket2 = oldBrackets[2];
-            tb.RightBracket2 = oldBrackets[3];
+            tb.Language.LeftBracket   = oldBrackets[0];
+            tb.Language.RightBracket  = oldBrackets[1];
+            tb.Language.LeftBracket2  = oldBrackets[2];
+            tb.Language.RightBracket2 = oldBrackets[3];
         }
 
         protected char[] RememberBrackets(FastColoredTextBox tb)
         {
-            return new[] { tb.LeftBracket, tb.RightBracket, tb.LeftBracket2, tb.RightBracket2 };
+            return new[]
+            {
+                tb.Language.LeftBracket,
+                tb.Language.RightBracket,
+                tb.Language.LeftBracket2,
+                tb.Language.RightBracket2
+            };
         }
 
         public void InitStyleSchema(Language lang)
         {
-            switch (lang)
-            {
-                case Language.CSharp:
-                    StringStyle = BrownStyle;
-                    CommentStyle = GreenStyle;
-                    NumberStyle = MagentaStyle;
-                    AttributeStyle = GreenStyle;
-                    ClassNameStyle = BoldStyle;
-                    KeywordStyle = BlueStyle;
-                    CommentTagStyle = GrayStyle;
-                    break;
-                case Language.VB:
-                    StringStyle = BrownStyle;
-                    CommentStyle = GreenStyle;
-                    NumberStyle = MagentaStyle;
-                    ClassNameStyle = BoldStyle;
-                    KeywordStyle = BlueStyle;
-                    break;
-                case Language.HTML:
-                    CommentStyle = GreenStyle;
-                    TagBracketStyle = BlueStyle;
-                    TagNameStyle = MaroonStyle;
-                    AttributeStyle = RedStyle;
-                    AttributeValueStyle = BlueStyle;
-                    HtmlEntityStyle = RedStyle;
-                    break;
-                case Language.XML:
-                    CommentStyle = GreenStyle;
-                    XmlTagBracketStyle = BlueStyle;
-                    XmlTagNameStyle = MaroonStyle;
-                    XmlAttributeStyle = RedStyle;
-                    XmlAttributeValueStyle = BlueStyle;
-                    XmlEntityStyle = RedStyle;
-                    XmlCDataStyle = BlackStyle;
-                    break;
-                case Language.JS:
-                    StringStyle = BrownStyle;
-                    CommentStyle = GreenStyle;
-                    NumberStyle = MagentaStyle;
-                    KeywordStyle = BlueStyle;
-                    break;
-                case Language.Lua:
-                    StringStyle = BrownStyle;
-                    CommentStyle = GreenStyle;
-                    NumberStyle = MagentaStyle;
-                    KeywordStyle = BlueBoldStyle;
-                    FunctionsStyle = MaroonStyle;
-                    break;
-                case Language.PHP:
-                    StringStyle = RedStyle;
-                    CommentStyle = GreenStyle;
-                    NumberStyle = RedStyle;
-                    VariableStyle = MaroonStyle;
-                    KeywordStyle = MagentaStyle;
-                    KeywordStyle2 = BlueStyle;
-                    KeywordStyle3 = GrayStyle;
-                    break;
-                case Language.SQL:
-                    StringStyle = RedStyle;
-                    CommentStyle = GreenStyle;
-                    NumberStyle = MagentaStyle;
-                    KeywordStyle = BlueBoldStyle;
-                    StatementsStyle = BlueBoldStyle;
-                    FunctionsStyle = MaroonStyle;
-                    VariableStyle = MaroonStyle;
-                    TypesStyle = BrownStyle;
-                    break;
-            }
+            //switch (lang)
+            //{
+            //    case Language.CSharp:
+            //        StringStyle = BrownStyle;
+            //        CommentStyle = GreenStyle;
+            //        NumberStyle = MagentaStyle;
+            //        AttributeStyle = GreenStyle;
+            //        ClassNameStyle = BoldStyle;
+            //        KeywordStyle = BlueStyle;
+            //        CommentTagStyle = GrayStyle;
+            //        break;
+            //    case Language.VB:
+            //        StringStyle = BrownStyle;
+            //        CommentStyle = GreenStyle;
+            //        NumberStyle = MagentaStyle;
+            //        ClassNameStyle = BoldStyle;
+            //        KeywordStyle = BlueStyle;
+            //        break;
+            //    case Language.HTML:
+            //        CommentStyle = GreenStyle;
+            //        TagBracketStyle = BlueStyle;
+            //        TagNameStyle = MaroonStyle;
+            //        AttributeStyle = RedStyle;
+            //        AttributeValueStyle = BlueStyle;
+            //        HtmlEntityStyle = RedStyle;
+            //        break;
+            //    case Language.XML:
+            //        CommentStyle = GreenStyle;
+            //        XmlTagBracketStyle = BlueStyle;
+            //        XmlTagNameStyle = MaroonStyle;
+            //        XmlAttributeStyle = RedStyle;
+            //        XmlAttributeValueStyle = BlueStyle;
+            //        XmlEntityStyle = RedStyle;
+            //        XmlCDataStyle = BlackStyle;
+            //        break;
+            //    case Language.JS:
+            //        StringStyle = BrownStyle;
+            //        CommentStyle = GreenStyle;
+            //        NumberStyle = MagentaStyle;
+            //        KeywordStyle = BlueStyle;
+            //        break;
+            //    case Language.PHP:
+            //        StringStyle = RedStyle;
+            //        CommentStyle = GreenStyle;
+            //        NumberStyle = RedStyle;
+            //        VariableStyle = MaroonStyle;
+            //        KeywordStyle = MagentaStyle;
+            //        KeywordStyle2 = BlueStyle;
+            //        KeywordStyle3 = GrayStyle;
+            //        break;
+            //    case Language.SQL:
+            //        StringStyle = RedStyle;
+            //        CommentStyle = GreenStyle;
+            //        NumberStyle = MagentaStyle;
+            //        KeywordStyle = BlueBoldStyle;
+            //        StatementsStyle = BlueBoldStyle;
+            //        FunctionsStyle = MaroonStyle;
+            //        VariableStyle = MaroonStyle;
+            //        TypesStyle = BrownStyle;
+            //        break;
+            //}
         }
-
-        #region Styles
-
-        /// <summary>
-        /// String style
-        /// </summary>
-        public Style StringStyle { get; set; }
-
-        /// <summary>
-        /// Comment style
-        /// </summary>
-        public Style CommentStyle { get; set; }
-
-        /// <summary>
-        /// Number style
-        /// </summary>
-        public Style NumberStyle { get; set; }
-
-        /// <summary>
-        /// Attribute style
-        /// </summary>
-        public Style AttributeStyle { get; set; }
-
-        /// <summary>
-        /// Class name style
-        /// </summary>
-        public Style ClassNameStyle { get; set; }
-
-        /// <summary>
-        /// Keyword style
-        /// </summary>
-        public Style KeywordStyle { get; set; }
-
-        /// <summary>
-        /// Variable style
-        /// </summary>
-        public Style VariableStyle { get; set; }
-
-        #endregion
     }
 
     /// <summary>

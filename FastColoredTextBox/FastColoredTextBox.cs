@@ -24,7 +24,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Drawing.Drawing2D;
@@ -36,6 +35,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
+using FastColoredTextBoxNS.Models.Syntaxes;
 using Microsoft.Win32;
 using Timer = System.Windows.Forms.Timer;
 
@@ -59,7 +59,7 @@ namespace FastColoredTextBoxNS
         private readonly Range selection;
         private readonly Timer timer = new Timer();
         private readonly Timer timer2 = new Timer();
-        private readonly Timer timer3 = new Timer();
+        private readonly Timer tooltipTimer = new Timer();
         private readonly List<VisualMarker> visibleMarkers = new List<VisualMarker>();
         public int TextHeight;
         public bool AllowInsertRemoveLines = true;
@@ -83,6 +83,7 @@ namespace FastColoredTextBoxNS
         private bool isLineSelect;
         private bool isReplaceMode;
         private Language language;
+        private ILanguage _language;
         private Keys lastModifiers;
         private Point lastMouseCoord;
         private DateTime lastNavigatedDateTime;
@@ -125,28 +126,31 @@ namespace FastColoredTextBoxNS
         private int reservedCountOfLineNumberChars = 1;
         private int zoom = 100;
         private Size localAutoScrollMinSize;
- 
-        /// <summary>
-        /// Constructor
-        /// </summary>
+
         public FastColoredTextBox()
         {
-            //register type provider
-            TypeDescriptionProvider prov = TypeDescriptor.GetProvider(GetType());
-            object theProvider =
-                prov.GetType().GetField("Provider", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(prov);
-            if (theProvider.GetType() != typeof (FCTBDescriptionProvider))
+            var typeDescriptionProvider = TypeDescriptor.GetProvider(GetType());
+            var theProvider = typeDescriptionProvider.GetType().GetField("Provider", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(typeDescriptionProvider);
+
+			if (theProvider.GetType() != typeof (FCTBDescriptionProvider))
                 TypeDescriptor.AddProvider(new FCTBDescriptionProvider(GetType()), GetType());
+
             //drawing optimization
             SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.ResizeRedraw, true);
-            //append monospace font
+            
+			//append monospace font
             Font = new Font(FontFamily.GenericMonospace, 9.75f);
             //create one line
             InitTextSource(CreateTextSource());
+
             if (lines.Count == 0)
                 lines.InsertLine(0, lines.CreateLine());
-            selection = new Range(this) {Start = new Place(0, 0)};
-            //default settings
+
+            selection = new Range(this)
+			{
+				Start = new Place(0, 0)
+			};
+			
             Cursor = Cursors.IBeam;
             BackColor = Color.White;
             LineNumberColor = Color.Teal;
@@ -165,12 +169,10 @@ namespace FastColoredTextBoxNS
             DelayedEventsInterval = 100;
             DelayedTextChangedInterval = 100;
             AllowSeveralTextStyleDrawing = false;
-            LeftBracket = '\x0';
-            RightBracket = '\x0';
-            LeftBracket2 = '\x0';
-            RightBracket2 = '\x0';
+
             SyntaxHighlighter = new SyntaxHighlighter(this);
-            language = Language.Custom;
+            Language = new CustomSyntax();
+
             PreferredLineWidth = 0;
             needRecalc = true;
             lastNavigatedDateTime = DateTime.Now;
@@ -195,7 +197,7 @@ namespace FastColoredTextBoxNS
             bookmarks = new Bookmarks(this);
             BookmarkColor = Color.PowderBlue;
             ToolTip = new ToolTip();
-            timer3.Interval = 500;
+            tooltipTimer.Interval = 500;
             hints = new Hints(this);
             SelectionHighlightingForLineBreaksEnabled = true;
             textAreaBorder = TextAreaBorderType.None;
@@ -214,7 +216,7 @@ namespace FastColoredTextBoxNS
             base.AutoScroll = true;
             timer.Tick += timer_Tick;
             timer2.Tick += timer2_Tick;
-            timer3.Tick += timer3_Tick;
+            tooltipTimer.Tick += timer3_Tick;
             middleClickScrollingTimer.Tick += middleClickScrollingTimer_Tick;
         }
 
@@ -309,8 +311,8 @@ namespace FastColoredTextBoxNS
         [Description("Delay(ms) of ToolTip.")]
         public int ToolTipDelay
         {
-            get { return timer3.Interval; }
-            set { timer3.Interval = value; }
+            get { return tooltipTimer.Interval; }
+            set { tooltipTimer.Interval = value; }
         }
 
         /// <summary>
@@ -852,39 +854,7 @@ namespace FastColoredTextBoxNS
         /// </summary>
         [Browsable(false)]
         public MarkerStyle BracketsStyle2 { get; set; }
-
-        /// <summary>
-        /// Opening bracket for brackets highlighting.
-        /// Set to '\x0' for disable brackets highlighting.
-        /// </summary>
-        [DefaultValue('\x0')]
-        [Description("Opening bracket for brackets highlighting. Set to '\\x0' for disable brackets highlighting.")]
-        public char LeftBracket { get; set; }
-
-        /// <summary>
-        /// Closing bracket for brackets highlighting.
-        /// Set to '\x0' for disable brackets highlighting.
-        /// </summary>
-        [DefaultValue('\x0')]
-        [Description("Closing bracket for brackets highlighting. Set to '\\x0' for disable brackets highlighting.")]
-        public char RightBracket { get; set; }
-
-        /// <summary>
-        /// Alternative opening bracket for brackets highlighting.
-        /// Set to '\x0' for disable brackets highlighting.
-        /// </summary>
-        [DefaultValue('\x0')]
-        [Description("Alternative opening bracket for brackets highlighting. Set to '\\x0' for disable brackets highlighting.")]
-        public char LeftBracket2 { get; set; }
-
-        /// <summary>
-        /// Alternative closing bracket for brackets highlighting.
-        /// Set to '\x0' for disable brackets highlighting.
-        /// </summary>
-        [DefaultValue('\x0')]
-        [Description("Alternative closing bracket for brackets highlighting. Set to '\\x0' for disable brackets highlighting.")]
-        public char RightBracket2 { get; set; }
-
+	
         /// <summary>
         /// Comment line prefix.
         /// </summary>
@@ -979,21 +949,17 @@ namespace FastColoredTextBoxNS
         /// <summary>
         /// Language for highlighting by built-in highlighter.
         /// </summary>
-        [Browsable(true)]
-        [DefaultValue(typeof (Language), "Custom")]
-        [Description("Language for highlighting by built-in highlighter.")]
-        public Language Language
+        public ILanguage Language
         {
-            get { return language; }
+            get { return _language; }
             set
             {
-                language = value;
-                if (SyntaxHighlighter != null)
-                    SyntaxHighlighter.InitStyleSchema(language);
+                _language = value;
+
                 Invalidate();
             }
         }
-
+	
         /// <summary>
         /// Syntax Highlighter
         /// </summary>
@@ -1008,9 +974,7 @@ namespace FastColoredTextBoxNS
         [Browsable(true)]
         [DefaultValue(null)]
         [Editor(typeof (FileNameEditor), typeof (UITypeEditor))]
-        [Description(
-            "XML file with description of syntax highlighting. This property works only with Language == Language.Custom."
-            )]
+        [Description("XML file with description of syntax highlighting. This property works only with Language == Language.Custom.")]
         public string DescriptionFile
         {
             get { return descriptionFile; }
@@ -1748,7 +1712,7 @@ namespace FastColoredTextBoxNS
 
         private void timer3_Tick(object sender, EventArgs e)
         {
-            timer3.Stop();
+            tooltipTimer.Stop();
             OnToolTip();
         }
 
@@ -2285,12 +2249,16 @@ namespace FastColoredTextBoxNS
         public virtual void OnSelectionChangedDelayed()
         {
             RecalcScrollByOneLine(Selection.Start.iLine);
+
             //highlight brackets
             ClearBracketsPositions();
-            if (LeftBracket != '\x0' && RightBracket != '\x0')
-                HighlightBrackets(LeftBracket, RightBracket, ref leftBracketPosition, ref rightBracketPosition);
-            if (LeftBracket2 != '\x0' && RightBracket2 != '\x0')
-                HighlightBrackets(LeftBracket2, RightBracket2, ref leftBracketPosition2, ref rightBracketPosition2);
+
+            if (Language.LeftBracket != Bracket.Disabled && Language.RightBracket != Bracket.Disabled)
+                HighlightBrackets(Language.LeftBracket, Language.RightBracket, ref leftBracketPosition, ref rightBracketPosition);
+
+            if (Language.LeftBracket2 != Bracket.Disabled && Language.RightBracket2 != Bracket.Disabled)
+                HighlightBrackets(Language.LeftBracket2, Language.RightBracket2, ref leftBracketPosition2, ref rightBracketPosition2);
+
             //remember last visit time
             if (Selection.IsEmpty && Selection.Start.iLine < LinesCount)
             {
@@ -4406,8 +4374,8 @@ namespace FastColoredTextBoxNS
         /// <summary>
         /// Regex patterns for AutoIndentChars (one regex per line)
         /// </summary>
-        [Description("Regex patterns for AutoIndentChars (one regex per line)")] 
-        [Editor( "System.ComponentModel.Design.MultilineStringEditor, System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" , typeof(UITypeEditor))]
+        [Description("Regex patterns for AutoIndentChars (one regex per line)")]
+        [Editor("System.ComponentModel.Design.MultilineStringEditor, System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", typeof(UITypeEditor))]
         [DefaultValue(@"^\s*[\w\.]+\s*(?<range>=)\s*(?<range>[^;]+);")]
         public string AutoIndentCharsPatterns { get; set; }
 
@@ -4702,10 +4670,9 @@ namespace FastColoredTextBoxNS
         {
             if (iLine < 0 || iLine >= LinesCount) return 0;
 
-
             EventHandler<AutoIndentEventArgs> calculator = AutoIndentNeeded;
             if (calculator == null)
-                if (Language != Language.Custom && SyntaxHighlighter != null)
+                if (SyntaxHighlighter != null)
                     calculator = SyntaxHighlighter.AutoIndentNeeded;
                 else
                     calculator = CalcAutoIndentShiftByCodeFolding;
@@ -4962,7 +4929,8 @@ namespace FastColoredTextBoxNS
             e.Graphics.FillRectangle(paddingBrush, textAreaRect.Right, 0, ClientSize.Width, ClientSize.Height);
             //left
             e.Graphics.FillRectangle(paddingBrush, LeftIndentLine, 0, LeftIndent - LeftIndentLine - 1, ClientSize.Height);
-            if (HorizontalScroll.Value <= Paddings.Left)
+
+			if (HorizontalScroll.Value <= Paddings.Left)
                 e.Graphics.FillRectangle(paddingBrush, LeftIndent - HorizontalScroll.Value - 2, 0,
                                          Math.Max(0, Paddings.Left - 1), ClientSize.Height);
             //
@@ -5719,7 +5687,7 @@ namespace FastColoredTextBoxNS
             {
                 //restart tooltip timer
                 CancelToolTip();
-                timer3.Start();
+                tooltipTimer.Start();
             }
             lastMouseCoord = e.Location;
 
@@ -5794,7 +5762,7 @@ namespace FastColoredTextBoxNS
 
         private void CancelToolTip()
         {
-            timer3.Stop();
+            tooltipTimer.Stop();
             if (ToolTip != null && !string.IsNullOrEmpty(ToolTip.GetToolTip(this)))
             {
                 ToolTip.Hide(this);
@@ -7210,26 +7178,14 @@ namespace FastColoredTextBoxNS
 
             Range range;
 
-            switch (HighlightingRangeType)
-            {
-                case HighlightingRangeType.VisibleRange:
-                    range = VisibleRange.GetUnionWith(args.ChangedRange);
-                    break;
-                case HighlightingRangeType.AllTextRange:
-                    range = Range;
-                    break;
-                default:
-                    range = args.ChangedRange;
-                    break;
-            }
+                 if (HighlightingRangeType == HighlightingRangeType.VisibleRange)
+                range = VisibleRange.GetUnionWith(args.ChangedRange);
+            else if (HighlightingRangeType == HighlightingRangeType.AllTextRange)
+                range = Range;
+            else
+                range = args.ChangedRange;
 
-            if (SyntaxHighlighter != null)
-            {
-                if (Language == Language.Custom && !string.IsNullOrEmpty(DescriptionFile))
-                    SyntaxHighlighter.HighlightSyntax(DescriptionFile, range);
-                else
-                    SyntaxHighlighter.HighlightSyntax(Language, range);
-            }
+            SyntaxHighlighter.HighlightSyntax(Language, range);
 
 #if debug
             Console.WriteLine("OnSyntaxHighlight: "+ sw.ElapsedMilliseconds);
@@ -7239,9 +7195,7 @@ namespace FastColoredTextBoxNS
         private void InitializeComponent()
         {
             SuspendLayout();
-            // 
-            // FastColoredTextBox
-            // 
+
             Name = "FastColoredTextBox";
             ResumeLayout(false);
         }
@@ -7251,13 +7205,14 @@ namespace FastColoredTextBoxNS
         /// </summary>
         public virtual void Print(Range range, PrintDialogSettings settings)
         {
-            //prepare export with wordwrapping
-            var exporter = new ExportToHTML();
-            exporter.UseBr = true;
-            exporter.UseForwardNbsp = true;
-            exporter.UseNbsp = true;
-            exporter.UseStyleTag = false;
-            exporter.IncludeLineNumbers = settings.IncludeLineNumbers;
+            var exporter = new ExportToHTML
+            {
+                UseBr = true,
+                UseForwardNbsp = true,
+                UseNbsp = true,
+                UseStyleTag = false,
+                IncludeLineNumbers = settings.IncludeLineNumbers
+            };
 
             if (range == null)
                 range = Range;
@@ -7392,8 +7347,10 @@ window.status = ""#print"";
             {
                 if (SyntaxHighlighter != null)
                     SyntaxHighlighter.Dispose();
+
                 timer.Dispose();
                 timer2.Dispose();
+
                 middleClickScrollingTimer.Dispose();
 
                 if (findForm != null)
@@ -7401,12 +7358,6 @@ window.status = ""#print"";
 
                 if (replaceForm != null)
                     replaceForm.Dispose();
-                /*
-                if (Font != null)
-                    Font.Dispose();
-
-                if (originalFont != null)
-                    originalFont.Dispose();*/
 
                 if (TextSource != null)
                     TextSource.Dispose();

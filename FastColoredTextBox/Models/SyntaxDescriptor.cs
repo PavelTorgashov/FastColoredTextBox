@@ -6,10 +6,10 @@ namespace FastColoredTextBoxNS
 {
     public class SyntaxDescriptor: IDisposable
     {
-        public char leftBracket = '(';
-        public char rightBracket = ')';
-        public char leftBracket2 = '{';
-        public char rightBracket2 = '}';
+        public char LeftBracket = '(';
+        public char RightBracket = ')';
+        public char LeftBracket2 = '{';
+        public char RightBracket2 = '}';
         public BracketsHighlightStrategy bracketsHighlightStrategy = BracketsHighlightStrategy.Strategy2;
         public readonly List<Style> styles = new List<Style>();
         public readonly List<RuleDesc> rules = new List<RuleDesc>();

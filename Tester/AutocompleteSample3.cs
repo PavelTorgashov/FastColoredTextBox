@@ -81,7 +81,7 @@ namespace Tester
         Type FindTypeByName(string name)
         {
             Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
-            Type type = null;
+	
             foreach (var a in assemblies)
             {
                 foreach (var t in a.GetTypes())

@@ -15,7 +15,7 @@ namespace FastColoredTextBoxNS
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="tb">Underlaying textbox</param>
+        /// <param name="ts">Underlaying textbox</param>
         /// <param name="c">Inserting char</param>
         public InsertCharCommand(TextSource ts, char c): base(ts)
         {
@@ -160,11 +160,7 @@ namespace FastColoredTextBoxNS
             tb.ExpandBlock(i);
             tb.ExpandBlock(i + 1);
             int pos = ts[i].Count;
-            //
-            /*
-            if(ts[i].Count == 0)
-                ts.RemoveLine(i);
-            else*/
+
             if (ts[i + 1].Count == 0)
                 ts.RemoveLine(i + 1);
             else
@@ -565,16 +561,14 @@ namespace FastColoredTextBoxNS
         List<int> iLines;
         List<string> prevText = new List<string>();
 
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="tb">Underlaying textbox</param>
-        /// <param name="ranges">List of ranges for replace</param>
-        /// <param name="insertedText">Text for inserting</param>
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="ts"></param>
+		/// <param name="iLines"></param>
         public RemoveLinesCommand(TextSource ts, List<int> iLines)
             : base(ts)
         {
-            //sort iLines
             iLines.Sort();
             //
             this.iLines = iLines;

@@ -61,7 +61,7 @@ namespace Tester
                 tb.BorderStyle = BorderStyle.Fixed3D;
                 //tb.VirtualSpace = true;
                 tb.LeftPadding = 17;
-                tb.Language = Language.CSharp;
+                tb.LanguageEnum = Language.CSharp;
                 tb.AddStyle(sameWordsStyle);//same words style
                 var tab = new FATabStripItem(fileName!=null?Path.GetFileName(fileName):"[new]", tb);
                 tab.Tag = fileName;
@@ -100,7 +100,7 @@ namespace Tester
         {
             //---block autocomplete menu for comments
             //get index of green style (used for comments)
-            var iGreenStyle = CurrentTB.GetStyleIndex(CurrentTB.SyntaxHighlighter.GreenStyle);
+            var iGreenStyle = CurrentTB.GetStyleIndex(Styles.GreenStyle);
             if (iGreenStyle >= 0)
                 if (CurrentTB.Selection.Start.iChar > 0)
                 {

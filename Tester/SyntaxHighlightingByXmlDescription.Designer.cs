@@ -52,10 +52,8 @@
             this.fctb.DescriptionFile = "htmlDesc.xml";
             this.fctb.Dock = System.Windows.Forms.DockStyle.Fill;
             this.fctb.IsChanged = true;
-            this.fctb.LeftBracket = '(';
             this.fctb.Location = new System.Drawing.Point(0, 39);
             this.fctb.Name = "fastColoredTextBox1";
-            this.fctb.RightBracket = ')';
             this.fctb.SelectedText = "";
             this.fctb.SelectionStart = 373;
             this.fctb.Size = new System.Drawing.Size(370, 275);

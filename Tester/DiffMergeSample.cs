@@ -97,9 +97,9 @@ namespace Tester
             Cursor = Cursors.WaitCursor;
            
             if (Path.GetExtension(tbFirstFile.Text).ToLower() == ".cs")
-                fctb1.Language = fctb2.Language = Language.CSharp;
+                fctb1.LanguageEnum = fctb2.LanguageEnum = Language.CSharp;
             else
-                fctb1.Language = fctb2.Language = Language.Custom;
+                fctb1.LanguageEnum = fctb2.LanguageEnum = Language.Custom;
 
             var source1 = Lines.Load(tbFirstFile.Text);
             var source2 = Lines.Load(tbSecondFile.Text);
