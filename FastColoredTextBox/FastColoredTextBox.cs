@@ -5068,6 +5068,13 @@ namespace FastColoredTextBoxNS
                 for (int iWordWrapLine = 0; iWordWrapLine < lineInfo.WordWrapStringsCount; iWordWrapLine++)
                 {
                     y = lineInfo.startY + iWordWrapLine*CharHeight - VerticalScroll.Value;
+                    // break if too long line (important for extremly big lines)
+                    if (y > VerticalScroll.Value + ClientSize.Height)
+                        break;
+                    // continue if wordWrapLine isn't seen yet (important for extremly big lines)
+                    if (lineInfo.startY + iWordWrapLine * CharHeight < VerticalScroll.Value)
+                        continue;
+
                     //indent
                     var indent = iWordWrapLine == 0 ? 0 : lineInfo.wordWrapIndent * CharWidth;
                     //draw chars
@@ -5837,7 +5844,7 @@ namespace FastColoredTextBoxNS
             Selection = new Range(this, toX, p.iLine, fromX, p.iLine);
         }
 
-        private int YtoLineIndex(int y)
+        public int YtoLineIndex(int y)
         {
             int i = LineInfos.BinarySearch(new LineInfo(-10), new LineYComparer(y));
             i = i < 0 ? -i - 2 : i;
@@ -5876,6 +5883,15 @@ namespace FastColoredTextBoxNS
                 iLine = FindPrevVisibleLine(iLine);
             //
             int iWordWrapLine = LineInfos[iLine].WordWrapStringsCount;
+
+            //set iWordWrapLine more accurate (important for extremly big lines)
+            if (y > point.Y)
+            {
+                int approximatelyLines = (y - point.Y - CharHeight) / CharHeight;
+                y -= approximatelyLines * CharHeight;
+                iWordWrapLine -= approximatelyLines;
+            }
+
             do
             {
                 iWordWrapLine--;
