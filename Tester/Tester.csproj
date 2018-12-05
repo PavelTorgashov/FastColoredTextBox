@@ -95,6 +95,12 @@
     <Compile Include="AutoIndentCharsSample.Designer.cs">
       <DependentUpon>AutoIndentCharsSample.cs</DependentUpon>
     </Compile>
+    <Compile Include="CustomTextSourceSample2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CustomTextSourceSample2.Designer.cs">
+      <DependentUpon>CustomTextSourceSample2.cs</DependentUpon>
+    </Compile>
     <Compile Include="CustomWordWrapSample.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -319,6 +325,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="AutoIndentCharsSample.resx">
       <DependentUpon>AutoIndentCharsSample.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CustomTextSourceSample2.resx">
+      <DependentUpon>CustomTextSourceSample2.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="CustomWordWrapSample.resx">
       <DependentUpon>CustomWordWrapSample.cs</DependentUpon>

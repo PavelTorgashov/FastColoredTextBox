@@ -212,5 +212,10 @@ namespace Tester
         {
             new AutoIndentCharsSample().Show();
         }
+
+        private void button39_Click(object sender, EventArgs e)
+        {
+            new CustomTextSourceSample2().Show();
+        }
     }
 }
