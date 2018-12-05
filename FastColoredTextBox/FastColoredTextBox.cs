@@ -12,7 +12,6 @@
 
 // #define debug
 
-
 // -------------------------------------------------------------------------------
 // By default the FastColoredTextbox supports no more 16 styles at the same time.
 // This restriction saves memory.
