@@ -325,7 +325,7 @@ namespace FastColoredTextBoxNS
             if (tb != null)
             {
                 tb.KeyDown -= tb_KeyDown;
-                tb.KeyPress -= tb_KeyPressed;
+                tb.KeyPressed -= tb_KeyPressed;
                 tb.SelectionChanged -= tb_SelectionChanged;
             }
 
