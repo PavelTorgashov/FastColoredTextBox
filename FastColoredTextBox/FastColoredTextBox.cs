@@ -205,7 +205,8 @@ namespace FastColoredTextBoxNS
             WordWrapAutoIndent = true;
             FoldedBlocks = new Dictionary<int, int>();
             AutoCompleteBrackets = false;
-            AutoIndentCharsPatterns = @"^\s*[\w\.]+\s*(?<range>=)\s*(?<range>[^;]+);";
+            AutoIndentCharsPatterns = @"^\s*[\w\.]+(\s\w+)?\s*(?<range>=)\s*(?<range>[^;=]+);
+^\s*(case|default)\s*[^:]*(?<range>:)\s*(?<range>[^;]+);";
             AutoIndentChars = true;
             CaretBlinking = true;
             ServiceColors = new ServiceColors();
@@ -4811,7 +4812,7 @@ namespace FastColoredTextBoxNS
 
         protected override bool IsInputKey(Keys keyData)
         {
-            if (keyData == Keys.Tab && !AcceptsTab)
+            if ((keyData == Keys.Tab || keyData == (Keys.Shift | Keys.Tab)) && !AcceptsTab)
                 return false;
             if (keyData == Keys.Enter && !AcceptsReturn)
                 return false;
@@ -5645,7 +5646,6 @@ namespace FastColoredTextBoxNS
             }
         }
 
-
         public void ChangeFontSize(int step)
         {
             var points = Font.SizeInPoints;
@@ -5655,7 +5655,7 @@ namespace FastColoredTextBoxNS
                 var newPoints = points + step * 72f / dpi;
                 if(newPoints < 1f) return;
                 var k = newPoints / originalFont.SizeInPoints;
-                 Zoom = (int)(100 * k);
+                Zoom = (int)Math.Round(100 * k);
             }
         }
 
@@ -5681,7 +5681,7 @@ namespace FastColoredTextBoxNS
 
         private void DoZoom(float koeff)
         {
-            //remmber first displayed line
+            //remember first displayed line
             var iLine = YtoLineIndex(VerticalScroll.Value);
             //
             var points = originalFont.SizeInPoints;

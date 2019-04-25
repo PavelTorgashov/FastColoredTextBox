@@ -58,8 +58,7 @@
         '\"',
         '\'',
         '\''};
-            this.fctb.AutoIndentCharsPatterns = "\r\n^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;]+);\r\n^\\s*(case|default)\\s*[^:]" +
-    "*(?<range>:)\\s*(?<range>[^;]+);\r\n";
+            this.fctb.AutoIndentCharsPatterns = "^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;=]+);\r\n^\\s*(case|default)\\s*[^:]*(?<range>:)\\s*(?<range>[^;]+);";
             this.fctb.AutoScrollMinSize = new System.Drawing.Size(137, 180);
             this.fctb.BackBrush = null;
             this.fctb.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
