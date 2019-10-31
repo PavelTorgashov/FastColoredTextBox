@@ -234,6 +234,13 @@ namespace FastColoredTextBoxNS
         public bool AutoCompleteBrackets { get; set; }
 
         /// <summary>
+        /// AutoComplete brackets
+        /// </summary>
+        [DefaultValue(false)]
+        [Description("Force upper case.")]
+        public bool ForceUpperCase { get; set; }
+
+        /// <summary>
         /// Colors of some service visual markers
         /// </summary>
         [Browsable(true)] 
@@ -2729,7 +2736,7 @@ namespace FastColoredTextBoxNS
                 if (Selection.IsEmpty && Selection.Start.iChar > GetLineLength(Selection.Start.iLine) && VirtualSpace)
                     InsertVirtualSpaces();
 
-                lines.Manager.ExecuteCommand(new InsertTextCommand(TextSource, text));
+                lines.Manager.ExecuteCommand(new InsertTextCommand(TextSource, ForceUpperCase ? text.ToUpper() : text));
                 if (updating <= 0 && jumpToCaret)
                     DoCaretVisible();
             }
@@ -2988,7 +2995,7 @@ namespace FastColoredTextBoxNS
                     InsertVirtualSpaces();
 
                 //insert char
-                lines.Manager.ExecuteCommand(new InsertCharCommand(TextSource, c));
+                lines.Manager.ExecuteCommand(new InsertCharCommand(TextSource, ForceUpperCase ? char.ToUpper(c) : c));
             }
             finally
             {
