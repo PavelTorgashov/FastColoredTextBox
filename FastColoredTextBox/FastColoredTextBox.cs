@@ -6598,19 +6598,12 @@ namespace FastColoredTextBoxNS
             if (from == to)
                 return;
 
-            //find first non empty line
-            for (; from <= to; from++)
-            {
-                if (GetLineText(from).Trim().Length > 0)
-                {
-                    //hide lines
-                    for (int i = from + 1; i <= to; i++)
-                        SetVisibleState(i, VisibleState.Hidden);
-                    SetVisibleState(from, VisibleState.StartOfHiddenBlock);
-                    Invalidate();
-                    break;
-                }
-            }
+            //hide lines
+            for (int i = from + 1; i <= to; i++)
+                SetVisibleState(i, VisibleState.Hidden);
+            SetVisibleState(from, VisibleState.StartOfHiddenBlock);
+            Invalidate();
+
             //Move caret outside
             from = Math.Min(fromLine, toLine);
             to = Math.Max(fromLine, toLine);
