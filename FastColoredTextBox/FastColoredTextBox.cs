@@ -7609,16 +7609,25 @@ window.status = ""#print"";
 
             if (form.ShowDialog() == DialogResult.OK)
             {
-                int line = Math.Min(LinesCount - 1, Math.Max(0, form.SelectedLineNumber - 1));
-                Selection = new Range(this, 0, line, 0, line);
-                DoSelectionVisible();
+                SetSelectedLine(form.SelectedLineNumber);
             }
         }
 
-    /// <summary>
-    /// Occurs when undo/redo stack is changed
-    /// </summary>
-    public void OnUndoRedoStateChanged()
+        /// <summary>
+        /// Set current line number and make it visible
+        /// </summary>
+        /// <param name="lineNumberToSelect"></param>
+        public void SetSelectedLine(int lineNumberToSelect)
+        {
+            var line = Math.Min(LinesCount - 1, Math.Max(0, lineNumberToSelect - 1));
+            Selection = new Range(this, 0, line, 0, line);
+            DoSelectionVisible();
+        }
+
+        /// <summary>
+        /// Occurs when undo/redo stack is changed
+        /// </summary>
+        public void OnUndoRedoStateChanged()
         {
             if (UndoRedoStateChanged != null)
                 UndoRedoStateChanged(this, EventArgs.Empty);
