@@ -3381,15 +3381,26 @@ namespace FastColoredTextBoxNS
         {
             if (ShowScrollBars)
             {
-                //some magic for update scrolls
-                base.AutoScrollMinSize -= new Size(1, 0);
-                base.AutoScrollMinSize += new Size(1, 0);
+                OnMagicUpdateScrollBars();
             }
             else
                 PerformLayout();
 
-            if(IsHandleCreated)
+            if (IsHandleCreated)
                 BeginInvoke((MethodInvoker)OnScrollbarsUpdated);
+        }
+
+        private void OnMagicUpdateScrollBars()
+        {
+            if (this.InvokeRequired)
+            {
+                Invoke(new MethodInvoker(OnMagicUpdateScrollBars));
+            }
+            else
+            {
+                base.AutoScrollMinSize -= new Size(1, 0);
+                base.AutoScrollMinSize += new Size(1, 0);
+            }
         }
 
         protected virtual void OnScrollbarsUpdated()
