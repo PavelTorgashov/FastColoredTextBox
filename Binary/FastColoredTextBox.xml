@@ -678,6 +678,12 @@
             </summary>
             <param name="range"></param>
         </member>
+        <member name="M:FastColoredTextBoxNS.SyntaxHighlighter.JSONSyntaxHighlight(FastColoredTextBoxNS.Range)">
+            <summary>
+            Highlights JSON code
+            </summary>
+            <param name="range"></param>
+        </member>
         <member name="P:FastColoredTextBoxNS.SyntaxHighlighter.StringStyle">
             <summary>
             String style

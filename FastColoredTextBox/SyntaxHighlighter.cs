@@ -75,6 +75,10 @@ namespace FastColoredTextBoxNS
         protected Regex JScriptNumberRegex;
         protected Regex JScriptStringRegex;
 
+        protected Regex JSONKeywordRegex;
+        protected Regex JSONNumberRegex;
+        protected Regex JSONStringRegex;
+
         protected Regex LuaCommentRegex1,
                       LuaCommentRegex2,
                       LuaCommentRegex3;
@@ -171,6 +175,9 @@ namespace FastColoredTextBoxNS
                     break;
                 case Language.Lua:
                     LuaSyntaxHighlight(range);
+                    break;
+                case Language.JSON:
+                    JSONSyntaxHighlight(range);
                     break;
                 default:
                     break;
@@ -680,6 +687,11 @@ namespace FastColoredTextBoxNS
                     FunctionsStyle = MaroonStyle;
                     VariableStyle = MaroonStyle;
                     TypesStyle = BrownStyle;
+                    break;
+                case Language.JSON:
+                    StringStyle = BrownStyle;
+                    NumberStyle = MagentaStyle;
+                    KeywordStyle = BlueStyle;
                     break;
             }
         }
@@ -1289,6 +1301,48 @@ namespace FastColoredTextBoxNS
             }
         }
 
+        protected void InitJSONRegex()
+        {
+            JSONStringRegex = new Regex(@"""([^\\""]|\\"")*""", RegexCompiledOption);
+            JSONNumberRegex = new Regex(@"\b(\d+[\.]?\d*|true|false|null)\b", RegexCompiledOption);
+            JSONKeywordRegex = new Regex(@"(?<range>""([^\\""]|\\"")*"")\s*:", RegexCompiledOption);
+        }
+
+        /// <summary>
+        /// Highlights JSON code
+        /// </summary>
+        /// <param name="range"></param>
+        public virtual void JSONSyntaxHighlight(Range range)
+        {
+            range.tb.LeftBracket = '[';
+            range.tb.RightBracket = ']';
+            range.tb.LeftBracket2 = '{';
+            range.tb.RightBracket2 = '}';
+            range.tb.BracketsHighlightStrategy = BracketsHighlightStrategy.Strategy2;
+
+            range.tb.AutoIndentCharsPatterns
+                = @"
+^\s*[\w\.]+(\s\w+)?\s*(?<range>=)\s*(?<range>[^;]+);
+";
+
+            //clear style of changed range
+            range.ClearStyle(StringStyle, NumberStyle, KeywordStyle);
+            //
+            if (JSONStringRegex == null)
+                InitJSONRegex();
+            //keyword highlighting
+            range.SetStyle(KeywordStyle, JSONKeywordRegex);
+            //string highlighting
+            range.SetStyle(StringStyle, JSONStringRegex);
+            //number highlighting
+            range.SetStyle(NumberStyle, JSONNumberRegex);
+            //clear folding markers
+            range.ClearFoldingMarkers();
+            //set folding markers
+            range.SetFoldingMarkers("{", "}"); //allow to collapse brackets block
+            range.SetFoldingMarkers(@"\[", @"\]"); //allow to collapse comment block
+        }
+
         #region Styles
 
         /// <summary>
@@ -1422,6 +1476,7 @@ namespace FastColoredTextBoxNS
         SQL,
         PHP,
         JS,
-        Lua
+        Lua,
+        JSON
     }
 }

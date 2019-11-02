@@ -59,6 +59,8 @@
         '\"',
         '\'',
         '\''};
+            this.fctb.AutoIndentCharsPatterns = "^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;=]+);\r\n^\\s*(case|default)\\s*[^:]*" +
+    "(?<range>:)\\s*(?<range>[^;]+);";
             this.fctb.AutoScrollMinSize = new System.Drawing.Size(0, 140);
             this.fctb.BackBrush = null;
             this.fctb.CharHeight = 28;
@@ -79,6 +81,7 @@
             this.fctb.Text = "(fastColoredTextBox1)\r\ngfdsg fd\r\ng fdsg (local) = 12\r\ndsfds\r\n";
             this.fctb.WordWrap = true;
             this.fctb.Zoom = 100;
+            this.fctb.TextChanged += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.fctb_TextChanged);
             // 
             // Sandbox
             // 
