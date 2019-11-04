@@ -533,7 +533,6 @@ namespace FastColoredTextBoxNS
             for (int i = 0; i < resilientStyles.Count; i++)
                 range.tb.Styles[l + i] = resilientStyles[i];
             //brackets
-            char[] oldBrackets = RememberBrackets(range.tb);
             range.tb.LeftBracket = desc.leftBracket;
             range.tb.RightBracket = desc.rightBracket;
             range.tb.LeftBracket2 = desc.leftBracket2;
@@ -548,22 +547,6 @@ namespace FastColoredTextBoxNS
             //folding markers
             foreach (FoldingDesc folding in desc.foldings)
                 range.SetFoldingMarkers(folding.startMarkerRegex, folding.finishMarkerRegex, folding.options);
-
-            //
-            RestoreBrackets(range.tb, oldBrackets);
-        }
-
-        protected void RestoreBrackets(FastColoredTextBox tb, char[] oldBrackets)
-        {
-            tb.LeftBracket = oldBrackets[0];
-            tb.RightBracket = oldBrackets[1];
-            tb.LeftBracket2 = oldBrackets[2];
-            tb.RightBracket2 = oldBrackets[3];
-        }
-
-        protected char[] RememberBrackets(FastColoredTextBox tb)
-        {
-            return new[] { tb.LeftBracket, tb.RightBracket, tb.LeftBracket2, tb.RightBracket2 };
         }
 
         protected void InitCShaprRegex()
