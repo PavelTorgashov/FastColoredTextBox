@@ -417,11 +417,12 @@ namespace FastColoredTextBoxNS
                     }
                 }
 
-                if (foundSelected)
-                {
-                    AdjustScroll();
-                    DoSelectedVisible();
-                }
+                // redundant call
+                //if (foundSelected)
+                //{
+                //    AdjustScroll();
+                //    DoSelectedVisible();
+                //}
             }
 
             //show popup menu
@@ -436,7 +437,7 @@ namespace FastColoredTextBoxNS
                 }
 
                 DoSelectedVisible();
-                Invalidate();
+                _Invalidate();
             }
             else
                 Menu.Close();
@@ -505,6 +506,11 @@ namespace FastColoredTextBoxNS
             if (oldItemCount == visibleItems.Count)
                 return;
 
+            if (oldItemCount > visibleItems.Count)
+            {
+                base.Refresh();
+            }
+
             int needHeight = ItemHeight * visibleItems.Count + 1;
             Height = Math.Min(needHeight, MaximumSize.Height);
             Menu.CalcSize();
@@ -515,8 +521,6 @@ namespace FastColoredTextBoxNS
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            AdjustScroll();
-
             var itemHeight = ItemHeight;
             int startI = VerticalScroll.Value / itemHeight - 1;
             int finishI = (VerticalScroll.Value + ClientSize.Height) / itemHeight + 1;
@@ -554,10 +558,16 @@ namespace FastColoredTextBoxNS
             }
         }
 
+        protected void _Invalidate()
+        {
+            AdjustScroll();
+            Invalidate();
+        }
+
         protected override void OnScroll(ScrollEventArgs se)
         {
             base.OnScroll(se);
-            Invalidate();
+            _Invalidate();
         }
 
         protected override void OnMouseClick(MouseEventArgs e)
@@ -568,7 +578,7 @@ namespace FastColoredTextBoxNS
             {
                 FocussedItemIndex = PointToItemIndex(e.Location);
                 DoSelectedVisible();
-                Invalidate();
+                _Invalidate();
             }
         }
 
@@ -576,7 +586,7 @@ namespace FastColoredTextBoxNS
         {
             base.OnMouseDoubleClick(e);
             FocussedItemIndex = PointToItemIndex(e.Location);
-            Invalidate();
+            _Invalidate();
             OnSelecting();
         }
 
@@ -599,7 +609,7 @@ namespace FastColoredTextBoxNS
                 if (args.Cancel)
                 {
                     FocussedItemIndex = args.SelectedIndex;
-                    Invalidate();
+                    _Invalidate();
                     return;
                 }
 
@@ -704,7 +714,7 @@ namespace FastColoredTextBoxNS
             FocussedItemIndex = Math.Max(0, Math.Min(FocussedItemIndex + shift, visibleItems.Count - 1));
             DoSelectedVisible();
             //
-            Invalidate();
+            _Invalidate();
         }
 
         private void DoSelectedVisible()
