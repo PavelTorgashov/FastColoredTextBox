@@ -234,7 +234,7 @@ namespace FastColoredTextBoxNS
         public bool AutoCompleteBrackets { get; set; }
 
         /// <summary>
-        /// AutoComplete brackets
+        /// Force inserted string or char to be uppercase
         /// </summary>
         [DefaultValue(false)]
         [Description("Force upper case.")]
