@@ -402,7 +402,8 @@ namespace FastColoredTextBoxNS
                 && (tb.Selection.Start > fragment.Start || text.Length == 0/*pops up only if caret is after first letter*/)))
             {
                 Menu.Fragment = fragment;
-                bool foundSelected = false;
+                //bool foundSelected = false;
+                AutocompleteItem foundItem = null;
                 //build popup menu
                 foreach (var item in sourceItems)
                 {
@@ -410,15 +411,26 @@ namespace FastColoredTextBoxNS
                     CompareResult res = item.Compare(text);
                     if(res != CompareResult.Hidden)
                         visibleItems.Add(item);
-                    if (res == CompareResult.VisibleAndSelected && !foundSelected)
+                    if (res == CompareResult.VisibleAndSelected && foundItem != null)
                     {
-                        foundSelected = true;
-                        FocussedItemIndex = visibleItems.Count - 1;
+                        foundItem = item;
+                        //FocussedItemIndex = visibleItems.Count - 1;
                     }
                 }
 
-                if (foundSelected)
+                visibleItems.Sort((AutocompleteItem a, AutocompleteItem b)=> {
+                    var indexA = a.Text.IndexOf(text);
+                    var indexB = b.Text.IndexOf(text);
+
+                    return indexA - indexB;
+
+                });
+
+                if (foundItem != null)
                 {
+
+                    FocussedItemIndex = visibleItems.IndexOf(foundItem);
+
                     AdjustScroll();
                     DoSelectedVisible();
                 }
