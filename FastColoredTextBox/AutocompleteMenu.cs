@@ -419,11 +419,19 @@ namespace FastColoredTextBoxNS
                 }
 
                 visibleItems.Sort((AutocompleteItem a, AutocompleteItem b)=> {
-                    var indexA = a.Text.IndexOf(text);
-                    var indexB = b.Text.IndexOf(text);
+                    var indexA = a.Text.IndexOf(text, StringComparison.InvariantCultureIgnoreCase);
+                    var indexB = b.Text.IndexOf(text, StringComparison.InvariantCultureIgnoreCase);
+
+                    if(indexA == indexB) {
+                        if(a.Text.Length == b.Text.Length) return string.Compare(a.Text, b.Text, true);
+                        return a.Text.Length - b.Text.Length;
+                    }
+                    else {
+                        if(indexA == -1) return 1;
+                        if(indexB == -1) return -1;
+                    }
 
                     return indexA - indexB;
-
                 });
 
                 if (foundItem != null)
