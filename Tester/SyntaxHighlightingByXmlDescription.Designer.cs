@@ -31,7 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SyntaxHighlightingByXmlDescription));
             this.label1 = new System.Windows.Forms.Label();
             this.fctb = new FastColoredTextBoxNS.FastColoredTextBox();
-            FastColoredTextBoxNS.SyntaxHighlighter syntaxHighlighter1 = new FastColoredTextBoxNS.SyntaxHighlighter(fctb);
+            FastColoredTextBoxNS.SyntaxHighlighter syntaxHighlighter1 = FastColoredTextBoxNS.SyntaxHighlighter.CreateSyntaxHighlighter(fctb, FastColoredTextBoxNS.Language.Custom);
             this.SuspendLayout();
             // 
             // label1

@@ -84,7 +84,6 @@
       <DependentUpon>Ruler.cs</DependentUpon>
     </Compile>
     <Compile Include="SyntaxDescriptor.cs" />
-    <Compile Include="SyntaxHighlighter.cs" />
     <Compile Include="ReplaceForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -108,6 +107,19 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Range.cs" />
     <Compile Include="Style.cs" />
+    <Compile Include="SyntaxHighlighter.cs" />
+    <Compile Include="SyntaxSources\AvrasmSyntaxSource.cs" />
+    <Compile Include="SyntaxSources\CSharpSyntaxSource.cs" />
+    <Compile Include="SyntaxSources\CustomSyntaxSource.cs" />
+    <Compile Include="SyntaxSources\FromXMLfileSyntaxSource.cs" />
+    <Compile Include="SyntaxSources\HTMLSyntaxSource.cs" />
+    <Compile Include="SyntaxSources\JScriptSyntaxSource.cs" />
+    <Compile Include="SyntaxSources\JSONSyntaxSource.cs" />
+    <Compile Include="SyntaxSources\LuaSyntaxSources.cs" />
+    <Compile Include="SyntaxSources\PHPSyntaxSource.cs" />
+    <Compile Include="SyntaxSources\SQLSyntaxSource.cs" />
+    <Compile Include="SyntaxSources\VBSyntaxSource.cs" />
+    <Compile Include="SyntaxSources\XMLSyntaxSource.cs" />
     <Compile Include="TextSource.cs" />
     <Compile Include="TypeDescriptor.cs" />
     <Compile Include="FileTextSource.cs" />

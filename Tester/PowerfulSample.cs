@@ -351,14 +351,18 @@ namespace Tester
 
         private void miChangeColors_Click(object sender, EventArgs e)
         {
-            var styles = new Style[] { fctb.SyntaxHighlighter.BlueBoldStyle, fctb.SyntaxHighlighter.BlueStyle, fctb.SyntaxHighlighter.BoldStyle, fctb.SyntaxHighlighter.BrownStyle, fctb.SyntaxHighlighter.GrayStyle, fctb.SyntaxHighlighter.GreenStyle, fctb.SyntaxHighlighter.MagentaStyle, fctb.SyntaxHighlighter.MaroonStyle, fctb.SyntaxHighlighter.RedStyle };
-            fctb.SyntaxHighlighter.AttributeStyle = styles[rnd.Next(styles.Length)];
-            fctb.SyntaxHighlighter.ClassNameStyle = styles[rnd.Next(styles.Length)];
-            fctb.SyntaxHighlighter.CommentStyle = styles[rnd.Next(styles.Length)];
-            fctb.SyntaxHighlighter.CommentTagStyle = styles[rnd.Next(styles.Length)];
-            fctb.SyntaxHighlighter.KeywordStyle = styles[rnd.Next(styles.Length)];
-            fctb.SyntaxHighlighter.NumberStyle = styles[rnd.Next(styles.Length)];
-            fctb.SyntaxHighlighter.StringStyle = styles[rnd.Next(styles.Length)];
+            var styles = new Style[] { SyntaxHighlighter.PredefinedStyles.BlueBoldStyle, SyntaxHighlighter.PredefinedStyles.BlueStyle, SyntaxHighlighter.PredefinedStyles.BoldStyle, SyntaxHighlighter.PredefinedStyles.BrownStyle, SyntaxHighlighter.PredefinedStyles.GrayStyle, SyntaxHighlighter.PredefinedStyles.GreenStyle, SyntaxHighlighter.PredefinedStyles.MagentaStyle, SyntaxHighlighter.PredefinedStyles.MaroonStyle, SyntaxHighlighter.PredefinedStyles.RedStyle };
+            for (int i = 0; i < fctb.SyntaxHighlighter.StyleSchema.Count; ++i)
+            {
+                fctb.SyntaxHighlighter.StyleSchema.ChangeStyle(i, styles[rnd.Next(styles.Length)]);
+            }
+            //fctb.SyntaxHighlighter.AttributeStyle = styles[rnd.Next(styles.Length)];
+            //fctb.SyntaxHighlighter.ClassNameStyle = styles[rnd.Next(styles.Length)];
+            //fctb.SyntaxHighlighter.CommentStyle = styles[rnd.Next(styles.Length)];
+            //fctb.SyntaxHighlighter.CommentTagStyle = styles[rnd.Next(styles.Length)];
+            //fctb.SyntaxHighlighter.KeywordStyle = styles[rnd.Next(styles.Length)];
+            //fctb.SyntaxHighlighter.NumberStyle = styles[rnd.Next(styles.Length)];
+            //fctb.SyntaxHighlighter.StringStyle = styles[rnd.Next(styles.Length)];
 
             fctb.OnSyntaxHighlight(new TextChangedEventArgs(fctb.Range));
         }

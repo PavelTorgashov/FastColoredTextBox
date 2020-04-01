@@ -599,211 +599,6 @@
             the contents of this method with the code editor.
             </summary>
         </member>
-        <member name="M:FastColoredTextBoxNS.SyntaxHighlighter.HighlightSyntax(FastColoredTextBoxNS.Language,FastColoredTextBoxNS.Range)">
-            <summary>
-            Highlights syntax for given language
-            </summary>
-        </member>
-        <member name="M:FastColoredTextBoxNS.SyntaxHighlighter.HighlightSyntax(System.String,FastColoredTextBoxNS.Range)">
-            <summary>
-            Highlights syntax for given XML description file
-            </summary>
-        </member>
-        <member name="M:FastColoredTextBoxNS.SyntaxHighlighter.AddXmlDescription(System.String,System.Xml.XmlDocument)">
-            <summary>
-            Uses the given <paramref name="doc"/> to parse a XML description and adds it as syntax descriptor. 
-            The syntax descriptor is used for highlighting when 
-            <list type="bullet">
-                <item>Language property of FCTB is set to <see cref="F:FastColoredTextBoxNS.Language.Custom"/></item>
-                <item>DescriptionFile property of FCTB has the same value as the method parameter <paramref name="descriptionFileName"/></item>
-            </list>
-            </summary>
-            <param name="descriptionFileName">Name of the description file</param>
-            <param name="doc">XmlDocument to parse</param>
-        </member>
-        <member name="M:FastColoredTextBoxNS.SyntaxHighlighter.AddResilientStyle(FastColoredTextBoxNS.Style)">
-            <summary>
-            Adds the given <paramref name="style"/> as resilient style. A resilient style is additionally available when highlighting is 
-            based on a syntax descriptor that has been derived from a XML description file. In the run of the highlighting routine 
-            the styles used by the FCTB are always dropped and replaced with the (initial) ones from the syntax descriptor. Resilient styles are 
-            added afterwards and can be used anyway. 
-            </summary>
-            <param name="style">Style to add</param>
-        </member>
-        <member name="M:FastColoredTextBoxNS.SyntaxHighlighter.CSharpSyntaxHighlight(FastColoredTextBoxNS.Range)">
-            <summary>
-            Highlights C# code
-            </summary>
-            <param name="range"></param>
-        </member>
-        <member name="M:FastColoredTextBoxNS.SyntaxHighlighter.VBSyntaxHighlight(FastColoredTextBoxNS.Range)">
-            <summary>
-            Highlights VB code
-            </summary>
-            <param name="range"></param>
-        </member>
-        <member name="M:FastColoredTextBoxNS.SyntaxHighlighter.HTMLSyntaxHighlight(FastColoredTextBoxNS.Range)">
-            <summary>
-            Highlights HTML code
-            </summary>
-            <param name="range"></param>
-        </member>
-        <member name="M:FastColoredTextBoxNS.SyntaxHighlighter.XMLSyntaxHighlight(FastColoredTextBoxNS.Range)">
-            <summary>
-            Highlights XML code
-            </summary>
-            <param name="range"></param>
-        </member>
-        <member name="M:FastColoredTextBoxNS.SyntaxHighlighter.SQLSyntaxHighlight(FastColoredTextBoxNS.Range)">
-            <summary>
-            Highlights SQL code
-            </summary>
-            <param name="range"></param>
-        </member>
-        <member name="M:FastColoredTextBoxNS.SyntaxHighlighter.PHPSyntaxHighlight(FastColoredTextBoxNS.Range)">
-            <summary>
-            Highlights PHP code
-            </summary>
-            <param name="range"></param>
-        </member>
-        <member name="M:FastColoredTextBoxNS.SyntaxHighlighter.JScriptSyntaxHighlight(FastColoredTextBoxNS.Range)">
-            <summary>
-            Highlights JavaScript code
-            </summary>
-            <param name="range"></param>
-        </member>
-        <member name="M:FastColoredTextBoxNS.SyntaxHighlighter.LuaSyntaxHighlight(FastColoredTextBoxNS.Range)">
-            <summary>
-            Highlights Lua code
-            </summary>
-            <param name="range"></param>
-        </member>
-        <member name="M:FastColoredTextBoxNS.SyntaxHighlighter.JSONSyntaxHighlight(FastColoredTextBoxNS.Range)">
-            <summary>
-            Highlights JSON code
-            </summary>
-            <param name="range"></param>
-        </member>
-        <member name="P:FastColoredTextBoxNS.SyntaxHighlighter.StringStyle">
-            <summary>
-            String style
-            </summary>
-        </member>
-        <member name="P:FastColoredTextBoxNS.SyntaxHighlighter.CommentStyle">
-            <summary>
-            Comment style
-            </summary>
-        </member>
-        <member name="P:FastColoredTextBoxNS.SyntaxHighlighter.NumberStyle">
-            <summary>
-            Number style
-            </summary>
-        </member>
-        <member name="P:FastColoredTextBoxNS.SyntaxHighlighter.AttributeStyle">
-            <summary>
-            C# attribute style
-            </summary>
-        </member>
-        <member name="P:FastColoredTextBoxNS.SyntaxHighlighter.ClassNameStyle">
-            <summary>
-            Class name style
-            </summary>
-        </member>
-        <member name="P:FastColoredTextBoxNS.SyntaxHighlighter.KeywordStyle">
-            <summary>
-            Keyword style
-            </summary>
-        </member>
-        <member name="P:FastColoredTextBoxNS.SyntaxHighlighter.CommentTagStyle">
-            <summary>
-            Style of tags in comments of C#
-            </summary>
-        </member>
-        <member name="P:FastColoredTextBoxNS.SyntaxHighlighter.AttributeValueStyle">
-            <summary>
-            HTML attribute value style
-            </summary>
-        </member>
-        <member name="P:FastColoredTextBoxNS.SyntaxHighlighter.TagBracketStyle">
-            <summary>
-            HTML tag brackets style
-            </summary>
-        </member>
-        <member name="P:FastColoredTextBoxNS.SyntaxHighlighter.TagNameStyle">
-            <summary>
-            HTML tag name style
-            </summary>
-        </member>
-        <member name="P:FastColoredTextBoxNS.SyntaxHighlighter.HtmlEntityStyle">
-            <summary>
-            HTML Entity style
-            </summary>
-        </member>
-        <member name="P:FastColoredTextBoxNS.SyntaxHighlighter.XmlAttributeStyle">
-            <summary>
-            XML attribute style
-            </summary>
-        </member>
-        <member name="P:FastColoredTextBoxNS.SyntaxHighlighter.XmlAttributeValueStyle">
-            <summary>
-            XML attribute value style
-            </summary>
-        </member>
-        <member name="P:FastColoredTextBoxNS.SyntaxHighlighter.XmlTagBracketStyle">
-            <summary>
-            XML tag brackets style
-            </summary>
-        </member>
-        <member name="P:FastColoredTextBoxNS.SyntaxHighlighter.XmlTagNameStyle">
-            <summary>
-            XML tag name style
-            </summary>
-        </member>
-        <member name="P:FastColoredTextBoxNS.SyntaxHighlighter.XmlEntityStyle">
-            <summary>
-            XML Entity style
-            </summary>
-        </member>
-        <member name="P:FastColoredTextBoxNS.SyntaxHighlighter.XmlCDataStyle">
-            <summary>
-            XML CData style
-            </summary>
-        </member>
-        <member name="P:FastColoredTextBoxNS.SyntaxHighlighter.VariableStyle">
-            <summary>
-            Variable style
-            </summary>
-        </member>
-        <member name="P:FastColoredTextBoxNS.SyntaxHighlighter.KeywordStyle2">
-            <summary>
-            Specific PHP keyword style
-            </summary>
-        </member>
-        <member name="P:FastColoredTextBoxNS.SyntaxHighlighter.KeywordStyle3">
-            <summary>
-            Specific PHP keyword style
-            </summary>
-        </member>
-        <member name="P:FastColoredTextBoxNS.SyntaxHighlighter.StatementsStyle">
-            <summary>
-            SQL Statements style
-            </summary>
-        </member>
-        <member name="P:FastColoredTextBoxNS.SyntaxHighlighter.FunctionsStyle">
-            <summary>
-            SQL Functions style
-            </summary>
-        </member>
-        <member name="P:FastColoredTextBoxNS.SyntaxHighlighter.TypesStyle">
-            <summary>
-            SQL Types style
-            </summary>
-        </member>
-        <member name="T:FastColoredTextBoxNS.Language">
-            <summary>
-            Language
-            </summary>
-        </member>
         <member name="F:FastColoredTextBoxNS.ReplaceForm.components">
             <summary>
             Required designer variable.
@@ -3166,6 +2961,21 @@
             This style is used to mark range of text as ReadOnly block
             </summary>
             <remarks>You can inherite this style to add visual effects of readonly text</remarks>
+        </member>
+        <member name="T:FastColoredTextBoxNS.StyleDescriptionList">
+            <summary>
+            Style and associated Regex Combinations
+            </summary>
+        </member>
+        <member name="T:FastColoredTextBoxNS.StyleDescription">
+            <summary>
+            Contained Name, Style information and Regex of Style;
+            </summary>
+        </member>
+        <member name="T:FastColoredTextBoxNS.Language">
+            <summary>
+            Language
+            </summary>
         </member>
         <member name="T:FastColoredTextBoxNS.TextSource">
             <summary>

@@ -29,27 +29,46 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BilingualHighlighterSample));
             this.tb = new FastColoredTextBoxNS.FastColoredTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.tb)).BeginInit();
             this.SuspendLayout();
             // 
             // tb
             // 
-            this.tb.AllowDrop = true;
+            this.tb.AutoCompleteBracketsList = new char[] {
+        '(',
+        ')',
+        '{',
+        '}',
+        '[',
+        ']',
+        '\"',
+        '\"',
+        '\'',
+        '\''};
+            this.tb.AutoIndentCharsPatterns = "^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;=]+);\r\n^\\s*(case|default)\\s*[^:]*" +
+    "(?<range>:)\\s*(?<range>[^;]+);";
             this.tb.AutoScrollMinSize = new System.Drawing.Size(347, 154);
             this.tb.BackBrush = null;
+            this.tb.CharHeight = 14;
+            this.tb.CharWidth = 8;
             this.tb.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.tb.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.tb.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tb.Font = new System.Drawing.Font("Courier New", 9.75F);
             this.tb.IsReplaceMode = false;
+            this.tb.Language = FastColoredTextBoxNS.Language.HTML;
             this.tb.Location = new System.Drawing.Point(0, 0);
             this.tb.Name = "tb";
             this.tb.Paddings = new System.Windows.Forms.Padding(0);
             this.tb.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
+            this.tb.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("tb.ServiceColors")));
             this.tb.Size = new System.Drawing.Size(355, 321);
             this.tb.TabIndex = 0;
             this.tb.Text = "<html>\r\n <head></head>\r\n <body>\r\n <ul> \r\n  <?php for($i=1;$i<=5;$i++){ ?>\r\n  <li>" +
     "Menu Item <?php echo $i; ?></li> \r\n  <?php } ?>\r\n </ul> \r\n</body>\r\n</html>\r\n";
+            this.tb.Zoom = 100;
             this.tb.TextChangedDelayed += new System.EventHandler<FastColoredTextBoxNS.TextChangedEventArgs>(this.tb_TextChangedDelayed);
             // 
             // BilingualHighlighterSample

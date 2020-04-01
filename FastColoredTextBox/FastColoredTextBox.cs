@@ -169,8 +169,8 @@ namespace FastColoredTextBoxNS
             RightBracket = '\x0';
             LeftBracket2 = '\x0';
             RightBracket2 = '\x0';
-            SyntaxHighlighter = new SyntaxHighlighter(this);
             language = Language.Custom;
+            SyntaxHighlighter = SyntaxHighlighter.CreateSyntaxHighlighter(this, language);
             PreferredLineWidth = 0;
             needRecalc = true;
             lastNavigatedDateTime = DateTime.Now;
@@ -288,7 +288,7 @@ namespace FastColoredTextBoxNS
             get { return base.AllowDrop; }
             set { base.AllowDrop = value; }
         }
-
+        
         /// <summary>
         /// Collection of Hints.
         /// This is temporary buffer for currently displayed hints.
@@ -1005,8 +1005,7 @@ namespace FastColoredTextBoxNS
             set
             {
                 language = value;
-                if (SyntaxHighlighter != null)
-                    SyntaxHighlighter.InitStyleSchema(language);
+                SyntaxHighlighter = SyntaxHighlighter.CreateSyntaxHighlighter(this, language);
                 Invalidate();
             }
         }
@@ -7265,10 +7264,7 @@ namespace FastColoredTextBoxNS
 
             if (SyntaxHighlighter != null)
             {
-                if (Language == Language.Custom && !string.IsNullOrEmpty(DescriptionFile))
-                    SyntaxHighlighter.HighlightSyntax(DescriptionFile, range);
-                else
-                    SyntaxHighlighter.HighlightSyntax(Language, range);
+                SyntaxHighlighter.SyntaxHighlight(range);
             }
 
 #if debug
