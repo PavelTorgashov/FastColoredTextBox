@@ -1013,7 +1013,7 @@
         <member name="P:FastColoredTextBoxNS.FastColoredTextBox.DescriptionFile">
             <summary>
             XML file with description of syntax highlighting.
-            This property works only with Language == Language.Custom.
+            This property works only with Language == Language.FromXMLfile.
             </summary>
         </member>
         <member name="P:FastColoredTextBoxNS.FastColoredTextBox.LeftBracketPosition">

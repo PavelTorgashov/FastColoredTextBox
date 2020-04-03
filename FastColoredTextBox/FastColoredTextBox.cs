@@ -1019,13 +1019,13 @@ namespace FastColoredTextBoxNS
 
         /// <summary>
         /// XML file with description of syntax highlighting.
-        /// This property works only with Language == Language.Custom.
+        /// This property works only with Language == Language.FromXMLfile.
         /// </summary>
         [Browsable(true)]
         [DefaultValue(null)]
         [Editor(typeof (FileNameEditor), typeof (UITypeEditor))]
         [Description(
-            "XML file with description of syntax highlighting. This property works only with Language == Language.Custom."
+            "XML file with description of syntax highlighting. This property works only with Language == Language.FromXMLfile."
             )]
         public string DescriptionFile
         {
@@ -4730,7 +4730,7 @@ namespace FastColoredTextBoxNS
 
             EventHandler<AutoIndentEventArgs> calculator = AutoIndentNeeded;
             if (calculator == null)
-                if (Language != Language.Custom && SyntaxHighlighter != null)
+                if (Language != Language.Custom && Language != Language.FromXMLfile && SyntaxHighlighter != null)
                     calculator = SyntaxHighlighter.AutoIndentNeeded;
                 else
                     calculator = CalcAutoIndentShiftByCodeFolding;

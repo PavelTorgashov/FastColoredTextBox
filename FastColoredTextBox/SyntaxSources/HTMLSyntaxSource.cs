@@ -29,28 +29,28 @@ namespace FastColoredTextBoxNS.SyntaxSources
             Textbox.AutoIndentCharsPatterns = @"";
 
             AddStyle("Comment1", 
-                new TextStyle(Brushes.Green, null, FontStyle.Italic), 
+                PredefinedStyles.GreenStyle, 
                 new Regex(@"(<!--.*?-->)|(<!--.*)", RegexOptions.Singleline | RegexCompiledOption));
             AddStyle("Comment2",
-                StyleSchema["Comment1"].Style, 
+                PredefinedStyles.GreenStyle, 
                 new Regex(@"(<!--.*?-->)|(.*-->)", RegexOptions.Singleline | RegexOptions.RightToLeft | RegexCompiledOption));
             AddStyle("Tag Bracket", 
-                new TextStyle(Brushes.Blue, null, FontStyle.Regular), 
+                PredefinedStyles.BlueStyle, 
                 new Regex(@"<|/>|</|>", RegexCompiledOption));
             AddStyle("Tag Name", 
-                new TextStyle(Brushes.Maroon, null, FontStyle.Regular), 
+                PredefinedStyles.MaroonStyle, 
                 new Regex(@"<(?<range>[!\w:]+)", RegexCompiledOption));
             AddStyle("End Tag", 
-                StyleSchema["Tag Name"].Style, 
+                PredefinedStyles.MaroonStyle, 
                 new Regex(@"</(?<range>[\w:]+)>", RegexCompiledOption));
             AddStyle("Attribute", 
-                new TextStyle(Brushes.Red, null, FontStyle.Regular), 
+                PredefinedStyles.RedStyle, 
                 new Regex(@"(?<range>[\w\d\-]{1,20}?)='[^']*'|(?<range>[\w\d\-]{1,20})=""[^""]*""|(?<range>[\w\d\-]{1,20})=[\w\d\-]{1,20}", RegexCompiledOption));
             AddStyle("Attribute Value", 
-                StyleSchema["Tag"].Style, 
+                PredefinedStyles.MagentaStyle, 
                 new Regex(@"[\w\d\-]{1,20}?=(?<range>'[^']*')|[\w\d\-]{1,20}=(?<range>""[^""]*"")|[\w\d\-]{1,20}=(?<range>[\w\d\-]{1,20})", RegexCompiledOption));
             AddStyle("Entity", 
-                StyleSchema["Attribute"].Style, 
+                PredefinedStyles.RedStyle, 
                 new Regex(@"\&(amp|gt|lt|nbsp|quot|apos|copy|reg|#[0-9]{1,8}|#x[0-9a-f]{1,8});", RegexCompiledOption | RegexOptions.IgnoreCase));
             AddFoldingRule("<head", "</head>", RegexOptions.IgnoreCase);
             AddFoldingRule("<body", "</body>", RegexOptions.IgnoreCase);
