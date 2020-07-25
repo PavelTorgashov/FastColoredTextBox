@@ -43,8 +43,8 @@ namespace Tester
         {
             var range = fctb.VisibleRange;
             range.ClearStyle(StyleIndex.All);
-            fctb.VisibleRange.SetStyle(fctb.SyntaxHighlighter.BrownStyle, "^.+?  ", RegexOptions.Multiline);
-            fctb.VisibleRange.SetStyle(fctb.SyntaxHighlighter.BlueBoldStyle, @"POST|GET", RegexOptions.Multiline);
+            fctb.VisibleRange.SetStyle(SyntaxHighlighter.PredefinedStyles.BrownStyle, "^.+?  ", RegexOptions.Multiline);
+            fctb.VisibleRange.SetStyle(SyntaxHighlighter.PredefinedStyles.BlueBoldStyle, @"POST|GET", RegexOptions.Multiline);
         }
     }
 

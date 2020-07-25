@@ -23,17 +23,18 @@ namespace Tester
             var tb = (FastColoredTextBox) sender;
             
             //highlight html
-            tb.SyntaxHighlighter.InitStyleSchema(Language.HTML);
-            tb.SyntaxHighlighter.HTMLSyntaxHighlight(tb.Range);
+            //tb.SyntaxHighlighter.InitStyleSchema(Language.HTML);
+            tb.SyntaxHighlighter.SyntaxHighlight(tb.Range);
             tb.Range.ClearFoldingMarkers();
             //find PHP fragments
+            SyntaxHighlighter phpSource = SyntaxHighlighter.CreateSyntaxHighlighter(tb, Language.PHP);
             foreach(var r in tb.GetRanges(@"<\?php.*?\?>", RegexOptions.Singleline))
             {
                 //remove HTML highlighting from this fragment
                 r.ClearStyle(StyleIndex.All);
                 //do PHP highlighting
-                tb.SyntaxHighlighter.InitStyleSchema(Language.PHP);
-                tb.SyntaxHighlighter.PHPSyntaxHighlight(r);
+                //tb.SyntaxHighlighter.InitStyleSchema(Language.PHP);
+                phpSource.SyntaxHighlight(r);
             }
         }
     }

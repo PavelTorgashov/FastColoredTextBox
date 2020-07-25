@@ -971,7 +971,7 @@ Namespace TesterVB
         End Sub
 
         Private Sub popupMenu_Opening(sender As Object, e As CancelEventArgs)
-            Dim iGreenStyle As Integer = Me.CurrentTB.GetStyleIndex(Me.CurrentTB.SyntaxHighlighter.GreenStyle)
+            Dim iGreenStyle As Integer = Me.CurrentTB.GetStyleIndex(SyntaxHighlighter.PredefinedStyles.GreenStyle)
             If iGreenStyle >= 0 AndAlso Me.CurrentTB.Selection.Start.iChar > 0 Then
                 Dim c As FastColoredTextBoxNS.Char = Me.CurrentTB(Me.CurrentTB.Selection.Start.iLine)(Me.CurrentTB.Selection.Start.iChar - 1)
                 Dim greenStyleIndex As StyleIndex = Range.ToStyleIndex(iGreenStyle)

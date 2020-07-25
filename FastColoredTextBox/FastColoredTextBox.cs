@@ -169,8 +169,8 @@ namespace FastColoredTextBoxNS
             RightBracket = '\x0';
             LeftBracket2 = '\x0';
             RightBracket2 = '\x0';
-            SyntaxHighlighter = new SyntaxHighlighter(this);
             language = Language.Custom;
+            SyntaxHighlighter = SyntaxHighlighter.CreateSyntaxHighlighter(this, language);
             PreferredLineWidth = 0;
             needRecalc = true;
             lastNavigatedDateTime = DateTime.Now;
@@ -288,7 +288,7 @@ namespace FastColoredTextBoxNS
             get { return base.AllowDrop; }
             set { base.AllowDrop = value; }
         }
-
+        
         /// <summary>
         /// Collection of Hints.
         /// This is temporary buffer for currently displayed hints.
@@ -821,7 +821,7 @@ namespace FastColoredTextBoxNS
         /// </summary>
         [Description("Here you can change hotkeys for FastColoredTextBox.")]
         [Editor(typeof(HotkeysEditor), typeof(UITypeEditor))]
-        [DefaultValue("Tab=IndentIncrease, Escape=ClearHints, PgUp=GoPageUp, PgDn=GoPageDown, End=GoEnd, Home=GoHome, Left=GoLeft, Up=GoUp, Right=GoRight, Down=GoDown, Ins=ReplaceMode, Del=DeleteCharRight, F3=FindNext, Shift+Tab=IndentDecrease, Shift+PgUp=GoPageUpWithSelection, Shift+PgDn=GoPageDownWithSelection, Shift+End=GoEndWithSelection, Shift+Home=GoHomeWithSelection, Shift+Left=GoLeftWithSelection, Shift+Up=GoUpWithSelection, Shift+Right=GoRightWithSelection, Shift+Down=GoDownWithSelection, Shift+Ins=Paste, Shift+Del=Cut, Ctrl+Back=ClearWordLeft, Ctrl+Space=AutocompleteMenu, Ctrl+End=GoLastLine, Ctrl+Home=GoFirstLine, Ctrl+Left=GoWordLeft, Ctrl+Up=ScrollUp, Ctrl+Right=GoWordRight, Ctrl+Down=ScrollDown, Ctrl+Ins=Copy, Ctrl+Del=ClearWordRight, Ctrl+0=ZoomNormal, Ctrl+A=SelectAll, Ctrl+B=BookmarkLine, Ctrl+C=Copy, Ctrl+E=MacroExecute, Ctrl+F=FindDialog, Ctrl+G=GoToDialog, Ctrl+H=ReplaceDialog, Ctrl+I=AutoIndentChars, Ctrl+M=MacroRecord, Ctrl+N=GoNextBookmark, Ctrl+R=Redo, Ctrl+U=UpperCase, Ctrl+V=Paste, Ctrl+X=Cut, Ctrl+Z=Undo, Ctrl+Add=ZoomIn, Ctrl+Subtract=ZoomOut, Ctrl+OemMinus=NavigateBackward, Ctrl+Shift+End=GoLastLineWithSelection, Ctrl+Shift+Home=GoFirstLineWithSelection, Ctrl+Shift+Left=GoWordLeftWithSelection, Ctrl+Shift+Right=GoWordRightWithSelection, Ctrl+Shift+B=UnbookmarkLine, Ctrl+Shift+C=CommentSelected, Ctrl+Shift+N=GoPrevBookmark, Ctrl+Shift+U=LowerCase, Ctrl+Shift+OemMinus=NavigateForward, Alt+Back=Undo, Alt+Up=MoveSelectedLinesUp, Alt+Down=MoveSelectedLinesDown, Alt+F=FindChar, Alt+Shift+Left=GoLeft_ColumnSelectionMode, Alt+Shift+Up=GoUp_ColumnSelectionMode, Alt+Shift+Right=GoRight_ColumnSelectionMode, Alt+Shift+Down=GoDown_ColumnSelectionMode")]
+        [DefaultValue("Tab=IndentIncrease, Escape=ClearHints, PgUp=GoPageUp, PgDn=GoPageDown, End=GoEnd, Home=GoHome, Left=GoLeft, Up=GoUp, Right=GoRight, Down=GoDown, Ins=ReplaceMode, Del=DeleteCharRight, F3=FindNext, Shift+Tab=IndentDecrease, Shift+PgUp=GoPageUpWithSelection, Shift+PgDn=GoPageDownWithSelection, Shift+End=GoEndWithSelection, Shift+Home=GoHomeWithSelection, Shift+Left=GoLeftWithSelection, Shift+Up=GoUpWithSelection, Shift+Right=GoRightWithSelection, Shift+Down=GoDownWithSelection, Shift+Ins=Paste, Shift+Del=Cut, Ctrl+Back=ClearWordLeft, Ctrl+Space=AutocompleteMenu, Ctrl+End=GoLastLine, Ctrl+Home=GoFirstLine, Ctrl+Left=GoWordLeft, Ctrl+Up=ScrollUp, Ctrl+Right=GoWordRight, Ctrl+Down=ScrollDown, Ctrl+Ins=Copy, Ctrl+Del=ClearWordRight, Ctrl+0=ZoomNormal, Ctrl+A=SelectAll, Ctrl+B=BookmarkLine, Ctrl+C=Copy, Ctrl+E=MacroExecute, Ctrl+F=FindDialog, Ctrl+G=GoToDialog, Ctrl+H=ReplaceDialog, Ctrl+I=AutoIndentChars, Ctrl+M=MacroRecord, Ctrl+N=GoNextBookmark, Ctrl+R=Redo, Ctrl+U=UpperCase, Ctrl+V=Paste, Ctrl+X=Cut, Ctrl+Z=Undo, Ctrl+Add=ZoomIn, Ctrl+Subtract=ZoomOut, Ctrl+OemMinus=NavigateBackward, Ctrl+Shift+End=GoLastLineWithSelection, Ctrl+Shift+Home=GoFirstLineWithSelection, Ctrl+Shift+Left=GoWordLeftWithSelection, Ctrl+Shift+Right=GoWordRightWithSelection, Ctrl+Shift+B=UnbookmarkLine, Ctrl+Shift+C=CommentSelected, Ctrl+Shift+N=GoPrevBookmark, Ctrl+Shift+U=LowerCase, Ctrl+Shift+OemMinus=NavigateForward, Alt+Back=Undo, Alt+Up=MoveSelectedLinesUp, Alt+Down=MoveSelectedLinesDown, Alt+F=FindChar, Alt+Shift+Left=GoLeft_ColumnSelectionMode, Alt+Shift+Up=GoUp_ColumnSelectionMode, Alt+Shift+Right=GoRight_ColumnSelectionMode, Alt+Shift+Down=GoDown_ColumnSelectionMode, Ctrl+D=CloneLine")]
         public string Hotkeys { 
             get { return HotkeysMapping.ToString(); }
             set { HotkeysMapping = HotkeysMapping.Parse(value); }
@@ -1005,8 +1005,7 @@ namespace FastColoredTextBoxNS
             set
             {
                 language = value;
-                if (SyntaxHighlighter != null)
-                    SyntaxHighlighter.InitStyleSchema(language);
+                SyntaxHighlighter = SyntaxHighlighter.CreateSyntaxHighlighter(this, language);
                 Invalidate();
             }
         }
@@ -1020,13 +1019,13 @@ namespace FastColoredTextBoxNS
 
         /// <summary>
         /// XML file with description of syntax highlighting.
-        /// This property works only with Language == Language.Custom.
+        /// This property works only with Language == Language.FromXMLfile.
         /// </summary>
         [Browsable(true)]
         [DefaultValue(null)]
         [Editor(typeof (FileNameEditor), typeof (UITypeEditor))]
         [Description(
-            "XML file with description of syntax highlighting. This property works only with Language == Language.Custom."
+            "XML file with description of syntax highlighting. This property works only with Language == Language.FromXMLfile."
             )]
         public string DescriptionFile
         {
@@ -2901,10 +2900,7 @@ namespace FastColoredTextBoxNS
 
         public static SizeF GetCharSize(Font font, char c)
         {
-            Size sz2 = TextRenderer.MeasureText("<" + c.ToString() + ">", font);
-            Size sz3 = TextRenderer.MeasureText("<>", font);
-
-            return new SizeF(sz2.Width - sz3.Width + 1, /*sz2.Height*/font.Height);
+            return CharSizeCache.GetCharSize(font, c);
         }
 
         [DllImport("Imm32.dll")]
@@ -3752,6 +3748,10 @@ namespace FastColoredTextBoxNS
                     BookmarkLine(Selection.Start.iLine);
                     break;
 
+                case FCTBAction.CloneLine:
+                    CloneLine(Selection);
+                    break;
+
                 case FCTBAction.GoNextBookmark:
                     GotoNextBookmark(Selection.Start.iLine);
                     break;
@@ -4116,6 +4116,21 @@ namespace FastColoredTextBoxNS
         {
             if (!bookmarks.Contains(iLine))
                 bookmarks.Add(iLine);
+        }
+
+        /// <summary>
+        /// Clones current line
+        /// </summary>
+        public virtual void CloneLine(Range selection)
+        {
+            // expand selection
+            selection.Expand();
+            // get text of selected lines
+            string text = Environment.NewLine + selection.Text;
+            // move caret to end of selected lines
+            selection.Start = selection.End;
+            // insert text
+            InsertText(text);
         }
 
         /// <summary>
@@ -4731,7 +4746,7 @@ namespace FastColoredTextBoxNS
 
             EventHandler<AutoIndentEventArgs> calculator = AutoIndentNeeded;
             if (calculator == null)
-                if (Language != Language.Custom && SyntaxHighlighter != null)
+                if (Language != Language.Custom && Language != Language.FromXMLfile && SyntaxHighlighter != null)
                     calculator = SyntaxHighlighter.AutoIndentNeeded;
                 else
                     calculator = CalcAutoIndentShiftByCodeFolding;
@@ -7265,10 +7280,7 @@ namespace FastColoredTextBoxNS
 
             if (SyntaxHighlighter != null)
             {
-                if (Language == Language.Custom && !string.IsNullOrEmpty(DescriptionFile))
-                    SyntaxHighlighter.HighlightSyntax(DescriptionFile, range);
-                else
-                    SyntaxHighlighter.HighlightSyntax(Language, range);
+                SyntaxHighlighter.SyntaxHighlight(range);
             }
 
 #if debug

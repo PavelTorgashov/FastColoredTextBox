@@ -28,10 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SyntaxHighlightingByXmlDescription));
             this.label1 = new System.Windows.Forms.Label();
             this.fctb = new FastColoredTextBoxNS.FastColoredTextBox();
-            FastColoredTextBoxNS.SyntaxHighlighter syntaxHighlighter1 = new FastColoredTextBoxNS.SyntaxHighlighter(fctb);
+            ((System.ComponentModel.ISupportInitialize)(this.fctb)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -44,30 +45,44 @@
             this.label1.TabIndex = 3;
             this.label1.Text = "This example uses XML file for description syntax highlighting.";
             // 
-            // fastColoredTextBox1
+            // fctb
             // 
-            this.fctb.AutoScroll = true;
-            this.fctb.AutoScrollMinSize = new System.Drawing.Size(0, 176);
+            this.fctb.AutoCompleteBracketsList = new char[] {
+        '(',
+        ')',
+        '{',
+        '}',
+        '[',
+        ']',
+        '\"',
+        '\"',
+        '\'',
+        '\''};
+            this.fctb.AutoIndentCharsPatterns = "^\\s*[\\w\\.]+(\\s\\w+)?\\s*(?<range>=)\\s*(?<range>[^;=]+);^\\s*(case|default)\\s*[^:]*(?" +
+    "<range>:)\\s*(?<range>[^;]+);";
+            this.fctb.AutoScrollMinSize = new System.Drawing.Size(0, 168);
+            this.fctb.BackBrush = null;
+            this.fctb.BracketsHighlightStrategy = FastColoredTextBoxNS.BracketsHighlightStrategy.Strategy2;
+            this.fctb.CharHeight = 14;
+            this.fctb.CharWidth = 8;
             this.fctb.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.fctb.DescriptionFile = "htmlDesc.xml";
+            this.fctb.DescriptionFile = "E:\\allej\\repos\\MyIdeas\\FastColoredTextBox\\Tester\\bin\\Debug\\htmlDesc.xml";
+            this.fctb.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.fctb.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.fctb.IsChanged = true;
-            this.fctb.LeftBracket = '(';
+            this.fctb.IsReplaceMode = false;
+            this.fctb.Language = FastColoredTextBoxNS.Language.FromXMLfile;
+            this.fctb.LeftBracket = '<';
             this.fctb.Location = new System.Drawing.Point(0, 39);
-            this.fctb.Name = "fastColoredTextBox1";
-            this.fctb.RightBracket = ')';
-            this.fctb.SelectedText = "";
-            this.fctb.SelectionStart = 373;
+            this.fctb.Name = "fctb";
+            this.fctb.Paddings = new System.Windows.Forms.Padding(0);
+            this.fctb.RightBracket = '>';
+            this.fctb.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
+            this.fctb.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("fctb.ServiceColors")));
             this.fctb.Size = new System.Drawing.Size(370, 275);
-            this.fctb.SyntaxHighlighter = syntaxHighlighter1;
             this.fctb.TabIndex = 4;
-            this.fctb.Text = @"<div class=""clip5x9 nav_arrows"">
-      <img src=""http://i3.msdn.microsoft.com/Hash/0f73868cd340280cac28f7eeb3d2dd7d.png"" class=""cl_nav_arrow"" alt="""" />
-</div>
-    
-<div class=""nav_div_currentroot"">
-<a href=""http://msdn.microsoft.com/en-us/library/abeh092z(v=VS.90).aspx"" title=""System.Globalization Namespace"">System.Globalization Namespace</a></div>";
+            this.fctb.Text = resources.GetString("fctb.Text");
             this.fctb.WordWrap = true;
+            this.fctb.Zoom = 100;
             // 
             // SyntaxHighlightingByXmlDescription
             // 
@@ -78,6 +93,7 @@
             this.Controls.Add(this.label1);
             this.Name = "SyntaxHighlightingByXmlDescription";
             this.Text = "SyntaxHighlightingByXmlDescription";
+            ((System.ComponentModel.ISupportInitialize)(this.fctb)).EndInit();
             this.ResumeLayout(false);
 
         }
