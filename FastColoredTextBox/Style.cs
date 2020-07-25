@@ -210,6 +210,16 @@ namespace FastColoredTextBoxNS
 
             return result;
         }
+
+        public override bool Equals(object obj)
+        {
+            TextStyle ts = obj as TextStyle;
+            if (ts != null)
+            {
+                return (ForeBrush == ts.ForeBrush) && (BackgroundBrush == ts.BackgroundBrush) && (FontStyle == ts.FontStyle) && (stringFormat == ts.stringFormat);
+            }
+            else return false;
+        }
     }
 
     /// <summary>

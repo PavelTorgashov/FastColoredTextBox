@@ -25,7 +25,7 @@ Namespace TesterVB
             Dim resources As ComponentResourceManager = New ComponentResourceManager(GetType(SyntaxHighlightingByXmlDescription))
             Me.label1 = New Label()
             Me.fctb = New FastColoredTextBox()
-            Dim syntaxHighlighter As SyntaxHighlighter = New SyntaxHighlighter(fctb)
+            Dim syntaxHighlighter As SyntaxHighlighter = SyntaxHighlighter.CreateSyntaxHighlighter(fctb, Language.Custom)
             MyBase.SuspendLayout()
             Me.label1.Dock = DockStyle.Top
             Me.label1.Font = New Font("Microsoft Sans Serif", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 204)

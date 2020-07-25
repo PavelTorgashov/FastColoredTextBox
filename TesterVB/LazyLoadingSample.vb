@@ -184,8 +184,8 @@ Namespace TesterVB
             range.ClearFoldingMarkers()
             range.SetFoldingMarkers("N\d\d00", "N\d\d99")
             range.ClearStyle(StyleIndex.All)
-            range.SetStyle(Me.fctb.SyntaxHighlighter.BlueStyle, "N\d+")
-            range.SetStyle(Me.fctb.SyntaxHighlighter.RedStyle, "[+\-]?[\d\.]+\d+")
+            range.SetStyle(SyntaxHighlighter.PredefinedStyles.BlueStyle, "N\d+")
+            range.SetStyle(SyntaxHighlighter.PredefinedStyles.RedStyle, "[+\-]?[\d\.]+\d+")
         End Sub
 
         Private Sub closeFileToolStripMenuItem_Click(sender As Object, e As EventArgs)
