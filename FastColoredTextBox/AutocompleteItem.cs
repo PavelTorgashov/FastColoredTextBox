@@ -59,7 +59,7 @@ namespace FastColoredTextBoxNS
         /// </summary>
         public virtual CompareResult Compare(string fragmentText)
         {
-            if (Text.StartsWith(fragmentText, StringComparison.InvariantCultureIgnoreCase) &&
+            if(string.IsNullOrEmpty(fragmentText) || Text.ToLowerInvariant().Contains(fragmentText.ToLowerInvariant()) &&
                    Text != fragmentText)
                 return CompareResult.VisibleAndSelected;
 
