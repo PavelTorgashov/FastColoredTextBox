@@ -68,8 +68,8 @@ namespace FastColoredTextBoxNS
             Console.WriteLine("UnloadUnusedLines: " + count);
             #endif
         }
-
-        public void OpenFile(string fileName, Encoding enc)
+        public void OpenFile(string fileName, Encoding enc) => OpenStream(new FileStream(fileName, FileMode.Open), enc);
+        public void OpenStream(Stream fs, Encoding enc)
         {
             Clear();
 
@@ -77,9 +77,7 @@ namespace FastColoredTextBoxNS
                 fs.Dispose();
 
             SaveEOL = Environment.NewLine;
-
-            //read lines of file
-            fs = new FileStream(fileName, FileMode.Open);
+                        
             var length = fs.Length;
             //read signature
             enc = DefineEncoding(enc, fs);
@@ -197,7 +195,7 @@ namespace FastColoredTextBoxNS
             return 0;
         }
 
-        private static Encoding DefineEncoding(Encoding enc, FileStream fs)
+        private static Encoding DefineEncoding(Encoding enc, Stream fs)
         {
             int bytesPerSignature = 0;
             byte[] signature = new byte[4];

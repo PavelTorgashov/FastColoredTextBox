@@ -7532,13 +7532,19 @@ window.status = ""#print"";
         /// </summary>
         /// <param name="fileName"></param>
         /// <param name="enc"></param>
-        public void OpenBindingFile(string fileName, Encoding enc)
+        public void OpenBindingFile(string fileName, Encoding enc) => OpenBindingStream(new FileStream(fileName, FileMode.Open),enc);
+        /// <summary>
+        /// Open stream binding mode
+        /// </summary>
+        /// <param name="filestream"></param>
+        /// <param name="enc"></param>
+        public void OpenBindingStream(Stream fileStream, Encoding enc)
         {
             var fts = new FileTextSource(this);
             try
             {
                 InitTextSource(fts);
-                fts.OpenFile(fileName, enc);
+                fts.OpenStream(fileStream, enc);
                 IsChanged = false;
                 OnVisibleRangeChanged();
             }
@@ -7551,8 +7557,8 @@ window.status = ""#print"";
                 throw;
             }
             Invalidate();
-        }
-
+        }        
+        
         /// <summary>
         /// Close file binding mode
         /// </summary>
