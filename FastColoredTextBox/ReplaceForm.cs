@@ -85,7 +85,7 @@ namespace FastColoredTextBoxNS
             }
             if (range.Start >= startPlace && startPlace > Place.Empty)
             {
-                tb.Selection.Start = new Place(0, 0);
+                tb.Selection.SetStartAndEnd(new Place(0, 0));
                 return Find(pattern);
             }
             return false;
@@ -155,7 +155,7 @@ namespace FastColoredTextBoxNS
                 if (ranges.Count > 0)
                 {
                     tb.TextSource.Manager.ExecuteCommand(new ReplaceTextCommand(tb.TextSource, ranges, tbReplace.Text));
-                    tb.Selection.Start = new Place(0, 0);
+                    tb.Selection.SetStartAndEnd(new Place(0, 0));
                 }
                 //
                 tb.Invalidate();

@@ -256,7 +256,7 @@ namespace Tester
                 if (counter == 1)
                 {
                     //found
-                    tb.Selection.Start = range.Start;
+                    tb.Selection.SetStartAndEnd(range.Start);
                     tb.DoSelectionVisible();
                     break;
                 }
@@ -279,7 +279,7 @@ namespace Tester
                 if (counter == -1)
                 {
                     //found
-                    tb.Selection.Start = range.Start;
+                    tb.Selection.SetStartAndEnd(range.Start);
                     tb.Selection.GoRightThroughFolded();
                     tb.DoSelectionVisible();
                     break;

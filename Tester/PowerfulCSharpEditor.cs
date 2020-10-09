@@ -824,7 +824,7 @@ namespace Tester
             //get text of selected lines
             string text = Environment.NewLine + CurrentTB.Selection.Text;
             //move caret to end of selected lines
-            CurrentTB.Selection.Start = CurrentTB.Selection.End;
+            CurrentTB.Selection.SetStartAndEnd(CurrentTB.Selection.End);
             //insert text
             CurrentTB.InsertText(text);
         }
@@ -840,7 +840,7 @@ namespace Tester
             //comment lines
             CurrentTB.InsertLinePrefix("//");
             //move caret to end of selected lines
-            CurrentTB.Selection.Start = CurrentTB.Selection.End;
+            CurrentTB.Selection.SetStartAndEnd(CurrentTB.Selection.End);
             //insert text
             CurrentTB.InsertText(text);
             //end of autoUndo block
