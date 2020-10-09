@@ -145,7 +145,8 @@ namespace FastColoredTextBoxNS
             InitTextSource(CreateTextSource());
             if (lines.Count == 0)
                 lines.InsertLine(0, lines.CreateLine());
-            selection = new Range(this) {Start = new Place(0, 0)};
+            selection = new Range(this);
+            selection.SetStartAndEnd(new Place(0, 0));
             //default settings
             Cursor = Cursors.IBeam;
             BackColor = Color.White;
