@@ -177,7 +177,7 @@ namespace FastColoredTextBoxNS
             get { return start; }
             set
             {
-                end = start = value;
+                start = value;
                 preferedPos = -1;
                 OnSelectionChanged();
             }
