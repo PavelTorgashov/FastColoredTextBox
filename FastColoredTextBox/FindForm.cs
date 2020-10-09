@@ -62,7 +62,7 @@ namespace FastColoredTextBoxNS
                 //
                 if (range.Start >= startPlace && startPlace > Place.Empty)
                 {
-                    tb.Selection.Start = new Place(0, 0);
+                    tb.Selection.SetStartAndEnd(new Place(0, 0));
                     FindNext(pattern);
                     return;
                 }

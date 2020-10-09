@@ -157,9 +157,9 @@ namespace FastColoredTextBoxNS
         {
             ColumnSelectionMode = false;
 
-            Start = new Place(0, 0);
+            SetStartAndEnd(new Place(0, 0));
             if (tb.LinesCount == 0)
-                Start = new Place(0, 0);
+                SetStartAndEnd(new Place(0, 0));
             else
             {
                 end = new Place(0, 0);
@@ -729,6 +729,12 @@ namespace FastColoredTextBoxNS
         }
 
         /// <summary>
+        /// Setter changing both, the Start and End property to the same value
+        /// </summary>
+        /// <param name="value">The new place</param>
+        public void SetStartAndEnd(Place value) { End = Start = value; }
+
+        /// <summary>
         /// Set style for range
         /// </summary>
         public void SetStyle(Style style)
@@ -1214,7 +1220,7 @@ namespace FastColoredTextBoxNS
             var mask = tb.GetStyleIndexMask(new Style[] { style });
             //
             Range r = new Range(tb);
-            r.Start = Start;
+            r.SetStartAndEnd(Start);
             //go left, check style
             while (r.GoLeftThroughFolded())
             {
@@ -1229,7 +1235,7 @@ namespace FastColoredTextBoxNS
             }
             Place startFragment = r.Start;
 
-            r.Start = Start;
+            r.SetStartAndEnd(Start);
             //go right, check style
             do
             {
@@ -1252,7 +1258,7 @@ namespace FastColoredTextBoxNS
         public Range GetFragment(string allowedSymbolsPattern, RegexOptions options)
         {
             Range r = new Range(tb);
-            r.Start = Start;
+            r.SetStartAndEnd(Start);
             Regex regex = new Regex(allowedSymbolsPattern, options);
             //go left, check symbols
             while (r.GoLeftThroughFolded())
@@ -1265,7 +1271,7 @@ namespace FastColoredTextBoxNS
             }
             Place startFragment = r.Start;
 
-            r.Start = Start;
+            r.SetStartAndEnd(Start);
             //go right, check symbols
             do
             {
