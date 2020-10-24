@@ -902,8 +902,8 @@ namespace FastColoredTextBoxNS
             XMLCommentRegex2 = new Regex(@"(<!--.*?-->)|(.*-->)",
                                           RegexOptions.Singleline | RegexOptions.RightToLeft | RegexCompiledOption);
             XMLTagRegex = new Regex(@"<\?|<|/>|</|>|\?>", RegexCompiledOption);
-            XMLTagNameRegex = new Regex(@"<[?](?<range1>[x][m][l]{1})|<(?<range>[!\w:]+)", RegexCompiledOption);
-            XMLEndTagRegex = new Regex(@"</(?<range>[\w:]+)>", RegexCompiledOption);
+            XMLTagNameRegex = new Regex(@"<[?](?<range1>[x][m][l]{1})|<(?<range>[!\w:\-]+)", RegexCompiledOption);
+            XMLEndTagRegex = new Regex(@"</(?<range>[\w:\-]+)>", RegexCompiledOption);
             XMLTagContentRegex = new Regex(@"<[^>]+>", RegexCompiledOption);
             XMLAttrRegex =
                 new Regex(
@@ -916,7 +916,7 @@ namespace FastColoredTextBoxNS
             XMLEntityRegex = new Regex(@"\&(amp|gt|lt|nbsp|quot|apos|copy|reg|#[0-9]{1,8}|#x[0-9a-f]{1,8});",
                                         RegexCompiledOption | RegexOptions.IgnoreCase);
             XMLCDataRegex = new Regex(@"<!\s*\[CDATA\s*\[(?<text>(?>[^]]+|](?!]>))*)]]>", RegexCompiledOption | RegexOptions.IgnoreCase); // http://stackoverflow.com/questions/21681861/i-need-a-regex-that-matches-cdata-elements-in-html
-            XMLFoldingRegex = new Regex(@"<(?<range>/?\w+)\s[^>]*?[^/]>|<(?<range>/?\w+)\s*>", RegexOptions.Singleline | RegexCompiledOption);
+            XMLFoldingRegex = new Regex(@"<(?<range>/?[\w:\-]+)\s[^>]*?[^/]>|<(?<range>/?[\w:\-]+)\s*>", RegexOptions.Singleline | RegexCompiledOption);
         }
 
         /// <summary>
