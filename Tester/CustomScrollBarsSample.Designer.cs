@@ -1,4 +1,4 @@
-﻿namespace Tester
+namespace Tester
 {
     partial class CustomScrollBarsSample
     {

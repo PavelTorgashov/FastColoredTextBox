@@ -1,4 +1,4 @@
-﻿using System.Windows.Forms;
+using System.Windows.Forms;
 using FastColoredTextBoxNS;
 using System;
 using System.Collections.Generic;
