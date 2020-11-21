@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using System.Windows.Forms;
 using FastColoredTextBoxNS;
 using System.Drawing;

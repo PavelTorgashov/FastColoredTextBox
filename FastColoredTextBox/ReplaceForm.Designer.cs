@@ -1,4 +1,4 @@
-﻿namespace FastColoredTextBoxNS
+namespace FastColoredTextBoxNS
 {
     partial class ReplaceForm
     {
