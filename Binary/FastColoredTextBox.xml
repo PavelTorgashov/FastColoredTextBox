@@ -975,6 +975,11 @@
             Width of char in pixels
             </summary>
         </member>
+        <member name="P:FastColoredTextBoxNS.FastColoredTextBox.CharCnWidth">
+            <summary>
+            Width of Chinese char in pixels
+            </summary>
+        </member>
         <member name="P:FastColoredTextBoxNS.FastColoredTextBox.TabLength">
             <summary>
             Spaces count for tab

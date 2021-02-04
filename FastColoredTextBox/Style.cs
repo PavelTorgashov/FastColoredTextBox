@@ -137,15 +137,20 @@ namespace FastColoredTextBoxNS
                     //IME mode
                     for (int i = range.Start.iChar; i < range.End.iChar; i++)
                     {
-                        SizeF size = FastColoredTextBox.GetCharSize(f, line[i].c);
+                        //SizeF size = FastColoredTextBox.GetCharSize(f, line[i].c);  //Modified for Chinese
 
                         var gs = gr.Save();
-                        float k = size.Width > range.tb.CharWidth + 1 ? range.tb.CharWidth/size.Width : 1;
+                        //float k = size.Width > range.tb.CharWidth + 1 ? range.tb.CharWidth/size.Width : 1;
+                        float k = 1;  //Modified for Chinese
                         gr.TranslateTransform(x, y + (1 - k)*range.tb.CharHeight/2);
                         gr.ScaleTransform(k, (float) Math.Sqrt(k));
                         gr.DrawString(line[i].c.ToString(), f, ForeBrush, 0, 0, stringFormat);
                         gr.Restore(gs);
-                        x += dx;
+                        //x += dx;  //Modified for Chinese
+                        if (FastColoredTextBox.IsChinese(line[i].c))
+                            x += range.tb.CharCnWidth;
+                        else
+                            x += dx;
                     }
                 }
                 else
@@ -155,7 +160,14 @@ namespace FastColoredTextBoxNS
                     {
                         //draw char
                         gr.DrawString(line[i].c.ToString(), f, ForeBrush, x, y, stringFormat);
-                        x += dx;
+                        //x += dx;  //Modified for Chinese
+                        if (line[i].c > 0xff)
+                        {
+                            var size = FastColoredTextBox.GetCharSize(f, line[i].c);
+                            x += size.Width;
+                        }
+                        else
+                            x += dx;
                     }
                 }
             }
@@ -276,7 +288,12 @@ namespace FastColoredTextBoxNS
             if (BackgroundBrush != null)
             {
                 gr.SmoothingMode = SmoothingMode.None;
-                var rect = new Rectangle(position.X, position.Y, (range.End.iChar - range.Start.iChar) * range.tb.CharWidth, range.tb.CharHeight);
+                //var rect = new Rectangle(position.X, position.Y, (range.End.iChar - range.Start.iChar) * range.tb.CharWidth, range.tb.CharHeight);  //Modified for Chinese
+                var cnt = 0;
+                foreach (var c in range.Text)
+                    cnt += c > 0xff ? range.tb.CharCnWidth : range.tb.CharWidth;
+                var rect = new Rectangle(position.X, position.Y, cnt, range.tb.CharHeight);
+
                 if (rect.Width == 0)
                     return;
                 gr.FillRectangle(BackgroundBrush, rect);
