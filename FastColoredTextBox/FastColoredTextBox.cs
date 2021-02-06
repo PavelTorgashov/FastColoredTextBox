@@ -25,6 +25,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Text;
 using System.Drawing.Design;
 using System.Drawing.Drawing2D;
 using System.IO;
@@ -5047,6 +5048,7 @@ namespace FastColoredTextBoxNS
             int iLine;
 
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
+            e.Graphics.TextRenderingHint = TextRenderingHint.ClearTypeGridFit;  //To aviod text alias when FCTB in tab control(after changing the tab control)
 
             //draw text
             for (iLine = startLine; iLine < lines.Count; iLine++)
