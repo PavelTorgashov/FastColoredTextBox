@@ -431,6 +431,7 @@ namespace FastColoredTextBoxNS
                 {
                     CancelEventArgs args = new CancelEventArgs();
                     Menu.OnOpening(args);
+                    point = FixIfPointIsCloseToTheBottom(point);
                     if(!args.Cancel)
                         Menu.Show(tb, point);
                 }
@@ -440,6 +441,22 @@ namespace FastColoredTextBoxNS
             }
             else
                 Menu.Close();
+        }
+
+        private Point FixIfPointIsCloseToTheBottom(Point point)
+        {
+            var tbCoordinates = tb.PointToScreen(new Point(0, 0)); // checking left upper corner of the TB
+            var requestedPoint = tb.PointToScreen(point);
+            var currentScreen = Screen.FromControl(tb);
+            if (requestedPoint.Y > currentScreen.Bounds.Height / 2)
+            {
+                // in case if current position is higher than half of the screen - show menu over the caret
+                return new Point(point.X, // get the same X
+                    tb.PointToClient(new Point(tbCoordinates.X, 
+                        tbCoordinates.Y - Size.Height - ItemHeight + point.Y)).Y); // calc current Y Position 
+            }
+
+            return point;
         }
 
         void tb_SelectionChanged(object sender, EventArgs e)
