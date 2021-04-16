@@ -12,6 +12,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Drawing.Drawing2D;
+using Range = FastColoredTextBoxNS.Range;
 
 namespace Tester
 {

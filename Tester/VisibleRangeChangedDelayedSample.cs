@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using FastColoredTextBoxNS;
+using Range = FastColoredTextBoxNS.Range;
 
 namespace Tester
 {

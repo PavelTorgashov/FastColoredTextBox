@@ -10,6 +10,7 @@ using FastColoredTextBoxNS;
 using System.Text.RegularExpressions;
 using System.Drawing.Imaging;
 using System.Timers;
+using Range = FastColoredTextBoxNS.Range;
 
 namespace Tester
 {
