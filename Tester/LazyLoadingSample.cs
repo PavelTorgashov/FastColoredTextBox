@@ -49,7 +49,7 @@ namespace Tester
             //expand visible range (+- margin)
             var startLine = Math.Max(0, fctb.VisibleRange.Start.iLine - margin);
             var endLine = Math.Min(fctb.LinesCount - 1, fctb.VisibleRange.End.iLine + margin);
-            var range = new Range(fctb, 0, startLine, 0, endLine);
+            var range = new FastColoredTextBoxNS.Range(fctb, 0, startLine, 0, endLine);
             //clear folding markers
             range.ClearFoldingMarkers();
             //set markers for folding

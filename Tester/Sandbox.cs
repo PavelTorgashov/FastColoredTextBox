@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using FastColoredTextBoxNS;
 using System.Linq;
+using Range = FastColoredTextBoxNS.Range;
 
 namespace Tester
 {

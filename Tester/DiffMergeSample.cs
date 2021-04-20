@@ -68,7 +68,7 @@ namespace Tester
             }
 
             if (curLine < tb.LinesCount)
-                tb.Selection = new Range(tb, 0, curLine, 0, curLine);
+                tb.Selection = new FastColoredTextBoxNS.Range(tb, 0, curLine, 0, curLine);
             //
             EndUpdate();
         }
