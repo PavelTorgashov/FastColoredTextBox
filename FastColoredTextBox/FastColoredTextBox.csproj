@@ -18,6 +18,17 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <PackageId>FCTB</PackageId>
+    <Title>Fast Colored TextBox</Title>
+    <Owners>$(Company)</Owners>
+    <Authors>$(Company)</Authors>
+    <PackageDescription>Fast Colored TextBox for Syntax Highlighting. The text editor component for .NET.</PackageDescription>
+    <PackageProjectUrl>http://www.codeproject.com/Articles/161871/Fast-Colored-TextBox-for-syntax-highlighting</PackageProjectUrl>
+    <PackageOutputPath>$(MSBuildThisFileDirectory)..\Binary</PackageOutputPath>
+    <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
   <ItemGroup Condition=" '$(TargetFramework)' == 'net20' ">
     <Reference Include="System.Design" />
     <Reference Include="System.Windows.Forms" />
