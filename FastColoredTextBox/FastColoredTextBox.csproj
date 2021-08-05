@@ -12,7 +12,8 @@
     <Company>Pavel Torgashov</Company>
     <Copyright>© Pavel Torgashov, 2011-2016, pavel_torgashov@ukr.net.</Copyright>
     <Trademark></Trademark>
-    <Version>2.16.26.0</Version>
+    <VersionPrefix>2.16.27</VersionPrefix>
+    <VersionSuffix>beta-001</VersionSuffix>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>FCTB_key.snk</AssemblyOriginatorKeyFile>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
