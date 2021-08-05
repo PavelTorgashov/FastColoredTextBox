@@ -2,7 +2,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net20</TargetFrameworks>
+    <TargetFrameworks>net20;net5.0-windows</TargetFrameworks>
+    <UseWindowsForms>true</UseWindowsForms>
     <RootNamespace>FastColoredTextBoxNS</RootNamespace>
   </PropertyGroup>
 
@@ -16,7 +17,7 @@
     <AssemblyOriginatorKeyFile>FCTB_key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
-  <ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net20' ">
     <Reference Include="System.Design" />
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
