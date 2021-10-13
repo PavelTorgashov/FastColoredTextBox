@@ -899,11 +899,12 @@ namespace FastColoredTextBoxNS
         protected void InitXMLRegex()
         {
             XMLCommentRegex1 = new Regex(@"(<!--.*?-->)|(<!--.*)", RegexOptions.Singleline | RegexCompiledOption);
-            XMLCommentRegex2 = new Regex(@"(<!--.*?-->)|(.*-->)",
-                                          RegexOptions.Singleline | RegexOptions.RightToLeft | RegexCompiledOption);
-            XMLTagRegex = new Regex(@"<\?|<|/>|</|>|\?>", RegexCompiledOption);
+            XMLCommentRegex2 = new Regex(@"(<!--.*?-->)|(.*-->)",  RegexOptions.Singleline | RegexOptions.RightToLeft | RegexCompiledOption);
+
+            XMLTagRegex = new Regex(@"<\?|</|>|<|/>|\?>", RegexCompiledOption);
             XMLTagNameRegex = new Regex(@"<[?](?<range1>[x][m][l]{1})|<(?<range>[!\w:\-\.]+)", RegexCompiledOption);
             XMLEndTagRegex = new Regex(@"</(?<range>[\w:\-\.]+)>", RegexCompiledOption);
+
             XMLTagContentRegex = new Regex(@"<[^>]+>", RegexCompiledOption);
             XMLAttrRegex =
                 new Regex(

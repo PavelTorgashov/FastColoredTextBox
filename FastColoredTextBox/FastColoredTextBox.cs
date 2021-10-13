@@ -1687,6 +1687,22 @@ namespace FastColoredTextBoxNS
         public event EventHandler<ToolTipNeededEventArgs> ToolTipNeeded;
 
         /// <summary>
+        /// Default size of the markers
+        /// </summary>
+        [Browsable(false)]
+        [DefaultValue(0)]
+        public int DefaultMarkerSize
+        {
+            get { return defaultMarkerSize; }
+            set
+            {
+                defaultMarkerSize = value;
+                Invalidate();
+            }
+        }
+        private int defaultMarkerSize = 8;
+
+        /// <summary>
         /// Removes all hints
         /// </summary>
         public void ClearHints()
@@ -5083,14 +5099,16 @@ namespace FastColoredTextBoxNS
                                                new RectangleF(-10, y, LeftIndent - minLeftIndent - 2 + 10, CharHeight + (int)(lineInterval * 0.5f)),
                                                new StringFormat(StringFormatFlags.DirectionRightToLeft) { LineAlignment = StringAlignment.Center });
                 }
-                
+
                 //create markers
+                int markerSize = (int)(defaultMarkerSize * zoom / 100f);
+                int markerRadius = markerSize / 2;
                 if (lineInfo.VisibleState == VisibleState.StartOfHiddenBlock)
-                    visibleMarkers.Add(new ExpandFoldingMarker(iLine, new Rectangle(LeftIndentLine - 4, y + CharHeight/2 - 3, 8, 8)));
+                    visibleMarkers.Add(new ExpandFoldingMarker(iLine, new Rectangle(LeftIndentLine - markerRadius, y + CharHeight/2 - markerRadius + 1, markerSize, markerSize)));
 
                 if (!string.IsNullOrEmpty(line.FoldingStartMarker) && lineInfo.VisibleState == VisibleState.Visible &&
                     string.IsNullOrEmpty(line.FoldingEndMarker))
-                        visibleMarkers.Add(new CollapseFoldingMarker(iLine, new Rectangle(LeftIndentLine - 4, y + CharHeight/2 - 3, 8, 8)));
+                        visibleMarkers.Add(new CollapseFoldingMarker(iLine, new Rectangle(LeftIndentLine - markerRadius, y + CharHeight/2 - markerRadius + 1, markerSize, markerSize)));
 
                 if (lineInfo.VisibleState == VisibleState.Visible && !string.IsNullOrEmpty(line.FoldingEndMarker) &&
                     string.IsNullOrEmpty(line.FoldingStartMarker))
