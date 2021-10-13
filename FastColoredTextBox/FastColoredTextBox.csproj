@@ -1,148 +1,38 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{6DD14A85-CCFC-4774-BD26-0F5772512319}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <TargetFrameworks>net20;net5.0-windows</TargetFrameworks>
+    <UseWindowsForms>true</UseWindowsForms>
     <RootNamespace>FastColoredTextBoxNS</RootNamespace>
-    <AssemblyName>FastColoredTextBox</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\FastColoredTextBox.XML</DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
+
   <PropertyGroup>
+    <Description>Fast сolored textbox control</Description>
+    <Company>Pavel Torgashov</Company>
+    <Copyright>© Pavel Torgashov, 2011-2016, pavel_torgashov@ukr.net.</Copyright>
+    <Trademark></Trademark>
+    <VersionPrefix>2.16.27</VersionPrefix>
+    <VersionSuffix>beta-001</VersionSuffix>
     <SignAssembly>true</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
     <AssemblyOriginatorKeyFile>FCTB_key.snk</AssemblyOriginatorKeyFile>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
+
+  <PropertyGroup>
+    <PackageId>FCTB</PackageId>
+    <Title>Fast Colored TextBox</Title>
+    <Owners>$(Company)</Owners>
+    <Authors>$(Company)</Authors>
+    <PackageDescription>Fast Colored TextBox for Syntax Highlighting. The text editor component for .NET.</PackageDescription>
+    <PackageProjectUrl>http://www.codeproject.com/Articles/161871/Fast-Colored-TextBox-for-syntax-highlighting</PackageProjectUrl>
+    <PackageOutputPath>$(MSBuildThisFileDirectory)..\Binary</PackageOutputPath>
+    <GeneratePackageOnBuild Condition=" '$(Configuration)' == 'Release' ">true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net20' ">
     <Reference Include="System.Design" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.XML" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="AutocompleteItem.cs" />
-    <Compile Include="AutocompleteMenu.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Bookmarks.cs" />
-    <Compile Include="Char.cs" />
-    <Compile Include="DocumentMap.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="EncodingDetector.cs" />
-    <Compile Include="ExportToHTML.cs" />
-    <Compile Include="ExportToRTF.cs" />
-    <Compile Include="GoToForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GoToForm.Designer.cs">
-      <DependentUpon>GoToForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Hints.cs" />
-    <Compile Include="HotkeysEditorForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="HotkeysEditorForm.Designer.cs">
-      <DependentUpon>HotkeysEditorForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="LineNumberFormatting.cs" />
-    <Compile Include="LinesAccessor.cs" />
-    <Compile Include="MacrosManager.cs" />
-    <Compile Include="PlatformType.cs" />
-    <Compile Include="Hotkeys.cs" />
-    <Compile Include="Ruler.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Ruler.Designer.cs">
-      <DependentUpon>Ruler.cs</DependentUpon>
-    </Compile>
-    <Compile Include="SyntaxDescriptor.cs" />
-    <Compile Include="SyntaxHighlighter.cs" />
-    <Compile Include="ReplaceForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="ReplaceForm.Designer.cs">
-      <DependentUpon>ReplaceForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FastColoredTextBox.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="CommandManager.cs" />
-    <Compile Include="Commands.cs" />
-    <Compile Include="FindForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FindForm.Designer.cs">
-      <DependentUpon>FindForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="LimitedStack.cs" />
-    <Compile Include="Line.cs" />
-    <Compile Include="Place.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Range.cs" />
-    <Compile Include="Style.cs" />
-    <Compile Include="TextSource.cs" />
-    <Compile Include="TypeDescriptor.cs" />
-    <Compile Include="FileTextSource.cs" />
-    <Compile Include="UnfocusablePanel.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="VisualMarker.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="FastColoredTextBox.resx">
-      <DependentUpon>FastColoredTextBox.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FindForm.resx">
-      <DependentUpon>FindForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="GoToForm.resx">
-      <DependentUpon>GoToForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="HotkeysEditorForm.resx">
-      <DependentUpon>HotkeysEditorForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ReplaceForm.resx">
-      <DependentUpon>ReplaceForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="FCTB_key.snk" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>
