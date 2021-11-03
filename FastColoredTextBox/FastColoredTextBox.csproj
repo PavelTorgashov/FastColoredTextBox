@@ -53,6 +53,7 @@
     </Compile>
     <Compile Include="Bookmarks.cs" />
     <Compile Include="Char.cs" />
+    <Compile Include="CharSizeCache.cs" />
     <Compile Include="DocumentMap.cs">
       <SubType>Component</SubType>
     </Compile>

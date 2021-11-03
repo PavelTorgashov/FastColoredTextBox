@@ -2917,10 +2917,7 @@ namespace FastColoredTextBoxNS
 
         public static SizeF GetCharSize(Font font, char c)
         {
-            Size sz2 = TextRenderer.MeasureText("<" + c.ToString() + ">", font);
-            Size sz3 = TextRenderer.MeasureText("<>", font);
-
-            return new SizeF(sz2.Width - sz3.Width + 1, /*sz2.Height*/font.Height);
+            return CharSizeCache.GetCharSize(font, c);
         }
 
         [DllImport("Imm32.dll")]
