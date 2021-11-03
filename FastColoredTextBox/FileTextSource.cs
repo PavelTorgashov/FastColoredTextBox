@@ -69,7 +69,7 @@ namespace FastColoredTextBoxNS
             #endif
         }
 
-        public void OpenFile(string fileName, Encoding enc)
+        public void OpenFile(string fileName, Encoding enc, System.IO.FileAccess openMode = System.IO.FileAccess.ReadWrite, System.IO.FileShare shareMode = System.IO.FileShare.None)
         {
             Clear();
 
@@ -79,7 +79,7 @@ namespace FastColoredTextBoxNS
             SaveEOL = Environment.NewLine;
 
             //read lines of file
-            fs = new FileStream(fileName, FileMode.Open);
+            fs = new FileStream(fileName, FileMode.Open, openMode, shareMode);
             var length = fs.Length;
             //read signature
             enc = DefineEncoding(enc, fs);
