@@ -7550,13 +7550,15 @@ window.status = ""#print"";
         /// </summary>
         /// <param name="fileName"></param>
         /// <param name="enc"></param>
-        public void OpenBindingFile(string fileName, Encoding enc)
+        /// <param name="openMode"></param>
+        /// <param name="shareMode"></param>
+        public void OpenBindingFile(string fileName, Encoding enc, System.IO.FileAccess openMode = System.IO.FileAccess.ReadWrite, System.IO.FileShare shareMode = System.IO.FileShare.None)
         {
             var fts = new FileTextSource(this);
             try
             {
                 InitTextSource(fts);
-                fts.OpenFile(fileName, enc);
+                fts.OpenFile(fileName, enc, openMode, shareMode);
                 IsChanged = false;
                 OnVisibleRangeChanged();
             }
