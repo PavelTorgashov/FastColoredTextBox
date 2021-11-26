@@ -43,6 +43,7 @@ namespace FastColoredTextBoxNS
     /// <summary>
     /// Fast colored textbox
     /// </summary>
+    [Docking(DockingBehavior.Ask)]
     public partial class FastColoredTextBox : UserControl, ISupportInitialize
     {
         internal const int minLeftIndent = 8;
