@@ -33,7 +33,7 @@ namespace FastColoredTextBoxNS
                 case '\n': MergeLines(sel.Start.iLine, ts); break;
                 case '\r': break;
                 case '\b':
-                    ts.CurrentTB.Selection.Start = lastSel.Start;
+                    ts.CurrentTB.Selection.SetStartAndEnd(lastSel.Start);
                     char cc = '\x0';
                     if (deletedChar != '\x0')
                     {
@@ -45,12 +45,12 @@ namespace FastColoredTextBoxNS
                     ts.CurrentTB.ExpandBlock(sel.Start.iLine);
                     for (int i = sel.FromX; i < lastSel.FromX; i++)
                         ts[sel.Start.iLine].RemoveAt(sel.Start.iChar);
-                    ts.CurrentTB.Selection.Start = sel.Start;
+                    ts.CurrentTB.Selection.SetStartAndEnd(sel.Start);
                     break;
                 default:
                     ts.CurrentTB.ExpandBlock(sel.Start.iLine);
                     ts[sel.Start.iLine].RemoveAt(sel.Start.iChar);
-                    ts.CurrentTB.Selection.Start = sel.Start;
+                    ts.CurrentTB.Selection.SetStartAndEnd(sel.Start);
                     break;
             }
 
@@ -112,7 +112,7 @@ namespace FastColoredTextBoxNS
                     {
                         deletedChar = ts[tb.Selection.Start.iLine][tb.Selection.Start.iChar - 1].c;
                         ts[tb.Selection.Start.iLine].RemoveAt(tb.Selection.Start.iChar - 1);
-                        tb.Selection.Start = new Place(tb.Selection.Start.iChar - 1, tb.Selection.Start.iLine);
+                        tb.Selection.SetStartAndEnd(new Place(tb.Selection.Start.iChar - 1, tb.Selection.Start.iLine));
                     }
                     break;
                 case '\t':
@@ -123,11 +123,11 @@ namespace FastColoredTextBoxNS
                     for (int i = 0; i < spaceCountNextTabStop; i++)
                         ts[tb.Selection.Start.iLine].Insert(tb.Selection.Start.iChar, new Char(' '));
 
-                    tb.Selection.Start = new Place(tb.Selection.Start.iChar + spaceCountNextTabStop, tb.Selection.Start.iLine);
+                    tb.Selection.SetStartAndEnd(new Place(tb.Selection.Start.iChar + spaceCountNextTabStop, tb.Selection.Start.iLine));
                     break;
                 default:
                     ts[tb.Selection.Start.iLine].Insert(tb.Selection.Start.iChar, new Char(c));
-                    tb.Selection.Start = new Place(tb.Selection.Start.iChar + 1, tb.Selection.Start.iLine);
+                    tb.Selection.SetStartAndEnd(new Place(tb.Selection.Start.iChar + 1, tb.Selection.Start.iLine));
                     break;
             }
         }
@@ -144,7 +144,7 @@ namespace FastColoredTextBoxNS
             else
                 BreakLines(tb.Selection.Start.iLine, tb.Selection.Start.iChar, ts);
 
-            tb.Selection.Start = new Place(0, tb.Selection.Start.iLine + 1);
+            tb.Selection.SetStartAndEnd(new Place(0, tb.Selection.Start.iLine + 1));
             ts.NeedRecalc(new TextSource.TextChangedEventArgs(0, 1));
         }
 
@@ -172,7 +172,7 @@ namespace FastColoredTextBoxNS
                 ts[i].AddRange(ts[i + 1]);
                 ts.RemoveLine(i + 1);
             }
-            tb.Selection.Start = new Place(pos, i);
+            tb.Selection.SetStartAndEnd(new Place(pos, i));
             ts.NeedRecalc(new TextSource.TextChangedEventArgs(0, 1));
         }
 
@@ -238,11 +238,11 @@ namespace FastColoredTextBoxNS
             {
                 tb.Selection.BeginUpdate();
                 char cc = '\x0';
-                
+
                 if (ts.Count == 0)
                 {
                     InsertCharCommand.InsertLine(ts);
-                    tb.Selection.Start = Place.Empty;
+                    tb.Selection.SetStartAndEnd(Place.Empty);
                 }
                 tb.ExpandBlock(tb.Selection.Start.iLine);
                 var len = insertedText.Length;
@@ -311,7 +311,7 @@ namespace FastColoredTextBoxNS
             tb.Selection.BeginUpdate();
             for (int i = 0; i<ranges.Count; i++)
             {
-                tb.Selection.Start = ranges[i].Start;
+                tb.Selection.SetStartAndEnd(ranges[i].Start);
                 for (int j = 0; j < insertedText.Length; j++)
                     tb.Selection.GoRight(true);
                 ClearSelected(ts);
@@ -407,7 +407,7 @@ namespace FastColoredTextBoxNS
         /// </summary>
         public override void Undo()
         {
-            ts.CurrentTB.Selection.Start = new Place(sel.FromX, Math.Min(sel.Start.iLine, sel.End.iLine));
+            ts.CurrentTB.Selection.SetStartAndEnd(new Place(sel.FromX, Math.Min(sel.Start.iLine, sel.End.iLine)));
             ts.OnTextChanging();
             InsertTextCommand.InsertText(deletedText, ts);
             ts.OnTextChanged(sel.Start.iLine, sel.End.iLine);
@@ -455,7 +455,7 @@ namespace FastColoredTextBoxNS
                 InsertCharCommand.MergeLines(fromLine, ts);
             }
             //
-            tb.Selection.Start = new Place(fromChar, fromLine);
+            tb.Selection.SetStartAndEnd(new Place(fromChar, fromLine));
             //
             ts.NeedRecalc(new TextSource.TextChangedEventArgs(fromLine, toLine));
         }
@@ -512,7 +512,7 @@ namespace FastColoredTextBoxNS
             tb.Selection.BeginUpdate();
             for (int i = 0; i < ranges.Count; i++)
             {
-                tb.Selection.Start = ranges[i].ReplacedRange.Start;
+                tb.Selection.SetStartAndEnd(ranges[i].ReplacedRange.Start);
                 for (int j = 0; j < ranges[i].ReplaceText.Length; j++)
                     tb.Selection.GoRight(true);
                 ClearSelectedCommand.ClearSelected(ts);
@@ -597,12 +597,12 @@ namespace FastColoredTextBoxNS
                 var iLine = iLines[i];
 
                 if(iLine < ts.Count)
-                    tb.Selection.Start = new Place(0, iLine);
+                    tb.Selection.SetStartAndEnd(new Place(0, iLine));
                 else
-                    tb.Selection.Start = new Place(ts[ts.Count - 1].Count, ts.Count - 1);
+                    tb.Selection.SetStartAndEnd(new Place(ts[ts.Count - 1].Count, ts.Count - 1));
 
                 InsertCharCommand.InsertLine(ts);
-                tb.Selection.Start = new Place(0, iLine);
+                tb.Selection.SetStartAndEnd(new Place(0, iLine));
                 var text = prevText[prevText.Count - i - 1];
                 InsertTextCommand.InsertText(text, ts);
                 ts[iLine].IsChanged = true;
@@ -633,12 +633,12 @@ namespace FastColoredTextBoxNS
             for(int i = iLines.Count - 1; i >= 0; i--)
             {
                 var iLine = iLines[i];
-                
+
                 prevText.Add(ts[iLine].Text);//backward
                 ts.RemoveLine(iLine);
                 //ts.OnTextChanged(ranges[i].Start.iLine, ranges[i].End.iLine);
             }
-            tb.Selection.Start = new Place(0, 0);
+            tb.Selection.SetStartAndEnd(new Place(0, 0));
             tb.Selection.EndUpdate();
             ts.NeedRecalc(new TextSource.TextChangedEventArgs(0, 1));
 
