@@ -3,7 +3,7 @@
   <PropertyGroup>
     <UseWindowsForms>true</UseWindowsForms>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <TargetFrameworks>net5.0-windows;netcoreapp3.1</TargetFrameworks>
+    <TargetFramework>net5.0-windows</TargetFramework>
   </PropertyGroup>
 
 </Project>

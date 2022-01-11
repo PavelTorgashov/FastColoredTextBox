@@ -257,6 +257,13 @@ namespace FastColoredTextBoxNS
                 }
             }
 
+            if (Count == 1)
+            {
+                OnSelecting();
+                Menu.Close();
+                return;
+            }
+            
             //show popup menu
             if (Count > 0)
             {
@@ -402,7 +409,7 @@ namespace FastColoredTextBoxNS
                     e.Graphics.DrawImage(ImageList.Images[item.ImageIndex], 1, y);
 
                 if (i == FocussedItemIndex)
-                    using (var selectedBrush = new LinearGradientBrush(new Point(0, y - 3), new Point(0, y + itemHeight), Color.Transparent, SelectedColor))
+                    using (var selectedBrush = new SolidBrush(SelectedColor))
                     using (var pen = new Pen(SelectedColor))
                     {
                         e.Graphics.FillRectangle(selectedBrush, leftPadding, y, ClientSize.Width - 1 - leftPadding, itemHeight - 1);
