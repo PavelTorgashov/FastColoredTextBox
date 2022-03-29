@@ -257,7 +257,7 @@ namespace FastColoredTextBoxNS
                 }
             }
 
-            if (Count == 1)
+            if (Count == 1 && forced)
             {
                 OnSelecting();
                 Menu.Close();
@@ -360,7 +360,7 @@ namespace FastColoredTextBoxNS
             {
                 if (tb.HotkeysMapping.ContainsKey(e.KeyData) && tb.HotkeysMapping[e.KeyData] == FCTBAction.AutocompleteMenu)
                 {
-                    DoAutocomplete();
+                    DoAutocomplete(true);
                     e.Handled = true;
                 }
                 else
