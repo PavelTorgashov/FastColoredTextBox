@@ -22,6 +22,11 @@ namespace FastColoredTextBoxNS
         public readonly Style MaroonStyle = new TextStyle(Brushes.Maroon, null, FontStyle.Regular);
         public readonly Style RedStyle = new TextStyle(Brushes.Red, null, FontStyle.Regular);
         public readonly Style BlackStyle = new TextStyle(Brushes.Black, null, FontStyle.Regular);
+        public readonly Style ForestGreenStyle= new TextStyle(Brushes.ForestGreen, null, FontStyle.Italic);
+        public readonly Style CrimsonStyle= new TextStyle(Brushes.Crimson, null, FontStyle.Regular);
+        public readonly Style OrangeStyle= new TextStyle(Brushes.Orange, null, FontStyle.Regular);
+        public readonly Style DodgerBlueStyle= new TextStyle(Brushes.DodgerBlue, null, FontStyle.Regular);
+
         //
         protected readonly Dictionary<string, SyntaxDescriptor> descByXMLfileNames =
             new Dictionary<string, SyntaxDescriptor>();
@@ -118,6 +123,14 @@ namespace FastColoredTextBoxNS
         protected Regex VBNumberRegex;
         protected Regex VBStringRegex;
 
+        protected Regex AssemblyStringRegex,
+            AssemblyCommentRegex,
+            AssemblyNumberRegex,
+            AssemblyAttributeRegex,
+            AssemblyKeywordsRegex,
+            AssemblyInstructionsRegex,
+            AssemblyRegisterRegex;
+
         protected FastColoredTextBox currentTb;
 
         public static RegexOptions RegexCompiledOption
@@ -179,6 +192,9 @@ namespace FastColoredTextBoxNS
                 case Language.JSON:
                     JSONSyntaxHighlight(range);
                     break;
+                case Language.Assembly:
+                    AssemblySyntaxHighlight(range);
+                    break;
                 default:
                     break;
             }
@@ -234,6 +250,9 @@ namespace FastColoredTextBoxNS
                     break; //JS like C#
                 case Language.Lua:
                     LuaAutoIndentNeeded(sender, args);
+                    break;
+                case Language.Assembly:
+                    AssemblyAutoIndentNeeded(sender, args);
                     break;
                 default:
                     break;
@@ -368,6 +387,16 @@ namespace FastColoredTextBoxNS
                     args.Shift = args.TabLength;
                     return;
                 }
+        }
+
+        private void AssemblyAutoIndentNeeded(object sender, AutoIndentEventArgs args)
+        {
+            //label
+            if (Regex.IsMatch(args.LineText, @"^\s*\w+\s*:\s*($|//)") && !Regex.IsMatch(args.LineText, @"^\s*default\s*:"))
+            {
+                args.Shift = -args.TabLength;
+                return;
+            }
         }
 
         /// <summary>
@@ -692,6 +721,14 @@ namespace FastColoredTextBoxNS
                     StringStyle = BrownStyle;
                     NumberStyle = MagentaStyle;
                     KeywordStyle = BlueStyle;
+                    break;
+                case Language.Assembly:
+                    AssemblyRegisterStyle = OrangeStyle;
+                    StringStyle = RedStyle;
+                    CommentStyle = ForestGreenStyle;
+                    NumberStyle = CrimsonStyle;
+                    KeywordStyle = DodgerBlueStyle;
+                    ClassNameStyle = BlueStyle;
                     break;
             }
         }
@@ -1344,6 +1381,80 @@ namespace FastColoredTextBoxNS
             range.SetFoldingMarkers(@"\[", @"\]"); //allow to collapse comment block
         }
 
+
+        /// <summary>
+        /// Highlights Assembly cod
+        /// </summary>
+        void InitAssemblyRegex()
+        {
+            AssemblyStringRegex = new Regex(@"""""|@""""|''|@"".*?""|(?<!@)(?<range>"".*?[^\\]"")|'.*?[^\\]'", RegexCompiledOption);
+            AssemblyCommentRegex = new Regex(@"(;.*)", RegexOptions.Multiline | RegexCompiledOption);
+            AssemblyNumberRegex = new Regex(@"\b\d+[\.]?\d*([eE]\-?\d+)?[abcedfh|ahbhchdhehfh]?\b|\b0x[abcedfh|ahbhchdhehfh\d]+\b", RegexOptions.IgnoreCase | RegexCompiledOption);
+            AssemblyAttributeRegex = new Regex(@"^\s*(?<range>\[.+?\])\s*$", RegexOptions.Multiline | RegexCompiledOption);
+            AssemblyKeywordsRegex = new Regex(@"\b(%(1)|.186(m)|.286(m)|.286c(m)|.286p(m)|.386(m)|.386c(m)|.386p(m)|.387(m)|.8086(m)|.8087(m)|;(2)|=(2)|align|.alpha(m)|arg|arpl|assume|%bin|bound|bsf|bsr|bt|btc|btr|bts|catstr(2)|cdq|clts|cmpbw|cmps|cmpsd|.code(m)|codeseg|comm(1)|comment(1)|%conds|const|.const(m)|%cref|.cref(m)|%crefall|%crefref|%crefuref|%ctls|cwde|.data(m)|.data?(m)|dataseg|dw|db|db(2)|dd(2)|%depth|df(2)|display|dosseg|dp(2)|dq(2)|dt(2)|dw(2)|else(1)|elseif(1)|elseif1(1)|elseif2(1)|elseifb(1)|elseifdef(1)|elseifdif(1)|elseifdifi(1)|elseife(1)|elseifidn(1)|elseifidni(1)|elseifnb(1)|elseifndef(1)|emul|end|endif(1)|endm|endp(2)|ends(2)|enter|equ(2)|.err(l)(m)|err|.err1(1)(m)|.err2(1)(m)|.errb(1)(m)|.errdef(l)(m)|.errdif(1)(m)|.errdifi(1)(m)|.erre(l)(m)|.erridn(1)(m)|.erridni(1)(m)|errif|errif1|errif2|errifb|errifdef|errifdif|errifdifi|errife|errifidn|errifidni|errifnb|errifndef|.errnb(1)(m)|.errndef(1)(m)|.errnz(1)(m)|esc|even|evendata|exitm|extrn(1)|f2xm1|fabs|fadd|faddp|fardata|.fardata(m)|.fardata?(m)|fbld|fbstp|fchs|fclex|fcom|fcomp|fcompp|fdecstp|fdisi|fdiv|fdivp|fdivr|fdivrp|feni|ffree|fiadd|ficom|ficomp|fidiv|fidivr|fild|fimul|fincstp|finit|fist|fistp|fisub|fisbr|fld|fld!|fldcw|fldenv|fldl2e|fldl2t|fldlg2|fldln2|fldpi|fldz|fmul|fmulp|fnclex|fndisi|fneni|fninit|fnop|fnsave|fnstcw|ifidn(1)|ltr|fnstenv|ifidni(1)|%macs|fnstsw|ifnb(1)|macro(2)|fpatan|ifndef(1)|masm|fprem|ijecxz|jump|model|fptan|jumps|.model(m)|frndint|frstor|label(2)|movmovs|fsave|%incl|fscale|include(1)|.lall(m)|movsd|fsqrt|includelib(1)|lar|fst|ins|movsx|fstcw|insb|movzx|fstenv|insd|leave|fstp|instr(2)|multerrs|fstsw|insw|.lfcond(m)|name(1)|fsub|lfs|fsubp|lgdt|%newpage|fsubr|lgs|%noconds|fsubrp|ireid|lidt|%nocref|ftst|irp(1)|%linum|%noctls|fwait|irpc(1)|%list|noemul|fxam|.list(m)|%noincl|fxch|lldt|nojumps|fxtract|lmsw|%nolist|fyl2x|local|nolocals|fyl2xp1|locals|nomasm51|fsetpm|lock|%nomacs|fpcos|lods.|nomulterrs|fprem1|fpsin|lodsd|nosmart|fpsincos|%nosyms|fucom|le|fucomp|loopd|%notrunc|fucompp|loopde|nowarn|global(1)|loopdne|group(2)|loopdnz|org|loopdz|ideal|%out(l)|outs|if(1)|outsb|if!(1)|loopw|outsd|if2(1)|loopwe|outsw|ifb(1)|loopwne|p186|ifdef(1)|loopwnz|p286|ifdif(1)|loopwz|p286n|ifdifi(1)|p287|!fe|(1)|lsllss|p386|p386n|rept(1)|setne|str|p387|setng|struc(2)|p8086|setnge|p8087|se1nl|substr(2)|page|se1nle|subtil(1)|%pagesize|setno|%subtil|%pcnt|setnp|%syms|pn087|setns|%tabsize|retn|setnz|popa|seto|%text|popad|setp|.tfcond(m)|popfd|setpe|title(1)|%poplctl|setpo|%title|ppf|.5all(m)|sets|%trunc|proc(2)|setz|udataseg|.sfcond(m)|ufardata|scas|sgdt|union(2)|pushad|uses|scasd|shld|verr|pushfd|verw|%pushlctl|segment(2)|shrd|wait|public(1)|.5eq(m)|sidt|warn|purge|seta|sizestr(2)|xall(m)|%pagesize|setae|sldt|%pcnt|setb|smart|.xcref(m)|pn087|setbe|smsw|xlat|%poplctl|setc|sor|proc(2)|sete|stack|.xlist(m)|%pushlctl|setg|.5tack(m)|usecs|public(1)|setge|.startup(m)|useds|purge|setl|usees|quirks|setle|sid|usefs|radix|setna|usegs|.radix(m)|setnae|stos|usess|rcl|setnb|setnbe|stosd|record(2)|setnc|bswap|cmpxchg|invd|xadd|p486|p486n|p487|invlpg|startupcode|wbinvd|publicdll(i)|retcode|enterd|leaved|enterw|leavew|clrflag|goto(l)|tblinit|enum(2)|largestack|tblinst|exitcode|setfield|typedef|fastimul|setflag|tblinit|flipflag|smallstack|tblinst|getfield|table(2)|version|while(1)|pushstate|popstate|iretw|popfw|protype(2)|popaw|procdesc(2)|pushaw|pushfw|alias|p586n|rsm|cmpxchg8b|p587|wrmsr|cpuid|rdmsr|p586|rdtsc|break|.continue|.else|.elseif|.endif|.endw|.if|.listall|.listif|.listmacro|.listmacroall|nolist|nolistif|.nolistmacro|.repeat|.until|.untilcxz|.while|carry?|echo|export|extern|externdef|far16|far32|for|forc|near16|near32|option|overflow?|parity?|private|proto|public|realio|real4|real8|repeat|sbyte|sdword|sign?|struct|subtitle|sword|zero?|casemap|dotname|nodotname|emulator|noemulator|epilogue|expr16|expr32|language|ljmp|noljmp|m510|nom510|nokeyword|nosignextend|offset|oldmacros|nooldmacros|oldstructs|nooldstructs|proc|prologue|readonly|noreadonly|scoped|noscoped|segment|setif2|far|near|ends)\b", RegexOptions.IgnoreCase | RegexCompiledOption);
+            AssemblyInstructionsRegex = new Regex(@"\b(aaa|aad|aam|aas|adc|add|and|call|cbw|clc|cld|cli|cmc|cmp|cmpsb|cmpsw|cwd|daa|das|dec|div|hlt|idiv|imul|in|inc|int|into|iret|ja|jae|jb|jbe|jc|jcxz|je|jg|jge|jl|jle|jmp|jna|jnae|jnb|jnbe|jnc|jne|jng|jnge|jnl|jnle|jno|jnp|jns|jnz|jo|jp|jpe|jpo|js|jz|lahf|lds|lea|les|lodsb|lodsw|loop|loope|loopne|loopnz|loopz|mov|movsb|movsw|mul|neg|nop|not|or|out|pop|popa|popf|push|pusha|pushf|rcl|rcr|rep|repe|repne|repnz|repz|ret|retf|rol|ror|sahf|sal|sar|sbb|scasb|scasw|shl|shr|stc|std|sti|stosb|stosw|sub|test|xchg|xlatb|xor)\b", RegexOptions.IgnoreCase | RegexCompiledOption);
+            AssemblyRegisterRegex = new Regex(@"\b(ax|bx|cx|dx|ah|al|bl|bh|ch|cl|dh|dl|di|si|bp|sp|ds|es|ss|cs)\b", RegexOptions.IgnoreCase | RegexCompiledOption);
+        }
+
+        /// <summary>
+        /// Highlights Assembly code
+        /// </summary>
+        /// <param name="range"></param>
+        public virtual void AssemblySyntaxHighlight(Range range)
+        {
+            range.tb.CommentPrefix = ";";
+
+            //clear style of changed range
+            range.ClearStyle(StringStyle, CommentStyle, NumberStyle, AttributeStyle, ClassNameStyle, KeywordStyle, AssemblyRegisterStyle);
+            //
+            if (AssemblyStringRegex == null)
+                InitAssemblyRegex();
+            //string highlighting
+            range.SetStyle(StringStyle, AssemblyStringRegex);
+            //comment highlighting
+            range.SetStyle(CommentStyle, AssemblyCommentRegex);
+            //number highlighting
+            range.SetStyle(NumberStyle, AssemblyNumberRegex);
+            //attribute highlighting
+            range.SetStyle(AttributeStyle, AssemblyAttributeRegex);
+            //class name highlighting
+            range.SetStyle(ClassNameStyle, AssemblyInstructionsRegex);
+            //keyword highlighting
+            range.SetStyle(KeywordStyle, AssemblyKeywordsRegex);
+            //Register highlighting
+            range.SetStyle(AssemblyRegisterStyle, AssemblyRegisterRegex);
+
+
+            //find document comments
+            foreach (var r in range.GetRanges(@"^\s*///.*$", RegexOptions.Multiline))
+            {
+                //remove C# highlighting from this fragment
+                r.ClearStyle(StyleIndex.All);
+
+                //
+                r.SetStyle(CommentStyle);
+
+                //prefix '///'
+                foreach (var rr in r.GetRanges(@"^\s*///", RegexOptions.Multiline))
+                {
+                    rr.ClearStyle(StyleIndex.All);
+                    rr.SetStyle(CommentTagStyle);
+                }
+            }
+
+            //clear folding markers
+            range.ClearFoldingMarkers();
+            //testing foling markers
+            range.SetFoldingMarkers("segment", "ends", RegexOptions.IgnoreCase);//allow to collapse brackets block
+
+            //set folding markers
+            /*
+             * no foldling marker keywords in assembly
+            */
+        }
+
+
+
         #region Styles
 
         /// <summary>
@@ -1461,6 +1572,11 @@ namespace FastColoredTextBoxNS
         /// </summary>
         public Style TypesStyle { get; set; }
 
+        /// <summary>
+        /// Assembly register style
+        /// </summary>
+        public Style AssemblyRegisterStyle { get; set; }
+
         #endregion
     }
 
@@ -1478,6 +1594,7 @@ namespace FastColoredTextBoxNS
         PHP,
         JS,
         Lua,
-        JSON
+        JSON,
+        Assembly
     }
 }
