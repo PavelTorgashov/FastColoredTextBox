@@ -231,7 +231,7 @@ namespace FastColoredTextBoxNS
         /// </summary>
         public virtual void DoVisible()
         {
-            TB.Selection.Start = new Place(0, LineIndex);
+            TB.Selection.SetStartAndEnd(new Place(0, LineIndex));
             TB.DoRangeVisible(TB.Selection, true);
             TB.Invalidate();
         }
