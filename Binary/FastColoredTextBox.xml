@@ -684,6 +684,12 @@
             </summary>
             <param name="range"></param>
         </member>
+        <member name="M:FastColoredTextBoxNS.SyntaxHighlighter.BatchFileSyntaxHighlight(FastColoredTextBoxNS.Range)">
+            <summary>
+            Highlights Batch file code.
+            </summary>
+            <param name="range"></param>
+        </member>
         <member name="P:FastColoredTextBoxNS.SyntaxHighlighter.StringStyle">
             <summary>
             String style
@@ -797,6 +803,21 @@
         <member name="P:FastColoredTextBoxNS.SyntaxHighlighter.TypesStyle">
             <summary>
             SQL Types style
+            </summary>
+        </member>
+        <member name="P:FastColoredTextBoxNS.SyntaxHighlighter.BatchSymbolStyle1">
+            <summary>
+            Specific Batch file symbol style
+            </summary>
+        </member>
+        <member name="P:FastColoredTextBoxNS.SyntaxHighlighter.BatchSymbolStyle2">
+            <summary>
+            Specific Batch file symbol style
+            </summary>
+        </member>
+        <member name="P:FastColoredTextBoxNS.SyntaxHighlighter.BatchSymbolStyle3">
+            <summary>
+            Specific Batch file symbol style
             </summary>
         </member>
         <member name="T:FastColoredTextBoxNS.Language">
@@ -1410,6 +1431,11 @@
         <member name="E:FastColoredTextBoxNS.FastColoredTextBox.ToolTipNeeded">
             <summary>
             Occurs when mouse is moving over text and tooltip is needed
+            </summary>
+        </member>
+        <member name="P:FastColoredTextBoxNS.FastColoredTextBox.DefaultMarkerSize">
+            <summary>
+            Default size of the markers
             </summary>
         </member>
         <member name="M:FastColoredTextBoxNS.FastColoredTextBox.ClearHints">
