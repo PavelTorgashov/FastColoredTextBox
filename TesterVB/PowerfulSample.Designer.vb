@@ -23,6 +23,7 @@ Partial Class PowerfulSample
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(PowerfulSample))
         Me.menuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.editToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.findToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -37,6 +38,7 @@ Partial Class PowerfulSample
         Me.hTMLToolStripMenuItem1 = New System.Windows.Forms.ToolStripMenuItem()
         Me.FontDialog1 = New System.Windows.Forms.FontDialog()
         Me.FastColoredTextBox1 = New FastColoredTextBoxNS.FastColoredTextBox()
+        Me.assemblyToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.menuStrip1.SuspendLayout()
         CType(Me.FastColoredTextBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -71,7 +73,7 @@ Partial Class PowerfulSample
         '
         'miLanguage
         '
-        Me.miLanguage.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.miCSharp, Me.miVB, Me.hTMLToolStripMenuItem, Me.sQLToolStripMenuItem, Me.pHPToolStripMenuItem})
+        Me.miLanguage.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.miCSharp, Me.miVB, Me.hTMLToolStripMenuItem, Me.sQLToolStripMenuItem, Me.pHPToolStripMenuItem, Me.assemblyToolStripMenuItem})
         Me.miLanguage.Name = "miLanguage"
         Me.miLanguage.Size = New System.Drawing.Size(71, 20)
         Me.miLanguage.Text = "Language"
@@ -79,44 +81,44 @@ Partial Class PowerfulSample
         'miCSharp
         '
         Me.miCSharp.Name = "miCSharp"
-        Me.miCSharp.Size = New System.Drawing.Size(112, 22)
+        Me.miCSharp.Size = New System.Drawing.Size(180, 22)
         Me.miCSharp.Text = "CSharp"
         '
         'miVB
         '
         Me.miVB.Name = "miVB"
-        Me.miVB.Size = New System.Drawing.Size(112, 22)
+        Me.miVB.Size = New System.Drawing.Size(180, 22)
         Me.miVB.Text = "VB"
         '
         'hTMLToolStripMenuItem
         '
         Me.hTMLToolStripMenuItem.Name = "hTMLToolStripMenuItem"
-        Me.hTMLToolStripMenuItem.Size = New System.Drawing.Size(112, 22)
+        Me.hTMLToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.hTMLToolStripMenuItem.Text = "HTML"
         '
         'sQLToolStripMenuItem
         '
         Me.sQLToolStripMenuItem.Name = "sQLToolStripMenuItem"
-        Me.sQLToolStripMenuItem.Size = New System.Drawing.Size(112, 22)
+        Me.sQLToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.sQLToolStripMenuItem.Text = "SQL"
         '
         'pHPToolStripMenuItem
         '
         Me.pHPToolStripMenuItem.Name = "pHPToolStripMenuItem"
-        Me.pHPToolStripMenuItem.Size = New System.Drawing.Size(112, 22)
+        Me.pHPToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
         Me.pHPToolStripMenuItem.Text = "PHP"
         '
         'exportToolStripMenuItem
         '
         Me.exportToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.hTMLToolStripMenuItem1})
         Me.exportToolStripMenuItem.Name = "exportToolStripMenuItem"
-        Me.exportToolStripMenuItem.Size = New System.Drawing.Size(52, 20)
+        Me.exportToolStripMenuItem.Size = New System.Drawing.Size(53, 20)
         Me.exportToolStripMenuItem.Text = "Export"
         '
         'hTMLToolStripMenuItem1
         '
         Me.hTMLToolStripMenuItem1.Name = "hTMLToolStripMenuItem1"
-        Me.hTMLToolStripMenuItem1.Size = New System.Drawing.Size(107, 22)
+        Me.hTMLToolStripMenuItem1.Size = New System.Drawing.Size(106, 22)
         Me.hTMLToolStripMenuItem1.Text = "HTML"
         '
         'FontDialog1
@@ -125,12 +127,15 @@ Partial Class PowerfulSample
         '
         'FastColoredTextBox1
         '
+        Me.FastColoredTextBox1.AutoCompleteBracketsList = New Char() {Global.Microsoft.VisualBasic.ChrW(40), Global.Microsoft.VisualBasic.ChrW(41), Global.Microsoft.VisualBasic.ChrW(123), Global.Microsoft.VisualBasic.ChrW(125), Global.Microsoft.VisualBasic.ChrW(91), Global.Microsoft.VisualBasic.ChrW(93), Global.Microsoft.VisualBasic.ChrW(34), Global.Microsoft.VisualBasic.ChrW(34), Global.Microsoft.VisualBasic.ChrW(39), Global.Microsoft.VisualBasic.ChrW(39)}
+        Me.FastColoredTextBox1.AutoIndentCharsPatterns = "" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10) & "^\s*[\w\.\(\)]+\s*(?<range>=)\s*(?<range>.+)" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         Me.FastColoredTextBox1.AutoScrollMinSize = New System.Drawing.Size(158, 15)
         Me.FastColoredTextBox1.BackBrush = Nothing
         Me.FastColoredTextBox1.CharHeight = 15
         Me.FastColoredTextBox1.CharWidth = 7
         Me.FastColoredTextBox1.CommentPrefix = "'"
         Me.FastColoredTextBox1.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.FastColoredTextBox1.DefaultMarkerSize = 8
         Me.FastColoredTextBox1.DisabledColor = System.Drawing.Color.FromArgb(CType(CType(100, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer), CType(CType(180, Byte), Integer))
         Me.FastColoredTextBox1.Dock = System.Windows.Forms.DockStyle.Fill
         Me.FastColoredTextBox1.Font = New System.Drawing.Font("Consolas", 9.75!)
@@ -142,9 +147,17 @@ Partial Class PowerfulSample
         Me.FastColoredTextBox1.Paddings = New System.Windows.Forms.Padding(0)
         Me.FastColoredTextBox1.RightBracket = Global.Microsoft.VisualBasic.ChrW(41)
         Me.FastColoredTextBox1.SelectionColor = System.Drawing.Color.FromArgb(CType(CType(50, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(255, Byte), Integer))
+        Me.FastColoredTextBox1.ServiceColors = CType(resources.GetObject("FastColoredTextBox1.ServiceColors"), FastColoredTextBoxNS.ServiceColors)
         Me.FastColoredTextBox1.Size = New System.Drawing.Size(362, 302)
         Me.FastColoredTextBox1.TabIndex = 0
         Me.FastColoredTextBox1.Text = "FastColoredTextBox1"
+        Me.FastColoredTextBox1.Zoom = 100
+        '
+        'assemblyToolStripMenuItem
+        '
+        Me.assemblyToolStripMenuItem.Name = "assemblyToolStripMenuItem"
+        Me.assemblyToolStripMenuItem.Size = New System.Drawing.Size(180, 22)
+        Me.assemblyToolStripMenuItem.Text = "Assembly"
         '
         'PowerfulSample
         '
@@ -176,5 +189,5 @@ Partial Class PowerfulSample
     Private WithEvents exportToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Private WithEvents hTMLToolStripMenuItem1 As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents FontDialog1 As System.Windows.Forms.FontDialog
-
+    Friend WithEvents assemblyToolStripMenuItem As ToolStripMenuItem
 End Class
