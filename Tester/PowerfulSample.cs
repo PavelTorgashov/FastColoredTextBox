@@ -142,6 +142,7 @@ namespace Tester
                 case "Lua": fctb.Language = Language.Lua; break;
                 case "JSON": fctb.Language = Language.JSON; break;
                 case "Assembly": fctb.Language = Language.Assembly; break;
+                case "Batch": fctb.Language = Language.Batch; break;
             }
             fctb.OnSyntaxHighlight(new TextChangedEventArgs(fctb.Range));
             miChangeColors.Enabled = lang != "CSharp (custom highlighter)";
