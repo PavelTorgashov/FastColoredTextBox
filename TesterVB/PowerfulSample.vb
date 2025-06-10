@@ -95,7 +95,7 @@ Public Class PowerfulSample
         e.ChangedRange.SetFoldingMarkers("/\*", "\*/") 'allow to collapse comment block
     End Sub
 
-    Private Sub miCSharp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles miCSharp.Click, sQLToolStripMenuItem.Click, pHPToolStripMenuItem.Click, miVB.Click, hTMLToolStripMenuItem.Click, assemblyToolStripMenuItem.Click
+    Private Sub miCSharp_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles miCSharp.Click, sQLToolStripMenuItem.Click, pHPToolStripMenuItem.Click, miVB.Click, hTMLToolStripMenuItem.Click, assemblyToolStripMenuItem.Click, batchToolStripMenuItem.Click
         'set language
         lang = CType(sender, ToolStripMenuItem).Text
 
@@ -114,6 +114,7 @@ Public Class PowerfulSample
             Case "SQL" : FastColoredTextBox1.Language = Language.SQL
             Case "PHP" : FastColoredTextBox1.Language = Language.PHP
             Case "Assembly" : FastColoredTextBox1.Language = Language.Assembly
+            Case "Batch" : FastColoredTextBox1.Language = Language.Batch
 
         End Select
 
